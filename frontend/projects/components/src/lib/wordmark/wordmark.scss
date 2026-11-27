@@ -1,0 +1,61 @@
+:host {
+  display: inline-flex;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-wordmark);
+  color: var(--color-fg);
+}
+
+.wordmark__stem {
+  position: relative;
+  display: inline-block;
+  width: 0.215em;
+  height: 0.5em;
+  margin: 0 0.055em 0 0.045em;
+  background: currentColor;
+  border-radius: 0.11em;
+}
+
+.wordmark__seed {
+  position: absolute;
+  left: 50%;
+  top: -0.36em;
+  width: 0.25em;
+  height: 0.25em;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: var(--color-brand-seed);
+}
+
+.wordmark__leaf {
+  position: absolute;
+  left: 58%;
+  top: -0.44em;
+  width: 0.13em;
+  height: 0.08em;
+  background: var(--color-brand-leaf);
+  border-radius: 0.13em 0 0.13em 0;
+  rotate: -20deg;
+}
+
+.wordmark--md {
+  font-size: 2.5rem;
+}
+
+.wordmark--lg {
+  font-size: 4.5rem;
+}
+
+.wordmark--hero {
+  font-size: 5rem;
+
+  @media (min-width: 40rem) {
+    font-size: 8.5rem;
+  }
+}
