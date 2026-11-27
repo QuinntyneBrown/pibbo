@@ -39,7 +39,7 @@ function installFakes(seed: number): void {
   const asked: string[] = [];
   (window as unknown as { __spoken: string[] }).__spoken = asked;
   HTMLMediaElement.prototype.play = function play(this: HTMLMediaElement) {
-    asked.push(new URL(this.currentSrc || this.src, location.href).pathname);
+    asked.push(new URL(this.src || this.currentSrc, location.href).pathname);
     queueMicrotask(() => this.dispatchEvent(new Event('ended')));
     return Promise.resolve();
   };

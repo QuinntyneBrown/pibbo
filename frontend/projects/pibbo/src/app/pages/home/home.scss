@@ -16,3 +16,13 @@
 .home__main {
   flex: 1;
 }
+
+.home__subjects {
+  padding: var(--space-8) var(--layout-margin) 0;
+}
+
+.home__games {
+  display: grid;
+  gap: var(--space-8);
+  padding: var(--space-6) var(--layout-margin) 0;
+}
