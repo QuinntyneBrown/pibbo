@@ -72,7 +72,11 @@ async function guardNetwork(page: Page, use: () => Promise<void>): Promise<void>
   page.on('requestfinished', (r) => pending.delete(r.url()));
   page.on('requestfailed', (r) => {
     pending.delete(r.url());
-    if (isLocal(r.url())) problems.push(`request failed: ${r.url()} (${r.failure()?.errorText})`);
+    // A recording cut short by the next one (one sound at a time) aborts its download.
+    const stoppedRecording =
+      r.resourceType() === 'media' && r.failure()?.errorText === 'net::ERR_ABORTED';
+    if (isLocal(r.url()) && !stoppedRecording)
+      problems.push(`request failed: ${r.url()} (${r.failure()?.errorText})`);
   });
   page.on('pageerror', (e) => problems.push(`page error: ${e.message}`));
   page.on('console', (m) => {

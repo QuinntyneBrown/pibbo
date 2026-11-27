@@ -2,6 +2,7 @@
 import { test, expect } from '../fixtures/test';
 import { HomePage } from '../pages/home.page';
 import { ActivityPlaceholderPage } from '../pages/activity-placeholder.page';
+import { CountTheToysPage } from '../pages/count-the-toys.page';
 
 interface Box {
   x: number;
@@ -86,15 +87,15 @@ test.describe('Home: choose an activity', () => {
     spoken,
   }) => {
     const home = new HomePage(page);
-    const activity = new ActivityPlaceholderPage(page);
+    const activity = new CountTheToysPage(page);
     await home.open();
     await home.touch(home.group('Count'));
 
     await home.touch(home.activity('Count the toys'));
 
-    await expect(activity.title).toHaveText('Count the toys');
-    expect(activity.path()).toBe('/count/toys');
-    expect(await spoken.recordings()).toEqual([
+    await expect(activity.root).toBeVisible();
+    expect(new URL(page.url()).pathname).toBe('/count/toys');
+    expect((await spoken.recordings()).slice(0, 2)).toEqual([
       '/recordings/home/count.wav',
       '/recordings/home/count-the-toys.wav',
     ]);

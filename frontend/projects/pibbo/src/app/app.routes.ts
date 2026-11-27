@@ -9,8 +9,12 @@ export const routes: Routes = [
     pathMatch: 'full',
     loadComponent: () => import('./pages/home/home').then((m) => m.Home),
   },
-  // Placeholders until journeys 3 and 4 build these activities (ADR 0006).
-  { path: 'count/toys', loadComponent: placeholder, data: { activityId: 'count-the-toys' } },
+  {
+    path: 'count/toys',
+    loadComponent: () =>
+      import('./pages/count-the-toys/count-the-toys').then((m) => m.CountTheToys),
+  },
+  // A placeholder until journey 4 builds this activity (ADR 0006).
   { path: 'read/sound-out', loadComponent: placeholder, data: { activityId: 'sound-it-out' } },
   { path: '**', redirectTo: '' },
 ];

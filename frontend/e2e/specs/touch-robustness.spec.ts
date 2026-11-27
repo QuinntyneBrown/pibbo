@@ -1,7 +1,7 @@
 // Traces to: L2-035
 import { test, expect } from '../fixtures/test';
 import { HomePage } from '../pages/home.page';
-import { ActivityPlaceholderPage } from '../pages/activity-placeholder.page';
+import { CountTheToysPage } from '../pages/count-the-toys.page';
 
 test.describe('Touch robustness on Home', () => {
   test.skip(({ hasTouch }) => !hasTouch, 'touch is for the phone');
@@ -25,16 +25,17 @@ test.describe('Touch robustness on Home', () => {
     spoken,
   }) => {
     const home = new HomePage(page);
-    const activity = new ActivityPlaceholderPage(page);
+    const activity = new CountTheToysPage(page);
     await home.open();
     await home.touch(home.group('Count'));
 
     await home.touchActivityThenReadAtOnce('Count the toys');
 
-    await expect(activity.title).toHaveText('Count the toys');
+    await expect(activity.root).toBeVisible();
     expect(await spoken.recordings()).toEqual([
       '/recordings/home/count.wav',
       '/recordings/home/count-the-toys.wav',
+      '/recordings/count/tap-each-toy.wav',
     ]);
   });
 

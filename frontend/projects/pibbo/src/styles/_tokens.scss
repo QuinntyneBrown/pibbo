@@ -88,6 +88,18 @@
   /* brand marks (wordmark seed and leaf) */
   --color-brand-seed: var(--palette-sun);
   --color-brand-leaf: var(--palette-leaf);
+  /* Pibbo the mascot, read by role (docs/mocks/assets/ui.css .pibbo__*) */
+  --color-pibbo-body: var(--palette-sun);
+  --color-pibbo-belly: var(--palette-sun-belly);
+  --color-pibbo-wing: var(--palette-sun-wing);
+  --color-pibbo-foot: var(--palette-foot);
+  --color-pibbo-leaf: var(--palette-leaf);
+  --color-pibbo-stem: var(--palette-leaf-deep);
+  --color-pibbo-eye: var(--palette-white);
+  --color-pibbo-ink: var(--palette-ink);
+  --color-pibbo-cheek: var(--palette-berry);
+  --color-pibbo-beak: var(--palette-berry);
+  --color-pibbo-beak-deep: var(--palette-berry-deep);
 
   /* ---------- Type ---------- */
   --font-display: 'Fredoka', ui-rounded, system-ui, sans-serif; /* Pibbo's voice, buttons, titles */

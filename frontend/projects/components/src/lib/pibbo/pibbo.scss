@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  flex: none;
+}
+
+.pibbo {
+  display: block;
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.pibbo__stem {
+  fill: none;
+  stroke: var(--color-pibbo-stem);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+.pibbo__leaf {
+  fill: var(--color-pibbo-leaf);
+}
+.pibbo__wing {
+  fill: var(--color-pibbo-wing);
+}
+.pibbo__foot {
+  fill: var(--color-pibbo-foot);
+}
+.pibbo__body {
+  fill: var(--color-pibbo-body);
+}
+.pibbo__belly {
+  fill: var(--color-pibbo-belly);
+}
+.pibbo__white {
+  fill: var(--color-pibbo-eye);
+}
+.pibbo__ink {
+  fill: var(--color-pibbo-ink);
+}
+.pibbo__line {
+  fill: none;
+  stroke: var(--color-pibbo-ink);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.pibbo__cheek {
+  fill: var(--color-pibbo-cheek);
+  opacity: 0.35;
+}
+.pibbo__beak {
+  fill: var(--color-pibbo-beak);
+}
+.pibbo__beak-deep {
+  fill: var(--color-pibbo-beak-deep);
+}

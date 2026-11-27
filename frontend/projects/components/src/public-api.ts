@@ -8,3 +8,5 @@ export * from './lib/tap/tap-rule';
 export * from './lib/group-switch/group-switch';
 export * from './lib/activity-picture/activity-picture';
 export * from './lib/activity-grid/activity-grid';
+export * from './lib/pibbo/pibbo';
+export * from './lib/round-shell/round-shell';
