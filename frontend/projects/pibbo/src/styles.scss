@@ -1,0 +1,5 @@
+// Global styles are foundations only: tokens, @font-face, reset and utilities.
+@use 'styles/tokens';
+@use 'styles/fonts';
+@use 'styles/reset';
+@use 'styles/utilities';
