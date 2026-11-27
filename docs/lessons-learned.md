@@ -75,7 +75,7 @@ One entry per journey, newest last. Before a journey, read these and apply the o
   cut short by the next one (one sound at a time) aborts that fetch, and the network guard
   failed the spec on `net::ERR_ABORTED`, only now and then and only on the phone. The guard
   now allows an aborted media request.
-- `new RegExp(\`^\s*${n}\s*$\`)` in a template literal drops the backslashes; it needs `\s`.
+- A `\s` inside a template literal passed to `new RegExp` loses its backslash; write `\s`.
 - Heredocs in Git Bash failed again on a long multi-file command; the Write tool is reliable.
 - Another agent edited this checkout's tokens and component styles mid-journey. Commits were
   staged from the index (`git update-index --cacheinfo`) so only this journey's changes went in.
