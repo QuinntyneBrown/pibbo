@@ -1,5 +1,7 @@
 # Feature: Scaffold the workspace
 
+**Status:** Complete (PR #1)
+
 Journey 1 of 27 in `docs/journeys.md`. Requirements: L2-034, L2-039.
 
 ## Goal
