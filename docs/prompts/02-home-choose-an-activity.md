@@ -1,5 +1,7 @@
 # Feature: Home: choose an activity
 
+**Status:** Complete (PR #2)
+
 Journey 2 of 27 in `docs/journeys.md`. Requirements: L2-024, L2-035.
 
 ## Goal
