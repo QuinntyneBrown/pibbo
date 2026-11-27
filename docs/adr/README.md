@@ -10,3 +10,4 @@
 | [0006](0006-home-catalogue-and-activity-placeholders.md) | Home catalogue, placeholder activities and the tap rule | Accepted |
 | [0007](0007-count-the-toys-round.md) | Count the toys: the round, retry, praise and the timer contract | Accepted |
 | [0008](0008-sound-it-out-round-and-word-content.md) | Sound it out: the round, the word content and its build-time check | Accepted |
+| [0009](0009-count-and-write-round.md) | Count and write: ten-frames, the digit pad and the round | Accepted |

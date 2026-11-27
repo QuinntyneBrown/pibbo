@@ -12,33 +12,41 @@ skinparam class {
 title Class structure — Count to twenty and write the numeral
 
 interface AudioPlayer <<token AUDIO_PLAYER>> {
-  +play(recordingId: string): Promise<PlayOutcome>
+  +play(recording: string): Promise<PlayOutcome>
   +stop(): void
 }
 interface RandomSource <<token RANDOM_SOURCE>> {
   +next(): number
 }
-interface RoundFeedback <<token ROUND_FEEDBACK>> {
-  +praise(): void
-  +hint(h: Hint): void
+interface Clock <<token CLOCK>> {
+  +after(ms: number, callback): () => void
 }
 
-class TenFrameLayout {
-  +frames: Thing[][]
+class CountAndWriteRound {
+  +phase: "counting" | "writing" | "hinting" | "right" | "modelled"
+  +answer: number
+  +things: Thing[]
+  +countedAs: (number | null)[]
+  +written: number[]
+  +wrong: number
 }
-class NumeralEntry {
-  +target: number
-  +digits: number[]
+class roundRules <<pure>> {
+  +startCountAndWriteRound(random, content): CountAndWriteRound
+  +tenFrames(n: number): number[][]
+  +countThing(r, index): TouchResult
+  +writeDigit(r, digit): TouchResult
+  +clearDigits(r): CountAndWriteRound
+  +checkNumeral(r): CheckResult
+  +hintDone(r): CountAndWriteRound
 }
-class numeralRules <<pure>> {
-  +frames(n: number): TenFrameLayout
-  +enter(e: NumeralEntry, digit: number): EntryResult
-}
-class EntryResult {
-  +entry: NumeralEntry
-  +status: "pending" | "accepted" | "rejected"
-  +hintDigits: number[]
-}
-numeralRules ..> NumeralEntry
-numeralRules ..> TenFrameLayout
+class CountAndWrite <<page>>
+class Tenframes <<pb-tenframes>>
+class DigitPad <<pb-digit-pad>>
+roundRules ..> CountAndWriteRound
+CountAndWrite ..> roundRules
+CountAndWrite ..> AudioPlayer
+CountAndWrite ..> RandomSource
+CountAndWrite ..> Clock
+CountAndWrite --> Tenframes
+CountAndWrite --> DigitPad
 @enduml

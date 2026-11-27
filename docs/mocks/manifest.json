@@ -95,15 +95,10 @@
     {
       "id": "count-and-write",
       "kind": "page",
-      "title": "Count and write to 20",
+      "title": "Count and write",
       "route": "/count/write",
-      "requirements": [],
-      "states": [
-        "counting",
-        "default",
-        "written",
-        "correct"
-      ],
+      "requirements": ["L2-003", "L2-004", "L2-025", "L2-026"],
+      "states": ["counting", "default", "written", "hint", "correct", "modelled"],
       "prototype_frame": "tnYweeoJu9A6giLgvwYCdA",
       "subject": "count",
       "not_applicable": {

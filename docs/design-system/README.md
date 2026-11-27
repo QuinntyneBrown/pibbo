@@ -50,6 +50,8 @@ a transcription of `docs/mocks/assets/tokens.css`.
 | Answer bar | `.answer-bar` (`--check`, `--right`, `--hint`, `--retry`, `--model`), `__message`; `.chunky--read`, `--reward` for Try again | `pages/count-the-toys/*.html`, `pages/sound-it-out/*.html` | `@pibbo/components` `pb-answer-bar` |
 | Word tiles | `.tiles`, `__unit`, `__say` (`--hidden`); `.tile` (`--next`, `--heard`, `--sounding`; `disabled`); `.blend`, `__bar`, `__fill` (`--0` to `--100`) | `pages/sound-it-out/*.html` | `@pibbo/components` `pb-word-tiles` |
 | Picture pick | `.pick`, `__option` (`aria-pressed`, `--right`; `disabled`), `__tick` | `pages/sound-it-out/pick.html`, `correct.html`, `retry.html`, `modelled.html` | `@pibbo/components` `pb-picture-pick` |
+| Ten-frames | `.tenframes` (`--small` once counted), `.tenframe`, `__cell`, `__thing` (`--counted`; `disabled`), `__badge`; 60 px things, 6 px apart | `pages/count-and-write/*.html` | `@pibbo/components` `pb-tenframes` |
+| Digit pad | `.digit-pad`, `__slots`, `__slot` (`--filled`, `--answer`), `__clear`, `__keys`, `__key` (`--lit`; `disabled`) | `pages/count-and-write/*.html` | `@pibbo/components` `pb-digit-pad` |
 
 ## Drift log
 
@@ -61,6 +63,7 @@ a transcription of `docs/mocks/assets/tokens.css`.
 | Dark theme also applies by `prefers-color-scheme` | The mocks force it with `data-theme`; a child's device setting should be honoured. |
 | Added `--color-pibbo-*` role tokens | The mock's mascot reads `--palette-*` directly; the product reads tokens by role only. Same values (journey 3). |
 | Added `.tile--sounding`, `.pick__tick` and `.shell--read .bubble__picture` | `L2-012` #1 lights each letter as it sounds; the right picture carries a tick, so colour is not its only carrier; the read bubble carries a picture as Count's does. Added to the mocks first (journey 4). |
+| Added `.tenframes` and `.digit-pad`; 6 px between ten-frame and digit targets | The prototype traced the numeral (a drag) and had no ten-frames (`L2-003`, `L2-004`). Five 60 px targets fit a 360 px phone only with a 6 px gap. Added to the mocks first (journey 5, ADR 0009). |
 
 ## Open questions
 

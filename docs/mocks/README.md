@@ -84,6 +84,16 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   (`rug__toy--0` to `--11`), each at least 60 px. Leave and replay grew to 60 px, and the speech
   bubble carries a picture of what is asked (`bubble__picture`). Next starts the next round
   (ADR 0007).
+- **Count and write reconciled with `L2-003`, `L2-004` and `AGENTS.md` (journey 5).** The
+  prototype drew a number track and a handwriting pad the child traces with a finger, which is a
+  precise drag (*Touch is a tap*), and it showed no things to count. The states now draw 14
+  toys in two ten-frames (`.tenframes`, `.tenframe`, `__thing`, `__cell`, `__badge`),
+  filled in order, each at least 60 px; once counted they shrink (`tenframes--small`) and a digit
+  pad (`.digit-pad`, `__slots`, `__slot`, `__keys`, `__key`, `__clear`) writes the numeral
+  by taps. New `hint` (the boxes clear and Pibbo lights 1, then 4: `digit-pad__key--lit`) and
+  `modelled` (`digit-pad__slot--answer`) states. The title is "Count and write"; the
+  cells between digit keys and things are 6 px, not 16 px, so five 60 px targets fit a 360 px
+  phone (ADR 0009).
 
 ## Open questions
 
@@ -119,7 +129,7 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 | Activity placeholder (`activity-placeholder`) | [✅](pages/activity-placeholder/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-024` |
 | Guided lesson (`guided-lesson`) | [✅](pages/guided-lesson/default.html) | ➖ | ➖ | ➖ | [✅](pages/guided-lesson/counting.html) |  | [✅](pages/guided-lesson/start.html) | [✅](pages/guided-lesson/done.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Count the toys (`count-the-toys`) | [✅](pages/count-the-toys/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/count-the-toys/start.html) |  | [✅](pages/count-the-toys/choose.html) | [✅](pages/count-the-toys/correct.html) | [✅](pages/count-the-toys/retry.html) | [✅](pages/count-the-toys/modelled.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-001`, `L2-002`, `L2-025`, `L2-026` |
-| Count and write to 20 (`count-and-write`) | [✅](pages/count-and-write/default.html) | ➖ | ➖ | ➖ | [✅](pages/count-and-write/counting.html) |  |  |  |  | [✅](pages/count-and-write/correct.html) |  |  | [✅](pages/count-and-write/written.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Count and write (`count-and-write`) | [✅](pages/count-and-write/default.html) | ➖ | ➖ | ➖ | [✅](pages/count-and-write/counting.html) |  |  |  |  | [✅](pages/count-and-write/correct.html) |  |  | [✅](pages/count-and-write/written.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Which is bigger? (`which-is-bigger`) | [✅](pages/which-is-bigger/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  | [✅](pages/which-is-bigger/correct.html) | [✅](pages/which-is-bigger/retry.html) |  |  | [✅](pages/which-is-bigger/picked.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Rocket countdown (`rocket-countdown`) | [✅](pages/rocket-countdown/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/rocket-countdown/start.html) |  |  | [✅](pages/rocket-countdown/correct.html) | [✅](pages/rocket-countdown/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Skip-count (`skip-count`) | [✅](pages/skip-count/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/skip-count/start.html) |  |  | [✅](pages/skip-count/correct.html) | [✅](pages/skip-count/retry.html) |  |  |  | [✅](pages/skip-count/by-twos.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |
