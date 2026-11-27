@@ -1,0 +1,8 @@
+<section class="game-group" aria-labelledby="activity-grid-title">
+  <h2 class="game-group__title" id="activity-grid-title">{{ title() }}</h2>
+  <ul class="game-group__grid">
+    @for (activity of activities(); track activity.id) {
+      <li><pb-activity-picture [activity]="activity" (touched)="touched.emit($event)" /></li>
+    }
+  </ul>
+</section>

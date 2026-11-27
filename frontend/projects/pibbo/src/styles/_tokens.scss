@@ -151,6 +151,8 @@
   --size-15: 9rem;
   --target-min: 3rem; /* 48px: the smallest thing a child touches in the prototype */
   --target-comfortable: 3.5rem;
+  --target-child: 3.75rem; /* 60px: the smallest target a child touches (AGENTS.md, L2-024) */
+  --gap-targets: 1rem; /* 16px: the least space between two targets (L2-024) */
   --control-height: 3.5rem; /* Chunky lg */
   --control-height-md: 3rem;
   --progress-height: 1rem;

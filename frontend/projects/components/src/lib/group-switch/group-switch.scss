@@ -1,0 +1,60 @@
+.switch {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--gap-targets);
+}
+
+.switch__option {
+  --depth: var(--color-depth);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-width: var(--size-12);
+  min-height: var(--size-12);
+  padding: var(--space-3) var(--space-6);
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  transition:
+    transform var(--duration-instant) var(--ease-out-quint),
+    box-shadow var(--duration-instant) var(--ease-out-quint),
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+
+  &:active {
+    transform: translateY(var(--press-travel));
+    box-shadow: 0 var(--press-depth-down) 0 var(--depth);
+  }
+
+  &[aria-pressed='true'] {
+    --depth: var(--color-count-depth);
+    background: var(--color-count-strong);
+    color: var(--color-fg-on-strong);
+
+    // A tick shows the chosen group as well as its colour.
+    &::after {
+      content: '\2713';
+      font-size: var(--font-size-lg);
+      line-height: 1;
+    }
+  }
+}
+
+.switch__option--read[aria-pressed='true'] {
+  --depth: var(--color-read-depth);
+  background: var(--color-read-strong);
+}
+
+.switch__glyph {
+  font-family: var(--font-read);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
