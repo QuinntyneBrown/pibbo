@@ -75,13 +75,14 @@
       "kind": "page",
       "title": "Count the toys",
       "route": "/count/toys",
-      "requirements": [],
+      "requirements": ["L2-001", "L2-002", "L2-025", "L2-026"],
       "states": [
         "start",
         "default",
         "choose",
         "correct",
-        "retry"
+        "retry",
+        "modelled"
       ],
       "prototype_frame": "3hcKaPmwMhuDctdU1Dz5XN",
       "subject": "count",

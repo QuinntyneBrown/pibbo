@@ -60,3 +60,9 @@ Activity pages report each answer to `roundRules` and act on the returned outcom
 The first two wrong answers give hints; the third models the answer and completes the round. Praise does not block the next touch.
 
 ![Sequence for three wrong answers, then a right one](diagrams/sequence-wrong-wrong-wrong.png)
+
+## Decisions (journey 3)
+
+- `answerOutcome(wrongSoFar, right)` in `@pibbo/domain/rounds` returns `right`, `hint`, or `model` on the third wrong answer (`MAX_WRONG_ANSWERS = 3`).
+- Praise is Pibbo's cheer and the praise recording; the page ends the cheer through `CLOCK.after(1500)` (ADR 0007) and Next is live throughout. The answer bar's message ("Yes! 7 toys.") stays until the next round.
+- A wrong answer plays no harsh sound: the hint is Pibbo saying "Let's count them together" and counting again.

@@ -60,3 +60,9 @@ Every activity page places its content inside `RoundShellComponent` and asks `In
 The instruction is always shown; it is spoken when sound is available and again on replay.
 
 ![Sequence for speak, show and replay an instruction](diagrams/sequence-instruction-and-replay.png)
+
+## Decisions (journey 3)
+
+- `RoundShell` (`pb-round-shell`, block `.shell`) is the shared shell: the leave control, the progress bar, Pibbo, the speech bubble with the instruction's picture and text, and the replay control (`.hear`, 60 px). The activity content and the answer bar are projected. It has no slot for a timer or score.
+- The instruction is a data item (`Instruction`: `text`, `recording`, `picture`) in `@pibbo/domain/rounds`; the page plays it on round start and on replay. The design's `InstructionPlayer` service was not needed for one activity.
+- The text is always shown, so a recording that fails (`PlayOutcome` `failed`) changes nothing on screen.

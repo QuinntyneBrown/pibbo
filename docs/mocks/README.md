@@ -70,6 +70,15 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   check pictures (`L2-024` #4) come back with journeys 22 and 23. `activity-placeholder` is new:
   it stands in for an activity until its journey builds it (ADR 0006).
 
+- **Count the toys reconciled with `L2-001`, `L2-002`, `L2-025` and `L2-026` (journey 3).** The
+  prototype's Try again cleared the stamps; now nothing is cleared: Pibbo counts the toys again
+  aloud, lighting each in turn (`rug__toy--highlight`), and the child chooses again. A new
+  `modelled` state shows the right numeral (`numeral--answer`) after the third wrong answer. The
+  prototype's toy spots overlapped on a phone; toys now sit one per cell of a 4 x 3 grid
+  (`rug__toy--0` to `--11`), each at least 60 px. Leave and replay grew to 60 px, and the speech
+  bubble carries a picture of what is asked (`bubble__picture`). Next starts the next round
+  (ADR 0007).
+
 ## Open questions
 
 - The prototype and these mocks are not reconciled with `AGENTS.md`. At the owner's
@@ -103,7 +112,7 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 | Home · Choose an activity (`home`) | [✅](pages/home/default.html) | ➖ | ➖ | ➖ | [✅](pages/home/counting.html) | [✅](pages/home/first-visit.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-024`, `L2-035` |
 | Activity placeholder (`activity-placeholder`) | [✅](pages/activity-placeholder/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-024` |
 | Guided lesson (`guided-lesson`) | [✅](pages/guided-lesson/default.html) | ➖ | ➖ | ➖ | [✅](pages/guided-lesson/counting.html) |  | [✅](pages/guided-lesson/start.html) | [✅](pages/guided-lesson/done.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| Count the toys (`count-the-toys`) | [✅](pages/count-the-toys/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/count-the-toys/start.html) |  | [✅](pages/count-the-toys/choose.html) | [✅](pages/count-the-toys/correct.html) | [✅](pages/count-the-toys/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Count the toys (`count-the-toys`) | [✅](pages/count-the-toys/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/count-the-toys/start.html) |  | [✅](pages/count-the-toys/choose.html) | [✅](pages/count-the-toys/correct.html) | [✅](pages/count-the-toys/retry.html), [✅ modelled](pages/count-the-toys/modelled.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Count and write to 20 (`count-and-write`) | [✅](pages/count-and-write/default.html) | ➖ | ➖ | ➖ | [✅](pages/count-and-write/counting.html) |  |  |  |  | [✅](pages/count-and-write/correct.html) |  | [✅](pages/count-and-write/written.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Which is bigger? (`which-is-bigger`) | [✅](pages/which-is-bigger/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  | [✅](pages/which-is-bigger/correct.html) | [✅](pages/which-is-bigger/retry.html) |  | [✅](pages/which-is-bigger/picked.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Rocket countdown (`rocket-countdown`) | [✅](pages/rocket-countdown/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/rocket-countdown/start.html) |  |  | [✅](pages/rocket-countdown/correct.html) | [✅](pages/rocket-countdown/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |

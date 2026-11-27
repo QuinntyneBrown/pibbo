@@ -8,3 +8,4 @@
 | [0004](0004-e2e-fixtures.md) | E2E fixtures: fixed clock, seeded random source, stand-in audio player, network guard | Accepted |
 | [0005](0005-unit-tests-run-locally.md) | Unit tests run locally, not in CI | Accepted; open for the repository owner |
 | [0006](0006-home-catalogue-and-activity-placeholders.md) | Home catalogue, placeholder activities and the tap rule | Accepted |
+| [0007](0007-count-the-toys-round.md) | Count the toys: the round, retry, praise and the timer contract | Accepted |
