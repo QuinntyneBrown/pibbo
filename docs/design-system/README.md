@@ -39,6 +39,10 @@ a transcription of `docs/mocks/assets/tokens.css`.
 | Component | Block | Mock | Code |
 |-----------|-------|------|------|
 | Wordmark | `.wordmark` (`--md`, `--lg`, `--hero`) | `pages/brand/default.html`, `pages/home/default.html` | `@pibbo/components` `pb-wordmark` |
+| Group switch | `.switch--groups`, `.switch__option--group` (`--read`), `.switch__glyph`; chosen is `aria-pressed="true"` plus a tick | `pages/home/*.html` | `@pibbo/components` `pb-group-switch` |
+| Activity grid | `.game-group`, `__title`, `__grid` (2, 3, 5 columns; `--gap-targets`) | `pages/home/default.html`, `counting.html` | `@pibbo/components` `pb-activity-grid` |
+| Activity picture | `.game-card` (`--count`, `--read`), `__glyph`, `__body`, `__title`; at least `--target-child` | `pages/home/default.html`, `counting.html` | `@pibbo/components` `pb-activity-picture` |
+| Tap | behaviour, no block: `[pbTap]` on every target (ADR 0006) | — | `@pibbo/components` `Tap` |
 
 ## Drift log
 
@@ -46,12 +50,13 @@ a transcription of `docs/mocks/assets/tokens.css`.
 |--------|-----|
 | Added `--color-brand-seed` and `--color-brand-leaf` | The mock's wordmark reads `--palette-sun` and `--palette-leaf` directly; the product reads tokens by role only. Same values. |
 | Dropped the "aliases mock.css expects" (`--color-accent`, `--color-warning-*`) | They serve the mock chrome, not the product. |
+| Added `--target-child` (60 px) and `--gap-targets` (16 px) | `L2-024` and `AGENTS.md`; added to the mock tokens first (journey 2). |
 | Dark theme also applies by `prefers-color-scheme` | The mocks force it with `data-theme`; a child's device setting should be honoured. |
 
 ## Open questions
 
-- `--target-min` in the mocks is 3 rem (48 px), while `AGENTS.md` requires every target a child
-  touches to be at least 60 × 60 px. The first journey that builds a target must settle this
-  with the repository owner (mock first, then this folder).
+- `--target-min` (48 px) stays for the prototype's smaller controls, but every target a child
+  touches now uses `--target-child` (60 px), settled in journey 2. Other screens move to it as
+  their journeys build them.
 - Component pages, the remaining foundation pages and the contrast record come with the
   journeys that build each component.

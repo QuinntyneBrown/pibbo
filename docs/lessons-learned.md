@@ -29,3 +29,38 @@ One entry per journey, newest last. Before a journey, read these and apply the o
    with `allowTypeImports` enforces exactly that.
 
 **Earlier lessons applied:** none; this is the first journey.
+
+## Journey 2: Home: choose an activity
+
+**What slowed it**
+
+- The Home mock was the prototype's, unreconciled with `AGENTS.md` (child's name, stars, 21
+  games). It had to be redrawn before any code (ADR 0006).
+- Long heredocs in Git Bash failed again, apparently on non-ASCII text (a tick, an em dash);
+  the Write tool is reliable for new files.
+- The stand-in audio player recorded `currentSrc`, which keeps the previous recording until
+  the (faked) load runs; it now records `src` first.
+- Playwright's `locator.tap()` throws without `hasTouch`; the page object taps on a coarse
+  pointer and clicks otherwise.
+- CDP touch sessions keep their own touch state: a `touchEnd` from a new session fails with
+  "Must send a TouchStart first". Keep one session per gesture.
+
+**New lessons**
+
+1. Read the mock against `AGENTS.md` before the slice plan; a mock that breaks *Children's
+   privacy and safety* is redrawn first, and the departure goes in `docs/mocks/README.md`.
+2. Drive palms, second fingers and long presses with `Input.dispatchTouchEvent` (with
+   `radiusX`/`radiusY`) and advance time with `page.clock.runFor`: `performance.now()` follows
+   the fake clock, so a long press needs no real wait.
+3. Prove a rule-based spec bites by breaking the rule once (the long-press spec failed with the
+   threshold raised).
+4. Lazy routes still grow the initial chunk: framework code they use (linkedSignal, control
+   flow) is hoisted into it. Expect a few kB per new feature and budget for it explicitly.
+
+**Earlier lessons applied**
+
+- Faking browser APIs, not bindings (J1 #1): worked; the palm and long-press specs exercise the
+  real `pbTap` with no test hook in the bundle.
+- E2E against the production build with headers (J1 #2): worked; no CSP issue arose.
+- Types-only imports from `api` in `components` (J1 #5): worked; the new components import
+  `Activity` and `ActivityGroup` as types.
