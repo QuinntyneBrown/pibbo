@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import type { Instruction, PibboMood } from '@pibbo/api';
+import type { GroupId, Instruction, PibboMood } from '@pibbo/api';
 import { Pibbo } from '../pibbo/pibbo';
 import { Tap } from '../tap/tap';
 
@@ -19,6 +19,8 @@ import { Tap } from '../tap/tap';
 export class RoundShell {
   /** The activity's name, for assistive technology. */
   readonly title = input.required<string>();
+  /** The activity's group, which colours the shell (`shell--count`, `shell--read`). */
+  readonly group = input<GroupId>('count');
   readonly instruction = input.required<Instruction>();
   readonly mood = input<PibboMood>('rest');
   /** Rounds finished so far, out of `rounds`. */

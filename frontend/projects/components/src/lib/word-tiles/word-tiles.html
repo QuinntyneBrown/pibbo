@@ -1,0 +1,39 @@
+<div class="tiles" role="group" aria-label="The sounds in the word">
+  @for (sound of sounds(); track $index; let i = $index) {
+    @let heardIt = heard()[i] ?? false;
+    <div class="tiles__unit">
+      <button
+        type="button"
+        class="tile"
+        [class.tile--wide]="sound.letters.length > 1"
+        [class.tile--heard]="heardIt"
+        [class.tile--next]="next() === i"
+        [class.tile--sounding]="sounding() === i"
+        [disabled]="next() !== i"
+        [attr.aria-label]="
+          heardIt
+            ? sound.letters + ', says ' + sound.shown
+            : next() === i
+              ? sound.letters + ', tap to hear it'
+              : sound.letters
+        "
+        (pbTap)="touched.emit(i)"
+      >
+        {{ sound.letters }}
+      </button>
+      <span class="tiles__say" [class.tiles__say--hidden]="!heardIt" aria-hidden="true">{{
+        sound.shown
+      }}</span>
+    </div>
+  }
+</div>
+@if (showBlend()) {
+  <div class="blend">
+    <div class="blend__bar" aria-hidden="true">
+      <div [class]="'blend__fill blend__fill--' + fill()"></div>
+    </div>
+    <button type="button" class="chunky" [disabled]="!canBlend()" (pbTap)="blend.emit()">
+      Read it fast
+    </button>
+  </div>
+}

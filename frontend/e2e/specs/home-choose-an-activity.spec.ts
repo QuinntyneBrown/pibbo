@@ -1,7 +1,7 @@
 // Traces to: L2-024
 import { test, expect } from '../fixtures/test';
 import { HomePage } from '../pages/home.page';
-import { ActivityPlaceholderPage } from '../pages/activity-placeholder.page';
+import { SoundItOutPage } from '../pages/sound-it-out.page';
 import { CountTheToysPage } from '../pages/count-the-toys.page';
 
 interface Box {
@@ -101,17 +101,17 @@ test.describe('Home: choose an activity', () => {
     ]);
   });
 
-  test('Given an open activity placeholder, when the child touches Home, then Home returns with the group still chosen', async ({
+  test('Given an open activity, when the grown-up touches leave, then Home returns with the group still chosen', async ({
     page,
   }) => {
     const home = new HomePage(page);
-    const activity = new ActivityPlaceholderPage(page);
+    const activity = new SoundItOutPage(page);
     await home.open();
     await home.touch(home.group('Read'));
     await home.touch(home.activity('Sound it out'));
-    await expect(activity.title).toHaveText('Sound it out');
+    await expect(activity.root).toBeVisible();
 
-    await home.touch(activity.home);
+    await home.touch(activity.leave);
 
     await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
     await expect(home.activity('Sound it out')).toBeVisible();
@@ -123,14 +123,14 @@ test.describe('Home: choose an activity', () => {
   }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium-desktop', 'the keyboard is for the desktop');
     const home = new HomePage(page);
-    const activity = new ActivityPlaceholderPage(page);
+    const activity = new SoundItOutPage(page);
     await home.open();
 
     await home.activateWithKeyboard(home.group('Read'));
     await home.activateWithKeyboard(home.activity('Sound it out'));
 
-    await expect(activity.title).toHaveText('Sound it out');
-    expect(await spoken.recordings()).toEqual([
+    await expect(activity.root).toBeVisible();
+    expect((await spoken.recordings()).slice(0, 2)).toEqual([
       '/recordings/home/read.wav',
       '/recordings/home/sound-it-out.wav',
     ]);
