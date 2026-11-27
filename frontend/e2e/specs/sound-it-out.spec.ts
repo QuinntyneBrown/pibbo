@@ -6,6 +6,9 @@ import { SoundItOutPage } from '../pages/sound-it-out.page';
 const HOME = ['/recordings/home/read.wav', '/recordings/home/sound-it-out.wav'];
 const TAP_EACH = '/recordings/read/tap-each-letter.wav';
 const SAY_FAST = '/recordings/read/say-them-fast.wav';
+const YOU_READ = '/recordings/read/you-read.wav';
+const READ_AGAIN = '/recordings/read/read-again.wav';
+const THIS_IS = '/recordings/read/this-is.wav';
 const WHICH = '/recordings/read/which-picture.wav';
 const wordRecording = (w: string) => `/recordings/words/${w}.wav`;
 const sound = (s: string) => `/recordings/sounds/${s}.wav`;
@@ -125,5 +128,117 @@ test.describe('Sound it out: blending', () => {
       WHICH,
       wordRecording(word),
     ]);
+  });
+});
+
+test.describe('Sound it out: choosing the picture', () => {
+  test('Given three pictures, when the child chooses the right one and touches Check, then it is highlighted, brief praise plays, and Next starts the next round', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    const word = await read.soundAndBlend();
+    await expect(read.action).toBeDisabled();
+
+    await read.answer(word);
+
+    await expect(read.rightPicture).toHaveAttribute('aria-label', word);
+    await expect(read.message).toHaveText(`You read “${word}”!`);
+    expect((await spoken.recordings()).slice(-2)).toEqual([YOU_READ, wordRecording(word)]);
+    await page.clock.runFor(1500);
+    await read.touch(read.action);
+
+    await expect(read.progress).toHaveAttribute('aria-valuenow', '1');
+    await expect(read.pictures).toHaveCount(0);
+    await expect(read.heard).toHaveCount(0);
+    expect(await read.word()).not.toBe(word);
+    expect((await spoken.recordings()).at(-1)).toBe(TAP_EACH);
+  });
+
+  test('Given three pictures, when the child chooses a wrong one, then nothing heard is taken away, Pibbo says to read it again, and Try again blends the word again before the child picks again', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    const word = await read.soundAndBlend();
+    const wrong = (await read.pictureWords()).find((w) => w !== word)!;
+
+    await read.answer(wrong);
+
+    await expect(read.message).toHaveText('Read it again, then look closely.');
+    await expect(read.heard).toHaveCount(3);
+    await expect(read.pictures.first()).toBeDisabled();
+    expect((await spoken.recordings()).at(-1)).toBe(READ_AGAIN);
+    const before = (await spoken.recordings()).length;
+
+    await read.touch(read.action);
+
+    await expect(read.pictures.first()).toBeEnabled();
+    expect((await spoken.recordings()).slice(before)).toEqual([
+      ...[...word].map(sound),
+      wordRecording(word),
+      WHICH,
+      wordRecording(word),
+    ]);
+    await read.answer(word);
+    await expect(read.message).toHaveText(`You read “${word}”!`);
+  });
+
+  test('Given two wrong pictures, when the third is wrong too, then Pibbo shows and says the right picture and the round completes', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    const word = await read.soundAndBlend();
+    const wrong = (await read.pictureWords()).find((w) => w !== word)!;
+
+    for (let i = 0; i < 2; i++) {
+      await read.answer(wrong);
+      await read.touch(read.action);
+      await expect(read.pictures.first()).toBeEnabled();
+    }
+    await read.answer(wrong);
+
+    await expect(read.message).toHaveText(`This is “${word}”.`);
+    await expect(read.rightPicture).toHaveAttribute('aria-label', word);
+    expect((await spoken.recordings()).slice(-2)).toEqual([THIS_IS, wordRecording(word)]);
+    await expect(read.action).toBeEnabled();
+  });
+
+  test('Given the fifth round is read, when the child touches Next, then Home returns with Read chosen', async ({
+    page,
+  }) => {
+    const read = new SoundItOutPage(page);
+    const home = new HomePage(page);
+    await read.openFromHome();
+
+    for (let i = 0; i < 5; i++) {
+      const word = await read.soundAndBlend();
+      await read.answer(word);
+      await read.touch(read.action);
+      if (i < 4) await expect(read.progress).toHaveAttribute('aria-valuenow', String(i + 1));
+    }
+
+    await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
+  });
+});
+
+test.describe('Sound it out: with the sound off', () => {
+  test.use({ sound: 'off' });
+
+  test('Given the device is muted, when the child sounds out and blends a word, then every sound is shown and the round completes', async ({
+    page,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+
+    const word = await read.soundAndBlend();
+    await expect(read.shownSounds).toHaveText([...word].map((l) => `/${l}/`));
+    await read.answer(word);
+
+    await expect(read.message).toHaveText(`You read “${word}”!`);
   });
 });

@@ -11,6 +11,8 @@
     type="button"
     class="chunky"
     [class.chunky--success]="kind() === 'right'"
+    [class.chunky--read]="group() === 'read'"
+    [class.chunky--reward]="kind() === 'retry'"
     [disabled]="!ready()"
     (pbTap)="action.emit()"
   >
@@ -19,6 +21,12 @@
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M5 12h14M12 5l7 7-7 7" />
       </svg>
+    } @else if (kind() === 'retry') {
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+        <path d="M3 3v5h5" />
+      </svg>
+      Try again
     } @else {
       Check
     }

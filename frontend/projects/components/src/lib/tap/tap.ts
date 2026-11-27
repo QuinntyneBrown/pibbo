@@ -29,6 +29,9 @@ const SYNTHETIC_CLICK_WINDOW_MS = 800;
     '(pointerup)': 'up($event)',
     '(pointercancel)': 'cancel($event)',
     '(click)': 'click($event)',
+    // The browser's click after a touch can land on whatever replaced the target under the
+    // finger (blend gives way to the pictures); cancelling the touch's end prevents it.
+    '(touchend)': '$event.cancelable && $event.preventDefault()',
     '(contextmenu)': '$event.preventDefault()',
   },
 })

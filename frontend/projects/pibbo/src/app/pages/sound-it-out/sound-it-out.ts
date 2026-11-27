@@ -8,18 +8,30 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AUDIO_PLAYER, RANDOM_SOURCE, type Instruction, type PlayOutcome } from '@pibbo/api';
-import { AnswerBar, PicturePick, RoundShell, WordTiles } from '@pibbo/components';
+import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction, type PlayOutcome } from '@pibbo/api';
+import {
+  AnswerBar,
+  PicturePick,
+  RoundShell,
+  WordTiles,
+  type AnswerBarKind,
+} from '@pibbo/components';
 import {
   blendDone,
   blendPlan,
+  checkPicture,
+  choosePicture,
   nextLetter,
   SOUND_OUT,
   startBlend,
   startSoundOutRound,
   touchLetter,
+  tryAgain,
   type SoundOutRound,
 } from '@pibbo/domain';
+
+/** Praise lasts no more than this (L2-026 #3). */
+const PRAISE_MS = 1500;
 
 /**
  * Sound it out (docs/mocks/pages/sound-it-out): the child touches each letter to hear its
@@ -35,6 +47,7 @@ import {
 })
 export class SoundItOut {
   private readonly audio = inject(AUDIO_PLAYER);
+  private readonly clock = inject(CLOCK);
   private readonly random = inject(RANDOM_SOURCE);
   private readonly router = inject(Router);
 
@@ -43,7 +56,9 @@ export class SoundItOut {
   /** Rounds finished in this play. */
   protected readonly done = signal(0);
 
-  protected readonly next = computed(() => nextLetter(this.round()));
+  protected readonly nextToTouch = computed(() => nextLetter(this.round()));
+  protected readonly praising = signal(false);
+  private endPraise: (() => void) | null = null;
   /** The letter whose sound is playing. */
   protected readonly sounding = signal<number | null>(null);
   protected readonly instruction = computed<Instruction>(() => {
@@ -61,6 +76,38 @@ export class SoundItOut {
         };
     }
   });
+  protected readonly mood = computed(() =>
+    this.praising()
+      ? 'cheer'
+      : this.round().wrong > 0 && this.round().phase !== 'right'
+        ? 'oh'
+        : 'rest',
+  );
+  protected readonly bar = computed<{ kind: AnswerBarKind; message: string; ready: boolean }>(
+    () => {
+      const round = this.round();
+      const word = round.word.word;
+      switch (round.phase) {
+        case 'right':
+          return { kind: 'right', message: `You read “${word}”!`, ready: true };
+        case 'modelled':
+          return { kind: 'model', message: `This is “${word}”.`, ready: true };
+        case 'retry':
+          return { kind: 'retry', message: SOUND_OUT.hint.text, ready: true };
+        default:
+          return {
+            kind: 'check',
+            message: '',
+            ready: round.phase === 'picking' && round.chosen !== null,
+          };
+      }
+    },
+  );
+  /** The word whose picture is shown as right, once the round is done. */
+  protected readonly right = computed(() => {
+    const round = this.round();
+    return round.phase === 'right' || round.phase === 'modelled' ? round.word.word : null;
+  });
   /** Whether the pictures are offered. */
   protected readonly picking = computed(() => {
     const phase = this.round().phase;
@@ -76,6 +123,7 @@ export class SoundItOut {
     document.addEventListener('visibilitychange', rest);
     inject(DestroyRef).onDestroy(() => {
       document.removeEventListener('visibilitychange', rest);
+      this.endPraise?.();
       this.audio.stop();
     });
     void this.audio.play(this.instruction().recording);
@@ -121,19 +169,71 @@ export class SoundItOut {
   }
 
   /** "Which picture is", then the word. */
-  private async askWhichPicture(round: SoundOutRound): Promise<void> {
-    const outcome = await this.audio.play(SOUND_OUT.instructions.picking.recording);
-    if (outcome !== 'stopped' && this.round() === round) {
-      void this.audio.play(round.word.recording);
-    }
+  private askWhichPicture(round: SoundOutRound): Promise<void> {
+    return this.say(SOUND_OUT.instructions.picking.recording, round);
   }
 
-  protected choosePicture(_word: string): void {
-    // Slice 5.
+  protected choosePicture(word: string): void {
+    const round = choosePicture(this.round(), word);
+    if (round === this.round()) return;
+    this.round.set(round);
+    void this.audio.play(round.pictures.find((w) => w.word === word)!.recording);
   }
 
+  /** Check while picking; Try again after a hint; Next once the round is done. */
   protected action(): void {
-    // Slice 5.
+    const round = this.round();
+    if (round.phase === 'right' || round.phase === 'modelled') this.next();
+    else if (round.phase === 'retry') this.tryAgain();
+    else this.check();
+  }
+
+  private check(): void {
+    const { round, outcome } = checkPicture(this.round());
+    if (outcome === null) return;
+    this.round.set(round);
+    if (outcome === 'right') this.praise(round);
+    else if (outcome === 'hint') void this.audio.play(SOUND_OUT.hint.recording);
+    else void this.say(SOUND_OUT.model.recording, round);
+  }
+
+  /** Try again (L2-026 #1): nothing is taken away; Pibbo blends the word again. */
+  private tryAgain(): void {
+    const round = tryAgain(this.round());
+    this.round.set(round);
+    void this.playBlend(round);
+  }
+
+  /** Says a line, then the word, unless something newer cuts it short. */
+  private async say(line: string, round: SoundOutRound): Promise<void> {
+    const outcome = await this.audio.play(line);
+    if (outcome !== 'stopped' && this.round() === round) void this.audio.play(round.word.recording);
+  }
+
+  /** Brief praise that never blocks Next: it ends itself after at most 1.5 s. */
+  private praise(round: SoundOutRound): void {
+    this.praising.set(true);
+    void this.say(SOUND_OUT.praise.recording, round);
+    this.endPraise?.();
+    this.endPraise = this.clock.after(PRAISE_MS, () => this.stopPraise());
+  }
+
+  private stopPraise(): void {
+    this.endPraise?.();
+    this.endPraise = null;
+    this.praising.set(false);
+  }
+
+  private next(): void {
+    this.stopPraise();
+    const done = this.done() + 1;
+    if (done >= SOUND_OUT.roundsPerPlay) {
+      this.leave();
+      return;
+    }
+    this.done.set(done);
+    this.round.set(startSoundOutRound(this.random, SOUND_OUT.words, this.round().word.word));
+    void this.audio.play(SOUND_OUT.instructions.sounding.recording);
   }
 
   protected replay(): void {

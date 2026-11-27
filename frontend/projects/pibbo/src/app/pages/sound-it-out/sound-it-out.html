@@ -2,6 +2,7 @@
   title="Sound it out"
   group="read"
   [instruction]="instruction()"
+  [mood]="mood()"
   [done]="done()"
   [rounds]="content.roundsPerPlay"
   (replay)="replay()"
@@ -11,7 +12,7 @@
     <pb-word-tiles
       [sounds]="round().word.sounds"
       [heard]="round().heard"
-      [next]="next()"
+      [next]="nextToTouch()"
       [sounding]="sounding()"
       [showBlend]="!picking()"
       [canBlend]="round().phase === 'ready'"
@@ -22,10 +23,18 @@
       <pb-picture-pick
         [pictures]="round().pictures"
         [chosen]="round().chosen"
+        [right]="right()"
         [locked]="round().phase !== 'picking'"
         (chose)="choosePicture($event)"
       />
     }
   </div>
-  <pb-answer-bar answer kind="check" [ready]="false" (action)="action()" />
+  <pb-answer-bar
+    answer
+    group="read"
+    [kind]="bar().kind"
+    [message]="bar().message"
+    [ready]="bar().ready"
+    (action)="action()"
+  />
 </pb-round-shell>

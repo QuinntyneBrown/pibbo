@@ -26,6 +26,7 @@
 }
 
 .answer-bar--hint,
+.answer-bar--retry,
 .answer-bar--model {
   background: var(--color-reward-soft);
 }
@@ -77,6 +78,17 @@
   &:disabled {
     opacity: 0.45;
   }
+}
+
+.chunky--read {
+  --depth: var(--color-read-depth);
+  background: var(--color-read-strong);
+}
+
+.chunky--reward {
+  --depth: var(--color-reward-strong);
+  background: var(--color-reward);
+  color: var(--color-on-reward);
 }
 
 .chunky--success {
