@@ -8,7 +8,15 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction, type PlayOutcome } from '@pibbo/api';
+import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
+import {
+  ASSET_PRELOADER,
+  AUDIO_PLAYER,
+  CLOCK,
+  RANDOM_SOURCE,
+  type Instruction,
+  type PlayOutcome,
+} from '@pibbo/api';
 import {
   AnswerBar,
   PicturePick,
@@ -22,6 +30,7 @@ import {
   checkPicture,
   choosePicture,
   nextLetter,
+  roundAssets,
   SOUND_OUT,
   startBlend,
   startSoundOutRound,
@@ -44,15 +53,20 @@ const PRAISE_MS = 1500;
   templateUrl: './sound-it-out.html',
   styleUrl: './sound-it-out.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Scoped to the activity: its fetches end when the child leaves.
+  providers: [{ provide: ASSET_PRELOADER, useClass: BrowserAssetPreloader }],
 })
 export class SoundItOut {
   private readonly audio = inject(AUDIO_PLAYER);
   private readonly clock = inject(CLOCK);
   private readonly random = inject(RANDOM_SOURCE);
   private readonly router = inject(Router);
+  private readonly preloader = inject(ASSET_PRELOADER);
 
   protected readonly content = SOUND_OUT;
   protected readonly round = signal(startSoundOutRound(this.random, SOUND_OUT.words));
+  /** The next round, chosen now so its assets are fetched while the child plays this one. */
+  private upcoming: SoundOutRound;
   /** Rounds finished in this play. */
   protected readonly done = signal(0);
 
@@ -115,6 +129,8 @@ export class SoundItOut {
   });
 
   constructor() {
+    this.preloader.preload(roundAssets(this.round()));
+    this.upcoming = this.prepareNext(this.round());
     // It rests: sound stops while the tab is hidden, and nothing resumes until a touch.
     const document = inject(DOCUMENT);
     const rest = () => {
@@ -232,8 +248,16 @@ export class SoundItOut {
       return;
     }
     this.done.set(done);
-    this.round.set(startSoundOutRound(this.random, SOUND_OUT.words, this.round().word.word));
+    this.round.set(this.upcoming);
+    this.upcoming = this.prepareNext(this.upcoming);
     void this.audio.play(SOUND_OUT.instructions.sounding.recording);
+  }
+
+  /** Chooses the round after `current` and fetches its assets while this one is played. */
+  private prepareNext(current: SoundOutRound): SoundOutRound {
+    const next = startSoundOutRound(this.random, SOUND_OUT.words, current.word.word);
+    this.preloader.preload(roundAssets(next));
+    return next;
   }
 
   protected replay(): void {

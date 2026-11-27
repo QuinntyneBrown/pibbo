@@ -242,3 +242,29 @@ test.describe('Sound it out: with the sound off', () => {
     await expect(read.message).toHaveText(`You read “${word}”!`);
   });
 });
+
+test.describe('Sound it out: the next round is ready', () => {
+  test('Given a round is being played, when the child touches Next, then the next word’s sounds, recording and picture were already fetched', async ({
+    page,
+  }) => {
+    const read = new SoundItOutPage(page);
+    const fetched: string[] = [];
+    page.on('request', (r) => fetched.push(new URL(r.url()).pathname));
+    await read.openFromHome();
+    const first = await read.soundAndBlend();
+    await read.answer(first);
+    const before = [...fetched];
+
+    await read.touch(read.action);
+    await expect(read.progress).toHaveAttribute('aria-valuenow', '1');
+    const next = await read.word();
+
+    for (const asset of [
+      ...[...next].map((l) => `/recordings/sounds/${l}.wav`),
+      `/recordings/words/${next}.wav`,
+      `/pictures/words/${next}.jpg`,
+    ]) {
+      expect(before, `${asset} fetched before Next`).toContain(asset);
+    }
+  });
+});
