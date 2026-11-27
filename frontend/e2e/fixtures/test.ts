@@ -17,14 +17,20 @@ export const RANDOM_SEED = 20260105;
 export interface Spoken {
   /** The recordings asked for, in order, as paths on Pibbo's own origin. */
   recordings(): Promise<string[]>;
+  /** How many times a playing recording was stopped. */
+  stops(): Promise<number>;
 }
 
+/** `'off'` stands for a muted device: every recording fails to play (L2-025 #3). */
+export type Sound = 'on' | 'off';
+
 interface Fixtures {
+  sound: Sound;
   spoken: Spoken;
   guard: void;
 }
 
-function installFakes(seed: number): void {
+function installFakes({ seed, sound }: { seed: number; sound: Sound }): void {
   // Seeded random source (mulberry32).
   let state = seed >>> 0;
   Math.random = () => {
@@ -37,14 +43,17 @@ function installFakes(seed: number): void {
 
   // The stand-in audio player.
   const asked: string[] = [];
+  const stops = { count: 0 };
   (window as unknown as { __spoken: string[] }).__spoken = asked;
+  (window as unknown as { __stops: { count: number } }).__stops = stops;
   HTMLMediaElement.prototype.play = function play(this: HTMLMediaElement) {
     asked.push(new URL(this.src || this.currentSrc, location.href).pathname);
+    if (sound === 'off') return Promise.reject(new DOMException('muted', 'NotAllowedError'));
     queueMicrotask(() => this.dispatchEvent(new Event('ended')));
     return Promise.resolve();
   };
   HTMLMediaElement.prototype.pause = function pause() {
-    /* nothing is playing */
+    stops.count++;
   };
   HTMLMediaElement.prototype.load = function load() {
     /* nothing is fetched */
@@ -91,9 +100,10 @@ async function guardNetwork(page: Page, use: () => Promise<void>): Promise<void>
 }
 
 export const test = base.extend<Fixtures>({
-  page: async ({ page }, use) => {
+  sound: ['on', { option: true }],
+  page: async ({ page, sound }, use) => {
     await page.clock.install({ time: FIXED_TIME });
-    await page.addInitScript(installFakes, RANDOM_SEED);
+    await page.addInitScript(installFakes, { seed: RANDOM_SEED, sound });
     await use(page);
   },
   guard: [async ({ page }, use) => guardNetwork(page, use), { auto: true }],
@@ -101,6 +111,8 @@ export const test = base.extend<Fixtures>({
     await use({
       recordings: () =>
         page.evaluate(() => [...(window as unknown as { __spoken: string[] }).__spoken]),
+      stops: () =>
+        page.evaluate(() => (window as unknown as { __stops: { count: number } }).__stops.count),
     });
   },
 });

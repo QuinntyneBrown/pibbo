@@ -121,6 +121,15 @@ export class CountTheToysPage {
     });
   }
 
+  /** Shows the tab again. */
+  async showTab(): Promise<void> {
+    await this.page.evaluate(() => {
+      Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true });
+      Object.defineProperty(document, 'hidden', { value: false, configurable: true });
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+  }
+
   /** Hides the tab, as when the screen locks or the child switches app. */
   async hideTab(): Promise<void> {
     await this.page.evaluate(() => {

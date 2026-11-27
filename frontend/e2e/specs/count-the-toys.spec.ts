@@ -284,3 +284,44 @@ test.describe('Count the toys: a wrong answer is a chance to try again', () => {
     await expect(count.progress).toHaveAttribute('aria-valuenow', '1');
   });
 });
+
+test.describe('Count the toys: with the sound off', () => {
+  test.use({ sound: 'off' });
+
+  test('Given the device is muted, when a round is played, then it can be completed from what is shown alone', async ({
+    page,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+    await expect(count.instruction).toHaveText('Tap each toy once to count it.');
+
+    const n = await count.countAll();
+    await expect(count.badge(n - 1)).toHaveText(String(n));
+    await expect(count.instruction).toHaveText('How many toys are there?');
+    await count.answer(n + 1);
+    await expect(count.message).toHaveText('Let’s count them together.');
+    await count.answer(n);
+
+    await expect(count.message).toHaveText(`Yes! ${n} toys.`);
+    await count.touch(count.action);
+    await expect(count.progress).toHaveAttribute('aria-valuenow', '1');
+  });
+});
+
+test.describe('Count the toys: it rests', () => {
+  test('Given a round, when the tab is hidden, then the sound stops and nothing plays on return until a touch', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+    const said = (await spoken.recordings()).length;
+    const stops = await spoken.stops();
+
+    await count.hideTab();
+    await count.showTab();
+
+    expect(await spoken.stops()).toBeGreaterThan(stops);
+    expect((await spoken.recordings()).length).toBe(said);
+  });
+});

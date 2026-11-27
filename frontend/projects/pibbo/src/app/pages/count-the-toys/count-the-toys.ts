@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -80,7 +81,14 @@ export class CountTheToys {
   );
 
   constructor() {
+    // It rests: sound stops while the tab is hidden, and nothing resumes until a touch.
+    const document = inject(DOCUMENT);
+    const rest = () => {
+      if (document.visibilityState === 'hidden') this.audio.stop();
+    };
+    document.addEventListener('visibilitychange', rest);
     inject(DestroyRef).onDestroy(() => {
+      document.removeEventListener('visibilitychange', rest);
       this.endPraise?.();
       this.audio.stop();
     });
