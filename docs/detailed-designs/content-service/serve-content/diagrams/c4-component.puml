@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Serve versioned content
+Container_Boundary(b, "Pibbo.Api (ASP.NET Core, .NET 10)") {
+  Component(ctrl, "ContentController", "ASP.NET Core controller", "Read-only endpoints")
+  Component(h, "GetActivityQueryHandler", "MediatR handler", "Loads one activity")
+  Component(store, "IContentStore", "Interface", "Reads content")
+  Component(etag, "ManifestETag", "Output cache / conditional GET", "ETag and 304")
+}
+Rel(ctrl, h, "Sends query")
+Rel(h, store, "Reads")
+Rel(ctrl, etag, "Uses")
+@enduml

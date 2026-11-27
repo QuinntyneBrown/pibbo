@@ -1,0 +1,20 @@
+@startuml
+title UML sequence behaviour — Play a round with the keyboard
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "Activity page" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "RovingFocus" as rf
+end box
+actor -> rf : Tab into grid; ArrowRight
+rf -> rf : move focus; visible ring 3:1 [L2-036 #2]
+rf --> actor : announce "letter m, sound mmm" [L2-036 #4]
+actor -> rf : Enter
+rf -> page : touched
+@enduml

@@ -1,0 +1,40 @@
+@startuml
+title UML sequence behaviour — Write the numeral with digit tiles
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "CountToTwentyPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "DigitPadComponent" as pad
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "numeralRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+page -> rules : frames(14)
+rules --> page : one full and one partial ten-frame [L2-003 #1]
+== child counts to 14 ==
+page -> audio : play("number-14") [L2-003 #2]
+actor -> pad : Touch 1
+page -> rules : enter(entry, 1)
+rules --> page : pending
+actor -> pad : Touch 4
+page -> rules : enter(entry, 4)
+alt digits = [1,4]
+  rules --> page : accepted
+  page -> audio : play("number-14") [L2-004 #1]
+else digits = [4,1]
+  rules --> page : rejected, hintDigits [1,4]
+  page --> pad : clear tiles; animate 1 then 4 [L2-004 #2]
+end
+actor -> pad : Touch a third digit
+page -> rules : enter(entry, d)
+rules --> page : ignored [L2-004 #4]
+@enduml

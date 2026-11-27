@@ -1,0 +1,31 @@
+@startuml
+title UML sequence behaviour — Choose the first two sounds
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "AdjacentConsonantsPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "SoundChoiceComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "clusterRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+actor -> view : Touch s, then t
+page -> audio : play("sound-s"); play("sound-t") [L2-015 #1]
+actor -> view : Choose an answer
+page -> rules : judge(round, choice)
+alt "st"
+  page -> audio : play both sounds; praise [L2-015 #2]
+else other
+  page -> rules : model(round)
+  page -> audio : play model steps [L2-015 #2]
+end
+@enduml

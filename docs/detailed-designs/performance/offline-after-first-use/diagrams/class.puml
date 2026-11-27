@@ -1,0 +1,22 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Offline after first use
+
+class ActivityAvailability {
+  +online: Signal<boolean>
+  +isAvailable(id: string): Signal<boolean>
+}
+class ContentUpdater {
+  +onBetweenRounds(): void
+}
+ContentUpdater ..> SwUpdate
+@enduml

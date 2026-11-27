@@ -1,0 +1,44 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Count to twenty and write the numeral
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+class TenFrameLayout {
+  +frames: Thing[][]
+}
+class NumeralEntry {
+  +target: number
+  +digits: number[]
+}
+class numeralRules <<pure>> {
+  +frames(n: number): TenFrameLayout
+  +enter(e: NumeralEntry, digit: number): EntryResult
+}
+class EntryResult {
+  +entry: NumeralEntry
+  +status: "pending" | "accepted" | "rejected"
+  +hintDigits: number[]
+}
+numeralRules ..> NumeralEntry
+numeralRules ..> TenFrameLayout
+@enduml

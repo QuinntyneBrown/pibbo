@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Retry and praise
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(rules, "roundRules", "Pure domain functions", "Wrong-answer count")
+  Component(fb, "RoundFeedback", "Token ROUND_FEEDBACK", "Praise, hint, model")
+  Component(clock, "Clock", "Token CLOCK", "Dismiss timer")
+  Component(pr, "PraiseComponent", "Presentation", "Non-blocking praise")
+}
+Rel(fb, rules, "Asks outcome")
+Rel(fb, clock, "Schedules dismiss")
+Rel(fb, pr, "Shows")
+@enduml

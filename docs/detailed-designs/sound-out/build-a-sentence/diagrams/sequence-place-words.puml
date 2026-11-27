@@ -1,0 +1,32 @@
+@startuml
+title UML sequence behaviour — Place words in order
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "SentencePage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "SentenceSlotsComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "sentenceRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+actor -> view : Touch word tile
+page -> audio : play word [L2-020 #3]
+page -> rules : place(round, word)
+alt expected
+  page --> view : move to next slot [L2-020 #1]
+else not expected
+  page --> view : tile stays; pulse next slot [L2-020 #2]
+end
+opt complete
+  page -> audio : play sentence; show "The cat sat." [L2-020 #4]
+end
+@enduml

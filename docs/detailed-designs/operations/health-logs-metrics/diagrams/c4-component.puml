@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Health, logs and metrics
+Container_Boundary(b, "Pibbo.Api (ASP.NET Core, .NET 10)") {
+  Component(hc, "HealthChecks", "ASP.NET Core", "live / ready")
+  Component(log, "Request logging", "Serilog JSON", "Route template")
+  Component(otel, "OpenTelemetry", "Metrics exporter", "Per route")
+  Component(ex, "ExceptionHandler", "Middleware", "500 problem details")
+}
+Rel(ex, log, "Logs with trace id")
+Rel(hc, otel, "Exported with")
+@enduml

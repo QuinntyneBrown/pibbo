@@ -1,0 +1,69 @@
+# Choose an activity from Home
+
+## Overview
+
+Home is the first screen of Pibbo. It lets a child who cannot read choose what to practise.
+It shows two *groups* — Count and Read — as pictures, plus a picture for guided lessons and one for the check game.
+
+- **group** — set of activities of one kind shown together, Count or Read
+- **activity picture** — touch target that names an activity by picture and by a spoken recording
+
+Touching a group picture speaks its name and shows that group's activities, at most 6 per screen. Touching an activity picture once speaks its name and opens it. Home is also the touch that unlocks sound in the browser.
+
+## Description
+
+The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
+
+- **`HomePage`** — route component in `pibbo` at `/`, in the initial bundle. It reads the activity catalogue, tracks the chosen group in a signal and navigates to the lazy activity route.
+- **`ActivityGridComponent`** — presentation component (`pb-activity-grid`) laying out at most 6 `pb-activity-picture` targets, each at least 60 × 60 px with at least 16 px between targets.
+- **`ActivityPictureComponent`** — presentation component (`pb-activity-picture`): picture, accessible name and `touched` output.
+- **`ActivityCatalogue`** — data in `@pibbo/domain` listing groups, activities, their pictures, recordings and route paths.
+- **`AudioUnlock`** — part of the `AudioPlayer` implementation; the first touch on Home resumes the audio context.
+- **`GrownUpEntry`** — small corner control leading to the grown-up gate (`grown-up/grown-up-gate`).
+
+## Requirements
+
+The feature realises the following level-2 (L2) requirements. Each L2 requirement refines a level-1 (L1) requirement, cited by identifier.
+
+| L2 ID | Refines (L1) | Requirement |
+|-------|--------------|-------------|
+| `L2-024` | `L1-022` | Home screen. Home shows two groups, Count and Read, each a picture spoken when touched. Choosing a group shows its activities as pictures, at most 6 per screen. |
+
+Acceptance criteria of `L2-024` (Home screen):
+
+1. Given Home, when the child touches the Count picture, then "Count" is spoken and the counting activities are shown.
+2. Given any activity picture, when touched once, then its name is spoken and it opens.
+3. Given Home on any viewport, when shown, then nothing scrolls and every target is at least 60 x 60 px with at least 16 px between targets.
+4. Given Home, when shown, then guided lessons and the check game each have their own picture.
+
+## Diagrams
+
+### System context
+
+The child uses Pibbo directly; a grown-up is beside or nearby and is not needed to make the feature work. No third-party system takes part.
+
+![C4 system context for choose an activity from home](diagrams/c4-context.png)
+
+### Containers
+
+The feature runs in the `pibbo` single-page application. Content arrives from `Pibbo.Api` through the service worker cache; nothing a child does is sent back.
+
+![C4 container view for choose an activity from home](diagrams/c4-container.png)
+
+### Components
+
+`HomePage` reads `ActivityCatalogue`, renders it through `ActivityGridComponent`, and navigates to the chosen activity's lazy route.
+
+![C4 component view for choose an activity from home](diagrams/c4-component.png)
+
+### Class structure
+
+The catalogue is plain data; `HomePage` holds only the chosen group.
+
+![Class diagram for choose an activity from home](diagrams/class.png)
+
+### Choose a group and an activity
+
+The first touch unlocks sound. The group name is spoken and shown, then one touch on an activity speaks its name and opens it (`L2-024`).
+
+![Sequence for choose a group and an activity](diagrams/sequence-choose-group-and-activity.png)

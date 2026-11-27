@@ -1,0 +1,30 @@
+@startuml
+title UML sequence behaviour — Three wrong answers, then a right one
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "Activity page" as page
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "roundRules" as rules
+  participant "RoundFeedback" as fb
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "Clock" as clock
+end box
+actor -> page : Wrong answer
+page -> rules : onWrong(attempts)
+rules --> page : hint (1st, 2nd) [L2-026 #1]
+page -> fb : hint(h)
+actor -> page : Third wrong answer
+rules --> page : model [L2-026 #2]
+page -> fb : model(steps); complete round
+actor -> page : Right answer (next round)
+page -> fb : praise()
+fb -> clock : schedule(<= 1500 ms, dismiss) [L2-026 #3]
+actor -> page : Touch next control during praise (accepted)
+@enduml

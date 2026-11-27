@@ -1,0 +1,55 @@
+# Journeys
+
+These are the user journeys to implement, in the order to build them. Each one is a thin vertical slice with its own implementation prompt in [`docs/prompts/`](prompts/). Each prompt is run as one session and ends with a PR.
+
+**% complete:** 0% (0 of 27 journeys done)
+
+## Order
+
+The order follows what makes sense to build first:
+
+1. **Scaffold.** The workspace, its boundaries, checks and test fixtures, which everything stands on.
+2. **Home and the two core activities.** Count a set and Sound out and blend come straight from the purpose in `AGENTS.md`. They build the shared round behaviour, audio and content data that later journeys reuse.
+3. **The other counting activities,** from simplest to most complex. Count to music comes last because it needs timed audio.
+4. **The other reading activities,** each building on the data before it. The Sound it out extensions come in increasing difficulty.
+5. **Lessons, the check game and the grown-up area.** They need the activities, and they bring the first thing kept on the device.
+6. **Offline and the cross-cutting hardening.**
+7. **The backend.** It is blocked: `AGENTS.md` says there is no backend until an ADR, agreed with the repository owner, adds one.
+
+## Journeys
+
+| # | Journey | L2 | Detailed designs | Why here | Prompt | Status |
+|---|---------|----|------------------|----------|--------|--------|
+| 1 | Scaffold the workspace | `L2-034`, `L2-039` | [layout/responsive-breakpoints](detailed-designs/layout/responsive-breakpoints/README.md)<br>[operations/build-and-deploy](detailed-designs/operations/build-and-deploy/README.md)<br>[privacy/device-only-data](detailed-designs/privacy/device-only-data/README.md)<br>[security/transport-and-headers](detailed-designs/security/transport-and-headers/README.md)<br>[performance/fast-load-and-response](detailed-designs/performance/fast-load-and-response/README.md) | Nothing else can be built until the workspace, its boundaries, its checks and its test fixtures exist. | [prompt](prompts/01-scaffold-the-workspace.md) | Not started |
+| 2 | Home: choose an activity | `L2-024`, `L2-035` | [home/choose-an-activity](detailed-designs/home/choose-an-activity/README.md)<br>[layout/touch-robustness](detailed-designs/layout/touch-robustness/README.md) | Home is the door to every activity and the touch that unlocks sound. | [prompt](prompts/02-home-choose-an-activity.md) | Not started |
+| 3 | Count a set | `L2-001`, `L2-002`, `L2-025`, `L2-026` | [count/count-a-set](detailed-designs/count/count-a-set/README.md)<br>[rounds/spoken-and-shown-instructions](detailed-designs/rounds/spoken-and-shown-instructions/README.md)<br>[rounds/retry-and-praise](detailed-designs/rounds/retry-and-praise/README.md) | It is the first activity in the purpose and it builds the shared round behaviour (instructions, retry and praise) that every later activity reuses. | [prompt](prompts/03-count-a-set.md) | Not started |
+| 4 | Sound out and blend a word | `L2-012` | [sound-out/sound-out-and-blend](detailed-designs/sound-out/sound-out-and-blend/README.md) | It is the second activity in the purpose. It adds word data, sound recordings and the build-time content check that all reading activities reuse. | [prompt](prompts/04-sound-out-and-blend.md) | Not started |
+| 5 | Count and write to twenty | `L2-003`, `L2-004` | [count/count-to-twenty](detailed-designs/count/count-to-twenty/README.md) | It extends Count a set to larger sets and adds forming the numeral. | [prompt](prompts/05-count-to-twenty.md) | Not started |
+| 6 | Compare two numbers | `L2-005` | [count/compare-two-numbers](detailed-designs/count/compare-two-numbers/README.md) | It reuses the counting rules with one new decision. | [prompt](prompts/06-compare-two-numbers.md) | Not started |
+| 7 | Count backward | `L2-006` | [count/count-backward](detailed-designs/count/count-backward/README.md) | It reuses counting with a reversed order. | [prompt](prompts/07-count-backward.md) | Not started |
+| 8 | Skip-count by twos, fives and tens | `L2-007` | [count/skip-count](detailed-designs/count/skip-count/README.md) | It builds on counting forward. | [prompt](prompts/08-skip-count.md) | Not started |
+| 9 | Add two numbers together (pass and play) | `L2-008` | [count/add-two-numbers](detailed-designs/count/add-two-numbers/README.md) | It combines two counted sets and adds turn-taking on one device. | [prompt](prompts/09-add-two-numbers.md) | Not started |
+| 10 | Count to music | `L2-009` | [count/count-to-music](detailed-designs/count/count-to-music/README.md) | It needs a timed audio track, so it comes after the plain counting activities. | [prompt](prompts/10-count-to-music.md) | Not started |
+| 11 | Match letters to sounds | `L2-010` | [sound-out/match-letters-to-sounds](detailed-designs/sound-out/match-letters-to-sounds/README.md) | It is the simplest reading round and reuses the sound data from journey 4. | [prompt](prompts/11-match-letters-to-sounds.md) | Not started |
+| 12 | Recognise uppercase and lowercase | `L2-011` | [sound-out/recognise-letter-forms](detailed-designs/sound-out/recognise-letter-forms/README.md) | It pairs letter forms with the sounds already built. | [prompt](prompts/12-recognise-letter-forms.md) | Not started |
+| 13 | Spell a word by sound | `L2-013` | [sound-out/spell-by-sound](detailed-designs/sound-out/spell-by-sound/README.md) | It is the reverse of journey 4 and reuses its word data. | [prompt](prompts/13-spell-by-sound.md) | Not started |
+| 14 | Letter groups that make one sound | `L2-014` | [sound-out/letter-groups](detailed-designs/sound-out/letter-groups/README.md) | It extends Sound it out with groups of letters that make one sound. | [prompt](prompts/14-letter-groups.md) | Not started |
+| 15 | Adjacent consonants | `L2-015` | [sound-out/adjacent-consonants](detailed-designs/sound-out/adjacent-consonants/README.md) | It extends Sound it out to longer words. | [prompt](prompts/15-adjacent-consonants.md) | Not started |
+| 16 | Silent-e words | `L2-016` | [sound-out/silent-e](detailed-designs/sound-out/silent-e/README.md) | It extends Sound it out with the `magic-e` state. | [prompt](prompts/16-silent-e.md) | Not started |
+| 17 | Read longer words by syllable | `L2-017` | [sound-out/read-by-syllable](detailed-designs/sound-out/read-by-syllable/README.md) | It is the last Sound it out extension. | [prompt](prompts/17-read-by-syllable.md) | Not started |
+| 18 | Connect words to pictures | `L2-018` | [sound-out/connect-words-to-pictures](detailed-designs/sound-out/connect-words-to-pictures/README.md) | It reuses word data and pictures. | [prompt](prompts/18-connect-words-to-pictures.md) | Not started |
+| 19 | Recognise common words | `L2-019` | [sound-out/recognise-common-words](detailed-designs/sound-out/recognise-common-words/README.md) | It adds common-word data. | [prompt](prompts/19-recognise-common-words.md) | Not started |
+| 20 | Build a short sentence | `L2-020` | [sound-out/build-a-sentence](detailed-designs/sound-out/build-a-sentence/README.md) | It needs common words (journey 19). | [prompt](prompts/20-build-a-sentence.md) | Not started |
+| 21 | Hear rhymes | `L2-021` | [sound-out/hear-rhymes](detailed-designs/sound-out/hear-rhymes/README.md) | It reuses word recordings. | [prompt](prompts/21-hear-rhymes.md) | Not started |
+| 22 | Follow a guided lesson | `L2-022` | [lessons/guided-lesson](detailed-designs/lessons/guided-lesson/README.md) | It strings together activities that now exist. | [prompt](prompts/22-guided-lesson.md) | Not started |
+| 23 | Play the check game | `L2-023` | [lessons/check-game](detailed-designs/lessons/check-game/README.md) | It needs practice history and the on-device storage from journey 22. | [prompt](prompts/23-check-game.md) | Not started |
+| 24 | Grown-up gate and area | `L2-037` | [grown-up/grown-up-gate](detailed-designs/grown-up/grown-up-gate/README.md) | It lets a grown-up clear what journeys 22 and 23 keep. | [prompt](prompts/24-grown-up-gate.md) | Not started |
+| 25 | Offline after first use | `L2-033` | [performance/offline-after-first-use](detailed-designs/performance/offline-after-first-use/README.md) | It comes once the content is settled. | [prompt](prompts/25-offline-after-first-use.md) | Not started |
+| 26 | Performance, accessibility and privacy hardening | `L2-029`, `L2-032`, `L2-036` | [privacy/device-only-data](detailed-designs/privacy/device-only-data/README.md)<br>[performance/fast-load-and-response](detailed-designs/performance/fast-load-and-response/README.md)<br>[accessibility/wcag-and-keyboard](detailed-designs/accessibility/wcag-and-keyboard/README.md) | It closes the cross-cutting criteria across every built activity. | [prompt](prompts/26-performance-and-accessibility-hardening.md) | Not started |
+| 27 | Content backend (blocked on an ADR) | `L2-027`, `L2-028`, `L2-030`, `L2-031`, `L2-038`, `L2-039` | [content-service/serve-content](detailed-designs/content-service/serve-content/README.md)<br>[content-service/hold-nothing-about-a-child](detailed-designs/content-service/hold-nothing-about-a-child/README.md)<br>[security/transport-and-headers](detailed-designs/security/transport-and-headers/README.md)<br>[security/admin-content-security](detailed-designs/security/admin-content-security/README.md)<br>[operations/health-logs-metrics](detailed-designs/operations/health-logs-metrics/README.md)<br>[operations/build-and-deploy](detailed-designs/operations/build-and-deploy/README.md) | Last, and blocked. `AGENTS.md` says Pibbo has no backend until an ADR adds one, with the repository owner's agreement. | [prompt](prompts/27-content-backend.md) | Not started |
+
+## Notes
+
+- Cross-cutting requirements are built inside the first journey that needs them and checked in every later one: `L2-025` and `L2-026` (journey 3), `L2-034` (journey 1) and `L2-035` (journey 2). Journey 26 closes `L2-029`, `L2-032` and `L2-036` across the whole app.
+- Journeys 14, 15 and 24 have no mock state yet. Their prompts draw the mock first.
+- Journeys 22 and 23 keep data on the device, so they need an ADR first.

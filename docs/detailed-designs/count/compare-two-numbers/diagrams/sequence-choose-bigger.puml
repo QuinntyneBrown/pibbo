@@ -1,0 +1,32 @@
+@startuml
+title UML sequence behaviour — Choose the bigger number
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "ComparePage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "CompareSetsComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "compareRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+page -> rules : newRound(rnd)
+rules --> page : 6 and 9
+actor -> view : Touch a set
+page -> rules : judge(round, chosen)
+alt chose 9
+  page -> audio : play("nine-is-bigger-than-six"); show sentence [L2-005 #1]
+else chose 6
+  page -> rules : extras(round)
+  rules --> page : 3
+  page --> view : line up one-to-one; highlight 3 extras [L2-005 #2]
+end
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Choose an activity from Home
+Person(child, "Child", "Pre-reader practising counting and sounding out words")
+Person(grownup, "Grown-up", "Adult beside or near the child")
+System(pibbo, "Pibbo", "Responsive web application for counting and sounding out words")
+Rel(child, pibbo, "Plays rounds by touch, mouse or keyboard")
+Rel(grownup, pibbo, "Supports the child; uses the grown-up area")
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Content administration security
+Container_Boundary(b, "Pibbo.Api (ASP.NET Core, .NET 10)") {
+  Component(ctrl, "AdminContentController", "ASP.NET Core controller", "Authenticated writes")
+  Component(auth, "JwtBearer + ContentEditor policy", "Authentication", "401 / 403")
+  Component(v, "UploadAssetValidator", "FluentValidation", "Sniff and size")
+  Component(h, "UploadAssetHandler", "MediatR handler", "Stores asset")
+}
+Rel(ctrl, auth, "Guarded by")
+Rel(ctrl, h, "Sends command")
+Rel(h, v, "Validated by")
+@enduml

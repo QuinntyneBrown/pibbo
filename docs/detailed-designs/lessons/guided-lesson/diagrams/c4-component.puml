@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Follow a guided lesson
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(page, "LessonPage", "Angular route", "Hosts activities in order")
+  Component(path, "LessonPathComponent", "Presentation", "Shows steps")
+  Component(rules, "lessonRules", "Pure domain functions", "Order, resume, skip")
+  Component(store, "ProgressStore", "Token PROGRESS_STORE", "Device-only position")
+  Component(log, "ClientLog", "Token CLIENT_LOG", "Warnings, no child data")
+}
+Rel(page, path, "Binds")
+Rel(page, rules, "Calls")
+Rel(page, store, "Saves position")
+Rel(page, log, "Warns on unknown activity")
+@enduml

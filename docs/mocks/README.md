@@ -1,0 +1,114 @@
+# Pibbo mocks
+
+Static HTML mocks for every screen of the Magic Patterns prototype, in every state the
+prototype draws. Open [index.html](index.html) from disk to browse them. They need no
+network: the fonts and pictures are in `assets/`.
+
+**Source.** The Magic Patterns (MagicOS) project "Pibbo Early Learning App"
+(`eDDkMMZM4QuKmuCTaj4fkB`): the "Pibbo App" prototype (`kEXWdPBhS1LJVpJoSCC6YH`), its 19
+frames and the "Pibbo Brand" prototype. Each screen in `manifest.json` names its
+`prototype_frame`. These mocks were transcribed from the prototype as it stands, at the
+repository owner's direction, without reconciling it with `AGENTS.md` (see *Open questions*).
+
+## Opening the mocks
+
+- `index.html`: a gallery of every screen and state.
+- `?theme=dark` or `?theme=light` forces a theme; the mock bar toggles it, and so does the `t` key.
+- `?chrome=0` hides the mock bar and the yellow design notes, leaving only the product.
+- Each Check, Next and Try again button links to the state it leads to, so you can click
+  through a game the way a child would play it.
+
+## Cast and catalog
+
+The sample data comes from the prototype's `journeys.ts`, `pictures.ts` and each frame's
+args. It is the cast, not a set of rules.
+
+- **Child:** Maya. **Grown-up:** Dad (Add together).
+- **Stars:** 26 in total across the 21 games, as shown on Home and on the progress check results.
+- **Today's lessons:** Reading, "Sounds that team up" (letter sounds, sound it out, two
+  letters one sound, rhyme time, build a sentence), 2 of 5 done. Counting, "Numbers up and
+  down" (count the toys, count and write, which is bigger, rocket countdown, counting
+  dance), 1 of 5 done.
+- **Pictures:** teddy, duck, ball, map, sun, ship, stop, cap, cape, boat, night, sunset,
+  cat, hat, bat (`assets/pictures/`, downloaded from the prototype).
+- **Words:** map, ship, stop, cape, boat, night, sunset (Sound it out); sun (Spell by
+  sound); cat with hat, bat, sun, map (Rhyme time); "The cat can sit." (Build a sentence);
+  the story "The cat is on the mat. A ship is on the sea. The sun is up and the cat has a
+  nap." (Spot the word).
+- **Numbers:** 7 toys; 14 to write; 7 against 4; countdown from 10; skip-count by 5s to
+  50; 3 + 4; dance to 10.
+
+## How the mocks were made
+
+`assets/tokens.css` holds the prototype's `@theme` palette and type as primitives, with
+semantic roles on top. `assets/ui.css` is the component kit, with one BEM block per
+prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMatch` is
+`.pairs`, and so on). Every state of a screen is the same layout with different content.
+
+### Where the mocks depart from the prototype
+
+- **Dark theme added.** The prototype is light only. The dark theme is new: Pibbo and
+  the brand colours are kept, and pictures sit on a light plate.
+- **Self-hosted fonts and pictures.** The prototype loads Fredoka and Andika from Google
+  Fonts and its pictures from the Magic Patterns CDN. The mocks bundle copies so they
+  open offline.
+- **Static states for live behaviour.** The prototype animates the rocket, the dance,
+  the blend sweep and a wrong pair's shake. The mocks show a single frame and describe the
+  motion in a note.
+- **Links instead of handlers.** Leave, Next, Try again, Check and the game cards are
+  links between mock files. In the product they are buttons and routes.
+- **Words and pictures, Spot the word, Build a sentence and What do I know?** are
+  frames in the project but are not wired into the prototype's own navigation. Here they
+  are linked from Home and the lesson, as `journeys.ts` describes.
+
+## Open questions
+
+- The prototype and these mocks are not reconciled with `AGENTS.md`. At the owner's
+  direction, that was set aside for this transcription. The main differences: Home
+  shows the child's name and stars and offers 21 games, not the two activities `AGENTS.md`
+  names; "Rocket countdown" counts down; "What do I know?" keeps results between visits.
+  Under `AGENTS.md` the mocks are the source of truth, so this needs deciding before the
+  requirements, the design system or the code follow them.
+- Routes in `manifest.json` are proposals; the prototype has no URLs.
+- No specs exist yet, so no mock lists requirement IDs.
+
+## Re-checking and re-screenshotting
+
+```sh
+python .claude/skills/writing-html-mocks/scripts/check_mocks.py docs/mocks --write
+python .claude/skills/writing-html-mocks/scripts/screenshot_mocks.py docs/mocks
+```
+
+Screenshots go to `docs/mocks/.cache/` (ignored by git).
+
+## Coverage
+
+<!-- coverage:start -->
+
+Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missing
+
+### Pages
+
+| Screen | default | loading | empty | error | counting | first-visit | start | done | choose | correct | retry | written | picked | by-twos | playing | held | ready | pick | magic-e | syllables | full | all-chosen | miss | answered | counting-question | results | Requirements |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Home · Choose a game (`home`) | [✅](pages/home/default.html) | ➖ | ➖ | ➖ | [✅](pages/home/counting.html) | [✅](pages/home/first-visit.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Guided lesson (`guided-lesson`) | [✅](pages/guided-lesson/default.html) | ➖ | ➖ | ➖ | [✅](pages/guided-lesson/counting.html) |  | [✅](pages/guided-lesson/start.html) | [✅](pages/guided-lesson/done.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Count the toys (`count-the-toys`) | [✅](pages/count-the-toys/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/count-the-toys/start.html) |  | [✅](pages/count-the-toys/choose.html) | [✅](pages/count-the-toys/correct.html) | [✅](pages/count-the-toys/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Count and write to 20 (`count-and-write`) | [✅](pages/count-and-write/default.html) | ➖ | ➖ | ➖ | [✅](pages/count-and-write/counting.html) |  |  |  |  | [✅](pages/count-and-write/correct.html) |  | [✅](pages/count-and-write/written.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Which is bigger? (`which-is-bigger`) | [✅](pages/which-is-bigger/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  | [✅](pages/which-is-bigger/correct.html) | [✅](pages/which-is-bigger/retry.html) |  | [✅](pages/which-is-bigger/picked.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Rocket countdown (`rocket-countdown`) | [✅](pages/rocket-countdown/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/rocket-countdown/start.html) |  |  | [✅](pages/rocket-countdown/correct.html) | [✅](pages/rocket-countdown/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Skip-count (`skip-count`) | [✅](pages/skip-count/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/skip-count/start.html) |  |  | [✅](pages/skip-count/correct.html) | [✅](pages/skip-count/retry.html) |  |  | [✅](pages/skip-count/by-twos.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Add together (`add-together`) | [✅](pages/add-together/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/add-together/start.html) |  |  | [✅](pages/add-together/correct.html) | [✅](pages/add-together/retry.html) |  | [✅](pages/add-together/picked.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Counting dance (`counting-dance`) | [✅](pages/counting-dance/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/counting-dance/start.html) |  |  | [✅](pages/counting-dance/correct.html) |  |  |  |  | [✅](pages/counting-dance/playing.html) |  |  |  |  |  |  |  |  |  |  |  |  |
+| Letter sounds (`letter-sounds`) | [✅](pages/letter-sounds/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/letter-sounds/start.html) |  |  | [✅](pages/letter-sounds/correct.html) |  |  |  |  |  | [✅](pages/letter-sounds/held.html) |  |  |  |  |  |  |  |  |  |  |  |
+| Big and small letters (`big-and-small-letters`) | [✅](pages/big-and-small-letters/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  | [✅](pages/big-and-small-letters/correct.html) |  |  |  |  |  | [✅](pages/big-and-small-letters/held.html) |  |  |  |  |  |  |  |  |  |  |  |
+| Words and pictures (`words-and-pictures`) | [✅](pages/words-and-pictures/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  | [✅](pages/words-and-pictures/correct.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Sound it out (`sound-it-out`) | [✅](pages/sound-it-out/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  | [✅](pages/sound-it-out/correct.html) | [✅](pages/sound-it-out/retry.html) |  |  |  |  |  | [✅](pages/sound-it-out/ready.html) | [✅](pages/sound-it-out/pick.html) | [✅](pages/sound-it-out/magic-e.html) | [✅](pages/sound-it-out/syllables.html) |  |  |  |  |  |  |  |
+| Spell by sound (`spell-by-sound`) | [✅](pages/spell-by-sound/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  | [✅](pages/spell-by-sound/correct.html) | [✅](pages/spell-by-sound/retry.html) |  |  |  |  |  |  |  |  |  | [✅](pages/spell-by-sound/full.html) |  |  |  |  |  |  |
+| Rhyme time (`rhyme-time`) | [✅](pages/rhyme-time/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/rhyme-time/start.html) |  |  | [✅](pages/rhyme-time/correct.html) | [✅](pages/rhyme-time/retry.html) |  |  |  |  |  |  |  |  |  |  | [✅](pages/rhyme-time/all-chosen.html) |  |  |  |  |  |
+| Spot the word (`spot-the-word`) | [✅](pages/spot-the-word/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  | [✅](pages/spot-the-word/correct.html) |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/spot-the-word/miss.html) |  |  |  |  |
+| Build a sentence (`build-a-sentence`) | [✅](pages/build-a-sentence/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/build-a-sentence/start.html) |  |  | [✅](pages/build-a-sentence/correct.html) | [✅](pages/build-a-sentence/retry.html) |  |  |  |  |  |  |  |  |  | [✅](pages/build-a-sentence/full.html) |  |  |  |  |  |  |
+| What do I know? (`progress-check`) | [✅](pages/progress-check/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  | [✅](pages/progress-check/correct.html) | [✅](pages/progress-check/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/progress-check/answered.html) | [✅](pages/progress-check/counting-question.html) | [✅](pages/progress-check/results.html) |  |
+| Pibbo brand (`brand`) | [✅](pages/brand/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+<!-- coverage:end -->

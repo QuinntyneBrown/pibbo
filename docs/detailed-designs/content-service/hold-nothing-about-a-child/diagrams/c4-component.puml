@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Hold nothing about a child
+Container_Boundary(b, "Pibbo.Api (ASP.NET Core, .NET 10)") {
+  Component(pol, "ReadOnlyPublicPolicy", "Endpoint convention", "405 on writes")
+  Component(log, "PrivacyLogEnricher", "Logging enricher", "Strips identifiers")
+  Component(nc, "NoCookieMiddleware", "Middleware", "No Set-Cookie")
+}
+Rel(pol, log, "Requests logged through")
+Rel(log, nc, "Response passes")
+@enduml

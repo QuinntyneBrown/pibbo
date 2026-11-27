@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Choose an activity from Home
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(page, "HomePage", "Angular route component", "Chosen group, navigation")
+  Component(grid, "ActivityGridComponent", "Presentation", "At most 6 pictures")
+  Component(pic, "ActivityPictureComponent", "Presentation", "One spoken picture")
+  Component(cat, "ActivityCatalogue", "Domain data", "Groups and activities")
+  Component(audio, "AudioPlayer", "Token AUDIO_PLAYER", "Speaks names; unlocked on first touch")
+  Component(router, "Router", "Angular router", "loadComponent per activity")
+}
+Rel(page, grid, "Binds activities")
+Rel(grid, pic, "Renders")
+Rel(page, cat, "Reads")
+Rel(page, audio, "Speaks names")
+Rel(page, router, "Navigates")
+@enduml

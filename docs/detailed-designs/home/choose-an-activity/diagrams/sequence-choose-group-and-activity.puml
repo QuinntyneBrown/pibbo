@@ -1,0 +1,32 @@
+@startuml
+title UML sequence behaviour — Choose a group and an activity
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "HomePage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "ActivityGridComponent" as grid
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "ActivityCatalogue" as cat
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+actor -> grid : Touch Count picture
+grid -> page : touched(Count)
+page -> audio : Unlock audio context (first touch)
+page -> audio : play("name-count") [L2-024 #1]
+page -> cat : activitiesIn(Count)
+cat --> page : up to 6 ActivityEntry
+page --> grid : activities
+actor -> grid : Touch one activity picture
+grid -> page : touched(activity)
+page -> audio : play(activity.nameRecordingId) [L2-024 #2]
+page -> page : router.navigate(activity.route) (lazy route)
+@enduml

@@ -1,0 +1,14 @@
+# Generated caches
+.cache/
+
+# Python caches (skill scripts)
+__pycache__/
+
+# Node
+node_modules/
+
+# macOS
+.DS_Store
+
+# Worktrees of parallel Claude Code sessions
+.claude/worktrees/

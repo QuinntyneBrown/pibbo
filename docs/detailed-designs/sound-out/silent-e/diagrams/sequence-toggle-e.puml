@@ -1,0 +1,30 @@
+@startuml
+title UML sequence behaviour — Add and remove the e
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "SilentEPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "SilentEWordComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "silentERules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+actor -> view : Touch e tile
+page -> rules : toggle(round)
+rules --> page : withE = true
+page -> audio : play("word-cape")
+page --> view : change mark on a; cape picture [L2-016 #1]
+actor -> view : Touch e tile again
+page -> audio : play("word-cap") [L2-016 #2]
+actor -> view : Choose cap picture for "cape"
+page -> audio : play("word-cap"); choose again [L2-016 #3]
+@enduml

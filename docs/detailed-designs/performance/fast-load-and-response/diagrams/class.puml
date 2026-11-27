@@ -1,0 +1,31 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Load and response performance
+
+class RoundAssetLoader {
+  +prepare(round: RoundRef): Promise<void>
+  +prefetch(next: RoundRef): void
+}
+class BoundedAssetCache {
+  -capacity: number
+  +get(id): AudioBuffer | null
+  +put(id, b: AudioBuffer): void
+}
+class WebAudioPlayer {
+  -ctx: AudioContext
+  -current: AudioBufferSourceNode | null
+  +play(id): Promise<PlayOutcome>
+  +stop(): void
+}
+RoundAssetLoader --> BoundedAssetCache
+WebAudioPlayer --> BoundedAssetCache
+@enduml

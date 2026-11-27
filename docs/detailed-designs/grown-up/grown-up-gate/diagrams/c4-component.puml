@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Grown-up gate and area
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(entry, "GrownUpEntryComponent", "Presentation", "Corner control")
+  Component(gate, "GateDialog", "CDK Dialog", "Reading task")
+  Component(rules, "gateRules", "Pure domain", "Sequence")
+  Component(ga, "GrownUpPage", "Lazy route", "Volume, clear, about")
+}
+Rel(entry, gate, "Opens")
+Rel(gate, rules, "Calls")
+Rel(gate, ga, "Navigates on pass")
+@enduml

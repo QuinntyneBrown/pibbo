@@ -1,0 +1,23 @@
+@startuml
+title UML sequence behaviour — A request through the hardened pipeline
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Browser" as actor
+box "Backend — Pibbo.Api application" #D1FADF
+  participant "Middleware pipeline" as mw
+  participant "RateLimiter" as rl
+end box
+actor -> mw : http:// request
+mw --> actor : 308 to https [L2-030 #1]
+actor -> mw : https:// request
+mw -> mw : CORS check, frontend origin only [L2-030 #3]
+mw -> rl : acquire permit
+alt over 300 in a minute
+  rl --> actor : 429 with Retry-After [L2-030 #4]
+else permitted
+  mw --> actor : response + HSTS, CSP, nosniff, no-referrer [L2-030 #2]
+end
+@enduml

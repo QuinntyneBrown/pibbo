@@ -1,0 +1,34 @@
+@startuml
+title UML sequence behaviour — Choose a common word
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "CommonWordsPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "WordChoiceComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "repetitionRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "ProgressStore" as store
+  participant "AudioPlayer" as audio
+end box
+page -> store : read("repetition", guard)
+page -> rules : next(state, rnd)
+page -> audio : play("word-the")
+actor -> view : Choose a word
+alt "the"
+  page -> page : praise [L2-019 #1]
+else other
+  page -> audio : play chosen word; highlight "the"
+end
+page -> rules : record(state, word, right)
+rules --> page : due within 5 rounds when wrong [L2-019 #2]
+page -> store : write("repetition", state) (device only) [L2-019 #3]
+@enduml

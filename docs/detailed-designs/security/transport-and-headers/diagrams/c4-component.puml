@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Transport and header hardening
+Container_Boundary(b, "Pibbo.Api (ASP.NET Core, .NET 10)") {
+  Component(https, "HttpsRedirection + HSTS", "Middleware", "HTTPS only")
+  Component(hdr, "SecurityHeadersMiddleware", "Middleware", "CSP and headers")
+  Component(cors, "CorsPolicy", "Middleware", "One origin")
+  Component(rl, "RateLimiter", "Middleware", "300/min")
+}
+Rel(https, hdr, "Then")
+Rel(hdr, cors, "Then")
+Rel(cors, rl, "Then")
+@enduml

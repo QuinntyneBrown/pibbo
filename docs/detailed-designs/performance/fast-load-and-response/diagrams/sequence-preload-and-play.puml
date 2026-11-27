@@ -1,0 +1,22 @@
+@startuml
+title UML sequence behaviour — Preload a round and play on first touch
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "Activity page" as page
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "RoundAssetLoader" as loader
+  participant "WebAudioPlayer" as player
+end box
+page -> loader : prepare(round)
+loader --> page : decoded [L2-032 #3]
+page -> loader : prefetch(next round)
+actor -> page : First touch
+page --> actor : visual feedback < 100 ms [L2-032 #2]
+page -> player : play(id) < 150 ms
+@enduml

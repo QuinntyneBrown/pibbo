@@ -1,0 +1,38 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Connect words to pictures
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+class PairingRound {
+  +theme: Theme
+  +words: Word[]
+  +pictures: string[]
+  +joined: Map<string, string>
+  +selectedWord: string | null
+}
+class pairingRules <<pure>> {
+  +selectWord(r, w): PairingRound
+  +selectPicture(r, p): PairResult
+}
+PairingRound "1" *-- "3" Word
+@enduml

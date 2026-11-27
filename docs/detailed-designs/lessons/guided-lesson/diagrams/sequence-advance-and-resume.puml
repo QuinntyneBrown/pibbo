@@ -1,0 +1,32 @@
+@startuml
+title UML sequence behaviour — Advance, pause and resume a lesson
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "LessonPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "LessonPathComponent" as path
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "lessonRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "ProgressStore" as store
+end box
+page -> store : read("lesson", guard)
+page -> rules : resume(stored, lesson) [L2-022 #2]
+actor -> page : Finish activity 1
+page -> rules : advance(lesson, progress, known)
+alt next is unknown
+  rules --> page : skip; ClientLog.warn(no child data) [L2-022 #4]
+end
+page --> path : step 2 current by shape and colour [L2-022 #1]
+page -> store : write position
+actor -> page : Touch Home
+page -> page : navigate to Home, no confirmation [L2-022 #3]
+@enduml

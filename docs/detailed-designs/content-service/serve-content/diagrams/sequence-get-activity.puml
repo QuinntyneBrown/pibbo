@@ -1,0 +1,37 @@
+@startuml
+title UML sequence behaviour — Get an activity and the manifest
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "pibbo frontend" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "ContentApiClient (generated)" as client
+end box
+box "Backend — Pibbo.Api application" #D1FADF
+  participant "ContentController" as ctrl
+end box
+box "Backend — Pibbo Application and Domain" #ECFDF3
+  participant "GetActivityQueryHandler" as h
+end box
+box "Backend — Pibbo Infrastructure" #FFF4E5
+  database "Content store" as db
+end box
+actor -> client : load activity
+client -> ctrl : GET /api/v1/activities/{id}
+alt id !~ ^[a-z0-9-]{1,64}$
+  ctrl --> client : 400 problem details, no lookup [L2-027 #3]
+else valid
+  ctrl -> h : Send GetActivityQuery
+  h -> db : FindActivity(id)
+  alt found
+    h --> ctrl : ActivityDto
+    ctrl --> client : 200 JSON per OpenAPI [L2-027 #1]
+  else missing
+    ctrl --> client : 404 problem details [L2-027 #2]
+  end
+end
+client -> ctrl : GET /api/v1/content/manifest (If-None-Match)
+ctrl --> client : 304 or 200 with ETag and version [L2-027 #4]
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Recognise common words
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+class RepetitionState {
+  +version: number
+  +entries: Map<string, RepetitionEntry>
+}
+class RepetitionEntry {
+  +dueInRounds: number
+}
+class repetitionRules <<pure>> {
+  +next(s: RepetitionState, rnd: RandomSource): string
+  +record(s: RepetitionState, word: string, right: boolean): RepetitionState
+}
+interface ProgressStore <<token PROGRESS_STORE>> {
+  +read<T>(key, guard): T | null
+  +write<T>(key, value: T): void
+  +clearAll(): void
+}
+repetitionRules ..> RepetitionState
+@enduml

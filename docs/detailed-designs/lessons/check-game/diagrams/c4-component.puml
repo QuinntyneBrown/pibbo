@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Play the check game
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(page, "CheckGamePage", "Angular route", "Runs mixed rounds")
+  Component(res, "EarnedPicturesComponent", "Presentation", "Earned skills only")
+  Component(rules, "checkRules", "Pure domain functions", "Selection, results")
+  Component(store, "ProgressStore", "Token PROGRESS_STORE", "Device-only")
+}
+Rel(page, res, "Binds earned skills")
+Rel(page, rules, "Calls")
+Rel(page, store, "Reads history, writes results")
+@enduml

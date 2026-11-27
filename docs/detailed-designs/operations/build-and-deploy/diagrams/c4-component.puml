@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Build and deployment
+Container_Boundary(b, "Pibbo.Api (ASP.NET Core, .NET 10)") {
+  Component(ci, "CI workflow", "GitHub Actions", "Checks")
+  Component(img, "Container image", "OCI", "Non-root, pinned")
+  Component(dep, "Deployment", "<TO SUPPLY>", "Readiness-gated")
+}
+Rel(ci, img, "Builds")
+Rel(dep, img, "Promotes")
+@enduml

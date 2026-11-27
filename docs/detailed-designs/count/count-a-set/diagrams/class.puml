@@ -1,0 +1,53 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Count a set
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+class CountRound {
+  +things: Thing[]
+  +countedIds: ReadonlySet<string>
+  +choices: number[]
+  +count(): number
+}
+class Thing {
+  +id: string
+  +pictureId: string
+  +x: number
+  +y: number
+  +countedAs: number | null
+}
+class countingRules <<pure>> {
+  +newRound(n: number, rnd: RandomSource): CountRound
+  +touch(r: CountRound, id: string): TouchResult
+  +choicesFor(n: number, rnd: RandomSource): number[]
+  +judge(r: CountRound, numeral: number): Answer
+  +layout(n: number, area: Size): Position[]
+}
+class TouchResult {
+  +round: CountRound
+  +spokenNumber: number | null
+}
+CountRound "1" *-- "1..10" Thing
+countingRules ..> CountRound
+countingRules ..> RandomSource
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+title UML sequence behaviour — Touch a letter group
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "SoundOutPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "WordTilesComponent" as view
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+actor -> view : Touch [sh]
+page -> audio : play("sound-sh") once [L2-014 #1]
+actor -> view : Touch blend on [n][igh][t]
+page -> audio : play 3 sounds, then "word-night" [L2-014 #2-3]
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+title UML sequence behaviour — Match a played sound
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "MatchSoundsPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "LetterChoiceComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "soundRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+page -> audio : play("sound-m")
+actor -> view : Touch a letter
+page -> audio : play(letter sound, never name) [L2-010 #2]
+page -> rules : judge(round, letter)
+alt m
+  page -> page : RoundFeedback.praise() [L2-010 #1]
+else other
+  page -> audio : play("sound-m") again [L2-010 #1]
+end
+@enduml

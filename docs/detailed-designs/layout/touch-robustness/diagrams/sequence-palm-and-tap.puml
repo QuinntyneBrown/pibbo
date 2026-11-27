@@ -1,0 +1,21 @@
+@startuml
+title UML sequence behaviour — A resting palm and a tap
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "Activity page" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "TapDirective" as tap
+end box
+actor -> tap : pointerdown (palm, edge)
+tap -> tap : ignore [L2-035 #2]
+actor -> tap : pointerdown/up (finger)
+tap -> page : tap
+actor -> tap : long press / double tap
+tap -> tap : no answer, no menu [L2-035 #1]
+@enduml

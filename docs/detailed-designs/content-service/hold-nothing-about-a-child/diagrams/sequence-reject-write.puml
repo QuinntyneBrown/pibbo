@@ -1,0 +1,21 @@
+@startuml
+title UML sequence behaviour — Reject a write and log privately
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Any client" as actor
+box "Backend — Pibbo.Api application" #D1FADF
+  participant "Middleware pipeline" as mw
+  participant "ReadOnlyPublicPolicy" as pol
+end box
+box "Backend — Pibbo Infrastructure" #FFF4E5
+  participant "PrivacyLogEnricher" as log
+end box
+actor -> mw : POST /api/v1/activities/map
+mw -> pol : match endpoint
+pol --> mw : 405 Method Not Allowed [L2-028 #1]
+mw -> log : log route template, status; truncate IP [L2-028 #2]
+mw --> actor : 405, no Set-Cookie [L2-028 #3]
+@enduml

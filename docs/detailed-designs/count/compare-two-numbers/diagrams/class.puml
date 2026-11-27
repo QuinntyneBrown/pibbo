@@ -1,0 +1,38 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Compare two numbers
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+class CompareRound {
+  +left: number
+  +right: number
+  +bigger(): number
+}
+class compareRules <<pure>> {
+  +newRound(rnd: RandomSource): CompareRound
+  +judge(r: CompareRound, chosen: number): Answer
+  +extras(r: CompareRound): number
+}
+compareRules ..> CompareRound
+compareRules ..> RandomSource
+@enduml

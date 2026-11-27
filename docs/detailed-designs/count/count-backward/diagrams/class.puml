@@ -1,0 +1,40 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Count backward
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+class BackwardRound {
+  +start: number
+  +current: number
+}
+class backwardRules <<pure>> {
+  +newRound(rnd: RandomSource): BackwardRound
+  +touch(r: BackwardRound, n: number): StepResult
+}
+class StepResult {
+  +round: BackwardRound
+  +status: "advanced" | "hint" | "done"
+  +hintNumber: number | null
+}
+backwardRules ..> BackwardRound
+@enduml

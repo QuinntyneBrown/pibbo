@@ -1,0 +1,33 @@
+@startuml
+title UML sequence behaviour — Take turns and find the total
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "AddTogetherPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "TurnSetsComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "additionRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+page --> view : star turn shown by symbol and colour [L2-008 #1]
+actor -> view : Add 3 things, end turn
+actor -> view : Moon adds 4 things, end turn
+page -> audio : play("how-many-altogether")
+page -> rules : choicesFor(7, rnd)
+rules --> page : 3-5 numerals incl. 7 [L2-008 #2]
+actor -> view : Choose numeral
+alt wrong
+  page -> audio : count 1..7 aloud [L2-008 #3]
+else right
+  page -> page : RoundFeedback.praise(); no winner or score [L2-008 #4]
+end
+@enduml

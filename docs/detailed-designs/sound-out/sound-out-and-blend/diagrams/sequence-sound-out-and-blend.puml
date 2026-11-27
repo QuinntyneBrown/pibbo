@@ -1,0 +1,32 @@
+@startuml
+title UML sequence behaviour — Touch each letter, then blend
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "SoundOutPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "WordTilesComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "blendRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+actor -> view : Touch m
+page -> audio : stop(); play("sound-m") within 100 ms [L2-012 #4]
+page --> view : highlight m [L2-012 #1]
+actor -> view : Touch blend
+page -> rules : blendPlan(round)
+rules --> page : remaining sounds, close sounds, word [L2-012 #2-3]
+loop each PlaybackStep
+  page -> audio : play(step.recordingId)
+  page --> view : highlight step target
+end
+page --> view : highlight picture
+@enduml

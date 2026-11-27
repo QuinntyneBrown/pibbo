@@ -1,0 +1,24 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Responsive breakpoints
+
+enum LayoutMode {
+  Column
+ SideBySide
+  Centred
+}
+class ViewportLayout <<pure>> {
+  +mode(w: number, h: number): LayoutMode
+  +maxTarget: 160
+}
+ViewportLayout --> LayoutMode
+@enduml

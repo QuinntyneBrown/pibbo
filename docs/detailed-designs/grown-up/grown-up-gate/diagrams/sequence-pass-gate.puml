@@ -1,0 +1,26 @@
+@startuml
+title UML sequence behaviour — Pass or fail the gate
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Grown-up" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "HomePage" as home
+  participant "GateDialog" as gate
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "gateRules" as rules
+end box
+actor -> home : Touch corner control [L2-037 #1]
+home -> gate : open
+gate -> rules : newChallenge(rnd)
+gate --> actor : "touch seven, three, nine" (text only) [L2-037 #2]
+actor -> gate : Touch numerals
+alt passed
+  gate -> home : navigate /grown-up (volume, clear progress, about) [L2-037 #4]
+else failed or dismissed
+  gate --> home : close; Home unchanged [L2-037 #3]
+end
+@enduml

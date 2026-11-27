@@ -1,0 +1,45 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Count to music
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+class BeatState {
+  +number: number
+  +limit: 10 | 20
+  +playing: boolean
+}
+class beatRules <<pure>> {
+  +onBeat(s: BeatState): BeatState
+  +pause(s: BeatState): BeatState
+  +resume(s: BeatState): BeatState
+}
+interface Clock <<token CLOCK>> {
+  +schedule(ms: number, fn): Cancel
+}
+class BeatScheduler {
+  +start(): void
+  +stop(): void
+}
+BeatScheduler ..> Clock
+BeatScheduler ..> beatRules
+@enduml

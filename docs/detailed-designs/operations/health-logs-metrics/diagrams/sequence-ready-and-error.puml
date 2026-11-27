@@ -1,0 +1,26 @@
+@startuml
+title UML sequence behaviour — Readiness and an unhandled exception
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Orchestrator" as actor
+box "Backend — Pibbo.Api application" #D1FADF
+  participant "HealthChecks" as hc
+  participant "ExceptionHandler" as ex
+end box
+box "Backend — Pibbo Infrastructure" #FFF4E5
+  database "Content store" as db
+end box
+actor -> hc : GET /health/ready
+hc -> db : ping
+alt unreachable
+  hc --> actor : 503 [L2-038 #1]
+else reachable
+  hc --> actor : 200
+end
+actor -> ex : request that throws
+ex -> ex : log JSON with trace id, no child data [L2-038 #2, #4]
+ex --> actor : 500 problem details, no stack trace
+@enduml

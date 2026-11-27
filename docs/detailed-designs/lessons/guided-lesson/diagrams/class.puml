@@ -1,0 +1,29 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Follow a guided lesson
+
+class Lesson {
+  +id: string
+  +steps: string[]
+}
+class LessonProgress {
+  +lessonId: string
+  +stepIndex: number
+}
+class lessonRules <<pure>> {
+  +start(l: Lesson, known: Set<string>): LessonProgress
+  +advance(l: Lesson, p: LessonProgress, known: Set<string>): LessonProgress | "done"
+  +resume(stored: unknown, l: Lesson): LessonProgress
+}
+Lesson "1" --> "3..6" ActivityRef
+lessonRules ..> LessonProgress
+@enduml

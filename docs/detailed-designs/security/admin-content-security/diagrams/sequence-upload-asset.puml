@@ -1,0 +1,34 @@
+@startuml
+title UML sequence behaviour — Upload an asset as a content editor
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Content editor" as actor
+box "Backend — Pibbo.Api application" #D1FADF
+  participant "AdminContentController" as ctrl
+end box
+box "Backend — Pibbo Application and Domain" #ECFDF3
+  participant "UploadAssetValidator" as v
+  participant "UploadAssetHandler" as h
+end box
+box "Backend — Pibbo Infrastructure" #FFF4E5
+  database "Content store" as db
+end box
+actor -> ctrl : POST /api/v1/admin/assets
+alt no token
+  ctrl --> actor : 401 [L2-031 #1]
+else no content-editor role
+  ctrl --> actor : 403 [L2-031 #2]
+else authorised
+  ctrl -> v : validate
+  alt type or size not allowed
+    v --> actor : 415 or 413 [L2-031 #3]
+  else valid
+    ctrl -> h : Send UploadAssetCommand
+    h -> db : store
+    ctrl --> actor : 201
+  end
+end
+@enduml

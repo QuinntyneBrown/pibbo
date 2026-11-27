@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Count and write to 20 · counting — Pibbo mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="count-and-write">
+<meta name="mock:state" content="counting">
+<meta name="description" content="Counting along the track: 1 to 6 done, 7 is next and ringed.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the game</a>
+<div class="shell shell--count">
+  <header class="shell__top">
+    <a class="chunky chunky--white chunky--icon press" href="../home/default.html" aria-label="Leave game"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
+    <div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2"><div class="progress__fill progress__fill--2"></div></div>
+  </header>
+  <div class="shell__ask">
+    <svg class="pibbo pibbo--md " viewBox="0 0 120 120" role="img" aria-label="Pibbo"><path class="pibbo__stem" d="M60 30 C60 22 60 18 61 13"/><path class="pibbo__leaf" d="M60 18 C52 18 44 13 43 5 C51 4 59 9 60 18 Z"/><path class="pibbo__leaf" d="M61 15 C66 8 75 5 82 8 C79 16 70 19 61 15 Z"/><ellipse class="pibbo__wing" cx="19" cy="74" rx="9" ry="15" transform="rotate(18 19 74)"/><ellipse class="pibbo__wing" cx="101" cy="74" rx="9" ry="15" transform="rotate(-18 101 74)"/><ellipse class="pibbo__foot" cx="49" cy="108" rx="8" ry="5"/><ellipse class="pibbo__foot" cx="71" cy="108" rx="8" ry="5"/><ellipse class="pibbo__body" cx="60" cy="67" rx="43" ry="41"/><ellipse class="pibbo__belly" cx="60" cy="84" rx="25" ry="18"/><ellipse class="pibbo__white" cx="45" cy="57" rx="11" ry="12.5"/><ellipse class="pibbo__white" cx="75" cy="57" rx="11" ry="12.5"/><circle class="pibbo__ink" cx="46" cy="58.5" r="6.5"/><circle class="pibbo__ink" cx="76" cy="58.5" r="6.5"/><circle class="pibbo__white" cx="48" cy="56.0" r="2.2"/><circle class="pibbo__white" cx="78" cy="56.0" r="2.2"/><circle class="pibbo__cheek" cx="30" cy="73" r="6"/><circle class="pibbo__cheek" cx="90" cy="73" r="6"/><path class="pibbo__beak" d="M53 69 Q60 65.5 67 69 Q60 79 53 69 Z"/></svg>
+    <div class="bubble">
+      <p class="bubble__text" id="prompt">Count along! Tap 7.</p>
+      <button class="hear" type="button" aria-label="Hear it again"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button>
+    </div>
+  </div>
+  <main class="shell__game" id="main" aria-labelledby="prompt">
+    <h1 class="visually-hidden">Count and write to 20</h1>
+    <div class="stage stage--row-lg">
+      <div class="track" role="group" aria-label="Numbers 1 to 20"><button class="track__cell track__cell--done" type="button" disabled>1</button><button class="track__cell track__cell--done" type="button" disabled>2</button><button class="track__cell track__cell--done" type="button" disabled>3</button><button class="track__cell track__cell--done" type="button" disabled>4</button><button class="track__cell track__cell--done" type="button" disabled>5</button><button class="track__cell track__cell--done" type="button" disabled>6</button><button class="track__cell track__cell--next press" type="button">7</button><button class="track__cell " type="button" disabled>8</button><button class="track__cell " type="button" disabled>9</button><button class="track__cell " type="button" disabled>10</button><button class="track__cell " type="button" disabled>11</button><button class="track__cell " type="button" disabled>12</button><button class="track__cell " type="button" disabled>13</button><button class="track__cell track__cell--target" type="button" disabled aria-label="14, write it">?</button><button class="track__cell " type="button" disabled>15</button><button class="track__cell " type="button" disabled>16</button><button class="track__cell " type="button" disabled>17</button><button class="track__cell " type="button" disabled>18</button><button class="track__cell " type="button" disabled>19</button><button class="track__cell " type="button" disabled>20</button></div>
+      <div class="write-pad write-pad--idle"><svg class="write-pad__surface" viewBox="0 0 300 260" role="img" aria-label="Writing pad: trace 14"><line class="write-pad__base" x1="20" y1="215" x2="280" y2="215"/><text class="write-pad__guide" x="150" y="210" text-anchor="middle">14</text></svg></div>
+    </div>
+  </main>
+  <footer class="answer-bar answer-bar--check"><button class="chunky chunky--count chunky--wide press" type="button" disabled>Check</button></footer>
+</div>
+<p class="mock-note" style="top: 6rem; right: 1rem;">Only the next number can be tapped; each tap says it aloud.</p>
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Count and write to 20</span>
+  <ul class="mock-bar__states"><li><a href="counting.html" aria-current="page">counting</a></li><li><a href="default.html">default</a></li><li><a href="written.html">written</a></li><li><a href="correct.html">correct</a></li></ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

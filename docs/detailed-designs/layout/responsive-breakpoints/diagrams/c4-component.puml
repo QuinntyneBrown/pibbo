@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Responsive breakpoints
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(shell, "RoundShellComponent", "Presentation", "Grid with container queries")
+  Component(tok, "Breakpoint tokens", "Design tokens", "XS-XL")
+  Component(page, "Activity page", "Route component", "Holds round state")
+}
+Rel(shell, tok, "Reads")
+Rel(page, shell, "Binds state")
+@enduml

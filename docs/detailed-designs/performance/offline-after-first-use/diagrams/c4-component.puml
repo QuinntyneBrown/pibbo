@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Offline after first use
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(sw, "Angular service worker", "ngsw", "Caches")
+  Component(av, "ActivityAvailability", "Service", "Cached or not")
+  Component(home, "HomePage", "Route component", "Greys unavailable")
+}
+Rel(av, sw, "Queries caches")
+Rel(home, av, "Reads")
+@enduml

@@ -1,0 +1,45 @@
+@startuml
+title UML sequence behaviour — Count the things and answer
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "CountPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "CountSetComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "countingRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+actor -> view : Touch thing 1
+view -> page : touched("t1")
+page -> rules : touch(round, "t1") [L2-001 #1]
+rules --> page : round', spokenNumber = 1
+page -> audio : play("number-1")
+page --> view : t1 shows 1 and counted mark
+actor -> view : Touch thing 1 again
+view -> page : touched("t1")
+page -> rules : touch(round, "t1")
+rules --> page : unchanged, spokenNumber = null [L2-001 #2]
+== all counted ==
+page -> rules : choicesFor(5, rnd)
+rules --> page : 3 to 5 numerals incl. 5 [L2-001 #4]
+actor -> view : Touch numeral
+page -> rules : judge(round, numeral)
+alt correct
+  page -> audio : play("number-5")
+  page -> page : RoundFeedback.praise(); offer next round [L2-002 #1]
+else wrong
+  loop each thing in order
+    page -> audio : play next number; highlight thing [L2-002 #2]
+  end
+  page --> view : choices stay; child chooses again
+end
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — WCAG 2.2 AA and keyboard
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(rf, "RovingFocus", "CDK FocusKeyManager", "Arrow keys")
+  Component(pc, "Presentation components", "@pibbo/components", "Names, states, icons")
+  Component(mo, "Motion preference", "Signal", "Reduced motion")
+}
+Rel(pc, rf, "Use")
+Rel(pc, mo, "Read")
+@enduml

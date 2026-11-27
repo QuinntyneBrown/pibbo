@@ -1,0 +1,40 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Spell a word by sound
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+class SpellRound {
+  +word: Word
+  +filled: string[]
+  +tiles: string[]
+  +current(): number
+}
+class spellRules <<pure>> {
+  +choose(r: SpellRound, letter: string): SpellResult
+}
+class SpellResult {
+  +round: SpellRound
+  +status: "filled" | "retry" | "complete"
+}
+spellRules ..> SpellRound
+@enduml

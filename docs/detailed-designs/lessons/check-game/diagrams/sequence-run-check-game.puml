@@ -1,0 +1,29 @@
+@startuml
+title UML sequence behaviour — Run the check game
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "CheckGamePage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "EarnedPicturesComponent" as res
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "checkRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "ProgressStore" as store
+end box
+page -> store : read("history", guard)
+page -> rules : plan(history, firstLesson, rnd) [L2-023 #4]
+loop 5-8 rounds
+  actor -> page : Answer (retry rule on wrong) [L2-023 #2]
+end
+page -> rules : earned(answers)
+page --> res : earned pictures only [L2-023 #1]
+page -> store : write("check", result) [L2-023 #3]
+@enduml

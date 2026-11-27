@@ -1,0 +1,42 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Serve versioned content
+
+class ContentController {
+  +GetManifest(): IActionResult
+  +GetActivity(id: string): IActionResult
+  +GetLesson(id: string): IActionResult
+}
+class GetActivityQuery {
+  +Id: string
+}
+class GetActivityQueryHandler {
+  +Handle(q: GetActivityQuery): Task<ActivityDto?>
+}
+class ActivityDto {
+  +Id: string
+  +Kind: string
+  +Rounds: RoundDto[]
+}
+class ManifestDto {
+  +ContentVersion: string
+  +Activities: string[]
+  +Lessons: string[]
+}
+interface IContentStore {
+  +FindActivity(id): Task<Activity?>
+  +Manifest(): Task<Manifest>
+}
+ContentController ..> GetActivityQuery
+GetActivityQueryHandler ..> IContentStore
+GetActivityQueryHandler --> ActivityDto
+@enduml

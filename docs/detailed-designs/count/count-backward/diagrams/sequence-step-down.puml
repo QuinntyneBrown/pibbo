@@ -1,0 +1,34 @@
+@startuml
+title UML sequence behaviour — Step down to zero
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "CountBackwardPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "NumberTrackComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "backwardRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+page -> audio : play("number-10"); show start [L2-006 #1]
+actor -> view : Touch n
+page -> rules : touch(round, n)
+alt n = current - 1
+  rules --> page : advanced
+  page -> audio : play number n [L2-006 #2]
+else n other
+  rules --> page : hint, hintNumber = current - 1
+  page -> audio : play hint number; highlight it [L2-006 #3]
+end
+opt reached 0
+  page -> page : RoundFeedback.praise()
+end
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+title UML sequence behaviour — Match the lowercase form
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "LetterFormsPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "LetterPairComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "formRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+actor -> view : Touch lowercase choice
+page -> rules : judge(round, choice)
+alt b
+  page --> view : join B and b
+  page -> page : RoundFeedback.praise() [L2-011 #1]
+else d
+  page -> audio : play("sound-d")
+  page --> view : show B and b side by side [L2-011 #2]
+end
+@enduml

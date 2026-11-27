@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Load and response performance
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(loader, "RoundAssetLoader", "Route-scoped service", "Preload current and next round")
+  Component(cache, "BoundedAssetCache", "LRU cache", "Fixed size")
+  Component(player, "WebAudioPlayer", "AUDIO_PLAYER impl", "Decoded buffers")
+}
+Rel(loader, cache, "Fills")
+Rel(player, cache, "Reads")
+@enduml

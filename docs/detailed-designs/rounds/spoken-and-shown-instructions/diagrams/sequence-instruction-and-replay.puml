@@ -1,0 +1,24 @@
+@startuml
+title UML sequence behaviour — Speak, show and replay an instruction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "RoundShellComponent" as shell
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "InstructionPlayer" as ip
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+shell -> shell : show instruction picture and text [L2-025 #1]
+shell -> ip : speak(instruction)
+ip -> audio : play(recordingId)
+audio --> ip : played | unavailable [L2-025 #3]
+actor -> shell : Touch replay
+shell -> ip : speak(instruction) [L2-025 #2]
+@enduml

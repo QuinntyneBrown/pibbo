@@ -1,0 +1,11 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Nothing about a child leaves the device
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(ps, "ProgressStore", "Token PROGRESS_STORE", "Device-only storage")
+  Component(ls, "db:localStorage / IndexedDB", "Browser storage", "pibbo: keys")
+  Component(csp, "Content Security Policy", "HTTP header", "Same-origin only")
+}
+Rel(ps, ls, "Reads, writes, clears")
+@enduml

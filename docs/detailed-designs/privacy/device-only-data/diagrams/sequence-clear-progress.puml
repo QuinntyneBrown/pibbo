@@ -1,0 +1,19 @@
+@startuml
+title UML sequence behaviour — Clear progress
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Grown-up" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "GrownUpPage" as ga
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "BrowserProgressStore" as ps
+end box
+actor -> ga : Confirm clear progress
+ga -> ps : clearAll()
+ps -> ps : remove pibbo: keys; delete IndexedDB databases [L2-029 #4]
+ps --> ga : done
+@enduml

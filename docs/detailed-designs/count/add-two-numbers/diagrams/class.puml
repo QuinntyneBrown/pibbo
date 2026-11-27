@@ -1,0 +1,44 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Add two numbers together (pass and play)
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+enum TurnSymbol {
+  Star
+  Moon
+}
+class AddRound {
+  +sets: Map<TurnSymbol, number>
+  +turn: TurnSymbol
+  +total(): number
+  +choices: number[]
+}
+class additionRules <<pure>> {
+  +addThing(r: AddRound): AddRound
+  +endTurn(r: AddRound): AddRound
+  +choicesFor(total: number, rnd: RandomSource): number[]
+  +judge(r: AddRound, n: number): Answer
+}
+AddRound --> TurnSymbol
+additionRules ..> AddRound
+@enduml

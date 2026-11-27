@@ -1,0 +1,32 @@
+@startuml
+title UML sequence behaviour — Play, pause and resume the beat
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "CountToMusicPage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "BeatFigureComponent" as fig
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "BeatScheduler" as sched
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+loop each beat
+  sched -> page : beat
+  page -> page : beatRules.onBeat(state)
+  page -> audio : play number recording [L2-009 #1]
+  page --> fig : show numeral; pulse; move (none under reduced motion) [L2-009 #2-3]
+end
+actor -> fig : Touch pause
+page -> sched : stop()
+page -> audio : stop() within 200 ms [L2-009 #4]
+actor -> fig : Touch play
+page -> sched : start() from same number
+@enduml

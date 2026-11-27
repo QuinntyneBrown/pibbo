@@ -1,0 +1,23 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Nothing about a child leaves the device
+
+interface ProgressStore <<token PROGRESS_STORE>> {
+  +read<T>(key: string, guard: (v: unknown) => v is T): T | null
+  +write<T>(key: string, value: T): void
+  +clearAll(): Promise<void>
+}
+class BrowserProgressStore {
+  -prefix = "pibbo:"
+}
+BrowserProgressStore ..|> ProgressStore
+@enduml

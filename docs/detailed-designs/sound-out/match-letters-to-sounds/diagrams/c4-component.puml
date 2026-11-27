@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Match letters to sounds
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(page, "MatchSoundsPage", "Angular route component", "Orchestrates the round")
+  Component(view, "LetterChoiceComponent", "Presentation component", "Renders targets, emits touches")
+  Component(rules, "soundRules", "Pure domain functions", "Builds rounds, judges touches")
+  Component(fb, "RoundFeedback", "Domain service", "Praise, hint, model answer")
+  Component(audio, "AudioPlayer", "Token AUDIO_PLAYER", "One recording at a time")
+  Component(rnd, "RandomSource", "Token RANDOM_SOURCE", "Injected randomness")
+}
+Rel(page, view, "Binds state; listens to touched")
+Rel(page, rules, "Calls")
+Rel(rules, rnd, "Draws from")
+Rel(page, audio, "Plays recordings")
+Rel(page, fb, "Requests praise or hint")
+@enduml

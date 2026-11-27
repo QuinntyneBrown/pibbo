@@ -1,0 +1,18 @@
+@startuml
+title UML sequence behaviour — Rotate during a round
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "Activity page" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "RoundShellComponent" as shell
+end box
+actor -> shell : Rotate device
+shell -> shell : container query -> SideBySide [L2-034 #2]
+page --> shell : same round signal [L2-034 #6]
+@enduml

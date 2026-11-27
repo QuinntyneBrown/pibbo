@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Add two numbers together (pass and play)
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(page, "AddTogetherPage", "Angular route component", "Orchestrates the round")
+  Component(view, "TurnSetsComponent", "Presentation component", "Renders targets, emits touches")
+  Component(rules, "additionRules", "Pure domain functions", "Builds rounds, judges touches")
+  Component(fb, "RoundFeedback", "Domain service", "Praise, hint, model answer")
+  Component(audio, "AudioPlayer", "Token AUDIO_PLAYER", "One recording at a time")
+  Component(rnd, "RandomSource", "Token RANDOM_SOURCE", "Injected randomness")
+}
+Rel(page, view, "Binds state; listens to touched")
+Rel(page, rules, "Calls")
+Rel(rules, rnd, "Draws from")
+Rel(page, audio, "Plays recordings")
+Rel(page, fb, "Requests praise or hint")
+@enduml

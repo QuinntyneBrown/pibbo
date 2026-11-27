@@ -1,0 +1,48 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Sound out and blend a three-sound word
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+class Word {
+  +text: string
+  +sounds: SoundUnit[]
+  +pictureId: string
+  +recordingId: string
+}
+class SoundUnit {
+  +graphemes: string
+  +soundId: SoundId
+  +recordingId: string
+}
+class SoundOutRound {
+  +word: Word
+  +heard: ReadonlySet<number>
+}
+class blendRules <<pure>> {
+  +touch(r: SoundOutRound, i: number): SoundOutRound
+  +blendPlan(r: SoundOutRound): PlaybackStep[]
+}
+Word "1" *-- "1..*" SoundUnit
+SoundOutRound --> Word
+blendRules ..> SoundOutRound
+@enduml

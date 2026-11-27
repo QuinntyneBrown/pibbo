@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Touch robustness
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(tap, "TapDirective", "Angular directive", "One tap event")
+  Component(css, "Global touch styles", "Foundations stylesheet", "No zoom, select, callout")
+}
+Rel(tap, css, "Relies on")
+@enduml

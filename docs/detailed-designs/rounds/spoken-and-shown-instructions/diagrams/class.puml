@@ -1,0 +1,28 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Spoken and shown instructions
+
+class Instruction {
+  +recordingId: string
+  +visualId: string
+  +text: string
+}
+class InstructionPlayer {
+  +speak(i: Instruction): Promise<PlayOutcome>
+}
+enum PlayOutcome {
+  played
+  unavailable
+}
+InstructionPlayer ..> Instruction
+InstructionPlayer --> PlayOutcome
+@enduml

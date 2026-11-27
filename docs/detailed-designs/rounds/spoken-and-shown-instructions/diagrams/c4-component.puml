@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Spoken and shown instructions
+Container_Boundary(b, "pibbo (Angular workspace)") {
+  Component(shell, "RoundShellComponent", "Presentation", "Instruction, replay")
+  Component(ip, "InstructionPlayer", "Route-scoped service", "Speaks instruction")
+  Component(audio, "AudioPlayer", "Token AUDIO_PLAYER", "Playback")
+}
+Rel(shell, ip, "replay output handled by page via")
+Rel(ip, audio, "Plays")
+@enduml

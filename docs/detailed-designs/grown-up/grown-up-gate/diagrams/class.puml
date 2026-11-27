@@ -1,0 +1,28 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Grown-up gate and area
+
+class GateChallenge {
+  +sequence: number[]
+  +promptText: string
+  +touched: number[]
+}
+class gateRules <<pure>> {
+  +newChallenge(rnd): GateChallenge
+  +touch(c: GateChallenge, n: number): "pending" | "passed" | "failed"
+}
+class GrownUpPage {
+  +setVolume(v: number): void
+  +clearProgress(): Promise<void>
+}
+gateRules ..> GateChallenge
+@enduml

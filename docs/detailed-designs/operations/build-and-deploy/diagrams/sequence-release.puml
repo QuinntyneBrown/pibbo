@@ -1,0 +1,24 @@
+@startuml
+title UML sequence behaviour — Build and promote a release
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Maintainer" as actor
+box "Backend — Pibbo.Api application" #D1FADF
+  participant "CI workflow" as ci
+end box
+box "Backend — Pibbo Infrastructure" #FFF4E5
+  participant "Deployment" as dep
+end box
+actor -> ci : push commit
+ci -> ci : build, test, lint, axe, budgets [L2-039 #1]
+ci -> dep : image by digest, non-root [L2-039 #2]
+dep -> dep : wait for /health/ready
+alt ready
+  dep -> dep : move traffic [L2-039 #3]
+else not ready
+  dep -> dep : roll back
+end
+@enduml

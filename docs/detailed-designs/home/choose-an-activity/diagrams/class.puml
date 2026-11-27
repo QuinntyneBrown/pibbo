@@ -1,0 +1,45 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Choose an activity from Home
+
+enum GroupId {
+  Count
+  Read
+}
+class ActivityEntry {
+  +id: string
+  +group: GroupId
+  +pictureId: string
+  +nameRecordingId: string
+  +nameText: string
+  +route: string
+}
+class ActivityCatalogue {
+  +groups(): GroupEntry[]
+  +activitiesIn(g: GroupId): ActivityEntry[]
+  +lessonEntry: ActivityEntry
+  +checkGameEntry: ActivityEntry
+}
+class GroupEntry {
+  +id: GroupId
+  +pictureId: string
+  +nameRecordingId: string
+}
+class HomePage {
+  -chosenGroup: Signal<GroupId | null>
+  +onGroup(g: GroupId): void
+  +onActivity(a: ActivityEntry): void
+}
+ActivityCatalogue "1" *-- "*" ActivityEntry
+ActivityCatalogue "1" *-- "2" GroupEntry
+HomePage ..> ActivityCatalogue : reads
+@enduml

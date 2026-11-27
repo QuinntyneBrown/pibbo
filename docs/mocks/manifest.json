@@ -1,0 +1,396 @@
+{
+  "project": "Pibbo",
+  "source": "Magic Patterns MagicOS project eDDkMMZM4QuKmuCTaj4fkB “Pibbo Early Learning App”, prototype kEXWdPBhS1LJVpJoSCC6YH",
+  "required_states": {
+    "page": [
+      "default",
+      "loading",
+      "empty",
+      "error"
+    ]
+  },
+  "screens": [
+    {
+      "id": "home",
+      "kind": "page",
+      "title": "Home · Choose a game",
+      "route": "/",
+      "requirements": [],
+      "states": [
+        "default",
+        "counting",
+        "first-visit"
+      ],
+      "prototype_frame": "qWbazJPhFtQFND16jvAWTf",
+      "subject": "both",
+      "not_applicable": {
+        "loading": "Home is in the initial bundle; it never waits on anything.",
+        "empty": "The game list is fixed content; it is never empty.",
+        "error": "Home reads nothing that can fail."
+      }
+    },
+    {
+      "id": "guided-lesson",
+      "kind": "page",
+      "title": "Guided lesson",
+      "route": "/lesson/:subject",
+      "requirements": [],
+      "states": [
+        "default",
+        "start",
+        "counting",
+        "done"
+      ],
+      "prototype_frame": "5AdBwAcgFZqygAN7r2paEj",
+      "subject": "both",
+      "not_applicable": {
+        "loading": "The lesson is fixed data in the bundle.",
+        "empty": "A lesson always has five games.",
+        "error": "Nothing on this screen can fail."
+      }
+    },
+    {
+      "id": "count-the-toys",
+      "kind": "page",
+      "title": "Count the toys",
+      "route": "/count/toys",
+      "requirements": [],
+      "states": [
+        "start",
+        "default",
+        "choose",
+        "correct",
+        "retry"
+      ],
+      "prototype_frame": "3hcKaPmwMhuDctdU1Dz5XN",
+      "subject": "count",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "count-and-write",
+      "kind": "page",
+      "title": "Count and write to 20",
+      "route": "/count/write",
+      "requirements": [],
+      "states": [
+        "counting",
+        "default",
+        "written",
+        "correct"
+      ],
+      "prototype_frame": "tnYweeoJu9A6giLgvwYCdA",
+      "subject": "count",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "which-is-bigger",
+      "kind": "page",
+      "title": "Which is bigger?",
+      "route": "/count/compare",
+      "requirements": [],
+      "states": [
+        "default",
+        "picked",
+        "correct",
+        "retry"
+      ],
+      "prototype_frame": "xmQrw2RZJpLoPt8jexL9rV",
+      "subject": "count",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "rocket-countdown",
+      "kind": "page",
+      "title": "Rocket countdown",
+      "route": "/count/countdown",
+      "requirements": [],
+      "states": [
+        "start",
+        "default",
+        "retry",
+        "correct"
+      ],
+      "prototype_frame": "kn8uZkTTPu5QAes1YGB1A8",
+      "subject": "count",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "skip-count",
+      "kind": "page",
+      "title": "Skip-count",
+      "route": "/count/skip",
+      "requirements": [],
+      "states": [
+        "start",
+        "default",
+        "by-twos",
+        "retry",
+        "correct"
+      ],
+      "prototype_frame": "vdEDZtjjyVBAUA3v7LwW8U",
+      "subject": "count",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "add-together",
+      "kind": "page",
+      "title": "Add together",
+      "route": "/count/add",
+      "requirements": [],
+      "states": [
+        "start",
+        "default",
+        "picked",
+        "correct",
+        "retry"
+      ],
+      "prototype_frame": "mkU449mJhaPU6ssfoBLky8",
+      "subject": "count",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "counting-dance",
+      "kind": "page",
+      "title": "Counting dance",
+      "route": "/count/dance",
+      "requirements": [],
+      "states": [
+        "start",
+        "default",
+        "playing",
+        "correct"
+      ],
+      "prototype_frame": "goqC7yjhpfWZMjk14jJLbw",
+      "subject": "count",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "letter-sounds",
+      "kind": "page",
+      "title": "Letter sounds",
+      "route": "/read/letter-sounds",
+      "requirements": [],
+      "states": [
+        "start",
+        "default",
+        "held",
+        "correct"
+      ],
+      "prototype_frame": "3wxvUaHV82kSHpo6v6bP3Q",
+      "subject": "read",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "big-and-small-letters",
+      "kind": "page",
+      "title": "Big and small letters",
+      "route": "/read/letter-forms",
+      "requirements": [],
+      "states": [
+        "default",
+        "held",
+        "correct"
+      ],
+      "prototype_frame": "ssCmdyySHgJieyyT6RSNsG",
+      "subject": "read",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "words-and-pictures",
+      "kind": "page",
+      "title": "Words and pictures",
+      "route": "/read/word-pictures",
+      "requirements": [],
+      "states": [
+        "default",
+        "correct"
+      ],
+      "prototype_frame": "i8mQ2u4bAv95bb92nf7tc5",
+      "subject": "read",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "sound-it-out",
+      "kind": "page",
+      "title": "Sound it out",
+      "route": "/read/sound-out/:word",
+      "requirements": [],
+      "states": [
+        "default",
+        "ready",
+        "pick",
+        "correct",
+        "retry",
+        "magic-e",
+        "syllables"
+      ],
+      "prototype_frame": "7f2gDTETEj5wz2wj8j3k6S",
+      "subject": "read",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "spell-by-sound",
+      "kind": "page",
+      "title": "Spell by sound",
+      "route": "/read/spell",
+      "requirements": [],
+      "states": [
+        "default",
+        "full",
+        "correct",
+        "retry"
+      ],
+      "prototype_frame": "dgKcKTaV9T9eEuNaux7wcq",
+      "subject": "read",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "rhyme-time",
+      "kind": "page",
+      "title": "Rhyme time",
+      "route": "/read/rhymes",
+      "requirements": [],
+      "states": [
+        "start",
+        "default",
+        "all-chosen",
+        "correct",
+        "retry"
+      ],
+      "prototype_frame": "oyGFSwVHG2Nz2m28fZ8sqi",
+      "subject": "read",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "spot-the-word",
+      "kind": "page",
+      "title": "Spot the word",
+      "route": "/read/sight-words",
+      "requirements": [],
+      "states": [
+        "default",
+        "miss",
+        "correct"
+      ],
+      "prototype_frame": "1oVngqwpmYBXPpSLJSYCpS",
+      "subject": "read",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "build-a-sentence",
+      "kind": "page",
+      "title": "Build a sentence",
+      "route": "/read/sentence",
+      "requirements": [],
+      "states": [
+        "start",
+        "default",
+        "full",
+        "correct",
+        "retry"
+      ],
+      "prototype_frame": "3mB6d7j8yJagSd2CagJNKf",
+      "subject": "read",
+      "not_applicable": {
+        "loading": "Every word, picture and recording a game uses is bundled and ready before the game opens; there is nothing to wait for on screen.",
+        "empty": "A game always has a round to play; the prototype draws no empty game.",
+        "error": "A recording that cannot play never blocks a round: what it would have said is already shown in Pibbo's speech bubble."
+      }
+    },
+    {
+      "id": "progress-check",
+      "kind": "page",
+      "title": "What do I know?",
+      "route": "/check",
+      "requirements": [],
+      "states": [
+        "default",
+        "answered",
+        "correct",
+        "retry",
+        "counting-question",
+        "results"
+      ],
+      "prototype_frame": "uqsXti2BwppQA9k9zEtnFN",
+      "subject": "both",
+      "not_applicable": {
+        "loading": "The questions are fixed data in the bundle.",
+        "empty": "There are always four questions.",
+        "error": "Nothing on this screen can fail."
+      }
+    },
+    {
+      "id": "brand",
+      "kind": "page",
+      "title": "Pibbo brand",
+      "route": "(reference)",
+      "requirements": [],
+      "states": [
+        "default"
+      ],
+      "prototype_frame": "hJsTNgw8Kuq2xNiY8yArB6",
+      "subject": "none",
+      "not_applicable": {
+        "loading": "A static reference sheet.",
+        "empty": "A static reference sheet.",
+        "error": "A static reference sheet."
+      }
+    }
+  ]
+}

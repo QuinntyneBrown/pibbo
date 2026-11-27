@@ -1,0 +1,30 @@
+@startuml
+title UML sequence behaviour — Find the rhyming word
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+actor "Child" as actor
+box "Frontend — pibbo application" #E0F2FE
+  participant "RhymePage" as page
+end box
+box "Frontend — @pibbo/components library" #E0F2FE
+  participant "PictureChoiceComponent" as view
+end box
+box "Frontend — @pibbo/domain library" #ECFDF3
+  participant "rhymeRules" as rules
+end box
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "AudioPlayer" as audio
+end box
+page -> audio : play("word-cat")
+actor -> view : Touch a picture choice
+page -> audio : play target, then choice [L2-021 #1-3]
+page -> rules : judge(round, choice)
+alt rhymes
+  page -> page : praise
+else
+  page --> view : choose again
+end
+@enduml

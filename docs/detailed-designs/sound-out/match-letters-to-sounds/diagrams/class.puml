@@ -1,0 +1,41 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Match letters to sounds
+
+interface AudioPlayer <<token AUDIO_PLAYER>> {
+  +play(recordingId: string): Promise<PlayOutcome>
+  +stop(): void
+}
+interface RandomSource <<token RANDOM_SOURCE>> {
+  +next(): number
+}
+interface RoundFeedback <<token ROUND_FEEDBACK>> {
+  +praise(): void
+  +hint(h: Hint): void
+}
+
+class MatchRound {
+  +target: SoundId
+  +choices: Letter[]
+}
+class Letter {
+  +grapheme: string
+  +soundId: SoundId
+  +recordingId: string
+}
+class soundRules <<pure>> {
+  +newMatchRound(rnd: RandomSource): MatchRound
+  +judge(r: MatchRound, l: Letter): Answer
+}
+MatchRound "1" *-- "3" Letter
+soundRules ..> MatchRound
+@enduml
