@@ -4,7 +4,9 @@
 
 CI builds the .NET and Angular projects and runs unit tests, acceptance tests, lint, axe checks and bundle-size checks, failing on any failure. A release is a container image running as a non-root user on a base image pinned by digest, promoted unchanged between environments. Traffic moves only after readiness passes, and a failed readiness check rolls back.
 
-`L2-039` #1 asks CI to run unit tests, while `AGENTS.md` states unit tests run locally and never in CI; this conflict is `<TO SUPPLY>` for the repository owner.
+`L2-039` #1 asks CI to run unit tests, while `AGENTS.md` states unit tests run locally and never in CI; [ADR 0005](../../../adr/0005-unit-tests-run-locally.md) follows `AGENTS.md` until the repository owner decides.
+
+**Built so far (journey 1):** the frontend half. `.github/workflows/ci.yml` runs format, lint, `npm audit`, the Angular build with its bundle budgets and the behaviour e2e; `node tools/verify/verify.mjs` adds the unit tests locally. The static host settings are in [`docs/deploy.md`](../../../deploy.md). The .NET build, container image and deployment wait for the backend ADR.
 
 ## Description
 

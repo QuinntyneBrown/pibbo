@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pibbo foundations</title>
+<link rel="stylesheet" href="../../mocks/assets/tokens.css">
+<style>
+  body { margin: 0; padding: var(--space-6) var(--layout-margin); background: var(--color-bg); color: var(--color-fg); font-family: var(--font-display); }
+  h1 { margin: 0 0 var(--space-6); } h2 { margin: var(--space-8) 0 var(--space-4); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: var(--space-3); }
+  .swatch { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); font-size: var(--font-size-sm); }
+  .swatch__chip { height: 4rem; }
+  .swatch__name { padding: var(--space-2); font-family: ui-monospace, monospace; }
+  .row { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-2); font-family: ui-monospace, monospace; font-size: var(--font-size-sm); }
+  .bar { height: 1rem; background: var(--color-count); border-radius: var(--radius-sm); }
+</style>
+</head>
+<body>
+<h1>Pibbo foundations</h1>
+<p>Every value below is read live from <code>docs/mocks/assets/tokens.css</code>, the source of truth. Add <code>?theme=dark</code> to see the dark theme.</p>
+<h2>Colour roles</h2><div class="grid" id="color"></div>
+<h2>Type</h2><div id="type"></div>
+<h2>Space</h2><div id="space"></div>
+<h2>Radius</h2><div class="grid" id="radius"></div>
+<h2>Motion</h2><div id="motion"></div>
+<script>
+  if (new URLSearchParams(location.search).get('theme') === 'dark') document.documentElement.dataset.theme = 'dark';
+  const names = [...document.styleSheets].flatMap((s) => { try { return [...s.cssRules]; } catch { return []; } })
+    .filter((r) => r.selectorText === ':root').flatMap((r) => [...r.style]).filter((n) => n.startsWith('--'));
+  const val = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const add = (id, html) => document.getElementById(id).insertAdjacentHTML('beforeend', html);
+  for (const n of names) {
+    if (n.startsWith('--color-')) add('color', `<div class="swatch"><div class="swatch__chip" style="background:var(${n})"></div><div class="swatch__name">${n}<br>${val(n)}</div></div>`);
+    else if (n.startsWith('--font-size-')) add('type', `<div class="row"><span style="font-size:var(${n})">Aa</span>${n} ${val(n)}</div>`);
+    else if (n.startsWith('--space-')) add('space', `<div class="row"><span class="bar" style="width:var(${n})"></span>${n} ${val(n)}</div>`);
+    else if (n.startsWith('--radius-')) add('radius', `<div class="swatch"><div class="swatch__chip" style="background:var(--color-count-soft);border-radius:var(${n})"></div><div class="swatch__name">${n} ${val(n)}</div></div>`);
+    else if (n.startsWith('--duration-') || n.startsWith('--ease-')) add('motion', `<div class="row">${n} ${val(n)}</div>`);
+  }
+</script>
+</body>
+</html>
