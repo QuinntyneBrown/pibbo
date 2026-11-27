@@ -1,6 +1,8 @@
 import type { RandomSource } from '@pibbo/api';
 import {
+  chooseNumeral,
   countedSoFar,
+  numeralChoices,
   isCountComplete,
   layout,
   RUG_CELLS,
@@ -90,5 +92,46 @@ describe('touchThing', () => {
       round = touchThing(round, i).round;
     }
     expect(isCountComplete(round)).toBe(true);
+  });
+});
+
+describe('numeralChoices', () => {
+  it('offers three in a row with the answer in the middle', () => {
+    expect(numeralChoices(7)).toEqual([6, 7, 8]);
+  });
+
+  it('keeps within 1 and the largest number', () => {
+    expect(numeralChoices(1)).toEqual([1, 2, 3]);
+    expect(numeralChoices(10)).toEqual([8, 9, 10]);
+  });
+});
+
+/** A round of 5 with every thing counted. */
+const counted = (): CountRound => {
+  let round = startRound(sequence(0), content);
+  for (let i = 0; i < round.things.length; i++) round = touchThing(round, i).round;
+  return round;
+};
+
+describe('chooseNumeral', () => {
+  it('offers the numerals once the count is complete', () => {
+    const round = counted();
+    expect(round.phase).toBe('choosing');
+    expect(round.choices).toEqual([4, 5, 6]);
+  });
+
+  it('marks and speaks the numeral chosen', () => {
+    const { round, spoken } = chooseNumeral(counted(), 6);
+    expect(spoken).toBe(6);
+    expect(round.chosen).toBe(6);
+  });
+
+  it('ignores a numeral not offered, and any numeral while counting', () => {
+    expect(chooseNumeral(counted(), 9).spoken).toBeNull();
+    expect(chooseNumeral(startRound(sequence(0), content), 5).spoken).toBeNull();
+  });
+
+  it('takes no more touches on things once counting is done', () => {
+    expect(touchThing(counted(), 0).spoken).toBeNull();
   });
 });

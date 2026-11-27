@@ -10,6 +10,12 @@
       [countedAs]="round().countedAs"
       (touched)="touchThing($event)"
     />
-    <pb-tally [counted]="counted()" />
+    <pb-tally
+      [counted]="counted()"
+      [choices]="round().choices"
+      [chosen]="round().chosen"
+      (chose)="chooseNumeral($event)"
+    />
   </div>
+  <pb-answer-bar answer [ready]="round().chosen !== null" (action)="check()" />
 </pb-round-shell>

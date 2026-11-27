@@ -5,6 +5,7 @@ import { HomePage } from '../pages/home.page';
 
 const HOME = ['/recordings/home/count.wav', '/recordings/home/count-the-toys.wav'];
 const TAP_EACH = '/recordings/count/tap-each-toy.wav';
+const HOW_MANY = '/recordings/count/how-many.wav';
 const number = (n: number) => `/recordings/numbers/${n}.wav`;
 
 test.describe('Count the toys: spoken and shown instructions', () => {
@@ -133,5 +134,45 @@ test.describe('Count the toys: one touch, one number', () => {
     await expect(count.tally).toHaveText('2');
     await expect(count.counted).toHaveCount(2);
     expect((await spoken.recordings()).slice(3)).toEqual([number(1), number(2)]);
+  });
+});
+
+test.describe('Count the toys: answer how many', () => {
+  test('Given all toys counted, when the count completes, then "How many?" is asked after the last number and 3 numerals including the count are offered, each at least 60 x 60 px', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+
+    const n = await count.countAll();
+
+    await expect(count.instruction).toHaveText('How many toys are there?');
+    await expect(count.numerals).toHaveCount(3);
+    await expect(count.numeral(n)).toBeVisible();
+    for (const b of await count.numerals.all()) {
+      const box = await b.boundingBox();
+      expect(box!.width).toBeGreaterThanOrEqual(60);
+      expect(box!.height).toBeGreaterThanOrEqual(60);
+    }
+    await expect(count.action).toBeDisabled();
+    const said = await spoken.recordings();
+    expect(said.slice(-2)).toEqual([number(n), HOW_MANY]);
+    expect(await count.scrolls()).toBe(false);
+  });
+
+  test('Given numerals offered, when the child chooses one, then its number is spoken, it is marked chosen and Check is ready', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+    const n = await count.countAll();
+
+    await count.touch(count.numeral(n));
+
+    await expect(count.numeral(n)).toHaveAttribute('aria-pressed', 'true');
+    await expect(count.action).toBeEnabled();
+    expect((await spoken.recordings()).at(-1)).toBe(number(n));
   });
 });

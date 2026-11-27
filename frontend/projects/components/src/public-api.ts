@@ -12,3 +12,4 @@ export * from './lib/pibbo/pibbo';
 export * from './lib/round-shell/round-shell';
 export * from './lib/count-set/count-set';
 export * from './lib/tally/tally';
+export * from './lib/answer-bar/answer-bar';

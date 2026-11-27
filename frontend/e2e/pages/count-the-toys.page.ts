@@ -48,7 +48,7 @@ export class CountTheToysPage {
   }
 
   numeral(n: number): Locator {
-    return this.numerals.filter({ hasText: new RegExp(`^${n}$`) });
+    return this.numerals.filter({ hasText: new RegExp(`^\\s*${n}\\s*$`) });
   }
 
   /** Opens Count the toys the way a child does: Count, then Count the toys on Home. */

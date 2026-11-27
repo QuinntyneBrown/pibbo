@@ -3,19 +3,35 @@ import type { RandomSource, Thing } from '@pibbo/api';
 /** The rug is a 4 x 3 grid; each thing takes its own cell, so no two overlap (L2-002 #3). */
 export const RUG_CELLS = 12;
 
+/** The largest number a round can ask: L2-001 says 1 to 10. */
+export const LARGEST_COUNT = 10;
+
 /** What a Count round can be made from: content, not rules. */
 export interface CountContent {
   readonly numbers: readonly number[];
   readonly toys: readonly { readonly name: string; readonly picture: string }[];
 }
 
+/**
+ * Where a round is: the child counts, then chooses a numeral; a wrong answer has Pibbo count
+ * again (`recounting`) before the child chooses again; the round ends `right` or `modelled`.
+ */
+export type CountPhase = 'counting' | 'choosing' | 'recounting' | 'right' | 'modelled';
+
 /** One Count round. Immutable: every rule returns a new value. */
 export interface CountRound {
+  readonly phase: CountPhase;
   /** How many things there are: the right answer. */
   readonly answer: number;
   readonly things: readonly Thing[];
   /** For each thing, the number it was counted as, or null while it is not counted. */
   readonly countedAs: readonly (number | null)[];
+  /** The numerals offered once the count is complete. */
+  readonly choices: readonly number[];
+  /** The numeral the child has chosen, not yet checked. */
+  readonly chosen: number | null;
+  /** Wrong answers so far in this round. */
+  readonly wrong: number;
 }
 
 function pick<T>(random: RandomSource, from: readonly T[]): T {
@@ -40,7 +56,15 @@ export function startRound(random: RandomSource, content: CountContent): CountRo
     const toy = pick(random, content.toys);
     return { cell, name: toy.name, picture: toy.picture };
   });
-  return { answer, things, countedAs: things.map(() => null) };
+  return {
+    phase: 'counting',
+    answer,
+    things,
+    countedAs: things.map(() => null),
+    choices: [],
+    chosen: null,
+    wrong: 0,
+  };
 }
 
 /** How many things are counted so far. */
@@ -53,21 +77,49 @@ export function isCountComplete(round: CountRound): boolean {
   return countedSoFar(round) === round.things.length;
 }
 
-/** What a touch on a thing did: the round after it, and the number to speak, if any. */
+/** What a touch did: the round after it, and the number to speak, if any. */
 export interface TouchResult {
   readonly round: CountRound;
   readonly spoken: number | null;
 }
 
 /**
+ * The numerals offered (L2-001 #4): three in a row that include the answer, the answer in
+ * the middle unless it is 1 or the largest (ADR 0007).
+ */
+export function numeralChoices(answer: number, largest = LARGEST_COUNT): number[] {
+  const first = Math.max(1, Math.min(answer - 1, largest - 2));
+  return [first, first + 1, first + 2];
+}
+
+/**
  * One touch, one number (L2-001): an uncounted thing is counted as the next number; a
- * counted thing, or one that does not exist, changes nothing and speaks nothing.
+ * counted thing, one that does not exist, or any thing once counting is done, changes
+ * nothing and speaks nothing. The last thing counted offers the numerals.
  */
 export function touchThing(round: CountRound, index: number): TouchResult {
-  if (round.countedAs[index] !== null || index < 0 || index >= round.things.length) {
+  if (
+    round.phase !== 'counting' ||
+    index < 0 ||
+    index >= round.things.length ||
+    round.countedAs[index] !== null
+  ) {
     return { round, spoken: null };
   }
   const next = countedSoFar(round) + 1;
   const countedAs = round.countedAs.map((n, i) => (i === index ? next : n));
-  return { round: { ...round, countedAs }, spoken: next };
+  const counted: CountRound = { ...round, countedAs };
+  if (!isCountComplete(counted)) return { round: counted, spoken: next };
+  return {
+    round: { ...counted, phase: 'choosing', choices: numeralChoices(round.answer) },
+    spoken: next,
+  };
+}
+
+/** The child chooses a numeral, which is spoken. Only while choosing, and only one offered. */
+export function chooseNumeral(round: CountRound, numeral: number): TouchResult {
+  if (round.phase !== 'choosing' || !round.choices.includes(numeral)) {
+    return { round, spoken: null };
+  }
+  return { round: { ...round, chosen: numeral }, spoken: numeral };
 }

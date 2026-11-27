@@ -1,0 +1,26 @@
+<footer [class]="'answer-bar answer-bar--' + kind()" [attr.role]="message() ? 'status' : null">
+  @if (message()) {
+    <p class="answer-bar__message">
+      @if (kind() === 'right') {
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+      }
+      {{ message() }}
+    </p>
+  }
+  <button
+    type="button"
+    class="chunky"
+    [class.chunky--success]="kind() === 'right'"
+    [disabled]="!ready()"
+    (pbTap)="action.emit()"
+  >
+    @if (kind() === 'right' || kind() === 'model') {
+      Next
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7" />
+      </svg>
+    } @else {
+      Check
+    }
+  </button>
+</footer>
