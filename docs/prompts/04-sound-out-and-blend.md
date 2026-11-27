@@ -1,5 +1,6 @@
 # Feature: Sound out and blend a word
-n**Status:** Complete (PR #4)
+
+**Status:** Complete (PR #4)
 
 Journey 4 of 27 in `docs/journeys.md`. Requirements: L2-012.
 
