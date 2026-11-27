@@ -7,3 +7,4 @@ export * from './lib/clock';
 export * from './lib/random-source';
 export * from './lib/activity';
 export * from './lib/round';
+export * from './lib/count';

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { AUDIO_PLAYER, type Instruction } from '@pibbo/api';
-import { RoundShell } from '@pibbo/components';
-import { COUNT_THE_TOYS } from '@pibbo/domain';
+import { AUDIO_PLAYER, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
+import { CountSet, RoundShell, Tally } from '@pibbo/components';
+import { COUNT_THE_TOYS, startRound } from '@pibbo/domain';
 
 /**
  * Count the toys (docs/mocks/pages/count-the-toys): things appear, each touch says the next
@@ -11,17 +11,19 @@ import { COUNT_THE_TOYS } from '@pibbo/domain';
  */
 @Component({
   selector: 'pb-count-the-toys',
-  imports: [RoundShell],
+  imports: [RoundShell, CountSet, Tally],
   templateUrl: './count-the-toys.html',
   styleUrl: './count-the-toys.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CountTheToys {
   private readonly audio = inject(AUDIO_PLAYER);
+  private readonly random = inject(RANDOM_SOURCE);
   private readonly router = inject(Router);
 
   protected readonly content = COUNT_THE_TOYS;
   protected readonly instruction = signal<Instruction>(COUNT_THE_TOYS.count);
+  protected readonly round = signal(startRound(this.random, COUNT_THE_TOYS));
 
   constructor() {
     void this.audio.play(this.instruction().recording);

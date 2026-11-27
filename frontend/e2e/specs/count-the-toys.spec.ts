@@ -46,3 +46,40 @@ test.describe('Count the toys: spoken and shown instructions', () => {
     await expect(home.group('Count')).toHaveAttribute('aria-pressed', 'true');
   });
 });
+
+interface Box {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+function overlap(a: Box, b: Box): boolean {
+  return a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+}
+
+test.describe('Count the toys: a round of things', () => {
+  test('Given a round is generated, when it is laid out, then no two toys overlap, each is at least 60 x 60 px and nothing scrolls', async ({
+    page,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+
+    const boxes = await count.toyBoxes();
+    expect(boxes.length).toBeGreaterThanOrEqual(1);
+    expect(boxes.length).toBeLessThanOrEqual(10);
+    await expect(count.rug).toHaveAttribute('aria-label', `The rug, ${boxes.length} toys`);
+    for (const b of boxes) {
+      expect(b.width).toBeGreaterThanOrEqual(60);
+      expect(b.height).toBeGreaterThanOrEqual(60);
+    }
+    for (let i = 0; i < boxes.length; i++) {
+      for (let j = i + 1; j < boxes.length; j++) {
+        expect(overlap(boxes[i]!, boxes[j]!)).toBe(false);
+      }
+    }
+    await expect(count.counted).toHaveCount(0);
+    await expect(count.tally).toHaveText('0');
+    expect(await count.scrolls()).toBe(false);
+  });
+});

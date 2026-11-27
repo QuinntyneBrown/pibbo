@@ -5,3 +5,4 @@
 export * from './lib/activities/activities-for';
 export * from './lib/activities/activity-catalogue';
 export * from './lib/counting/count-the-toys-content';
+export * from './lib/counting/count-round';

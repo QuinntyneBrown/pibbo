@@ -1,0 +1,21 @@
+<div class="rug" role="group" [attr.aria-label]="'The rug, ' + things().length + ' toys'">
+  @for (thing of things(); track $index; let i = $index) {
+    @let counted = countedAs()[i] ?? null;
+    <button
+      type="button"
+      [class]="'rug__toy rug__toy--' + thing.cell"
+      [class.rug__toy--counted]="counted !== null"
+      [class.rug__toy--highlight]="lit() === i"
+      [disabled]="counted !== null"
+      [attr.aria-label]="
+        counted !== null ? 'Toy counted as ' + counted : 'Count this ' + thing.name
+      "
+      (pbTap)="touched.emit(i)"
+    >
+      <img class="picture" [src]="thing.picture" alt="" draggable="false" />
+      @if (counted !== null) {
+        <span class="rug__badge" aria-hidden="true">{{ counted }}</span>
+      }
+    </button>
+  }
+</div>

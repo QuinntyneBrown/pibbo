@@ -1,0 +1,22 @@
+<div class="tally">
+  @if (choices().length === 0) {
+    <p class="stage__label">Counted</p>
+    <p class="tally__number" aria-live="polite">{{ counted() }}</p>
+  } @else {
+    <p class="stage__label" id="how-many">How many?</p>
+    <div class="choices" role="group" aria-labelledby="how-many">
+      @for (n of choices(); track n) {
+        <button
+          type="button"
+          class="numeral"
+          [class.numeral--answer]="modelled() === n"
+          [attr.aria-pressed]="chosen() === n"
+          [disabled]="locked()"
+          (pbTap)="chose.emit(n)"
+        >
+          {{ n }}
+        </button>
+      }
+    </div>
+  }
+</div>

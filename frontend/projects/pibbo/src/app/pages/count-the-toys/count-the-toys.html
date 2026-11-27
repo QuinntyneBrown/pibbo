@@ -4,4 +4,8 @@
   (replay)="replay()"
   (leave)="leave()"
 >
+  <div class="stage">
+    <pb-count-set [things]="round().things" [countedAs]="round().countedAs" />
+    <pb-tally [counted]="0" />
+  </div>
 </pb-round-shell>
