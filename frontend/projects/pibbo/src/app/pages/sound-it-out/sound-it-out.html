@@ -12,6 +12,7 @@
       [sounds]="round().word.sounds"
       [heard]="round().heard"
       [next]="next()"
+      [sounding]="sounding()"
       [canBlend]="round().phase === 'ready'"
       (touched)="touchLetter($event)"
       (blend)="blend()"

@@ -10,7 +10,7 @@ import {
 import { Router } from '@angular/router';
 import { AUDIO_PLAYER, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
 import { AnswerBar, RoundShell, WordTiles } from '@pibbo/components';
-import { nextLetter, SOUND_OUT, startSoundOutRound } from '@pibbo/domain';
+import { nextLetter, SOUND_OUT, startSoundOutRound, touchLetter } from '@pibbo/domain';
 
 /**
  * Sound it out (docs/mocks/pages/sound-it-out): the child touches each letter to hear its
@@ -35,7 +35,13 @@ export class SoundItOut {
   protected readonly done = signal(0);
 
   protected readonly next = computed(() => nextLetter(this.round()));
-  protected readonly instruction = computed<Instruction>(() => SOUND_OUT.instructions.sounding);
+  /** The letter whose sound is playing. */
+  protected readonly sounding = signal<number | null>(null);
+  protected readonly instruction = computed<Instruction>(() =>
+    this.round().phase === 'sounding'
+      ? SOUND_OUT.instructions.sounding
+      : SOUND_OUT.instructions.ready,
+  );
 
   constructor() {
     // It rests: sound stops while the tab is hidden, and nothing resumes until a touch.
@@ -51,8 +57,18 @@ export class SoundItOut {
     void this.audio.play(this.instruction().recording);
   }
 
-  protected touchLetter(_index: number): void {
-    // Slice 3.
+  /** A letter makes its sound (L2-012 #1); a new sound stops the one playing (#4). */
+  protected async touchLetter(index: number): Promise<void> {
+    const { round, spoken } = touchLetter(this.round(), index);
+    if (spoken === null) return;
+    this.round.set(round);
+    this.sounding.set(index);
+    const outcome = await this.audio.play(spoken);
+    if (this.sounding() === index) this.sounding.set(null);
+    // Once every sound is heard, Pibbo asks for the blend, never over the last sound.
+    if (round.phase === 'ready' && outcome !== 'stopped' && this.round() === round) {
+      void this.audio.play(SOUND_OUT.instructions.ready.recording);
+    }
   }
 
   protected blend(): void {

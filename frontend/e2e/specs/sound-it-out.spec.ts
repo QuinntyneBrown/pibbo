@@ -5,6 +5,8 @@ import { SoundItOutPage } from '../pages/sound-it-out.page';
 
 const HOME = ['/recordings/home/read.wav', '/recordings/home/sound-it-out.wav'];
 const TAP_EACH = '/recordings/read/tap-each-letter.wav';
+const SAY_FAST = '/recordings/read/say-them-fast.wav';
+const sound = (s: string) => `/recordings/sounds/${s}.wav`;
 
 test.describe('Sound it out: a round', () => {
   test('Given the child chooses Sound it out, when the round is shown, then a three-letter word appears with the first letter marked, blend not yet active, and the instruction spoken and shown with a picture', async ({
@@ -37,5 +39,63 @@ test.describe('Sound it out: a round', () => {
     await read.touch(read.leave);
 
     await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
+  });
+});
+
+test.describe('Sound it out: each letter makes its sound', () => {
+  test('Given a word is shown, when the child touches each letter in turn, then each sound is spoken and shown beneath its letter, and blend becomes active', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    const word = await read.word();
+
+    await read.touch(read.letter(0));
+    await expect(read.letter(0)).toHaveClass(/tile--heard/);
+    await expect(read.shownSounds).toHaveText([`/${word[0]}/`]);
+    await expect(read.letter(1)).toHaveClass(/tile--next/);
+    await read.touch(read.letter(1));
+    await read.touch(read.letter(2));
+
+    await expect(read.heard).toHaveCount(3);
+    await expect(read.shownSounds).toHaveText([...word].map((l) => `/${l}/`));
+    await expect(read.blend).toBeEnabled();
+    await expect(read.instruction).toHaveText('Now say the sounds fast to read the word.');
+    expect(await spoken.recordings()).toEqual([
+      ...HOME,
+      TAP_EACH,
+      ...[...word].map(sound),
+      SAY_FAST,
+    ]);
+  });
+
+  test('Given a sound is playing, when the next letter is touched, then the playing recording stops and the new one starts', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    const word = await read.word();
+    const before = await spoken.stops();
+
+    await read.touch(read.letter(0));
+    await read.touch(read.letter(1));
+
+    expect(await spoken.stops()).toBeGreaterThan(before);
+    expect((await spoken.recordings()).slice(-2)).toEqual([sound(word[0]!), sound(word[1]!)]);
+  });
+
+  test('Given the next letter is marked, when a later letter is touched, then nothing is spoken', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+
+    await read.letter(2).dispatchEvent('click');
+
+    await expect(read.heard).toHaveCount(0);
+    expect(await spoken.recordings()).toEqual([...HOME, TAP_EACH]);
   });
 });
