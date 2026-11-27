@@ -64,3 +64,44 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - E2E against the production build with headers (J1 #2): worked; no CSP issue arose.
 - Types-only imports from `api` in `components` (J1 #5): worked; the new components import
   `Activity` and `ActivityGroup` as types.
+
+## Journey 3: Count a set
+
+**What slowed it**
+
+- The prototype's retry state cleared the stamps, against `L2-002` #2 and the purpose; its toy
+  spots overlapped and were under 60 px on a phone. Both were redrawn before code (ADR 0007).
+- Chromium still fetches a recording when `src` is set, even with `load()` faked. A recording
+  cut short by the next one (one sound at a time) aborts that fetch, and the network guard
+  failed the spec on `net::ERR_ABORTED`, only now and then and only on the phone. The guard
+  now allows an aborted media request.
+- `new RegExp(\`^\s*${n}\s*$\`)` in a template literal drops the backslashes; it needs `\s`.
+- Heredocs in Git Bash failed again on a long multi-file command; the Write tool is reliable.
+- Another agent edited this checkout's tokens and component styles mid-journey. Commits were
+  staged from the index (`git update-index --cacheinfo`) so only this journey's changes went in.
+
+**New lessons**
+
+1. Model a round as a pure state machine in `domain` (a `phase` plus immutable transitions):
+   the page only plays recordings and sets timers, and the tricky cases (two fingers, a touch
+   after counting, the third wrong answer) are unit tests.
+2. Sequence speech by awaiting `PlayOutcome`: speak the next line only when the last one was
+   not `stopped`, and only if the round is still the same value. That gives one sound at a time
+   and lets any touch or a hidden tab cut a sequence short with no flags.
+3. Put timers behind `CLOCK.after`: Playwright's `page.clock.runFor` then drives praise in a
+   spec with no real wait.
+4. A fixture option (`test.use({ sound: 'off' })`) is the simplest way to prove a round works
+   muted.
+5. A spec that passes before the slice (the muted round) is a regression guard, not a failing
+   acceptance test; say so rather than pretend it failed.
+
+**Earlier lessons applied**
+
+- Read the mock against `AGENTS.md` first (J2 #1): worked; it caught the cleared stamps and the
+  overlapping spots before any code.
+- Write tool over heredocs (J2): applied late; one long heredoc failed before it was.
+- Fake browser APIs, not bindings (J1 #1): worked; the muted and resting specs fake
+  `HTMLMediaElement` only.
+- Budget for lazy routes (J2 #4): the initial bundle stayed under budget; `round-shell.scss`
+  is over the 2 kB per-component warning (not the 4 kB error) and is a candidate to split.
+

@@ -43,6 +43,11 @@ a transcription of `docs/mocks/assets/tokens.css`.
 | Activity grid | `.game-group`, `__title`, `__grid` (2, 3, 5 columns; `--gap-targets`) | `pages/home/default.html`, `counting.html` | `@pibbo/components` `pb-activity-grid` |
 | Activity picture | `.game-card` (`--count`, `--read`), `__glyph`, `__body`, `__title`; at least `--target-child` | `pages/home/default.html`, `counting.html` | `@pibbo/components` `pb-activity-picture` |
 | Tap | behaviour, no block: `[pbTap]` on every target (ADR 0006) | — | `@pibbo/components` `Tap` |
+| Pibbo | `.pibbo` (`--cheer`; "oh" beak); colours by role `--color-pibbo-*` | `pages/count-the-toys/*.html` | `@pibbo/components` `pb-pibbo` |
+| Round shell | `.shell`, `__top`, `__ask`, `__game`; `.progress`; `.bubble`, `__picture`, `__text`; `.hear` (60 px) | `pages/count-the-toys/*.html` | `@pibbo/components` `pb-round-shell` |
+| Count set | `.rug`, `__toy` (`--0` to `--11` cells, `--counted`, `--highlight`), `__badge` | `pages/count-the-toys/*.html` | `@pibbo/components` `pb-count-set` |
+| Tally | `.tally`, `__number`; `.choices`; `.numeral` (`aria-pressed`, `--answer`) | `pages/count-the-toys/*.html` | `@pibbo/components` `pb-tally` |
+| Answer bar | `.answer-bar` (`--check`, `--right`, `--hint`, `--model`), `__message` | `pages/count-the-toys/*.html` | `@pibbo/components` `pb-answer-bar` |
 
 ## Drift log
 
@@ -52,6 +57,7 @@ a transcription of `docs/mocks/assets/tokens.css`.
 | Dropped the "aliases mock.css expects" (`--color-accent`, `--color-warning-*`) | They serve the mock chrome, not the product. |
 | Added `--target-child` (60 px) and `--gap-targets` (16 px) | `L2-024` and `AGENTS.md`; added to the mock tokens first (journey 2). |
 | Dark theme also applies by `prefers-color-scheme` | The mocks force it with `data-theme`; a child's device setting should be honoured. |
+| Added `--color-pibbo-*` role tokens | The mock's mascot reads `--palette-*` directly; the product reads tokens by role only. Same values (journey 3). |
 
 ## Open questions
 
