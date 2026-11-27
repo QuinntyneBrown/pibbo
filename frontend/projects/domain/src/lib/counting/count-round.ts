@@ -42,3 +42,32 @@ export function startRound(random: RandomSource, content: CountContent): CountRo
   });
   return { answer, things, countedAs: things.map(() => null) };
 }
+
+/** How many things are counted so far. */
+export function countedSoFar(round: CountRound): number {
+  return round.countedAs.filter((n) => n !== null).length;
+}
+
+/** Whether every thing is counted. */
+export function isCountComplete(round: CountRound): boolean {
+  return countedSoFar(round) === round.things.length;
+}
+
+/** What a touch on a thing did: the round after it, and the number to speak, if any. */
+export interface TouchResult {
+  readonly round: CountRound;
+  readonly spoken: number | null;
+}
+
+/**
+ * One touch, one number (L2-001): an uncounted thing is counted as the next number; a
+ * counted thing, or one that does not exist, changes nothing and speaks nothing.
+ */
+export function touchThing(round: CountRound, index: number): TouchResult {
+  if (round.countedAs[index] !== null || index < 0 || index >= round.things.length) {
+    return { round, spoken: null };
+  }
+  const next = countedSoFar(round) + 1;
+  const countedAs = round.countedAs.map((n, i) => (i === index ? next : n));
+  return { round: { ...round, countedAs }, spoken: next };
+}

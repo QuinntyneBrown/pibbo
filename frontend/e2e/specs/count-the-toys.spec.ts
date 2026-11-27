@@ -5,6 +5,7 @@ import { HomePage } from '../pages/home.page';
 
 const HOME = ['/recordings/home/count.wav', '/recordings/home/count-the-toys.wav'];
 const TAP_EACH = '/recordings/count/tap-each-toy.wav';
+const number = (n: number) => `/recordings/numbers/${n}.wav`;
 
 test.describe('Count the toys: spoken and shown instructions', () => {
   test('Given a round starts, when it is shown, then its instruction is spoken and shown with a picture, and no timer or score is visible', async ({
@@ -81,5 +82,56 @@ test.describe('Count the toys: a round of things', () => {
     await expect(count.counted).toHaveCount(0);
     await expect(count.tally).toHaveText('0');
     expect(await count.scrolls()).toBe(false);
+  });
+});
+
+test.describe('Count the toys: one touch, one number', () => {
+  test('Given none counted, when the child touches a toy, then "one" is spoken, 1 is shown on it and it is marked counted by shape and colour', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+
+    await count.touch(count.toy(0));
+
+    await expect(count.badge(0)).toHaveText('1');
+    await expect(count.toy(0)).toHaveClass(/rug__toy--counted/);
+    await expect(count.toy(0)).toHaveAttribute('aria-label', 'Toy counted as 1');
+    await expect(count.tally).toHaveText('1');
+    expect(await spoken.recordings()).toEqual([...HOME, TAP_EACH, number(1)]);
+  });
+
+  test('Given three toys counted, when the child touches a counted toy again, then the count stays at 3 and nothing is spoken', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+    for (const i of [0, 1, 2]) await count.touch(count.toy(i));
+
+    await count.toy(1).click({ force: true });
+
+    await expect(count.tally).toHaveText('3');
+    await expect(count.counted).toHaveCount(3);
+    expect(await spoken.recordings()).toEqual([...HOME, TAP_EACH, number(1), number(2), number(3)]);
+  });
+
+  test('Given two fingers touch two uncounted toys at the same instant, when the touches are processed, then each is counted once and the count rises by exactly 2', async ({
+    page,
+    spoken,
+  }) => {
+    test.skip(
+      !(await page.evaluate(() => matchMedia('(pointer: coarse)').matches)),
+      'touch is for the phone',
+    );
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+
+    await count.touchTwoAtOnce(count.toy(0), count.toy(1));
+
+    await expect(count.tally).toHaveText('2');
+    await expect(count.counted).toHaveCount(2);
+    expect((await spoken.recordings()).slice(3)).toEqual([number(1), number(2)]);
   });
 });

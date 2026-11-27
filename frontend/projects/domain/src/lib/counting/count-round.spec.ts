@@ -1,5 +1,14 @@
 import type { RandomSource } from '@pibbo/api';
-import { layout, RUG_CELLS, startRound, type CountContent } from './count-round';
+import {
+  countedSoFar,
+  isCountComplete,
+  layout,
+  RUG_CELLS,
+  startRound,
+  touchThing,
+  type CountContent,
+  type CountRound,
+} from './count-round';
 
 /** A random source that returns the given values in turn, then repeats them. */
 const sequence = (...values: number[]): RandomSource => {
@@ -41,5 +50,45 @@ describe('startRound', () => {
 
   it('takes the number from the content only', () => {
     expect(startRound(sequence(0), content).answer).toBe(5);
+  });
+});
+
+describe('touchThing', () => {
+  const fresh = (): CountRound => startRound(sequence(0), content);
+
+  it('counts an uncounted thing as the next number and speaks it', () => {
+    const first = touchThing(fresh(), 3);
+    expect(first.spoken).toBe(1);
+    expect(first.round.countedAs[3]).toBe(1);
+    const second = touchThing(first.round, 0);
+    expect(second.spoken).toBe(2);
+    expect(countedSoFar(second.round)).toBe(2);
+  });
+
+  it('changes nothing and speaks nothing when a counted thing is touched again', () => {
+    const once = touchThing(fresh(), 1).round;
+    const again = touchThing(once, 1);
+    expect(again.spoken).toBeNull();
+    expect(again.round).toBe(once);
+  });
+
+  it('counts two things touched together once each', () => {
+    const a = touchThing(fresh(), 0);
+    const b = touchThing(a.round, 4);
+    expect([a.spoken, b.spoken]).toEqual([1, 2]);
+    expect(countedSoFar(b.round)).toBe(2);
+  });
+
+  it('ignores a thing that is not there', () => {
+    expect(touchThing(fresh(), 99).spoken).toBeNull();
+  });
+
+  it('is complete once every thing is counted', () => {
+    let round = fresh();
+    for (let i = 0; i < round.things.length; i++) {
+      expect(isCountComplete(round)).toBe(false);
+      round = touchThing(round, i).round;
+    }
+    expect(isCountComplete(round)).toBe(true);
   });
 });
