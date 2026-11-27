@@ -7,6 +7,8 @@ const HOME = ['/recordings/home/count.wav', '/recordings/home/count-the-toys.wav
 const TAP_EACH = '/recordings/count/tap-each-toy.wav';
 const HOW_MANY = '/recordings/count/how-many.wav';
 const YES = '/recordings/count/yes.wav';
+const TOGETHER = '/recordings/count/count-together.wav';
+const THERE_ARE = '/recordings/count/there-are.wav';
 const number = (n: number) => `/recordings/numbers/${n}.wav`;
 
 test.describe('Count the toys: spoken and shown instructions', () => {
@@ -231,5 +233,54 @@ test.describe('Count the toys: praise', () => {
     }
 
     await expect(home.group('Count')).toHaveAttribute('aria-pressed', 'true');
+  });
+});
+
+test.describe('Count the toys: a wrong answer is a chance to try again', () => {
+  test('Given numerals offered, when the child chooses a wrong one and touches Check, then nothing is taken away, Pibbo counts the toys again aloud and the child chooses again', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+    const n = await count.countAll();
+    const before = (await spoken.recordings()).length;
+
+    await count.answer(n + 1);
+
+    await expect(count.message).toHaveText('Let’s count them together.');
+    await expect(count.counted).toHaveCount(n);
+    await expect(count.numeral(n)).toBeEnabled();
+    const recount = Array.from({ length: n }, (_, i) => number(i + 1));
+    expect((await spoken.recordings()).slice(before)).toEqual([
+      number(n + 1),
+      TOGETHER,
+      ...recount,
+      HOW_MANY,
+    ]);
+
+    await count.answer(n);
+    await expect(count.message).toHaveText(`Yes! ${n} toys.`);
+  });
+
+  test('Given two wrong answers, when the third is checked, then Pibbo shows and says the right numeral and the round completes', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+    const n = await count.countAll();
+
+    for (let i = 0; i < 3; i++) await count.answer(n - 1);
+
+    await expect(count.message).toHaveText(`There are ${n} toys.`);
+    await expect(count.numeral(n)).toHaveClass(/numeral--answer/);
+    await expect(count.numeral(n)).toBeDisabled();
+    expect((await spoken.recordings()).slice(-2)).toEqual([THERE_ARE, number(n)]);
+
+    await count.touch(count.action);
+
+    await expect(count.counted).toHaveCount(0);
+    await expect(count.progress).toHaveAttribute('aria-valuenow', '1');
   });
 });

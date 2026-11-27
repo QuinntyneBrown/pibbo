@@ -15,6 +15,7 @@ import {
   COUNT_THE_TOYS,
   countedSoFar,
   numberRecording,
+  recountDone,
   startRound,
   touchThing,
 } from '@pibbo/domain';
@@ -45,21 +46,35 @@ export class CountTheToys {
   /** Rounds finished in this play. */
   protected readonly done = signal(0);
   protected readonly praising = signal(false);
+  /** The thing Pibbo lights while it counts again. */
+  protected readonly lit = signal<number | null>(null);
   private endPraise: (() => void) | null = null;
 
   protected readonly counted = computed(() => countedSoFar(this.round()));
   protected readonly instruction = computed<Instruction>(() =>
     this.round().phase === 'counting' ? COUNT_THE_TOYS.count : COUNT_THE_TOYS.howMany,
   );
-  protected readonly mood = computed(() => (this.praising() ? 'cheer' : 'rest'));
+  protected readonly mood = computed(() =>
+    this.praising()
+      ? 'cheer'
+      : this.round().wrong > 0 && this.round().phase !== 'right'
+        ? 'oh'
+        : 'rest',
+  );
   protected readonly bar = computed<{ kind: AnswerBarKind; message: string; ready: boolean }>(
     () => {
       const round = this.round();
       switch (round.phase) {
         case 'right':
           return { kind: 'right', message: `Yes! ${round.answer} toys.`, ready: true };
+        case 'modelled':
+          return { kind: 'model', message: `There are ${round.answer} toys.`, ready: true };
+        case 'recounting':
+          return { kind: 'hint', message: COUNT_THE_TOYS.hint.text, ready: false };
         default:
-          return { kind: 'check', message: '', ready: round.chosen !== null };
+          return round.wrong > 0
+            ? { kind: 'hint', message: COUNT_THE_TOYS.hint.text, ready: round.chosen !== null }
+            : { kind: 'check', message: '', ready: round.chosen !== null };
       }
     },
   );
@@ -103,6 +118,33 @@ export class CountTheToys {
     if (outcome === null) return;
     this.round.set(round);
     if (outcome === 'right') this.praise();
+    else if (outcome === 'hint') void this.countAgain();
+    else
+      void this.audio.play(COUNT_THE_TOYS.model.recording).then((played) => {
+        if (played !== 'stopped' && this.round() === round) {
+          void this.audio.play(numberRecording(round.answer));
+        }
+      });
+  }
+
+  /**
+   * The hint (L2-002 #2): Pibbo counts the toys again aloud, lighting each in turn, in the
+   * order they were counted; nothing is cleared. Any newer sound ends it, and then the
+   * child chooses again.
+   */
+  private async countAgain(): Promise<void> {
+    const round = this.round();
+    const order = round.countedAs.map((n, i) => ({ n: n ?? 0, i })).sort((a, b) => a.n - b.n);
+    let outcome = await this.audio.play(COUNT_THE_TOYS.hint.recording);
+    for (const { n, i } of order) {
+      if (outcome === 'stopped' || this.round() !== round) break;
+      this.lit.set(i);
+      outcome = await this.audio.play(numberRecording(n));
+    }
+    this.lit.set(null);
+    if (this.round() !== round) return;
+    this.round.set(recountDone(round));
+    if (outcome !== 'stopped') void this.audio.play(COUNT_THE_TOYS.howMany.recording);
   }
 
   /** Brief praise that never blocks Next: it ends itself after at most 1.5 s. */
@@ -121,6 +163,7 @@ export class CountTheToys {
 
   private next(): void {
     this.stopPraise();
+    this.lit.set(null);
     const done = this.done() + 1;
     if (done >= COUNT_THE_TOYS.roundsPerPlay) {
       this.leave();

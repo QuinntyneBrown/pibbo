@@ -11,12 +11,14 @@
     <pb-count-set
       [things]="round().things"
       [countedAs]="round().countedAs"
+      [lit]="lit()"
       (touched)="touchThing($event)"
     />
     <pb-tally
       [counted]="counted()"
       [choices]="round().choices"
       [chosen]="round().chosen"
+      [modelled]="round().phase === 'modelled' ? round().answer : null"
       [locked]="round().phase !== 'choosing'"
       (chose)="chooseNumeral($event)"
     />
