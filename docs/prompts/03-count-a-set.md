@@ -1,5 +1,7 @@
 # Feature: Count a set
 
+**Status:** Complete (PR #3)
+
 Journey 3 of 27 in `docs/journeys.md`. Requirements: L2-001, L2-002, L2-025, L2-026.
 
 ## Goal
