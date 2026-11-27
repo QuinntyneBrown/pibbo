@@ -6,6 +6,7 @@ import { HomePage } from '../pages/home.page';
 const HOME = ['/recordings/home/count.wav', '/recordings/home/count-the-toys.wav'];
 const TAP_EACH = '/recordings/count/tap-each-toy.wav';
 const HOW_MANY = '/recordings/count/how-many.wav';
+const YES = '/recordings/count/yes.wav';
 const number = (n: number) => `/recordings/numbers/${n}.wav`;
 
 test.describe('Count the toys: spoken and shown instructions', () => {
@@ -174,5 +175,61 @@ test.describe('Count the toys: answer how many', () => {
     await expect(count.numeral(n)).toHaveAttribute('aria-pressed', 'true');
     await expect(count.action).toBeEnabled();
     expect((await spoken.recordings()).at(-1)).toBe(number(n));
+  });
+});
+
+test.describe('Count the toys: praise', () => {
+  test('Given numerals offered, when the child chooses the right one and touches Check, then brief praise plays, lasts no more than 1.5 s, and Next is accepted during it', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+    const n = await count.countAll();
+
+    await count.answer(n);
+
+    await expect(count.message).toHaveText(`Yes! ${n} toys.`);
+    await expect(count.pibbo).toHaveClass(/pibbo--cheer/);
+    await expect(count.action).toBeEnabled();
+    expect((await spoken.recordings()).slice(-2)).toEqual([number(n), YES]);
+
+    await count.touch(count.action);
+
+    await expect(count.counted).toHaveCount(0);
+    await expect(count.instruction).toHaveText('Tap each toy once to count it.');
+    await expect(count.progress).toHaveAttribute('aria-valuenow', '1');
+    expect((await spoken.recordings()).at(-1)).toBe(TAP_EACH);
+  });
+
+  test('Given praise is playing, when 1.5 s pass, then the praise has ended and the answer stays shown', async ({
+    page,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+    const n = await count.countAll();
+    await count.answer(n);
+    await expect(count.pibbo).toHaveClass(/pibbo--cheer/);
+
+    await page.clock.runFor(1500);
+
+    await expect(count.pibbo).not.toHaveClass(/pibbo--cheer/);
+    await expect(count.message).toHaveText(`Yes! ${n} toys.`);
+  });
+
+  test('Given five rounds played, when the child touches Next, then Home returns with Count chosen', async ({
+    page,
+  }) => {
+    const count = new CountTheToysPage(page);
+    const home = new HomePage(page);
+    await count.openFromHome();
+
+    for (let round = 0; round < 5; round++) {
+      await expect(count.counted).toHaveCount(0);
+      await count.answer(await count.countAll());
+      await count.touch(count.action);
+    }
+
+    await expect(home.group('Count')).toHaveAttribute('aria-pressed', 'true');
   });
 });

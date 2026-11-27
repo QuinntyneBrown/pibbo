@@ -1,6 +1,9 @@
 <pb-round-shell
   title="Count the toys"
   [instruction]="instruction()"
+  [mood]="mood()"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
   (replay)="replay()"
   (leave)="leave()"
 >
@@ -14,8 +17,15 @@
       [counted]="counted()"
       [choices]="round().choices"
       [chosen]="round().chosen"
+      [locked]="round().phase !== 'choosing'"
       (chose)="chooseNumeral($event)"
     />
   </div>
-  <pb-answer-bar answer [ready]="round().chosen !== null" (action)="check()" />
+  <pb-answer-bar
+    answer
+    [kind]="bar().kind"
+    [message]="bar().message"
+    [ready]="bar().ready"
+    (action)="action()"
+  />
 </pb-round-shell>

@@ -1,4 +1,5 @@
 import type { RandomSource, Thing } from '@pibbo/api';
+import { answerOutcome, type AnswerOutcome } from '../rounds/answer-outcome';
 
 /** The rug is a 4 x 3 grid; each thing takes its own cell, so no two overlap (L2-002 #3). */
 export const RUG_CELLS = 12;
@@ -114,6 +115,30 @@ export function touchThing(round: CountRound, index: number): TouchResult {
     round: { ...counted, phase: 'choosing', choices: numeralChoices(round.answer) },
     spoken: next,
   };
+}
+
+/** What Check did: the round after it and what follows, or null when there was nothing to check. */
+export interface CheckResult {
+  readonly round: CountRound;
+  readonly outcome: AnswerOutcome | null;
+}
+
+/**
+ * Check the chosen numeral (L2-002, L2-026). Right ends the round; a wrong answer keeps
+ * every count and has Pibbo count again (`recounting`); the third wrong one is modelled.
+ */
+export function checkAnswer(round: CountRound): CheckResult {
+  if (round.phase !== 'choosing' || round.chosen === null) return { round, outcome: null };
+  const outcome = answerOutcome(round.wrong, round.chosen === round.answer);
+  if (outcome === 'right') return { round: { ...round, phase: 'right' }, outcome };
+  const wrong = round.wrong + 1;
+  const phase = outcome === 'model' ? 'modelled' : 'recounting';
+  return { round: { ...round, phase, wrong, chosen: null }, outcome };
+}
+
+/** Pibbo has counted again; the child chooses again. */
+export function recountDone(round: CountRound): CountRound {
+  return round.phase === 'recounting' ? { ...round, phase: 'choosing' } : round;
 }
 
 /** The child chooses a numeral, which is spoken. Only while choosing, and only one offered. */

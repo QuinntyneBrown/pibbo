@@ -1,5 +1,7 @@
 import type { RandomSource } from '@pibbo/api';
 import {
+  checkAnswer,
+  recountDone,
   chooseNumeral,
   countedSoFar,
   numeralChoices,
@@ -133,5 +135,42 @@ describe('chooseNumeral', () => {
 
   it('takes no more touches on things once counting is done', () => {
     expect(touchThing(counted(), 0).spoken).toBeNull();
+  });
+});
+
+describe('checkAnswer', () => {
+  const choose = (round: CountRound, n: number) => chooseNumeral(round, n).round;
+
+  it('checks nothing until a numeral is chosen', () => {
+    expect(checkAnswer(counted()).outcome).toBeNull();
+  });
+
+  it('ends the round on the right numeral', () => {
+    const { round, outcome } = checkAnswer(choose(counted(), 5));
+    expect(outcome).toBe('right');
+    expect(round.phase).toBe('right');
+  });
+
+  it('keeps every count on a wrong numeral and has Pibbo count again', () => {
+    const before = choose(counted(), 6);
+    const { round, outcome } = checkAnswer(before);
+    expect(outcome).toBe('hint');
+    expect(round.phase).toBe('recounting');
+    expect(round.countedAs).toEqual(before.countedAs);
+    expect(round.chosen).toBeNull();
+    expect(recountDone(round).phase).toBe('choosing');
+  });
+
+  it('models the answer on the third wrong numeral', () => {
+    let round = counted();
+    const outcomes = [];
+    for (let i = 0; i < 3; i++) {
+      const result = checkAnswer(choose(round, 4));
+      outcomes.push(result.outcome);
+      round = recountDone(result.round);
+    }
+    expect(outcomes).toEqual(['hint', 'hint', 'model']);
+    expect(round.phase).toBe('modelled');
+    expect(round.wrong).toBe(3);
   });
 });
