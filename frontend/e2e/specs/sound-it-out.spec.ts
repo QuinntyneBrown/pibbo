@@ -6,6 +6,8 @@ import { SoundItOutPage } from '../pages/sound-it-out.page';
 const HOME = ['/recordings/home/read.wav', '/recordings/home/sound-it-out.wav'];
 const TAP_EACH = '/recordings/read/tap-each-letter.wav';
 const SAY_FAST = '/recordings/read/say-them-fast.wav';
+const WHICH = '/recordings/read/which-picture.wav';
+const wordRecording = (w: string) => `/recordings/words/${w}.wav`;
 const sound = (s: string) => `/recordings/sounds/${s}.wav`;
 
 test.describe('Sound it out: a round', () => {
@@ -97,5 +99,31 @@ test.describe('Sound it out: each letter makes its sound', () => {
 
     await expect(read.heard).toHaveCount(0);
     expect(await spoken.recordings()).toEqual([...HOME, TAP_EACH]);
+  });
+});
+
+test.describe('Sound it out: blending', () => {
+  test('Given all three sounds have been heard, when the child touches blend, then the sounds are spoken again back to back, then the word, and three pictures are offered', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    const word = await read.soundAll();
+    const before = (await spoken.recordings()).length;
+
+    await read.touch(read.blend);
+
+    await expect(read.pictures).toHaveCount(3);
+    expect(await read.pictureWords()).toContain(word);
+    await expect(read.blend).toHaveCount(0);
+    await expect(read.sounding).toHaveCount(0);
+    await expect(read.instruction).toHaveText(`Which picture is “${word}”?`);
+    expect((await spoken.recordings()).slice(before)).toEqual([
+      ...[...word].map(sound),
+      wordRecording(word),
+      WHICH,
+      wordRecording(word),
+    ]);
   });
 });

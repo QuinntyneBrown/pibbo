@@ -13,10 +13,19 @@
       [heard]="round().heard"
       [next]="next()"
       [sounding]="sounding()"
+      [showBlend]="!picking()"
       [canBlend]="round().phase === 'ready'"
       (touched)="touchLetter($event)"
       (blend)="blend()"
     />
+    @if (picking()) {
+      <pb-picture-pick
+        [pictures]="round().pictures"
+        [chosen]="round().chosen"
+        [locked]="round().phase !== 'picking'"
+        (chose)="choosePicture($event)"
+      />
+    }
   </div>
   <pb-answer-bar answer kind="check" [ready]="false" (action)="action()" />
 </pb-round-shell>

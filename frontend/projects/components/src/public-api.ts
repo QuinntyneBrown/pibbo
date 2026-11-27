@@ -14,3 +14,4 @@ export * from './lib/count-set/count-set';
 export * from './lib/tally/tally';
 export * from './lib/answer-bar/answer-bar';
 export * from './lib/word-tiles/word-tiles';
+export * from './lib/picture-pick/picture-pick';

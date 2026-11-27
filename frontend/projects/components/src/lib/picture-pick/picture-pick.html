@@ -1,0 +1,20 @@
+<div class="pick" role="group" aria-label="Pictures">
+  @for (picture of pictures(); track picture.word) {
+    <button
+      type="button"
+      class="pick__option"
+      [class.pick__option--right]="right() === picture.word"
+      [attr.aria-pressed]="chosen() === picture.word || right() === picture.word"
+      [attr.aria-label]="picture.word"
+      [disabled]="locked()"
+      (pbTap)="chose.emit(picture.word)"
+    >
+      <img class="picture" [src]="picture.picture" alt="" draggable="false" />
+      @if (right() === picture.word) {
+        <svg class="pick__tick" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      }
+    </button>
+  }
+</div>
