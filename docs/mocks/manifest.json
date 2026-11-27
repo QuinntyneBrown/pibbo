@@ -13,9 +13,12 @@
     {
       "id": "home",
       "kind": "page",
-      "title": "Home · Choose a game",
+      "title": "Home · Choose an activity",
       "route": "/",
-      "requirements": [],
+      "requirements": [
+        "L2-024",
+        "L2-035"
+      ],
       "states": [
         "default",
         "counting",
@@ -25,8 +28,26 @@
       "subject": "both",
       "not_applicable": {
         "loading": "Home is in the initial bundle; it never waits on anything.",
-        "empty": "The game list is fixed content; it is never empty.",
+        "empty": "Count and Read always have at least one activity; only activities that exist are listed.",
         "error": "Home reads nothing that can fail."
+      }
+    },
+    {
+      "id": "activity-placeholder",
+      "kind": "page",
+      "title": "Activity placeholder",
+      "route": "/count/toys, /read/sound-out",
+      "requirements": [
+        "L2-024"
+      ],
+      "states": [
+        "default"
+      ],
+      "subject": "both",
+      "not_applicable": {
+        "loading": "It is a lazy route with no data to wait for.",
+        "empty": "It always names one activity.",
+        "error": "Nothing on this screen can fail."
       }
     },
     {

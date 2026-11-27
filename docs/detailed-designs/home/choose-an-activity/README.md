@@ -15,11 +15,13 @@ Touching a group picture speaks its name and shows that group's activities, at m
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
 - **`HomePage`** — route component in `pibbo` at `/`, in the initial bundle. It reads the activity catalogue, tracks the chosen group in a signal and navigates to the lazy activity route.
-- **`ActivityGridComponent`** — presentation component (`pb-activity-grid`) laying out at most 6 `pb-activity-picture` targets, each at least 60 × 60 px with at least 16 px between targets.
-- **`ActivityPictureComponent`** — presentation component (`pb-activity-picture`): picture, accessible name and `touched` output.
+- **`GroupSwitch`** — presentation component (`pb-group-switch`, block `.switch--groups`): the Count and Read group pictures, the chosen one marked with `aria-pressed` and a tick.
+- **`ActivityGridComponent`** — presentation component (`pb-activity-grid`, block `.game-group`) laying out at most 6 `pb-activity-picture` targets, each at least 60 × 60 px with at least 16 px between targets.
+- **`ActivityPictureComponent`** — presentation component (`pb-activity-picture`, block `.game-card`): picture, accessible name and `touched` output, through `pbTap`.
+- **`ActivityPlaceholder`** — lazy route component in `pibbo` standing in for an activity not built yet: its name and one large way back to Home (ADR 0006).
 - **`ActivityCatalogue`** — data in `@pibbo/domain` listing groups, activities, their pictures, recordings and route paths.
 - **`AudioUnlock`** — part of the `AudioPlayer` implementation; the first touch on Home resumes the audio context.
-- **`GrownUpEntry`** — small corner control leading to the grown-up gate (`grown-up/grown-up-gate`).
+- **`GrownUpEntry`** — small corner control leading to the grown-up gate (`grown-up/grown-up-gate`). Deferred to journey 24.
 
 ## Requirements
 
@@ -67,3 +69,15 @@ The catalogue is plain data; `HomePage` holds only the chosen group.
 The first touch unlocks sound. The group name is spoken and shown, then one touch on an activity speaks its name and opens it (`L2-024`).
 
 ![Sequence for choose a group and an activity](diagrams/sequence-choose-group-and-activity.png)
+
+## Decisions (journey 2)
+
+- Home shows only activities that exist in `ACTIVITY_CATALOGUE`: Count the toys and Sound it out, each behind a lazy placeholder route until journeys 3 and 4 (ADR 0006).
+- `HomePage` is the lazy route at `/`. The chosen group is a signal, also kept in the URL as `?group=count|read` so the placeholder's Home button returns to the group; nothing is stored.
+- Once an activity picture is touched, Home ignores every further touch until it has navigated (`L2-035` #3).
+- `L2-024` #4 (lesson and check game pictures) is deferred to journeys 22 and 23. Content comes from the bundle; there is no `Pibbo.Api` (journey 27).
+
+## Open questions
+
+- The recordings for "Count", "Read" and each activity name are placeholder silences; a person must record them.
+- The tap thresholds (48 px palm, 12 px movement, 700 ms long press) need tuning on real devices.

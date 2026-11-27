@@ -622,3 +622,24 @@ img { display: block; max-width: 100%; }
 .rocket__body { fill: var(--palette-white); stroke: var(--palette-ink); stroke-width: 3; }
 .rocket__window { fill: var(--palette-sky); stroke: var(--palette-ink); stroke-width: 3; }
 .launch__rocket--0 { translate: none; }
+
+/* ---------- Home: group pictures (journey 2) ---------- */
+.switch--groups { gap: var(--gap-targets); padding: 0; background: transparent; }
+.switch__option--group {
+  flex-direction: column; justify-content: center; gap: var(--space-1);
+  min-width: var(--size-12); min-height: var(--size-12); height: auto; padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-xl); background: var(--color-surface); color: var(--color-fg);
+}
+.switch__glyph { font-family: var(--font-read); font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); line-height: 1; }
+.switch__option--group[aria-pressed="true"] { background: var(--color-count-strong); color: var(--color-fg-on-strong); --depth: var(--color-count-depth); }
+.switch__option--group.switch__option--read[aria-pressed="true"] { background: var(--color-read-strong); --depth: var(--color-read-depth); }
+.switch__option--group[aria-pressed="true"]::after { content: "✓"; font-size: var(--font-size-lg); line-height: 1; }
+.game-group__grid { gap: var(--gap-targets); }
+.game-card { min-height: var(--target-child); }
+
+/* ---------- Activity placeholder (until an activity is built) ---------- */
+.placeholder { display: flex; min-height: 100vh; }
+.placeholder__main { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-6); padding: var(--layout-margin); text-align: center; }
+.placeholder__glyph { font-family: var(--font-read); font-size: var(--font-size-6xl); font-weight: var(--font-weight-bold); color: var(--color-fg-muted); }
+.placeholder__title { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); }
+.placeholder__home { min-height: var(--target-child); min-width: var(--size-12); }

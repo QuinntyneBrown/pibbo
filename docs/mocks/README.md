@@ -61,6 +61,15 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   frames in the project but are not wired into the prototype's own navigation. Here they
   are linked from Home and the lesson, as `journeys.ts` describes.
 
+- **Home reconciled with `AGENTS.md` (journey 2).** The prototype's Home (the child's
+  name and stars, today's lesson card, the check card and 21 game cards) is replaced by what
+  `L2-024` and *Children's privacy and safety* allow: two group pictures, Count and Read, and
+  the chosen group's activities as pictures, only those that exist. The prototype's subject
+  switch became the group pictures (`.switch--groups`), its game cards lost their stars, and
+  targets and gaps grew to 60 px and 16 px (`--target-child`, `--gap-targets`). The lesson and
+  check pictures (`L2-024` #4) come back with journeys 22 and 23. `activity-placeholder` is new:
+  it stands in for an activity until its journey builds it (ADR 0006).
+
 ## Open questions
 
 - The prototype and these mocks are not reconciled with `AGENTS.md`. At the owner's
@@ -91,7 +100,8 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 
 | Screen | default | loading | empty | error | counting | first-visit | start | done | choose | correct | retry | written | picked | by-twos | playing | held | ready | pick | magic-e | syllables | full | all-chosen | miss | answered | counting-question | results | Requirements |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Home · Choose a game (`home`) | [✅](pages/home/default.html) | ➖ | ➖ | ➖ | [✅](pages/home/counting.html) | [✅](pages/home/first-visit.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Home · Choose an activity (`home`) | [✅](pages/home/default.html) | ➖ | ➖ | ➖ | [✅](pages/home/counting.html) | [✅](pages/home/first-visit.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-024`, `L2-035` |
+| Activity placeholder (`activity-placeholder`) | [✅](pages/activity-placeholder/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-024` |
 | Guided lesson (`guided-lesson`) | [✅](pages/guided-lesson/default.html) | ➖ | ➖ | ➖ | [✅](pages/guided-lesson/counting.html) |  | [✅](pages/guided-lesson/start.html) | [✅](pages/guided-lesson/done.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Count the toys (`count-the-toys`) | [✅](pages/count-the-toys/default.html) | ➖ | ➖ | ➖ |  |  | [✅](pages/count-the-toys/start.html) |  | [✅](pages/count-the-toys/choose.html) | [✅](pages/count-the-toys/correct.html) | [✅](pages/count-the-toys/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Count and write to 20 (`count-and-write`) | [✅](pages/count-and-write/default.html) | ➖ | ➖ | ➖ | [✅](pages/count-and-write/counting.html) |  |  |  |  | [✅](pages/count-and-write/correct.html) |  | [✅](pages/count-and-write/written.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |

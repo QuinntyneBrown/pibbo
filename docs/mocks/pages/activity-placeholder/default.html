@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Activity placeholder · default — Pibbo mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="activity-placeholder">
+<meta name="mock:requirements" content="L2-024">
+<meta name="mock:state" content="default">
+<meta name="description" content="Stands in for an activity until its journey builds it: the activity's name and one large way back to Home.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the game</a>
+<div class="placeholder">
+  <main class="placeholder__main" id="main">
+    <span class="placeholder__glyph" aria-hidden="true">1 2 3</span>
+    <h1 class="placeholder__title">Count the toys</h1>
+    <a class="chunky chunky--ink press placeholder__home" href="../home/counting.html">Home</a>
+  </main>
+</div>
+<p class="mock-note" style="top: 1rem; right: 1rem;">Temporary: shown for an activity whose screen is not built yet (journeys 3 and 4). The Home button returns to Home with the group still chosen.</p>
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Activity placeholder</span>
+  <ul class="mock-bar__states"><li><a href="default.html" aria-current="page">default</a></li></ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>
