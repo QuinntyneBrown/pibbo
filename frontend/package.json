@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve pibbo",
-    "build": "ng build pibbo",
+    "build": "node ../tools/content/check-content.mjs && ng build pibbo",
     "build:libs": "ng build api && ng build domain && ng build components",
     "lint": "ng lint && eslint e2e playwright.config.ts",
     "format": "prettier --write .",

@@ -1,0 +1,56 @@
+{
+  "roundsPerPlay": 5,
+  "words": [
+    {
+      "word": "map",
+      "sounds": ["m", "a", "p"],
+      "picture": "/pictures/words/map.jpg",
+      "recording": "/recordings/words/map.wav"
+    },
+    {
+      "word": "sun",
+      "sounds": ["s", "u", "n"],
+      "picture": "/pictures/words/sun.jpg",
+      "recording": "/recordings/words/sun.wav"
+    },
+    {
+      "word": "cat",
+      "sounds": ["c", "a", "t"],
+      "picture": "/pictures/words/cat.jpg",
+      "recording": "/recordings/words/cat.wav"
+    }
+  ],
+  "sounds": {
+    "m": { "letters": "m", "shown": "/m/", "recording": "/recordings/sounds/m.wav" },
+    "a": { "letters": "a", "shown": "/a/", "recording": "/recordings/sounds/a.wav" },
+    "p": { "letters": "p", "shown": "/p/", "recording": "/recordings/sounds/p.wav" },
+    "s": { "letters": "s", "shown": "/s/", "recording": "/recordings/sounds/s.wav" },
+    "u": { "letters": "u", "shown": "/u/", "recording": "/recordings/sounds/u.wav" },
+    "n": { "letters": "n", "shown": "/n/", "recording": "/recordings/sounds/n.wav" },
+    "c": { "letters": "c", "shown": "/c/", "recording": "/recordings/sounds/c.wav" },
+    "t": { "letters": "t", "shown": "/t/", "recording": "/recordings/sounds/t.wav" }
+  },
+  "instructions": {
+    "sounding": {
+      "text": "Tap each letter to hear its sound.",
+      "recording": "/recordings/read/tap-each-letter.wav",
+      "picture": "tap"
+    },
+    "ready": {
+      "text": "Now say the sounds fast to read the word.",
+      "recording": "/recordings/read/say-them-fast.wav",
+      "picture": "tap"
+    },
+    "picking": {
+      "text": "Which picture is",
+      "recording": "/recordings/read/which-picture.wav",
+      "picture": "ask"
+    }
+  },
+  "praise": { "recording": "/recordings/read/you-read.wav" },
+  "hint": {
+    "text": "Read it again, then look closely.",
+    "recording": "/recordings/read/read-again.wav"
+  },
+  "model": { "recording": "/recordings/read/this-is.wav" }
+}

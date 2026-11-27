@@ -4,6 +4,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "strict": true,
+    "resolveJsonModule": true,
     "paths": {
       "@pibbo/api": ["./projects/api/src/public-api.ts"],
       "@pibbo/components": ["./projects/components/src/public-api.ts"],
