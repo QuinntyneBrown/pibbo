@@ -105,3 +105,37 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Budget for lazy routes (J2 #4): the initial bundle stayed under budget; `round-shell.scss`
   is over the 2 kB per-component warning (not the 4 kB error) and is a candidate to split.
 
+
+## Journey 4: Sound out and blend a word
+
+**What slowed it**
+
+- The prototype's Sound it out cast was "ship", a digraph from a later journey, and `L2-012`
+  disagreed with the mock on blend order and on when the picture appears. The mock won: it was
+  redrawn with "map", and `L2-012` was brought in line (ADR 0008) before any code.
+- On a phone, the browser's click after a tap landed on the pictures that replace the blend
+  control under the finger and chose one. `pbTap` now cancels the touch's end.
+- `startRound` already existed in `@pibbo/domain` for Count; the Sound Out one is
+  `startSoundOutRound`, since the public API is flat.
+- A spec read the next word from the page before Next had rendered it; it now waits for the
+  progress bar first.
+
+**New lessons**
+
+1. A control that is replaced by other targets in the same place (blend, then pictures) needs
+   the touch's synthetic click cancelled, or the new target is chosen by accident.
+2. Keep content as JSON next to its typed accessor: a plain Node script checks it before
+   `ng build` with no TypeScript tooling, and the app imports the same file.
+3. Choose the next round when this one starts; preloading its assets is then one call, and
+   the preloader, provided by the route, aborts everything when the child leaves.
+4. After a touch that changes the round, wait for something the new round shows before
+   reading the page.
+
+**Earlier lessons applied**
+
+- Read the mock against `AGENTS.md` and the requirement first (J2 #1): worked; it caught the
+  digraph cast, the text-only bubble and the missing modelled state.
+- A round as a pure state machine (J3 #1): worked; the page only plays recordings.
+- Sequence speech by awaiting `PlayOutcome` (J3 #2): worked for blending and Try again.
+- `CLOCK.after` and `sound: 'off'` (J3 #3, #4): reused unchanged for praise and the muted spec.
+- Write tool over heredocs (J2): followed for long TypeScript; short heredocs were fine.

@@ -2,7 +2,7 @@
 
 These are the user journeys to implement, in the order to build them. Each one is a thin vertical slice with its own implementation prompt in [`docs/prompts/`](prompts/). Each prompt is run as one session and ends with a PR.
 
-**% complete:** 11% (3 of 27 journeys done)
+**% complete:** 15% (4 of 27 journeys done)
 
 ## Order
 
@@ -23,7 +23,7 @@ The order follows what makes sense to build first:
 | 1 | Scaffold the workspace | `L2-034`, `L2-039` | [layout/responsive-breakpoints](detailed-designs/layout/responsive-breakpoints/README.md)<br>[operations/build-and-deploy](detailed-designs/operations/build-and-deploy/README.md)<br>[privacy/device-only-data](detailed-designs/privacy/device-only-data/README.md)<br>[security/transport-and-headers](detailed-designs/security/transport-and-headers/README.md)<br>[performance/fast-load-and-response](detailed-designs/performance/fast-load-and-response/README.md) | Nothing else can be built until the workspace, its boundaries, its checks and its test fixtures exist. | [prompt](prompts/01-scaffold-the-workspace.md) | Done |
 | 2 | Home: choose an activity | `L2-024`, `L2-035` | [home/choose-an-activity](detailed-designs/home/choose-an-activity/README.md)<br>[layout/touch-robustness](detailed-designs/layout/touch-robustness/README.md) | Home is the door to every activity and the touch that unlocks sound. | [prompt](prompts/02-home-choose-an-activity.md) | Done |
 | 3 | Count a set | `L2-001`, `L2-002`, `L2-025`, `L2-026` | [count/count-a-set](detailed-designs/count/count-a-set/README.md)<br>[rounds/spoken-and-shown-instructions](detailed-designs/rounds/spoken-and-shown-instructions/README.md)<br>[rounds/retry-and-praise](detailed-designs/rounds/retry-and-praise/README.md) | It is the first activity in the purpose and it builds the shared round behaviour (instructions, retry and praise) that every later activity reuses. | [prompt](prompts/03-count-a-set.md) | Done |
-| 4 | Sound out and blend a word | `L2-012` | [sound-out/sound-out-and-blend](detailed-designs/sound-out/sound-out-and-blend/README.md) | It is the second activity in the purpose. It adds word data, sound recordings and the build-time content check that all reading activities reuse. | [prompt](prompts/04-sound-out-and-blend.md) | Not started |
+| 4 | Sound out and blend a word | `L2-012` | [sound-out/sound-out-and-blend](detailed-designs/sound-out/sound-out-and-blend/README.md) | It is the second activity in the purpose. It adds word data, sound recordings and the build-time content check that all reading activities reuse. | [prompt](prompts/04-sound-out-and-blend.md) | Done |
 | 5 | Count and write to twenty | `L2-003`, `L2-004` | [count/count-to-twenty](detailed-designs/count/count-to-twenty/README.md) | It extends Count a set to larger sets and adds forming the numeral. | [prompt](prompts/05-count-to-twenty.md) | Not started |
 | 6 | Compare two numbers | `L2-005` | [count/compare-two-numbers](detailed-designs/count/compare-two-numbers/README.md) | It reuses the counting rules with one new decision. | [prompt](prompts/06-compare-two-numbers.md) | Not started |
 | 7 | Count backward | `L2-006` | [count/count-backward](detailed-designs/count/count-backward/README.md) | It reuses counting with a reversed order. | [prompt](prompts/07-count-backward.md) | Not started |

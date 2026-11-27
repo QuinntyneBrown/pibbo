@@ -74,7 +74,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   "ship", a digraph (`L2-014`, journey 14); the journey-4 states now draw a three-sound word of
   single letters ("map", with sun and cat as the other pictures) and drop the `rule` line. The
   speech bubble carries a picture of what is asked (`bubble__picture`), the letter sounding is
-  lit (`tile--sounding`), Next starts the next round, and a new `modelled` state shows the
+  lit (`tile--sounding`), the right picture carries a tick (`pick__tick`), Next starts the next round, and a new `modelled` state shows the
   right picture after the third wrong one. `magic-e` and `syllables` are unchanged (ADR 0008).
 - **Count the toys reconciled with `L2-001`, `L2-002`, `L2-025` and `L2-026` (journey 3).** The
   prototype's Try again cleared the stamps; now nothing is cleared: Pibbo counts the toys again

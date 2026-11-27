@@ -438,6 +438,8 @@ img { display: block; max-width: 100%; }
 .pick__option[aria-pressed="true"] { background: var(--color-read-soft); box-shadow: inset 0 0 0 4px var(--color-read-strong), 0 var(--press-depth) 0 var(--color-read-strong); }
 .pick__option--count[aria-pressed="true"] { background: var(--color-count-soft); box-shadow: inset 0 0 0 4px var(--color-count-strong), 0 var(--press-depth) 0 var(--color-count-strong); }
 .pick__option--right { background: var(--color-success-soft) !important; box-shadow: inset 0 0 0 4px var(--color-success), 0 var(--press-depth) 0 var(--color-success) !important; }
+.pick__option { position: relative; }
+.pick__tick { position: absolute; top: var(--space-2); right: var(--space-2); width: var(--size-6); height: var(--size-6); fill: none; stroke: var(--color-success-strong); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .pick__option--text { aspect-ratio: auto; height: var(--size-12); font-family: var(--font-read); font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); }
 @media (min-width: 40rem) { .pick__option--text { font-size: var(--font-size-5xl); } }
 
