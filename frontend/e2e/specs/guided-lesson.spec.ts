@@ -6,6 +6,7 @@ import { LessonPage } from '../pages/lesson.page';
 
 const COUNT_TITLE = '/recordings/lessons/count.wav';
 const UP_NEXT = '/recordings/lessons/up-next.wav';
+const DONE = '/recordings/lessons/done.wav';
 const YES = '/recordings/count/yes.wav';
 const name = (id: string) => `/recordings/home/${id}.wav`;
 
@@ -84,10 +85,10 @@ test.describe('Guided lesson: moving on', () => {
     page,
   }) => {
     const lesson = new LessonPage(page);
-    await page.goto('/lesson/count?finished=1');
+    await lesson.open('count', '?finished=1');
     await expect(lesson.node(2)).toHaveAttribute('aria-current', 'step');
 
-    await page.goto('/lesson/count?finished=1');
+    await lesson.open('count', '?finished=1');
 
     await expect(lesson.node(2)).toHaveAttribute('aria-current', 'step');
     await expect(lesson.done).toHaveCount(1);
@@ -123,5 +124,67 @@ test.describe('Guided lesson: pausing', () => {
     await expect(lesson.root).toBeVisible();
     await expect(lesson.node(1)).toHaveAttribute('aria-current', 'step');
     await expect(lesson.done).toHaveCount(0);
+  });
+});
+
+test.describe('Guided lesson: resuming on the same device', () => {
+  test('Given step 2 is current, when the child leaves and comes back to the lesson, then it resumes at step 2', async ({
+    page,
+  }) => {
+    const lesson = new LessonPage(page);
+    const home = new HomePage(page);
+    await lesson.open('count', '?finished=1');
+    await expect(lesson.node(2)).toHaveAttribute('aria-current', 'step');
+    await lesson.touch(lesson.home);
+    await expect(home.root).toBeVisible();
+    await expect(home.activities.first()).toBeVisible();
+    await lesson.settle();
+
+    await lesson.open('count');
+
+    await expect(lesson.node(2)).toHaveAttribute('aria-current', 'step');
+    await expect(lesson.next).toHaveText('Up next: Count and write');
+    expect(JSON.parse((await lesson.stored('count')) ?? 'null')).toEqual({
+      v: 1,
+      step: 2,
+      at: 'count-and-write',
+    });
+  });
+
+  for (const [what, value] of [
+    ['damaged', '{"v":1,"step":'],
+    ['of an old version', '{"v":0,"step":3,"at":"which-is-bigger"}'],
+    ['out of range', '{"v":1,"step":9,"at":"done"}'],
+    ['no longer matching the lesson', '{"v":1,"step":3,"at":"count-the-toys"}'],
+  ] as const) {
+    test(`Given a stored place that is ${what}, when the lesson opens, then it is treated as not there and the lesson starts at step 1`, async ({
+      page,
+    }) => {
+      const lesson = new LessonPage(page);
+      await lesson.storeBeforeLoad('count', value);
+
+      await lesson.open('count');
+
+      await expect(lesson.node(1)).toHaveAttribute('aria-current', 'step');
+      await expect(lesson.done).toHaveCount(0);
+    });
+  }
+
+  test('Given the last step is current, when the child finishes it, then every step is done, "Lesson done" is spoken and shown, and Back home returns Home', async ({
+    page,
+    spoken,
+  }) => {
+    const lesson = new LessonPage(page);
+    const home = new HomePage(page);
+    await lesson.storeBeforeLoad('count', '{"v":1,"step":5,"at":"counting-dance"}');
+
+    await lesson.open('count', '?finished=5');
+
+    await expect(lesson.done).toHaveCount(5);
+    await expect(lesson.current).toHaveCount(0);
+    await expect(page.locator('.lesson__next p')).toHaveText('Lesson done! You played every game.');
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(DONE);
+    await lesson.touch(lesson.play);
+    await expect(home.root).toBeVisible();
   });
 });

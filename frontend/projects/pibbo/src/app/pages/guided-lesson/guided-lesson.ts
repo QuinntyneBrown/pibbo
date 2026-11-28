@@ -9,7 +9,7 @@ import {
   linkedSignal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AUDIO_PLAYER, type LessonStep } from '@pibbo/api';
+import { AUDIO_PLAYER, PROGRESS_STORE, type LessonStep } from '@pibbo/api';
 import { LessonPath, Pibbo, Tap } from '@pibbo/components';
 import {
   ACTIVITY_CATALOGUE,
@@ -17,7 +17,10 @@ import {
   LESSONS,
   finishStep,
   lessonById,
+  lessonKey,
+  lessonPlace,
   lessonSteps,
+  readLessonPlace,
 } from '@pibbo/domain';
 
 /**
@@ -35,6 +38,7 @@ import {
 export class GuidedLesson {
   private readonly audio = inject(AUDIO_PLAYER);
   private readonly router = inject(Router);
+  private readonly store = inject(PROGRESS_STORE);
 
   /** The `:subject` route parameter. */
   readonly subject = input<unknown>();
@@ -48,7 +52,14 @@ export class GuidedLesson {
     return lesson ? lessonSteps(lesson, ACTIVITY_CATALOGUE).steps : [];
   });
   /** The current step, 1-based; one past the last once the lesson is done. */
-  protected readonly current = linkedSignal(() => finishStep(1, this.finished(), this.steps()));
+  protected readonly current = linkedSignal(() => {
+    const lesson = this.lesson();
+    const steps = this.steps();
+    if (!lesson) return 1;
+    // Where the child left off on this device, checked; anything else starts at step 1.
+    const kept = readLessonPlace(this.store.read(lessonKey(lesson)), steps) ?? 1;
+    return finishStep(kept, this.finished(), steps);
+  });
   protected readonly next = computed<LessonStep | null>(
     () => this.steps()[this.current() - 1] ?? null,
   );
@@ -76,6 +87,7 @@ export class GuidedLesson {
       void this.router.navigate(['/'], { replaceUrl: true });
       return;
     }
+    this.store.write(lessonKey(lesson), lessonPlace(this.current(), this.steps()));
     const next = this.next();
     // The title when the lesson opens; back from an activity, only what comes next.
     const lines = this.finished() === undefined ? [lesson.recording] : [];

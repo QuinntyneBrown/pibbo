@@ -43,9 +43,15 @@ export class LessonPage {
   }
 
   /** Opens a lesson's path straight from its address. */
-  async open(lesson: 'count' | 'read'): Promise<void> {
-    await this.page.goto(`/lesson/${lesson}`);
+  async open(lesson: 'count' | 'read', query = ''): Promise<void> {
+    await this.page.goto(`/lesson/${lesson}${query}`);
     await expect(this.root).toBeVisible();
+    await this.settle();
+  }
+
+  /** Waits for fonts still loading: the next navigation would cut them off and fail the guard. */
+  async settle(): Promise<void> {
+    await this.page.evaluate(() => document.fonts.ready.then(() => undefined));
   }
 
   /** Touches (phone) or clicks (desktop) a target. */
