@@ -21,6 +21,7 @@
       ],
       "states": [
         "default",
+        "reading-more",
         "counting",
         "counting-more",
         "first-visit"
@@ -33,7 +34,8 @@
         "error": "Home reads nothing that can fail."
       },
       "state_subjects": {
-        "default": "read"
+        "default": "read",
+        "reading-more": "read"
       }
     },
     {

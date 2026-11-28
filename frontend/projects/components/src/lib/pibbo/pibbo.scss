@@ -5,8 +5,9 @@
 
 .pibbo {
   display: block;
-  width: 4.5rem;
-  height: 4.5rem;
+  // The shell may make Pibbo smaller where the instruction needs the room (`--pibbo-size`).
+  width: var(--pibbo-size, 4.5rem);
+  height: var(--pibbo-size, 4.5rem);
 }
 
 .pibbo--sm {
