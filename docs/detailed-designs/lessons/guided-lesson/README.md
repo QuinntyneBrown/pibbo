@@ -16,9 +16,9 @@ The feature is a vertical slice through the Angular workspace: the page in the `
 - **`LessonPath`** — presentation component (`pb-lesson-path`) keeping the mock's `.path` classes: done nodes play again, the current node has `aria-current="step"`, later nodes are disabled.
 - **`lessonRules`** — pure functions in `@pibbo/domain/lessons`: `lessonSteps` (drops unknown activities), `readLessonPlace` (checks a stored value), `lessonPlace`, `finishStep`.
 - **`LESSONS`** — the lesson content in `@pibbo/domain/lessons`; which activities and in what order is not decided.
-- **`ProgressStore`** — token `PROGRESS_STORE`, bound to `BrowserProgressStore` over `localStorage` (`pibbo:` prefix); a read that throws or finds nothing is absent; `clearAll` is for the grown-up area's "clear progress".
+- **`ProgressStore`** — token `PROGRESS_STORE`, bound at the lesson route to `BrowserProgressStore` over `localStorage` (`pibbo:` prefix); a read that throws or finds nothing is absent; `clearAll` is for the grown-up area's "clear progress".
 - **`ActivityExit`** — token `ACTIVITY_EXIT`, bound to `RouterActivityExit`: an activity's Leave and its last Next go back to the path when opened from a lesson, and to Home with its group otherwise.
-- **`ClientLog`** — token `CLIENT_LOG` (`console.warn`) for warnings that carry no child data.
+- **`ClientLog`** — token `CLIENT_LOG`, bound at the lesson route to `ConsoleClientLog` (`console.warn`), for warnings that carry no child data.
 
 ## Requirements
 

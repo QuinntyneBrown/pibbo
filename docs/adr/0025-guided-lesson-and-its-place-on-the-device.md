@@ -46,8 +46,9 @@ absent, and whose `clearAll` the grown-up area's "clear progress" calls.
    object, of another version, a step out of range, or an `at` that no longer names that step's
    activity (the content changed). Nothing means step 1. Storage that throws (private mode,
    disabled) reads as nothing and writes nothing; the lesson still runs.
-7. **The store** is `PROGRESS_STORE` in `@pibbo/api` (`read`, `write`, `clearAll`), bound in
-   `app.config.ts` to `BrowserProgressStore` over `localStorage`. `clearAll` removes every
+7. **The store** is `PROGRESS_STORE` in `@pibbo/api` (`read`, `write`, `clearAll`), bound at
+   the lazy lesson route (`guided-lesson.routes.ts`, with `CLIENT_LOG`) to `BrowserProgressStore`
+   over `localStorage`, so neither is in the initial bundle. `clearAll` removes every
    `pibbo:` key. A stored value is parsed as JSON and only ever used as a number and an id
    compared with content; it is never rendered.
 8. **How a grown-up clears it.** Journey 24's grown-up area calls `clearAll` for "clear
@@ -59,12 +60,13 @@ absent, and whose `clearAll` the grown-up area's "clear progress" calls.
    its last round (`finish`). Outside a lesson both return Home with the group chosen, as
    before. In a lesson, `leave` returns to the path and `finish` returns to it with
    `?finished=<n>`; the path advances only when `n` is its current step, so a replayed game or
-   a reload never skips one. Only the activities a lesson names call it: the count lesson's
-   five and the reading lesson's three that exist.
+   a reload never skips one. Every activity calls it, so any activity a lesson names later
+   needs no change. `RouterActivityExit` checks only that the lesson is a group and the step a
+   whole number, and imports no lesson content; the path checks the rest.
 10. **Home shows the chosen group's lesson** as a Lesson picture beside the wordmark
     (`.home__lesson`); touching it speaks "Lesson" and opens the path where the child left off.
 11. **Rules are pure functions** in `@pibbo/domain/lessons` with unit tests: `lessonSteps`,
-    `readLessonPlace`, `lessonPlace`, `finishStep`. The path is `LessonPath` (`pb-lesson-path`)
+    `readLessonPlace`, `lessonPlace`, `finishStep`, `lessonById`, `lessonKey`. The path is `LessonPath` (`pb-lesson-path`)
     in `@pibbo/components`, keeping the mock's `.path` classes, with `aria-current="step"` on the
     current node. The page is the lazy `LessonPage` at `/lesson/:subject`.
 
@@ -77,3 +79,11 @@ placeholders like every other (ADR 0006). Inside a lesson the activity's progres
 shows its own rounds; the mock's "game N of 5" bar is deferred. When Rhyme time and Build a
 sentence are built, the reading lesson grows to five steps and the e2e spec for the unknown
 step must name another unknown activity.
+
+The initial bundle grows by 4.2 kB raw (0.7 kB gzipped; 237.3 to 241.6 kB): the root
+`ACTIVITY_EXIT` binding (0.6 kB) and framework code the new lazy code reaches, which the
+builder keeps in `main`. Binding the store and log at the lesson route took 2.2 kB back. The
+initial budget's warning (230 kB) was already exceeded on `main`; its error (250 kB) holds and no
+budget is raised. Home's Count and Read screens already scroll on small phones, as their mock
+does; the Lesson picture adds 20 px there, as in the mock. Fitting Home on small phones is left
+to journey 26.
