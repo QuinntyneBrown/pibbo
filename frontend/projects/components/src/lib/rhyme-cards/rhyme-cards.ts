@@ -23,6 +23,11 @@ export class RhymeCards {
   /** The indexes of the chosen cards. */
   readonly chosen = input<readonly number[]>([]);
 
+  /** Whether the cards take a touch: not once checked. */
+  readonly open = input(true);
+  /** Whether the chosen cards show as right. */
+  readonly right = input(false);
+
   /** The index of the card touched. */
   readonly touched = output<number>();
 }

@@ -1,4 +1,5 @@
 <footer
+  [attr.data-fit]="fit() ? '' : null"
   [class]="'answer-bar answer-bar--' + (kind() === 'none' || kind() === 'pass' ? 'check' : kind())"
   [attr.role]="message() ? 'status' : null"
 >

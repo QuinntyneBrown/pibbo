@@ -3,6 +3,7 @@
   group="read"
   [fit]="true"
   [instruction]="instruction()"
+  [mood]="mood()"
   [done]="done()"
   [rounds]="content.roundsPerPlay"
   (replay)="replay()"
@@ -13,7 +14,17 @@
     [end]="round().set.end"
     [cards]="round().cards"
     [chosen]="round().chosen"
+    [open]="round().phase === 'choosing'"
+    [right]="round().phase === 'right' || round().phase === 'modelled'"
     (touched)="touch($event)"
   />
-  <pb-answer-bar answer group="read" kind="check" [ready]="canCheck()" />
+  <pb-answer-bar
+    answer
+    group="read"
+    [fit]="true"
+    [kind]="bar().kind"
+    [message]="bar().message"
+    [ready]="bar().ready"
+    (action)="action()"
+  />
 </pb-round-shell>

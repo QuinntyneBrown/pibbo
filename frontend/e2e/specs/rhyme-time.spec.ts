@@ -102,3 +102,176 @@ test.describe('Rhyme time: choosing words', () => {
     await expect.poll(async () => (await since()).length).toBe(8);
   });
 });
+
+const LISTEN = '/recordings/read/listen.wav';
+const hint = (w: string) => `/recordings/rhymes/listen-to-the-ends-${w[0]}-${SETS[w]!.end}.wav`;
+const allEnd = (w: string) => `/recordings/rhymes/all-end-in-${SETS[w]!.end}.wav`;
+const names = (w: string) => [w, ...SETS[w]!.rhymes].join(', ');
+const praised = (w: string) => {
+  const list = names(w);
+  return `${list[0]!.toUpperCase()}${list.slice(1)} — they all end in “${SETS[w]!.end}”!`;
+};
+const modelled = (w: string) => `Listen: ${names(w)} — they all end in “${SETS[w]!.end}”.`;
+
+test.describe('Rhyme time: checking the choice', () => {
+  test('Given exactly the rhyming cards are chosen, when the child touches Check, then they show as right, the rhymes and their ending are spoken and shown as praise, and Next starts the next round with a new word @critical', async ({
+    page,
+    spoken,
+  }) => {
+    const rhyme = new RhymeTimePage(page);
+    await rhyme.openFromHome();
+    const w = await rhyme.word();
+    const { rhymes, others } = SETS[w]!;
+    await rhyme.choose(rhymes);
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(word(rhymes.at(-1)!));
+    const before = (await spoken.recordings()).length;
+
+    await rhyme.touch(rhyme.action);
+
+    await expect(rhyme.message).toHaveText(praised(w));
+    for (const r of rhymes) await expect(rhyme.card(r)).toHaveClass(/word-card--good/);
+    for (const o of others) await expect(rhyme.card(o)).not.toHaveClass(/word-card--good/);
+    for (const c of await rhyme.cards.all()) await expect(c).toBeDisabled();
+    await expect(rhyme.action).toContainText('Next');
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(before))
+      .toEqual([word(w), ...rhymes.map(word), allEnd(w)]);
+
+    await rhyme.touch(rhyme.action);
+    await expect.poll(() => rhyme.word()).not.toBe(w);
+    await expect(rhyme.action).toHaveText('Check');
+    await expect(rhyme.action).toBeDisabled();
+    const next = await rhyme.word();
+    await expect.poll(async () => (await spoken.recordings()).slice(-3)).toEqual(asked(next));
+  });
+
+  test('Given a card that does not rhyme is chosen, when the child touches Check, then the hint is spoken and shown with Try again and the cards take no touch; Try again lets the child choose afresh', async ({
+    page,
+    spoken,
+  }) => {
+    const rhyme = new RhymeTimePage(page);
+    await rhyme.openFromHome();
+    const w = await rhyme.word();
+    await rhyme.choose([SETS[w]!.others[0]!]);
+
+    await rhyme.touch(rhyme.action);
+
+    await expect(rhyme.message).toHaveText(
+      `Listen to the ends of the words: ${w[0]}-${SETS[w]!.end}…`,
+    );
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(hint(w));
+    await expect(rhyme.action).toContainText('Try again');
+    for (const c of await rhyme.cards.all()) await expect(c).toBeDisabled();
+    await expect(page.locator('.word-card--good')).toHaveCount(0);
+
+    await rhyme.touch(rhyme.action);
+
+    await expect(rhyme.message).toHaveCount(0);
+    for (const c of await rhyme.cards.all()) {
+      await expect(c).toBeEnabled();
+      await expect(c).toHaveAttribute('aria-pressed', 'false');
+    }
+    await expect(rhyme.action).toHaveText('Check');
+    await expect(rhyme.action).toBeDisabled();
+  });
+
+  test('Given two wrong checks, when the third is wrong, then Pibbo models the rhymes, they show as right, and Next completes the round', async ({
+    page,
+    spoken,
+  }) => {
+    const rhyme = new RhymeTimePage(page);
+    await rhyme.openFromHome();
+    const w = await rhyme.word();
+    const { rhymes, others } = SETS[w]!;
+    for (let miss = 1; miss <= 3; miss++) {
+      await rhyme.choose([others[0]!]);
+      await rhyme.touch(rhyme.action);
+      if (miss < 3) await rhyme.touch(rhyme.action);
+    }
+
+    await expect(rhyme.message).toHaveText(modelled(w));
+    for (const r of rhymes) await expect(rhyme.card(r)).toHaveClass(/word-card--good/);
+    await expect(rhyme.card(others[0]!)).toHaveAttribute('aria-pressed', 'false');
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(-(rhymes.length + 3)))
+      .toEqual([LISTEN, word(w), ...rhymes.map(word), allEnd(w)]);
+    await expect(rhyme.action).toContainText('Next');
+    await rhyme.touch(rhyme.action);
+    await expect.poll(() => rhyme.word()).not.toBe(w);
+  });
+
+  test('Given five rounds are finished, when the child touches Next, then Home returns with Read chosen', async ({
+    page,
+  }) => {
+    const rhyme = new RhymeTimePage(page);
+    const home = new HomePage(page);
+    await rhyme.openFromHome();
+
+    for (let i = 0; i < 5; i++) {
+      await expect(rhyme.action).toHaveText('Check');
+      await rhyme.choose(SETS[await rhyme.word()]!.rhymes);
+      await rhyme.touch(rhyme.action);
+      await expect(rhyme.action).toContainText('Next');
+      await rhyme.touch(rhyme.action);
+    }
+
+    await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
+  });
+});
+
+test.describe('Rhyme time: muted', () => {
+  test.use({ sound: 'off' });
+
+  test('Given the device is muted, when the child plays a round, then it can be finished from what is shown alone', async ({
+    page,
+  }) => {
+    const rhyme = new RhymeTimePage(page);
+    await rhyme.openFromHome();
+    const w = await rhyme.word();
+    await expect(rhyme.instruction).toContainText(w);
+
+    await rhyme.choose(SETS[w]!.rhymes);
+    await rhyme.touch(rhyme.action);
+
+    await expect(rhyme.message).toHaveText(praised(w));
+    await expect(rhyme.action).toContainText('Next');
+  });
+});
+
+for (const size of [
+  { width: 320, height: 640 },
+  { width: 360, height: 640 },
+  { width: 640, height: 360 },
+]) {
+  test.describe(`Rhyme time: fits ${size.width} x ${size.height}`, () => {
+    test.use({ viewport: size });
+
+    test('Given a round on a small phone, when it is chosen, hinted and modelled, then every card stays 60 x 60 px and clear of the answer bar, with nothing to scroll', async ({
+      page,
+    }) => {
+      const rhyme = new RhymeTimePage(page);
+      await rhyme.openFromHome();
+      const other = SETS[await rhyme.word()]!.others[0]!;
+      const fits = async () => {
+        expect(await rhyme.scrolls()).toBe(false);
+        expect(await rhyme.hiddenUnderAnswerBar()).toBe(false);
+        for (const card of await rhyme.cards.all()) {
+          const box = (await card.boundingBox())!;
+          expect(box.width).toBeGreaterThanOrEqual(60);
+          expect(box.height).toBeGreaterThanOrEqual(60);
+          expect(box.x).toBeGreaterThanOrEqual(0);
+          expect(box.x + box.width).toBeLessThanOrEqual(size.width);
+        }
+      };
+
+      await fits();
+      for (let miss = 1; miss <= 3; miss++) {
+        await rhyme.choose([other]);
+        await rhyme.touch(rhyme.action);
+        await expect(rhyme.message).toBeVisible();
+        await fits();
+        if (miss < 3) await rhyme.touch(rhyme.action);
+      }
+    });
+  });
+}

@@ -1,4 +1,16 @@
-import { canCheckRhymes, rhymeAsk, rhymeAssets, startRhymeRound, toggleRhyme } from './rhyme-round';
+import {
+  canCheckRhymes,
+  checkRhymes,
+  chooseRhymesAgain,
+  isRhyme,
+  rhymeNames,
+  rhymeRecital,
+  type RhymeRound,
+  rhymeAsk,
+  rhymeAssets,
+  startRhymeRound,
+  toggleRhyme,
+} from './rhyme-round';
 import { RHYMES } from './rhymes-content';
 
 const first = { next: () => 0 };
@@ -53,6 +65,62 @@ describe('toggleRhyme', () => {
 
   it('ignores a card that is not there', () => {
     expect(toggleRhyme(round, 9)).toEqual({ round, spoken: [] });
+  });
+});
+
+/** Chooses every card whose rhyming matches `rhyming`, or the first such card only. */
+function choose(round: RhymeRound, rhyming: boolean, all = true): RhymeRound {
+  const wanted = round.cards.map((_, i) => i).filter((i) => isRhyme(round, i) === rhyming);
+  return (all ? wanted : wanted.slice(0, 1)).reduce((r, i) => toggleRhyme(r, i).round, round);
+}
+
+describe('checkRhymes', () => {
+  const round = startRhymeRound(first, RHYMES.sets);
+  const miss = (r: RhymeRound) => checkRhymes(choose(r, false, false));
+
+  it('is right when exactly the rhymes are chosen', () => {
+    expect(checkRhymes(choose(round, true)).phase).toBe('right');
+  });
+
+  it('is not right with a rhyme left out', () => {
+    expect(checkRhymes(choose(round, true, false)).phase).toBe('retry');
+  });
+
+  it('is not right with another word chosen as well', () => {
+    expect(checkRhymes(choose(choose(round, true), false, false)).phase).toBe('retry');
+  });
+
+  it('does nothing with no card chosen', () => {
+    expect(checkRhymes(round)).toBe(round);
+  });
+
+  it('takes no card touch until the child tries again, and then starts afresh', () => {
+    const hinted = miss(round);
+
+    expect(toggleRhyme(hinted, 0)).toEqual({ round: hinted, spoken: [] });
+    expect(chooseRhymesAgain(hinted)).toEqual({ ...round, wrong: 1 });
+  });
+
+  it('models exactly the rhymes on the third wrong check', () => {
+    const third = miss(chooseRhymesAgain(miss(chooseRhymesAgain(miss(round)))));
+
+    expect(third.phase).toBe('modelled');
+    expect(third.chosen.every((i) => isRhyme(third, i))).toBe(true);
+    expect(third.chosen).toHaveLength(third.set.rhymes.length);
+    expect(chooseRhymesAgain(third)).toBe(third);
+  });
+});
+
+describe('naming the rhymes', () => {
+  const set = RHYMES.sets[0]!;
+
+  it('names and says the word asked, then its rhymes, then their ending', () => {
+    expect(rhymeNames(set)).toBe('cat, hat, bat');
+    expect(rhymeRecital(set)).toEqual([
+      set.target.recording,
+      ...set.rhymes.map((w) => w.recording),
+      set.allEnd.recording,
+    ]);
   });
 });
 

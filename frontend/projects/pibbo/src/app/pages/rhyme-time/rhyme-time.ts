@@ -8,17 +8,25 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { ASSET_PRELOADER, AUDIO_PLAYER, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
-import { AnswerBar, RhymeCards, RoundShell } from '@pibbo/components';
+import { ASSET_PRELOADER, AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
+import { AnswerBar, RhymeCards, RoundShell, type AnswerBarKind } from '@pibbo/components';
 import {
   canCheckRhymes,
+  checkRhymes,
+  chooseRhymesAgain,
   rhymeAsk,
   rhymeAssets,
+  rhymeNames,
+  rhymeRecital,
   RHYMES,
   startRhymeRound,
   toggleRhyme,
+  type RhymeRound,
 } from '@pibbo/domain';
 import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
+
+/** Praise lasts no more than this (L2-026 #3). */
+const PRAISE_MS = 1500;
 
 /**
  * Rhyme time (docs/mocks/pages/rhyme-time): the child hears a word and chooses the words that
@@ -35,12 +43,15 @@ import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
 })
 export class RhymeTime {
   private readonly audio = inject(AUDIO_PLAYER);
+  private readonly clock = inject(CLOCK);
   private readonly random = inject(RANDOM_SOURCE);
   private readonly router = inject(Router);
   private readonly preloader = inject(ASSET_PRELOADER);
 
   protected readonly content = RHYMES;
   protected readonly round = signal(startRhymeRound(this.random, RHYMES.sets));
+  /** The next round, chosen now so its assets are fetched while the child plays this one. */
+  private upcoming: RhymeRound;
   /** Rounds finished in this play. */
   protected readonly done = signal(0);
   protected readonly instruction = computed<Instruction>(() => ({
@@ -49,10 +60,41 @@ export class RhymeTime {
     picture: 'ask',
   }));
 
-  protected readonly canCheck = computed(() => canCheckRhymes(this.round()));
+  protected readonly praising = signal(false);
+  private endPraise: (() => void) | null = null;
+  protected readonly mood = computed(() =>
+    this.praising() ? 'cheer' : this.round().phase === 'retry' ? 'oh' : 'rest',
+  );
+  protected readonly bar = computed<{ kind: AnswerBarKind; message: string; ready: boolean }>(
+    () => {
+      const round = this.round();
+      const names = rhymeNames(round.set);
+      switch (round.phase) {
+        case 'right': {
+          const capitalised = names.charAt(0).toUpperCase() + names.slice(1);
+          return {
+            kind: 'right',
+            message: `${capitalised} — ${round.set.allEnd.text}!`,
+            ready: true,
+          };
+        }
+        case 'modelled':
+          return {
+            kind: 'model',
+            message: `${RHYMES.listen.text} ${names} — ${round.set.allEnd.text}.`,
+            ready: true,
+          };
+        case 'retry':
+          return { kind: 'retry', message: round.set.hint.text, ready: true };
+        default:
+          return { kind: 'check', message: '', ready: canCheckRhymes(round) };
+      }
+    },
+  );
 
   constructor() {
     this.preloader.preload(rhymeAssets(this.round()));
+    this.upcoming = this.prepareNext(this.round());
     // It rests: sound stops while the tab is hidden, and nothing resumes until a touch.
     const document = inject(DOCUMENT);
     const rest = () => {
@@ -61,6 +103,7 @@ export class RhymeTime {
     document.addEventListener('visibilitychange', rest);
     inject(DestroyRef).onDestroy(() => {
       document.removeEventListener('visibilitychange', rest);
+      this.endPraise?.();
       this.audio.stop();
     });
     void this.say(rhymeAsk(this.round(), RHYMES.ask));
@@ -75,6 +118,58 @@ export class RhymeTime {
 
   protected replay(): void {
     void this.say(rhymeAsk(this.round(), RHYMES.ask));
+  }
+
+  /** Check while choosing; Try again after a hint; Next once the round is over. */
+  protected action(): void {
+    const phase = this.round().phase;
+    if (phase === 'right' || phase === 'modelled') this.next();
+    else if (phase === 'retry') this.round.set(chooseRhymesAgain(this.round()));
+    else this.check();
+  }
+
+  /** The right choice is praised; a wrong one gives a hint, or after the third, the answer. */
+  private check(): void {
+    if (!canCheckRhymes(this.round())) return;
+    const round = checkRhymes(this.round());
+    this.round.set(round);
+    if (round.phase === 'retry') void this.audio.play(round.set.hint.recording);
+    else if (round.phase === 'modelled') {
+      void this.say([RHYMES.listen.recording, ...rhymeRecital(round.set)]);
+    } else {
+      // Brief praise that never blocks Next: it ends itself after at most 1.5 s.
+      this.praising.set(true);
+      this.endPraise?.();
+      this.endPraise = this.clock.after(PRAISE_MS, () => this.stopPraise());
+      void this.say(rhymeRecital(round.set));
+    }
+  }
+
+  private stopPraise(): void {
+    this.endPraise?.();
+    this.endPraise = null;
+    this.praising.set(false);
+  }
+
+  /** The next round; after the last, Home with Read chosen. */
+  private next(): void {
+    this.stopPraise();
+    const done = this.done() + 1;
+    if (done >= RHYMES.roundsPerPlay) {
+      this.leave();
+      return;
+    }
+    this.done.set(done);
+    this.round.set(this.upcoming);
+    this.upcoming = this.prepareNext(this.upcoming);
+    this.replay();
+  }
+
+  /** Chooses the round after `current` and fetches its assets while this one is played. */
+  private prepareNext(current: RhymeRound): RhymeRound {
+    const next = startRhymeRound(this.random, RHYMES.sets, current.set.target.word);
+    this.preloader.preload(rhymeAssets(next));
+    return next;
   }
 
   /** The recordings in turn, until a newer sound or round stops them. */

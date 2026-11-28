@@ -101,6 +101,32 @@
   background: var(--color-success-strong);
 }
 
+// The mocks' compact bar (L2-021, ADR 0025): the message beside the way on.
+@media (max-width: 39.99rem) and (max-height: 52rem) and (orientation: portrait) {
+  .answer-bar[data-fit] {
+    padding: var(--space-2);
+    gap: var(--space-2);
+
+    &:not(.answer-bar--check) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .chunky {
+        flex: none;
+        width: auto;
+        min-width: var(--target-child);
+        padding-inline: var(--space-3);
+      }
+    }
+
+    .answer-bar__message {
+      font-size: var(--font-size-lg);
+      line-height: var(--line-height-snug);
+    }
+  }
+}
+
 .icon {
   width: var(--size-4);
   height: var(--size-4);

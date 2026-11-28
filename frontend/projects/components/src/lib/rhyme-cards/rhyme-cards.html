@@ -12,6 +12,8 @@
       <button
         type="button"
         class="word-card"
+        [class.word-card--good]="right() && chosen().includes(i)"
+        [disabled]="!open()"
         [attr.aria-pressed]="chosen().includes(i)"
         (pbTap)="touched.emit(i)"
       >
