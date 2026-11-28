@@ -8,4 +8,7 @@ public interface IContentStore
     /// <summary>The content version now served, or null while the store cannot be reached
     /// or its content does not pass the check.</summary>
     ContentSnapshot? Read();
+
+    /// <summary>Why nothing is served, for the operator. Null while content is served.</summary>
+    string? Problem { get; }
 }

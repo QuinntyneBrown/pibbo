@@ -22,7 +22,6 @@ public sealed class JsonFileContentStore(ContentStoreOptions options) : IContent
     private (DateTime Written, long Length)? _stamp;
     private ContentSnapshot? _snapshot;
 
-    /// <summary>Why nothing is served, for the operator's log. Null while content is served.</summary>
     public string? Problem { get; private set; }
 
     public ContentSnapshot? Read()
