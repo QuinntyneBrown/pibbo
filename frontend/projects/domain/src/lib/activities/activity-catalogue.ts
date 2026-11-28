@@ -43,6 +43,14 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       path: '/count/countdown',
     },
     {
+      id: 'skip-count',
+      group: 'count',
+      name: 'Skip-count',
+      glyph: '2 4 6',
+      recording: '/recordings/home/skip-count.wav',
+      path: '/count/skip',
+    },
+    {
       id: 'sound-it-out',
       group: 'read',
       name: 'Sound it out',

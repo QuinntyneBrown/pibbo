@@ -1,0 +1,57 @@
+<div class="stage">
+  <div class="switch switch--step" role="radiogroup" aria-label="Count by">
+    @for (by of steps(); track by) {
+      <button
+        type="button"
+        class="switch__option"
+        role="radio"
+        [attr.aria-checked]="by === step()"
+        (pbTap)="stepped.emit(by)"
+      >
+        By {{ by }}s
+      </button>
+    }
+  </div>
+  <svg class="number-line" viewBox="0 0 1040 170" role="img" [attr.aria-label]="label()">
+    <line class="number-line__axis" x1="20" y1="110" x2="1020" y2="110" />
+    @for (point of points(); track point.x) {
+      @if (point.state === 'said' && point.x > 20) {
+        <path
+          class="number-line__hop"
+          [attr.d]="
+            'M' + (point.x - 92) + ' 100 Q' + (point.x - 50) + ' 20 ' + (point.x - 8) + ' 100'
+          "
+        />
+      }
+      <circle
+        class="number-line__dot"
+        [class.number-line__dot--said]="point.state === 'said'"
+        [class.number-line__dot--next]="point.state === 'next'"
+        [attr.cx]="point.x"
+        cy="110"
+        [attr.r]="point.state === 'said' ? 13 : 9"
+      />
+      @if (point.state === 'said') {
+        <text class="number-line__label" [attr.x]="point.x" y="160">{{ point.number }}</text>
+      } @else if (point.state === 'next') {
+        <text class="number-line__label number-line__label--next" [attr.x]="point.x" y="160">
+          ?
+        </text>
+      }
+    }
+  </svg>
+  @if (choices().length > 0) {
+    <div class="choices" role="group" aria-label="Where do we land next?">
+      @for (n of choices(); track n) {
+        <button
+          type="button"
+          class="numeral numeral--wide"
+          [disabled]="locked()"
+          (pbTap)="chose.emit(n)"
+        >
+          {{ n }}
+        </button>
+      }
+    </div>
+  }
+</div>

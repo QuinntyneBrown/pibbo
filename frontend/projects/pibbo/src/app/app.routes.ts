@@ -27,6 +27,10 @@ export const routes: Routes = [
       import('./pages/rocket-countdown/rocket-countdown').then((m) => m.RocketCountdown),
   },
   {
+    path: 'count/skip',
+    loadComponent: () => import('./pages/skip-count/skip-count').then((m) => m.SkipCount),
+  },
+  {
     path: 'read/sound-out',
     loadComponent: () => import('./pages/sound-it-out/sound-it-out').then((m) => m.SoundItOut),
   },

@@ -711,3 +711,16 @@ img { display: block; max-width: 100%; }
 .switch--step .switch__option { height: var(--size-10); padding: 0 var(--space-4); background: var(--color-surface); color: var(--color-fg); font-size: var(--font-size-lg); }
 .switch--step .switch__option[aria-checked="true"] { background: var(--color-count-strong); color: var(--color-fg-on-strong); }
 .switch--step .switch__option[aria-checked="true"]::after { content: "\2713"; margin-left: var(--space-1); }
+
+/* A short screen (a phone on its side), journey 8 (ADR 0012): the shell gives up its spare
+   space and the instruction stays on one line; Skip-count puts the switch and the choices in
+   one row under the line. */
+@media (max-height: 30rem) {
+  .shell__top { padding-top: var(--space-2); }
+  .shell__ask { padding-top: var(--space-1); }
+  .bubble { margin-bottom: var(--space-1); }
+  .bubble__text { font-size: var(--font-size-lg); }
+  .shell__game { padding-block: var(--space-2); }
+  .stage:has(> .number-line) { display: grid; grid-template-columns: auto auto; justify-content: center; align-items: center; gap: var(--space-2) var(--gap-targets); }
+  .stage > .number-line { grid-column: 1 / -1; max-height: 2.5rem; }
+}

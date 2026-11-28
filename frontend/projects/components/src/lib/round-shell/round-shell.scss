@@ -156,3 +156,28 @@
   justify-content: center;
   padding: var(--space-4) var(--layout-margin);
 }
+
+// A short screen (a phone on its side): the top, the ask and the game give up their spare
+// space, and the instruction stays on one line, so an activity with two rows of targets fits
+// with no scrolling (journey 8, ADR 0012).
+@media (max-height: 30rem) {
+  .shell__top {
+    padding-top: var(--space-2);
+  }
+
+  .shell__ask {
+    padding-top: var(--space-1);
+  }
+
+  .bubble {
+    margin-bottom: var(--space-1);
+  }
+
+  .bubble__text {
+    font-size: var(--font-size-lg);
+  }
+
+  .shell__game {
+    padding-block: var(--space-2);
+  }
+}

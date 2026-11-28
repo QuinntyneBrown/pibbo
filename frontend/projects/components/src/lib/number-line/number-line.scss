@@ -1,0 +1,152 @@
+:host {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.stage {
+  display: flex;
+  width: 100%;
+  max-width: var(--content-max);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+
+  // A short screen (a phone on its side): the line on top, the switch and the choices in one
+  // row under it (ADR 0012).
+  @media (max-height: 30rem) {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    gap: var(--space-2) var(--gap-targets);
+
+    .number-line {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+// The step switch: 64 px targets 16 px apart; the chosen step carries a tick (ADR 0012).
+.switch {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-targets);
+}
+
+.switch__option {
+  --depth: var(--color-depth);
+  display: inline-flex;
+  height: var(--size-10);
+  align-items: center;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+
+  &[aria-checked='true'] {
+    --depth: var(--color-count-depth);
+    background: var(--color-count-strong);
+    color: var(--color-fg-on-strong);
+
+    &::after {
+      // The tick is seen; aria-checked already tells assistive technology.
+      content: '\2713' / '';
+      margin-left: var(--space-1);
+    }
+  }
+}
+
+// The line is shown, not touched. On a short screen it gives up height first.
+.number-line {
+  display: block;
+  width: 100%;
+
+  @media (max-height: 30rem) {
+    max-height: 2.5rem;
+  }
+}
+
+.number-line__axis {
+  stroke: var(--color-fg);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.number-line__hop {
+  fill: none;
+  stroke: var(--color-count);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.number-line__dot {
+  fill: var(--color-border);
+}
+
+.number-line__dot--said {
+  fill: var(--color-count-strong);
+}
+
+.number-line__dot--next {
+  fill: var(--color-surface);
+  stroke: var(--color-count-strong);
+  stroke-width: 4;
+}
+
+.number-line__label {
+  font-family: var(--font-read);
+  font-size: 44px;
+  font-weight: var(--font-weight-bold);
+  text-anchor: middle;
+  fill: var(--color-fg);
+}
+
+.number-line__label--next {
+  fill: var(--color-count-strong);
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-targets);
+}
+
+.numeral {
+  --depth: var(--color-depth);
+  display: inline-flex;
+  min-width: var(--size-10);
+  height: var(--size-10);
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-family: var(--font-read);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
+
+  &:disabled {
+    cursor: default;
+  }
+
+  @media (min-width: 40rem) and (min-height: 40rem) {
+    min-width: var(--size-12);
+    height: var(--size-12);
+    font-size: var(--font-size-5xl);
+  }
+}
