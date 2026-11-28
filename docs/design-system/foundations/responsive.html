@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Responsive — Pibbo design system</title>
+<meta name="description" content="Phone first, either hand, upright or on its side.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<link rel="stylesheet" href="../assets/ds-pibbo.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Pibbo DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul><li><a href="../foundations/color.html">Color</a></li><li><a href="../foundations/typography.html">Typography</a></li><li><a href="../foundations/spacing.html">Spacing</a></li><li><a href="../foundations/layout.html">Layout</a></li><li><a href="../foundations/elevation.html">Elevation</a></li><li><a href="../foundations/shape.html">Shape</a></li><li><a href="../foundations/motion.html">Motion</a></li><li><a href="../foundations/iconography.html">Iconography</a></li><li><a href="../foundations/theming.html">Theming</a></li><li><a href="../foundations/responsive.html">Responsive</a></li><li><a href="../foundations/accessibility.html">Accessibility</a></li><li><a href="../foundations/content.html">Content</a></li></ul></details>
+    <details open><summary>Components</summary><ul><li><a href="../components/button.html">Button (Chunky)</a></li><li><a href="../components/hear-button.html">Hear button</a></li><li><a href="../components/group-switch.html">Group switch</a></li><li><a href="../components/numeral.html">Numeral</a></li><li><a href="../components/tile.html">Tile</a></li><li><a href="../components/count-set.html">Count set</a></li><li><a href="../components/tally.html">Tally</a></li><li><a href="../components/activity-card.html">Activity card</a></li><li><a href="../components/lesson-card.html">Lesson card</a></li><li><a href="../components/speech-bubble.html">Speech bubble</a></li><li><a href="../components/answer-bar.html">Answer bar</a></li><li><a href="../components/progress-bar.html">Progress bar</a></li><li><a href="../components/star-rating.html">Star rating</a></li><li><a href="../components/pill.html">Pill</a></li><li><a href="../components/lesson-path.html">Lesson path</a></li><li><a href="../components/activity-shell.html">Activity shell</a></li><li><a href="../components/skip-link.html">Skip link</a></li><li><a href="../components/mascot.html">Mascot (Pibbo)</a></li><li><a href="../components/wordmark.html">Wordmark</a></li><li><a href="../components/picture.html">Picture</a></li></ul></details>
+    <details open><summary>Patterns</summary><ul><li><a href="../patterns/activity-round.html">Activity round</a></li><li><a href="../patterns/choosing-an-answer.html">Choosing an answer</a></li><li><a href="../patterns/feedback.html">Feedback and loading</a></li><li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li><li><a href="../patterns/navigation.html">Navigation and page structure</a></li><li><a href="../patterns/overlays.html">Dialogs and overlays</a></li><li><a href="../patterns/activity-grids.html">Lists and grids</a></li><li><a href="../patterns/spoken-and-shown.html">Notifications: spoken and shown</a></li><li><a href="../patterns/content-and-tone.html">Content and tone</a></li></ul></details>
+  </nav>
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Foundation</p>
+      <h1>Responsive</h1>
+      <p class="ds-lead">Phone first, either hand, upright or on its side.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Light and dark</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#rules">Per component</a></li><li><a href="#touch">Touch</a></li><li><a href="#testing">Testing</a></li><li><a href="#tokens">Tokens</a></li></ul>
+    </header>
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Base styles target 360px. Breakpoints add room, never more things on the screen.</p>
+    </section>
+    <section class="ds-section" id="rules"><h2><a href="#rules">Per component</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Component</th><th scope="col">Phone</th><th scope="col">≥ 40rem / 64rem</th></tr></thead><tbody><tr><td>Answer bar</td><td>Stacked, wide button</td><td>Row</td></tr><tr><td>Count set and tally</td><td>Stacked</td><td>Side by side at 64rem</td></tr><tr><td>Activity grid</td><td>2 columns</td><td>3, then 5</td></tr><tr><td>Speech bubble</td><td>20px</td><td>24px</td></tr><tr><td>Lesson path</td><td>Vertical</td><td>Horizontal at 48rem</td></tr></tbody></table></div>
+    </section>
+    <section class="ds-section" id="touch"><h2><a href="#touch">Touch</a></h2>
+<ul><li>Every child target 60 × 60px, 16px apart.</li><li>Taps only; no drag, long press or hover needed.</li><li><code>100dvh</code> so browser chrome never hides Check.</li></ul>
+    </section>
+    <section class="ds-section" id="testing"><h2><a href="#testing">Testing</a></h2>
+<p>Screenshots at 360, 768 and 1280px in both themes; no page scroll during an activity.</p>
+    </section>
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<p>Every responsive token in <code>tokens/tokens.css</code>, resolved live for each theme.</p><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <footer class="ds-footer"><span>Pibbo design system · extracted from <a href="../../mocks/index.html">docs/mocks</a> on 2026-11-27</span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

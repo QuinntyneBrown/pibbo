@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progress bar — Pibbo design system</title>
+<meta name="description" content="How far through the activity the child is: a thick rounded bar in the top row.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<link rel="stylesheet" href="../assets/ds-pibbo.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Pibbo DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul><li><a href="../foundations/color.html">Color</a></li><li><a href="../foundations/typography.html">Typography</a></li><li><a href="../foundations/spacing.html">Spacing</a></li><li><a href="../foundations/layout.html">Layout</a></li><li><a href="../foundations/elevation.html">Elevation</a></li><li><a href="../foundations/shape.html">Shape</a></li><li><a href="../foundations/motion.html">Motion</a></li><li><a href="../foundations/iconography.html">Iconography</a></li><li><a href="../foundations/theming.html">Theming</a></li><li><a href="../foundations/responsive.html">Responsive</a></li><li><a href="../foundations/accessibility.html">Accessibility</a></li><li><a href="../foundations/content.html">Content</a></li></ul></details>
+    <details open><summary>Components</summary><ul><li><a href="../components/button.html">Button (Chunky)</a></li><li><a href="../components/hear-button.html">Hear button</a></li><li><a href="../components/group-switch.html">Group switch</a></li><li><a href="../components/numeral.html">Numeral</a></li><li><a href="../components/tile.html">Tile</a></li><li><a href="../components/count-set.html">Count set</a></li><li><a href="../components/tally.html">Tally</a></li><li><a href="../components/activity-card.html">Activity card</a></li><li><a href="../components/lesson-card.html">Lesson card</a></li><li><a href="../components/speech-bubble.html">Speech bubble</a></li><li><a href="../components/answer-bar.html">Answer bar</a></li><li><a href="../components/progress-bar.html">Progress bar</a></li><li><a href="../components/star-rating.html">Star rating</a></li><li><a href="../components/pill.html">Pill</a></li><li><a href="../components/lesson-path.html">Lesson path</a></li><li><a href="../components/activity-shell.html">Activity shell</a></li><li><a href="../components/skip-link.html">Skip link</a></li><li><a href="../components/mascot.html">Mascot (Pibbo)</a></li><li><a href="../components/wordmark.html">Wordmark</a></li><li><a href="../components/picture.html">Picture</a></li></ul></details>
+    <details open><summary>Patterns</summary><ul><li><a href="../patterns/activity-round.html">Activity round</a></li><li><a href="../patterns/choosing-an-answer.html">Choosing an answer</a></li><li><a href="../patterns/feedback.html">Feedback and loading</a></li><li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li><li><a href="../patterns/navigation.html">Navigation and page structure</a></li><li><a href="../patterns/overlays.html">Dialogs and overlays</a></li><li><a href="../patterns/activity-grids.html">Lists and grids</a></li><li><a href="../patterns/spoken-and-shown.html">Notifications: spoken and shown</a></li><li><a href="../patterns/content-and-tone.html">Content and tone</a></li></ul></details>
+  </nav>
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Feedback</p>
+      <h1>Progress bar</h1>
+      <p class="ds-lead">How far through the activity the child is: a thick rounded bar in the top row.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Block <code>.progress</code></span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Progress fills one step per round. It is for orientation only; a child is never timed.</p>
+    </section>
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+<div class="ds-anatomy"><figure class="ds-anatomy__figure "><div class="ds-wide"><div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2"><div class="progress__fill progress__fill--2"></div></div></div></figure><ol class="ds-anatomy__list"><li><div><b>Track</b><small>16px, sunken</small></div></li><li><div><b>Fill</b><small>Subject colour</small></div></li></ol></div>
+    </section>
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+<p></p><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-variant"><div class="ds-wide"><div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"><div class="progress__fill progress__fill--3"></div></div></div><span class="ds-variant__label">Count</span></div><div class="ds-variant"><div class="ds-wide shell--read"><div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"><div class="progress__fill progress__fill--3"></div></div></div><span class="ds-variant__label">Read</span></div></div><details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class=&quot;ds-wide&quot;&gt;&lt;div class=&quot;progress&quot; role=&quot;progressbar&quot; aria-label=&quot;Game progress&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;5&quot; aria-valuenow=&quot;3&quot;&gt;&lt;div class=&quot;progress__fill progress__fill--3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;ds-wide shell--read&quot;&gt;&lt;div class=&quot;progress&quot; role=&quot;progressbar&quot; aria-label=&quot;Game progress&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;5&quot; aria-valuenow=&quot;3&quot;&gt;&lt;div class=&quot;progress__fill progress__fill--3&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</code></pre></details></div>
+    </section>
+    <section class="ds-section" id="sizes" data-na="One height (16px)."><h2><a href="#sizes">Sizes</a></h2><p class="ds-na">One height (16px).</p></section>
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+<p>Values from 0 to 5.</p><div class="ds-matrix"><table><thead><tr><th scope="col">Variant</th><th scope="col">Default</th></tr></thead><tbody><tr><th scope="row">0 of 5</th><td><div class="ds-wide"><div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0"><div class="progress__fill progress__fill--0"></div></div></div></td></tr><tr><th scope="row">1 of 5</th><td><div class="ds-wide"><div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="1"><div class="progress__fill progress__fill--1"></div></div></div></td></tr><tr><th scope="row">3 of 5</th><td><div class="ds-wide"><div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"><div class="progress__fill progress__fill--3"></div></div></div></td></tr><tr><th scope="row">5 of 5</th><td><div class="ds-wide"><div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="5"><div class="progress__fill progress__fill--5"></div></div></div></td></tr></tbody></table></div><h3>Both themes</h3><div class="ds-themes"><div data-theme="light"><div class="ds-theme-canvas "><div class="ds-wide"><div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2"><div class="progress__fill progress__fill--2"></div></div></div></div></div><div data-theme="dark"><div class="ds-theme-canvas "><div class="ds-wide"><div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2"><div class="progress__fill progress__fill--2"></div></div></div></div></div></div>
+    </section>
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Width</th><th scope="col">Behaviour</th></tr></thead><tbody><tr><td>All</td><td>Fills the space beside Leave.</td></tr></tbody></table></div>
+    </section>
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+<p>Track <code>--color-bg-surface-sunken</code>; fill <code>--color-count</code> or <code>--color-read</code>.</p>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<h3>Role and pattern</h3><p><code>role="progressbar"</code> with min, max and now.</p><h3>Keyboard</h3><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody><tr><td>–</td><td>Not focusable</td></tr></tbody></table><h3>Focus</h3><p>None.</p><h3>Labelling</h3><p>"Game progress".</p><h3>Contrast</h3><p>No text or meaningful edge; decorative.</p><h3>Motion</h3><p>Fill grows over 300ms; instant with reduced motion.</p><h3>Touch</h3><p>Not a target.</p>
+    </section>
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<ul><li>No numbers or time shown.</li></ul>
+    </section>
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont"><figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-wide"><div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2"><div class="progress__fill progress__fill--2"></div></div></div></div><figcaption>Show steps.</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p>00:42</p></div><figcaption>Show a timer.</figcaption></figure></div>
+    </section>
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<p>Component tokens alias semantic tokens; override the component token to re-theme one instance.</p><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead><tbody><tr><td>Track</td><td><code>--color-bg-surface-sunken</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr><tr><td>Fill</td><td><code>--color-count</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-count" data-swatch></i><span data-token="--color-count"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-count" data-swatch></i><span data-token="--color-count"></span></span></td></tr><tr><td>Read fill</td><td><code>--color-read</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-read" data-swatch></i><span data-token="--color-read"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-read" data-swatch></i><span data-token="--color-read"></span></span></td></tr><tr><td>Height</td><td><code>--progress-height</code></td><td><span data-theme="light" class="ds-val"><span data-token="--progress-height"></span></span></td><td><span data-theme="dark" class="ds-val"><span data-token="--progress-height"></span></span></td></tr></tbody></table></div>
+    </section>
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;div class=&quot;progress&quot; role=&quot;progressbar&quot; aria-label=&quot;Game progress&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;5&quot; aria-valuenow=&quot;1&quot;&gt;&lt;div class=&quot;progress__fill progress__fill--1&quot;&gt;&lt;/div&gt;&lt;/div&gt;</code></pre><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody><tr><td><code>.progress__fill--0…5</code></td><td>Steps</td></tr></tbody></table></div>
+    </section>
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<p>Extracted from these mocks:</p><ul><li><a href="../../mocks/pages/count-the-toys/default.html">pages/count-the-toys/default</a></li></ul><p>Drift fixed during extraction: none.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Pibbo design system · extracted from <a href="../../mocks/index.html">docs/mocks</a> on 2026-11-27</span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

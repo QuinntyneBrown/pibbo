@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notifications: spoken and shown — Pibbo design system</title>
+<meta name="description" content="Sound carries meaning and is never the only carrier">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<link rel="stylesheet" href="../assets/ds-pibbo.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Pibbo DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul><li><a href="../foundations/color.html">Color</a></li><li><a href="../foundations/typography.html">Typography</a></li><li><a href="../foundations/spacing.html">Spacing</a></li><li><a href="../foundations/layout.html">Layout</a></li><li><a href="../foundations/elevation.html">Elevation</a></li><li><a href="../foundations/shape.html">Shape</a></li><li><a href="../foundations/motion.html">Motion</a></li><li><a href="../foundations/iconography.html">Iconography</a></li><li><a href="../foundations/theming.html">Theming</a></li><li><a href="../foundations/responsive.html">Responsive</a></li><li><a href="../foundations/accessibility.html">Accessibility</a></li><li><a href="../foundations/content.html">Content</a></li></ul></details>
+    <details open><summary>Components</summary><ul><li><a href="../components/button.html">Button (Chunky)</a></li><li><a href="../components/hear-button.html">Hear button</a></li><li><a href="../components/group-switch.html">Group switch</a></li><li><a href="../components/numeral.html">Numeral</a></li><li><a href="../components/tile.html">Tile</a></li><li><a href="../components/count-set.html">Count set</a></li><li><a href="../components/tally.html">Tally</a></li><li><a href="../components/activity-card.html">Activity card</a></li><li><a href="../components/lesson-card.html">Lesson card</a></li><li><a href="../components/speech-bubble.html">Speech bubble</a></li><li><a href="../components/answer-bar.html">Answer bar</a></li><li><a href="../components/progress-bar.html">Progress bar</a></li><li><a href="../components/star-rating.html">Star rating</a></li><li><a href="../components/pill.html">Pill</a></li><li><a href="../components/lesson-path.html">Lesson path</a></li><li><a href="../components/activity-shell.html">Activity shell</a></li><li><a href="../components/skip-link.html">Skip link</a></li><li><a href="../components/mascot.html">Mascot (Pibbo)</a></li><li><a href="../components/wordmark.html">Wordmark</a></li><li><a href="../components/picture.html">Picture</a></li></ul></details>
+    <details open><summary>Patterns</summary><ul><li><a href="../patterns/activity-round.html">Activity round</a></li><li><a href="../patterns/choosing-an-answer.html">Choosing an answer</a></li><li><a href="../patterns/feedback.html">Feedback and loading</a></li><li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li><li><a href="../patterns/navigation.html">Navigation and page structure</a></li><li><a href="../patterns/overlays.html">Dialogs and overlays</a></li><li><a href="../patterns/activity-grids.html">Lists and grids</a></li><li><a href="../patterns/spoken-and-shown.html">Notifications: spoken and shown</a></li><li><a href="../patterns/content-and-tone.html">Content and tone</a></li></ul></details>
+  </nav>
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Pattern</p>
+      <h1>Notifications: spoken and shown</h1>
+      <p class="ds-lead">Sound carries meaning and is never the only carrier</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Light and dark</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#when">When to use</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Pibbo's notifications are spoken recordings with the same words on screen.</p>
+    </section>
+    <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
+<ul><li>Every prompt and feedback.</li></ul>
+    </section>
+    <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
+<div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="shell__ask ds-flush"><svg class="pibbo pibbo--md" viewBox="0 0 120 120" role="img" aria-label="Pibbo"><path class="pibbo__stem" d="M60 30 C60 22 60 18 61 13"/><path class="pibbo__leaf" d="M60 18 C52 18 44 13 43 5 C51 4 59 9 60 18 Z"/><path class="pibbo__leaf" d="M61 15 C66 8 75 5 82 8 C79 16 70 19 61 15 Z"/><ellipse class="pibbo__wing" cx="19" cy="74" rx="9" ry="15" transform="rotate(18 19 74)"/><ellipse class="pibbo__wing" cx="101" cy="74" rx="9" ry="15" transform="rotate(-18 101 74)"/><ellipse class="pibbo__foot" cx="49" cy="108" rx="8" ry="5"/><ellipse class="pibbo__foot" cx="71" cy="108" rx="8" ry="5"/><ellipse class="pibbo__body" cx="60" cy="67" rx="43" ry="41"/><ellipse class="pibbo__belly" cx="60" cy="84" rx="25" ry="18"/><ellipse class="pibbo__white" cx="45" cy="57" rx="11" ry="12.5"/><ellipse class="pibbo__white" cx="75" cy="57" rx="11" ry="12.5"/><circle class="pibbo__ink" cx="46" cy="58.5" r="6.5"/><circle class="pibbo__ink" cx="76" cy="58.5" r="6.5"/><circle class="pibbo__white" cx="48" cy="56.0" r="2.2"/><circle class="pibbo__white" cx="78" cy="56.0" r="2.2"/><circle class="pibbo__cheek" cx="30" cy="73" r="6"/><circle class="pibbo__cheek" cx="90" cy="73" r="6"/><path class="pibbo__beak" d="M53 69 Q60 65.5 67 69 Q60 79 53 69 Z"/></svg><div class="bubble"><svg class="bubble__picture" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17h.01"/></svg><p class="bubble__text">How many toys are there?</p><button class="hear" type="button" aria-label="Hear it again"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button></div></div></div></div>
+    </section>
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">State</th><th scope="col">What the child sees and hears</th></tr></thead><tbody><tr><td>spoken</td><td>Recording plays; words shown.</td></tr><tr><td>sound off</td><td>Words and pictures still carry it.</td></tr></tbody></table></div>
+    </section>
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive</a></h2>
+<p>–</p>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<p>Live regions for feedback.</p>
+    </section>
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<ul><li>Recording and text match exactly.</li></ul>
+    </section>
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont"><figure class="ds-do"><div class="ds-example__canvas"><div class="shell__ask ds-flush"><svg class="pibbo pibbo--md" viewBox="0 0 120 120" role="img" aria-label="Pibbo"><path class="pibbo__stem" d="M60 30 C60 22 60 18 61 13"/><path class="pibbo__leaf" d="M60 18 C52 18 44 13 43 5 C51 4 59 9 60 18 Z"/><path class="pibbo__leaf" d="M61 15 C66 8 75 5 82 8 C79 16 70 19 61 15 Z"/><ellipse class="pibbo__wing" cx="19" cy="74" rx="9" ry="15" transform="rotate(18 19 74)"/><ellipse class="pibbo__wing" cx="101" cy="74" rx="9" ry="15" transform="rotate(-18 101 74)"/><ellipse class="pibbo__foot" cx="49" cy="108" rx="8" ry="5"/><ellipse class="pibbo__foot" cx="71" cy="108" rx="8" ry="5"/><ellipse class="pibbo__body" cx="60" cy="67" rx="43" ry="41"/><ellipse class="pibbo__belly" cx="60" cy="84" rx="25" ry="18"/><ellipse class="pibbo__white" cx="45" cy="57" rx="11" ry="12.5"/><ellipse class="pibbo__white" cx="75" cy="57" rx="11" ry="12.5"/><circle class="pibbo__ink" cx="46" cy="58.5" r="6.5"/><circle class="pibbo__ink" cx="76" cy="58.5" r="6.5"/><circle class="pibbo__white" cx="48" cy="56.0" r="2.2"/><circle class="pibbo__white" cx="78" cy="56.0" r="2.2"/><circle class="pibbo__cheek" cx="30" cy="73" r="6"/><circle class="pibbo__cheek" cx="90" cy="73" r="6"/><path class="pibbo__beak" d="M53 69 Q60 65.5 67 69 Q60 79 53 69 Z"/></svg><div class="bubble"><svg class="bubble__picture" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17h.01"/></svg><p class="bubble__text">How many toys are there?</p><button class="hear" type="button" aria-label="Hear it again"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button></div></div></div><figcaption>Show what is said.</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><p>Sound only.</p></div><figcaption>Rely on audio.</figcaption></figure></div>
+    </section>
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<ul><li><a href="../../mocks/pages/count-the-toys/default.html">pages/count-the-toys/default</a></li></ul>
+    </section>
+
+    <footer class="ds-footer"><span>Pibbo design system · extracted from <a href="../../mocks/index.html">docs/mocks</a> on 2026-11-27</span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

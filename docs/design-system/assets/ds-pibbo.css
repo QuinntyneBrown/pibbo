@@ -1,0 +1,59 @@
+/* ds-pibbo.css: Pibbo-specific additions to the documentation chrome (ds.css).
+   Token-only, like everything else here. */
+
+.ds-nav__brand a { font-weight: var(--font-weight-bold); letter-spacing: var(--letter-spacing-wordmark); }
+.ds-main { max-width: 76rem; }
+.ds-header h1 { font-size: var(--font-size-3xl); }
+@media (min-width: 48rem) { .ds-header h1 { font-size: var(--font-size-4xl); } }
+.ds-section > h2 { font-size: var(--font-size-2xl); }
+@media (min-width: 48rem) { .ds-section > h2 { font-size: var(--font-size-3xl); } }
+
+/* Specimen frames: product components are big; give them room and let them wrap */
+.ds-example__canvas { gap: var(--space-6); padding: var(--space-8) var(--space-6); background: var(--color-bg-canvas); }
+.ds-anatomy__figure { min-height: 12rem; overflow: hidden; background: var(--color-bg-canvas); }
+.ds-figure--wide { place-items: stretch; padding: var(--space-6); }
+.ds-figure--card .game-card { width: 12rem; }
+.ds-variant { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); min-width: 0; max-width: 100%; }
+.ds-example__canvas--stack .ds-variant { align-items: stretch; }
+.ds-variant__label { font: var(--text-caption); color: var(--color-fg-muted); text-align: center; }
+.ds-cards-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr)); gap: var(--gap-targets); }
+.ds-cards-row .ds-variant { align-items: stretch; }
+
+/* Theme comparison: each side gets its own canvas so dark really reads as dark */
+.ds-themes > [data-theme] { padding: var(--space-4); }
+.ds-theme-canvas { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; justify-content: center; min-width: 0; color: var(--color-fg-default); }
+.ds-theme-canvas.ds-cards-row { display: grid; }
+
+/* State matrix: give product-sized cells room and keep them aligned */
+.ds-matrix { border: 1px solid var(--color-border-default); border-radius: var(--radius-sm); background: var(--color-bg-surface); }
+.ds-matrix td { background: var(--color-bg-canvas); padding: var(--space-4); text-align: center; }
+.ds-matrix th[scope="row"] { white-space: nowrap; background: var(--color-bg-surface); }
+
+/* Contrast pairs: light and dark side by side */
+.ds-pair-row { display: grid; gap: var(--space-2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin-block: var(--space-2); }
+.ds-pair { font: var(--text-body-sm); }
+.ds-val { font-family: var(--font-family-mono); font-size: var(--font-size-xs); }
+.ds-table td { overflow-wrap: anywhere; }
+
+/* Helpers that keep big product pieces inside their frames */
+.ds-wide { width: 100%; min-width: 0; }
+.ds-flush { width: 100%; margin: 0; padding-inline: var(--space-4); border-radius: var(--radius-md); }
+.ds-pad { width: 100%; padding: var(--space-6); border-radius: var(--radius-md); }
+.ds-mini { width: 100%; max-width: 26rem; }
+.ds-mini .rug { min-width: 0; max-width: none; }
+.ds-anatomy__figure .rug { max-width: 26rem; min-width: 0; margin-inline: auto; }
+.ds-solo { position: relative; width: var(--size-12); height: var(--size-12); translate: none; }
+.ds-pic { width: var(--size-12); height: var(--size-12); }
+.ds-static { position: static; box-shadow: var(--shadow-2); }
+.ds-shell-demo { min-height: 0; width: 100%; border-radius: var(--radius-md); overflow: hidden; background: var(--color-bg-canvas); outline: 1px solid var(--color-border-default); }
+.ds-shell-demo .shell__game { min-height: 8rem; }
+.ds-matrix .ds-shell-demo, .ds-matrix .ds-pad { min-width: 18rem; }
+.ds-cardlike { padding: var(--space-6); border-radius: var(--radius-xl); background: var(--color-bg-surface); }
+
+/* Index hero */
+.ds-hero { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-6); margin-top: var(--space-4); }
+.ds-card__preview { height: 5.5rem; }
+.ds-card__preview .chunky { pointer-events: none; }
+.ds-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.ds-chip { width: var(--size-8); height: var(--size-8); border-radius: var(--radius-sm); background: var(--swatch); box-shadow: inset 0 0 0 1px var(--color-border-default); }
+.ds-icon-tile { display: inline-grid; place-items: center; width: var(--size-10); height: var(--size-10); border-radius: var(--radius-md); background: var(--color-bg-surface); color: var(--color-fg-default); box-shadow: var(--shadow-1); }
