@@ -232,7 +232,7 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - The rocket first used container query units (`cqh`) and vanished at 1280 x 720: the launch's
   stretched height did not reach the container. Percentages of an absolutely positioned box
   that fills the launch worked at every size.
-- A Python string edit turned `\s` into `\s` in a page object's `RegExp`, again: the choice
+- A Python string edit turned `\\s` into `\s` in a page object's `RegExp`, again: the choice
   locator matched nothing.
 - The unit spec used `jasmine.objectContaining`; the runner is Vitest (`expect.objectContaining`).
 
