@@ -27,3 +27,4 @@ export * from './lib/spell-boxes/spell-boxes';
 export * from './lib/silent-e/silent-e';
 export * from './lib/rule/rule';
 export * from './lib/word-pictures/word-pictures';
+export * from './lib/spot/spot';

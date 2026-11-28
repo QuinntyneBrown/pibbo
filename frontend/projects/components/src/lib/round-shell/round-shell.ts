@@ -32,6 +32,12 @@ export class RoundShell {
    * way out and the progress bar.
    */
   readonly fit = input(false);
+  /**
+   * `story`: on a small screen the shell becomes a grid whose areas the game's own parts take
+   * (`find`, `story`), as the Spot the word mock draws it, so a story of 60 px words fits with
+   * nothing scrolling (ADR 0022). `stack`, the default, keeps the shell a column.
+   */
+  readonly layout = input<'stack' | 'story'>('stack');
 
   readonly leave = output<void>();
   readonly replay = output<void>();

@@ -64,5 +64,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/words-and-pictures/words-and-pictures').then((m) => m.WordsAndPictures),
   },
+  {
+    path: 'read/sight-words',
+    loadComponent: () =>
+      import('./pages/spot-the-word/spot-the-word').then((m) => m.SpotTheWordPage),
+  },
   { path: '**', redirectTo: '' },
 ];

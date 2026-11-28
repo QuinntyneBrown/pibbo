@@ -218,6 +218,35 @@ else {
     }
   }
 }
+// Spot the word (ADR 0022): every common word is recorded and is in the story, the number said
+// in its praise is recorded, and every line is shown and recorded.
+const spotPath = `${frontend}projects/domain/src/lib/sounds/common-words-content.json`;
+const spot = JSON.parse(readFileSync(spotPath, "utf8"));
+const plain = (shown) =>
+  String(shown)
+    .toLowerCase()
+    .replace(/[.,!?;:]/g, "");
+if (!(spot.roundsPerPlay > 0)) problems.push("spot: no rounds per play");
+if (!Array.isArray(spot.story) || spot.story.length === 0)
+  problems.push("spot: no story");
+if (!Array.isArray(spot.words) || spot.words.length < 2)
+  problems.push("spot: fewer than 2 common words");
+for (const w of spot.words ?? []) {
+  const name = w.word ?? "(a common word with no name)";
+  fileExists(w.recording, `common word "${name}" recording`);
+  const times = (spot.story ?? []).filter((s) => plain(s) === name).length;
+  if (times === 0) problems.push(`common word "${name}" is not in the story`);
+  else
+    fileExists(
+      `/recordings/numbers/${times}.wav`,
+      `spot praise number ${times}`,
+    );
+}
+for (const line of ["find", "inStory", "praise", "times"]) {
+  if (typeof spot[line]?.text !== "string" || spot[line].text.length === 0)
+    problems.push(`spot ${line}: no text`);
+  fileExists(spot[line]?.recording, `spot ${line} recording`);
+}
 if ((content.words ?? []).length < 3)
   problems.push("fewer than 3 words: a round offers 3 pictures");
 
