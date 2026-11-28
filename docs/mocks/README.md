@@ -11,6 +11,7 @@ frames and the "Pibbo Brand" prototype. Each screen in `manifest.json` names its
 repository owner's direction, without reconciling it with `AGENTS.md` (see *Open questions*).
 
 The [Magic Patterns alignment log](alignment-log.md) records each verified change by mock state and prototype reference.
+The [audit resolutions](audit-resolutions.md) record how each mock-vs-prototype issue was settled.
 
 ## Opening the mocks
 
