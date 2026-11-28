@@ -8,7 +8,10 @@ import { InjectionToken } from '@angular/core';
 export interface ProgressStore {
   read(key: string): unknown;
   write(key: string, value: unknown): void;
-  /** Removes everything Pibbo keeps: the grown-up area's "clear progress". */
+  /**
+   * The grown-up area's "clear progress": removes everything Pibbo keeps but the volume a
+   * grown-up chose, which is a setting (`volume`), and Pibbo's IndexedDB databases (ADR 0030).
+   */
   clearAll(): void;
 }
 

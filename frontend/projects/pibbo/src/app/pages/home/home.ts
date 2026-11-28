@@ -14,7 +14,14 @@ import {
   type ActivityGroup,
   type Lesson,
 } from '@pibbo/api';
-import { ActivityGrid, CheckCard, GroupSwitch, Tap, Wordmark } from '@pibbo/components';
+import {
+  ActivityGrid,
+  CheckCard,
+  GroupSwitch,
+  GrownUpEntry,
+  Tap,
+  Wordmark,
+} from '@pibbo/components';
 import {
   ACTIVITY_CATALOGUE,
   activityScreen,
@@ -35,7 +42,7 @@ import {
  */
 @Component({
   selector: 'pb-home',
-  imports: [Wordmark, CheckCard, GroupSwitch, ActivityGrid, Tap],
+  imports: [Wordmark, CheckCard, GroupSwitch, ActivityGrid, Tap, GrownUpEntry],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -98,6 +105,12 @@ export class Home {
       (opened) => (this.opening = opened),
       () => (this.opening = false),
     );
+  }
+
+  /** The grown-up entry: the grown-up screen opens at its gate, remembering Home's address. */
+  protected openGate(): void {
+    if (this.opening) return;
+    void this.router.navigate(['/grown-up'], { state: { from: this.router.url } });
   }
 
   protected openCheckGame(): void {

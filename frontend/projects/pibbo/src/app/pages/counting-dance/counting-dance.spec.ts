@@ -50,6 +50,9 @@ class FakeAudio implements AudioPlayer {
   stop(): void {
     this.stops++;
   }
+  setVolume(): void {
+    /* not heard */
+  }
 }
 
 describe('CountingDance', () => {

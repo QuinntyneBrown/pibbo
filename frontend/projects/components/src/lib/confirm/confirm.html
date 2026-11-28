@@ -1,0 +1,12 @@
+<div class="confirm" role="group" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+  <p class="confirm__title" id="confirm-title">{{ title() }}</p>
+  <p class="confirm__text" id="confirm-text">{{ text() }}</p>
+  <div class="confirm__actions">
+    <button type="button" class="chunky chunky--white confirm__keep" (pbTap)="kept.emit()">
+      {{ keepLabel() }}
+    </button>
+    <button type="button" class="chunky chunky--ink" (pbTap)="confirmed.emit()">
+      {{ confirmLabel() }}
+    </button>
+  </div>
+</div>

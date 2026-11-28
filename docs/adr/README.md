@@ -28,5 +28,7 @@
 | [0024](0024-spot-the-word-round.md) | Spot the word: every common word in a short story, and misses that come back | Accepted |
 | [0025](0025-rhyme-time-round.md) | Rhyme time: choose every rhyme, then Check | Accepted |
 | [0026](0026-guided-lesson-and-its-place-on-the-device.md) | Guided lesson: the path, and the one thing a lesson keeps on the device | Accepted |
-| [0026](0026-check-game.md) | The check game: one question for each activity, and what the device keeps | Accepted; storage open for the repository owner |
 | [0027](0027-check-game.md) | The check game: one question for each activity, and what the device keeps | Accepted; storage open for the repository owner |
+| [0028](0028-practice-kept-on-the-device-and-a-grown-up-area.md) | Practice is kept on the device, and a grown-up has an area | Accepted |
+| [0029](0029-grown-up-gate-and-area.md) | The grown-up gate and area: a corner padlock, three numbers in words, and Clear progress | Accepted |
+| [0030](0030-performance-accessibility-and-privacy-checks.md) | Performance, accessibility and privacy: behaviour specs over every activity, and sweeps on request | Accepted |

@@ -81,5 +81,9 @@ export const routes: Routes = [
     path: 'check',
     loadComponent: () => import('./pages/check-game/check-game').then((m) => m.CheckGame),
   },
+  {
+    path: 'grown-up',
+    loadComponent: () => import('./pages/grown-up/grown-up-area').then((m) => m.GrownUpArea),
+  },
   { path: '**', redirectTo: '' },
 ];

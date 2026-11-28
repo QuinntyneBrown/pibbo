@@ -40,3 +40,6 @@ export * from './lib/rounds/check-questions';
 export * from './lib/storage/activity-progress';
 export * from './lib/rounds/check-round';
 export * from './lib/rounds/check-results';
+export * from './lib/grown-up/gate';
+export * from './lib/grown-up/volume';
+export * from './lib/rounds/content-assets';

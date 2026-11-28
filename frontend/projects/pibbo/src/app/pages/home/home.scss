@@ -7,7 +7,7 @@
 
 .home__top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-4);
   padding: var(--space-5) var(--layout-margin) 0;
@@ -17,8 +17,21 @@
   flex: 1;
 }
 
-.home__subjects {
-  padding: var(--space-8) var(--layout-margin) 0;
+.home__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-targets);
+  // 48 px under the top bar, so the grown-up entry is at least 48 px from any activity
+  // picture (L2-037 #1).
+  padding: var(--space-12) var(--layout-margin) 0;
+}
+
+// The check game's picture sits beside the group pictures, as tall as they are; on the
+// narrowest phones it wraps under them (L2-024 #4).
+.home__check {
+  display: flex;
+  flex: 1 1 5.5rem;
+  max-width: 16rem;
 }
 
 .home__games {
