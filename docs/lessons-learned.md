@@ -551,3 +551,39 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Read shown text through `expect.poll` (J13 #3): tile letters and the last recording are polled.
 - Tag the critical path in the same change (J11 #4): night's sound-out-and-blend is `@critical`.
 - `--reporter=line` and timeouts (J8 #3): no hang.
+
+## Journey 15: Adjacent consonants
+
+**What slowed it**
+
+- The prompt's slices (data, layout, blending) left out `L2-015` #2, the first-two-sounds
+  question, which needed its own mock states, a phase in the round and a choice in
+  `pb-word-tiles`. It was built as a fourth slice inside Sound it out (ADR 0020) rather than as
+  the separate page the design named.
+- A seventh word moved every seed: the letter-group seeds were recomputed offline (J14 #2) and
+  committed with the first failing spec.
+- A template literal ate the backslashes of a page object's `RegExp` (`\s` became `s`), so the
+  choice locator matched nothing; the first run looked like a missing feature until the
+  locator was checked.
+- Heredocs holding Python with quotes failed in Git Bash again; the scripts went to the
+  scratchpad through the Write tool.
+
+**New lessons**
+
+1. Read the requirement's acceptance criteria, not only the prompt's slices; a slice list can
+   leave a criterion out.
+2. When a page object helper walks a round (`soundAndBlend`), give it the new step in the same
+   commit that adds the step, or every spec that plays several rounds fails on the new word.
+3. In a page object, build a `RegExp` from a string with doubled backslashes, or match exact text
+   another way.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1, J7 to J14): `clusters`, `first-two` and `first-two-retry` went in the
+  first commit, with the narrow-tile rule in the mock CSS and the design system.
+- Measure on 320 × 640, 360 × 640 and 640 × 360 (J9 #1, J11 #1): the layout spec failed first
+  (two rows) and passed once `tiles--long` narrowed the tiles.
+- Build before proving a failure (J8 #1): each of the three specs was committed failing for the
+  expected reason (no stop; tiles wrap; no question after blending).
+- Read shown text through `expect.poll` (J13 #3): spoken recordings are polled.
+- Tag the critical path in the same change (J11 #4): choosing st is `@critical`.

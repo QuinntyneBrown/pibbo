@@ -8,10 +8,12 @@ Adjacent consonants are two consonant sounds side by side at the start or end of
 
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
-- **`AdjacentConsonantsPage`** — route component in `pibbo`, loaded by `loadComponent` when the child chooses the activity. It is provided with its own `clusterRules` state at route scope, asks the rules for each round, plays recordings through `AUDIO_PLAYER` and hands state to the presentation component.
-- **`SoundChoiceComponent`** — presentation component in `@pibbo/components` (selector `pb-soundchoice`). It takes the round state as signal inputs, emits a `touched` output per target, and injects no service.
-- **`ClusterRound`** — immutable round state in `@pibbo/domain/sounds`; every transition returns a new value.
-- **`clusterRules`** — pure functions in `@pibbo/domain/sounds` that build a round from the injected `RandomSource` and decide the outcome of each touch, with unit tests.
+As built (ADR 0020), the feature lives inside Sound it out rather than in a page of its own:
+
+- **`SoundItOut`** — the Sound it out route component in `pibbo`, loaded by `loadComponent`. After blending a word with adjacent consonants it asks for the first two sounds, plays both sounds (with praise, or as a model) through `AUDIO_PLAYER`, each tile lit, and then offers the pictures.
+- **`WordTiles`** — presentation component in `@pibbo/components` (selector `pb-word-tiles`). A word of four sounds is `tiles--long`, so its tiles keep one row on a phone; its `choices` input draws the first two sounds as tiles (`.choose`, `.choose__option`) and its `chose` output emits the letters touched.
+- **`SoundOutRound`** — immutable round state in `@pibbo/domain/sounds`, with a `first-two` phase and a `firstTwo` question for a word with adjacent consonants, asked once per round.
+- **`adjacentConsonants`, `chooseFirstTwo`** — pure functions in `@pibbo/domain/sounds`: the first finds two single-letter consonants at the start of a word; the second decides a choice and returns the two sounds to play. The random source orders the choices. Unit tested.
 - **`AudioPlayer`** — contract in `@pibbo/api` bound to `AUDIO_PLAYER`. Playing a recording stops the one before it; a recording that cannot play resolves as `unavailable` and the screen shows the text instead.
 - **`RoundFeedback`** — shared round behaviour (`retry-and-praise`): brief praise, hints after a wrong answer, and modelling the answer after three wrong answers.
 

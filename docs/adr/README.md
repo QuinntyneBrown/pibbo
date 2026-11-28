@@ -21,3 +21,4 @@
 | [0017](0017-big-and-small-letters-round.md) | Big and small letters: a pair match of letter forms | Accepted |
 | [0018](0018-spell-by-sound-round.md) | Spell by sound: boxes, a letter bank and Check | Accepted |
 | [0019](0019-letter-groups-in-sound-it-out.md) | Letter groups in Sound it out: one tile, one recording | Accepted |
+| [0020](0020-adjacent-consonants-in-sound-it-out.md) | Adjacent consonants in Sound it out: four tiles and the first two sounds | Accepted |
