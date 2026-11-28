@@ -150,7 +150,11 @@ test.describe('What do I know?: answering, with the normal retry', () => {
     const answer = await check.answer();
     const wrong = await check.wrongChoice();
 
-    for (let i = 0; i < 3; i++) await check.answerWith(wrong);
+    for (let i = 0; i < 2; i++) await check.answerWith(wrong);
+    await expect(check.message).toHaveText('Listen to the sounds and look again.');
+    await expect(check.modelled).toHaveCount(0);
+
+    await check.touch(check.action);
 
     await expect(check.modelled).toHaveText(answer);
     await expect(check.message).toHaveText(`This is “${answer}”.`);
