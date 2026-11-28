@@ -1,7 +1,7 @@
 name: CI
 
 # Every push and pull request runs the checks. A push to main that passes them is published to
-# Azure Static Web Apps (ADR 0032, docs/deploy.md): the build the checks ran against is the one
+# Azure Static Web Apps (ADR 0033, docs/deploy.md): the build the checks ran against is the one
 # deployed, unchanged.
 
 on:

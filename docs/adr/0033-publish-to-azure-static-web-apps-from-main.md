@@ -1,4 +1,4 @@
-# 0032: Every commit to main is published to Azure Static Web Apps
+# 0033: Every commit to main is published to Azure Static Web Apps
 
 **Status:** Accepted (asked for by the repository owner)
 
@@ -19,7 +19,8 @@ left the platform `<TO SUPPLY>`.
 2. **The host's settings are generated, not written by hand.**
    `tools/deploy/static-web-app-config.mjs` writes `staticwebapp.config.json` into the build:
    `globalHeaders` is `security-headers.json` as it is, and the `index.html` fallback leaves out
-   every file extension the build ships, so a missing file stays a 404. The headers keep one
+   every file extension the build ships, so a missing file stays a 404; and `sw.js` is sent with
+   `Cache-Control: no-cache` (ADR 0032). The headers keep one
    source (ADR 0003).
 3. **CI deploys what it checked.** In `.github/workflows/ci.yml` the `frontend` job builds,
    generates the settings and runs the critical paths; on a push to main it uploads the build,
