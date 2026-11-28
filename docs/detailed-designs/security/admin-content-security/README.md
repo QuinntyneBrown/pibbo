@@ -6,7 +6,7 @@ Staff edit content through endpoints under `/api/v1/admin`. Each call needs a va
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend exists only once the ADR required by `L2-028` is accepted.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0034](../../../adr/0034-content-backend.md) records.
 
 - **`AdminContentController`** — controller under `/api/v1/admin` with `[Authorize(Policy = "ContentEditor")]`.
 - **`UploadAssetCommand + validator`** — FluentValidation checks sniffed type (audio/mpeg, audio/ogg, image/webp, sanitised image/svg+xml) and size (audio 1 MB, image 2 MB).
@@ -61,3 +61,12 @@ Commands carry the raw input; validators enforce the rules before the handler ru
 Authentication and role come first; then the file is sniffed and size-checked.
 
 ![Sequence for upload an asset as a content editor](diagrams/sequence-upload-asset.png)
+
+## As built (journey 27)
+
+- **No OIDC provider for the MVP** (owner's decision). Endpoints need a JWT bearer token with the `content-editor` role, signed with keys configured under `Authentication:Schemes:Bearer` (`dotnet user-jwts` locally). Setting an `Authority` there trusts an OIDC provider instead, with no code change. With nothing configured every admin call is 401.
+- `PUT /api/v1/admin/assets/{folder}/{**path}` takes the file as the body. `UploadAssetCommand` and its validator sniff the bytes (the declared type is never trusted), check the name and folder match, and cap recordings at 1 MB and pictures at 2 MB; the API reads nothing past 2 MB. 413 and 415 come from the validator's error codes. `SvgSanitiser` keeps only SVG elements and drops scripts, styles, `foreignObject`, animation, event handlers and any reference outside the drawing; a DTD is refused.
+- `POST /api/v1/admin/content/versions` publishes a version after `ContentSetValidator`, the same check the content file passes: text 1 to 80 characters from an allow-list, ids, and files that exist. A published version is never rewritten (409).
+- The admin contract is its own document, `backend/openapi/admin.json`, so the frontend's generated types never name an admin endpoint. No component in the frontend bypasses Angular's sanitisation (#4).
+- CI fails on high or critical vulnerable packages, through NuGet audit in the build, `backend/tools/audit-packages.sh` (over `dotnet list package --vulnerable`) and `npm audit` (#5).
+- Acceptance tests: `ContentAdministrationTests.cs`.

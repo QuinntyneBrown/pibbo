@@ -13,7 +13,7 @@ The feature is a vertical slice through the Angular workspace: the page in the `
 - **`BrowserAudioPlayer`** — `AUDIO_PLAYER` over one `<audio>` element, one recording at a time, at the grown-up's volume; a Web Audio player waits until a measured need.
 - **`performance.spec.ts`** — what each activity's first touch plays has been fetched before the touch (`L2-032` #3).
 - **`load.sweep.ts`** — on request: Home's Largest Contentful Paint, script size and touch response on a throttled phone, with time passing (`L2-032` #1, #2).
-- **`Load test`** — the content API at 500 requests per second waits for the backend (journey 27).
+- **`Load test`** — the content API at 500 requests per second is possible since the backend (ADR 0034) and is not built.
 
 ## Requirements
 

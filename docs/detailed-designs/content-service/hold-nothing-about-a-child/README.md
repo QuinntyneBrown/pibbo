@@ -6,12 +6,12 @@ The backend serves content only. Public endpoints accept GET and HEAD and answer
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend exists only once the ADR required by `L2-028` is accepted.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0034](../../../adr/0034-content-backend.md) records.
 
 - **`ReadOnlyPublicPolicy`** — endpoint convention rejecting POST, PUT, PATCH and DELETE outside `/api/v1/admin` with 405.
 - **`PrivacyLogEnricher`** — Serilog / OpenTelemetry enricher that drops query strings, cookies and device identifiers and truncates IPs.
 - **`NoCookieMiddleware`** — removes any `Set-Cookie` header from public responses.
-- **`ADR`** — `docs/adr/` decision record for the content-only backend (`<TO SUPPLY>`, not yet written).
+- **`ADR`** — `docs/adr/` decision record for the content-only backend ([ADR 0034](../../../adr/0034-content-backend.md), proposed; not yet accepted).
 
 ## Requirements
 
@@ -59,3 +59,10 @@ Three small cross-cutting parts, each with one rule.
 A write to a public endpoint answers 405 and the log line holds only the route template and a truncated IP.
 
 ![Sequence for reject a write and log privately](diagrams/sequence-reject-write.png)
+
+## As built (journey 27)
+
+- `ReadOnlyMiddleware` answers every write outside `/api/v1/admin` with 405 and `Allow: GET, HEAD`; `NoCookieMiddleware` strips `Set-Cookie` from every response.
+- The log is Serilog (one line of JSON per event). `RequestLogMiddleware` writes the route template, never the path; `NoRequestScopeEnricher` takes off the request path and ids that ASP.NET Core's scope adds; `NoInboundTraceContext` ignores a caller's `traceparent`. The client IP is omitted, not truncated. There is no separate `PrivacyLogEnricher`.
+- The database has tables for content versions, activities and lessons only. A version records who published it: the content file or a staff id.
+- Acceptance tests: `HoldsNothingAboutAChildTests.cs`, and the privacy cases in `MetricsTests.cs` and `ContentAdministrationTests.cs`.

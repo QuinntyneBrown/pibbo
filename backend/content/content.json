@@ -1,0 +1,105 @@
+{
+  "version": "2026.11.0",
+  "activities": [
+    {
+      "id": "count-the-toys",
+      "group": "count",
+      "name": "Count the toys",
+      "glyph": "1 2 3",
+      "recording": "/recordings/home/count-the-toys.wav",
+      "pictures": [],
+      "recordings": []
+    },
+    {
+      "id": "count-and-write",
+      "group": "count",
+      "name": "Count and write",
+      "glyph": "14",
+      "recording": "/recordings/home/count-and-write.wav",
+      "pictures": [],
+      "recordings": []
+    },
+    {
+      "id": "which-is-bigger",
+      "group": "count",
+      "name": "Which is bigger?",
+      "glyph": "7 4",
+      "recording": "/recordings/home/which-is-bigger.wav",
+      "pictures": [],
+      "recordings": []
+    },
+    {
+      "id": "rocket-countdown",
+      "group": "count",
+      "name": "Rocket countdown",
+      "glyph": "3 2 1",
+      "recording": "/recordings/home/rocket-countdown.wav",
+      "pictures": [],
+      "recordings": []
+    },
+    {
+      "id": "skip-count",
+      "group": "count",
+      "name": "Skip-count",
+      "glyph": "2 4 6",
+      "recording": "/recordings/home/skip-count.wav",
+      "pictures": [],
+      "recordings": []
+    },
+    {
+      "id": "add-together",
+      "group": "count",
+      "name": "Add together",
+      "glyph": "3+4",
+      "recording": "/recordings/home/add-together.wav",
+      "pictures": [],
+      "recordings": []
+    },
+    {
+      "id": "counting-dance",
+      "group": "count",
+      "name": "Counting dance",
+      "glyph": "♪ 1 2",
+      "recording": "/recordings/home/counting-dance.wav",
+      "pictures": [],
+      "recordings": []
+    },
+    {
+      "id": "sound-it-out",
+      "group": "read",
+      "name": "Sound it out",
+      "glyph": "map",
+      "recording": "/recordings/home/sound-it-out.wav",
+      "pictures": [],
+      "recordings": []
+    },
+    {
+      "id": "letter-sounds",
+      "group": "read",
+      "name": "Letter sounds",
+      "glyph": "m s t",
+      "recording": "/recordings/home/letter-sounds.wav",
+      "pictures": [],
+      "recordings": []
+    },
+    {
+      "id": "big-and-small-letters",
+      "group": "read",
+      "name": "Big and small letters",
+      "glyph": "B b",
+      "recording": "/recordings/home/big-and-small-letters.wav",
+      "pictures": [],
+      "recordings": []
+    },
+    {
+      "id": "spell-by-sound",
+      "group": "read",
+      "name": "Spell by sound",
+      "glyph": "s u _",
+      "recording": "/recordings/home/spell-by-sound.wav",
+      "pictures": [],
+      "recordings": []
+    }
+  ],
+  "lessons": []
+}

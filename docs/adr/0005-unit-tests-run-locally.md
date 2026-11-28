@@ -14,7 +14,8 @@ Follow `AGENTS.md`. `node tools/verify/verify.mjs` runs the format check, lint, 
 bundle budgets), unit tests and the behaviour e2e locally. CI (`.github/workflows/ci.yml`) runs
 the format check, lint, `npm audit` (high and above), the build with its budgets and the
 behaviour e2e. Axe sweeps run only when a person asks. The .NET parts of `L2-039` wait for the
-backend ADR (journey 27).
+backend ADR (journey 27). Since ADR 0034 the backend has acceptance tests only: CI runs its
+critical paths, and `verify.mjs` runs them all.
 
 ## Consequences
 

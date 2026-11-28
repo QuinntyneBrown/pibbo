@@ -6,7 +6,7 @@ The backend exposes liveness and readiness checks, writes structured JSON logs a
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend exists only once the ADR required by `L2-028` is accepted.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0034](../../../adr/0034-content-backend.md) records.
 
 - **`Health checks`** — `/health/live` returns 200 while the process runs; `/health/ready` returns 503 until the content store is reachable.
 - **`Structured logging`** — JSON with timestamp, route template, status, duration and trace id.
@@ -59,3 +59,11 @@ The readiness check depends on `IContentStore`.
 Readiness reflects the content store; an exception yields 500 problem details and a log entry with its trace id.
 
 ![Sequence for readiness and an unhandled exception](diagrams/sequence-ready-and-error.png)
+
+## As built (journey 27)
+
+- `/health/live` answers 200 while the process runs; `/health/ready` answers 503 until the database can be reached and holds a version that passed the check.
+- Logs are Serilog, compact JSON, one line per event, with a UTC timestamp; levels come from the `Serilog` section.
+- Metrics are OpenTelemetry, scraped at `/metrics` in the Prometheus format: ASP.NET Core's `http.server.request.duration` histogram by route template and status gives the request rate, the error rate and the latency per route. The Prometheus exporter package is a prerelease, pinned.
+- An unhandled exception is 500 problem details with a `traceId` and no stack trace, and is logged with the same trace id.
+- Acceptance tests: `HealthLogsMetricsTests.cs`, `MetricsTests.cs`, `ReadinessProbeTests.cs`.

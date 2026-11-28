@@ -16,7 +16,7 @@
   [`docs/deploy.md`](../deploy.md)): a Content-Security-Policy allowing only `'self'`, with
   `frame-ancestors 'none'` and no `unsafe-inline` script, plus `nosniff`, `no-referrer`, a
   Permissions-Policy that turns off the camera, microphone and location, and HSTS. This is the
-  frontend part of `L2-030`; its CORS and rate-limit criteria wait for a backend.
+  frontend part of `L2-030`; its CORS and rate-limit criteria are the backend's (ADR 0034).
 - `style-src` allows `'unsafe-inline'`: Angular injects component styles as `<style>` elements at
   run time, and a static host cannot issue the per-response nonce (`ngCspNonce`) that would avoid
   it. `L2-030` forbids only inline script.

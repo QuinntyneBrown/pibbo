@@ -50,7 +50,7 @@ component and a load test of the content API.
 
 ## Consequences
 
-`L2-032` #4 (the content API under load) waits for the backend (journey 27). `L2-036` #6 (a
+`L2-032` #4 (the content API under load) is possible since the backend (ADR 0034) and is not built. `L2-036` #6 (a
 shape as well as colour) and #5 (reduced motion) stay covered by each activity's own specs and
 by the accessibility sweep. Names come from each component's own text and labels rather than
 an `accessibleName` input. No sweep has been run or has a baseline yet: the first run, when a

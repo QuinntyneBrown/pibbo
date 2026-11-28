@@ -1,0 +1,425 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Pibbo content API",
+    "description": "Read-only, versioned content for Pibbo: activities, lessons and the manifest of pictures and recordings. It accepts GET and HEAD only, sets no cookie and holds nothing about a child. Errors are RFC 9457 problem details.",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/content/manifest": {
+      "get": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "The index of the content version now served.",
+        "description": "Carries an ETag. Send it back as If-None-Match to get 304 while nothing has changed.",
+        "operationId": "getManifest",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManifestResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/activities/{id}": {
+      "get": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "One activity.",
+        "operationId": "getActivity",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/lessons/{id}": {
+      "get": {
+        "tags": [
+          "Content"
+        ],
+        "summary": "One lesson.",
+        "operationId": "getLesson",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActivityResponse": {
+        "required": [
+          "id",
+          "group",
+          "name",
+          "glyph",
+          "recording",
+          "pictures",
+          "recordings"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The activity\u0027s id."
+          },
+          "group": {
+            "type": "string",
+            "description": "The id of the group Home shows it in."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name, shown and given as the text alternative."
+          },
+          "glyph": {
+            "type": "string",
+            "description": "The short picture-like text drawn on its card."
+          },
+          "recording": {
+            "type": "string",
+            "description": "The path of the recording that speaks the name."
+          },
+          "pictures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The paths of the pictures to have ready before a round is shown."
+          },
+          "recordings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The paths of the recordings to have ready before a round is shown."
+          }
+        },
+        "description": "An activity: its name as shown and spoken, and the pictures and recordings it needs."
+      },
+      "HttpValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "detail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "instance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "LessonResponse": {
+        "required": [
+          "id",
+          "name",
+          "recording",
+          "activities"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The lesson\u0027s id."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name, shown and given as the text alternative."
+          },
+          "recording": {
+            "type": "string",
+            "description": "The path of the recording that speaks the name."
+          },
+          "activities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The ids of its activities, in order."
+          }
+        },
+        "description": "A lesson: activities in the order a child meets them."
+      },
+      "ManifestActivityResponse": {
+        "required": [
+          "id",
+          "group",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The activity\u0027s id: GET /api/v1/activities/{id} returns it."
+          },
+          "group": {
+            "type": "string",
+            "description": "The id of the group Home shows it in."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name, shown and given as the text alternative."
+          }
+        },
+        "description": "An activity as the manifest lists it."
+      },
+      "ManifestLessonResponse": {
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The lesson\u0027s id: GET /api/v1/lessons/{id} returns it."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name, shown and given as the text alternative."
+          }
+        },
+        "description": "A lesson as the manifest lists it."
+      },
+      "ManifestResponse": {
+        "required": [
+          "contentVersion",
+          "activities",
+          "lessons",
+          "assets"
+        ],
+        "type": "object",
+        "properties": {
+          "contentVersion": {
+            "type": "string",
+            "description": "The version of the content this manifest lists."
+          },
+          "activities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManifestActivityResponse"
+            },
+            "description": "Every activity, in the order Home shows them."
+          },
+          "lessons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManifestLessonResponse"
+            },
+            "description": "Every lesson."
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The path of every picture and recording this version needs."
+          }
+        },
+        "description": "The index of one content version."
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "detail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "instance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Content"
+    }
+  ]
+}

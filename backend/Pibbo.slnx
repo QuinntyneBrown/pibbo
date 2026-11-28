@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Pibbo.Api/Pibbo.Api.csproj" />
+    <Project Path="src/Pibbo.Application/Pibbo.Application.csproj" />
+    <Project Path="src/Pibbo.Domain/Pibbo.Domain.csproj" />
+    <Project Path="src/Pibbo.Infrastructure/Pibbo.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Pibbo.Api.AcceptanceTests/Pibbo.Api.AcceptanceTests.csproj" />
+  </Folder>
+</Solution>
