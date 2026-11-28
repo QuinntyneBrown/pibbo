@@ -20,7 +20,9 @@
 - `style-src` allows `'unsafe-inline'`: Angular injects component styles as `<style>` elements at
   run time, and a static host cannot issue the per-response nonce (`ngCspNonce`) that would avoid
   it. `L2-030` forbids only inline script.
-- The page makes no favicon request (`<link rel="icon" href="data:,">`) until the design draws one.
+- The favicon is `frontend/projects/pibbo/public/favicon.ico`, served from Pibbo's own origin: the
+  app icon as `docs/mocks/pages/brand/default.html` draws it (Pibbo on the Count blue tile), at
+  16, 32, 48, 64, 128 and 256 px. It replaces the empty `data:,` icon used until the design drew one.
 
 ## Consequences
 
