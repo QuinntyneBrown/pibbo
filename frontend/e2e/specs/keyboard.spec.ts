@@ -110,10 +110,10 @@ test.describe('Keyboard play', () => {
     const home = new HomePage(page);
     const check = new CheckGamePage(page);
     await home.open();
-    await tabTo(page, home.checkCard);
-    await expect(check.question).toBeVisible();
+    await tabTo(page, check.card());
+    await expect(check.root).toBeVisible();
 
-    await tabTo(page, check.choice(await check.answer()), 'Space');
+    await tabTo(page, check.choice((await check.solve()).right), 'Space');
     await tabTo(page, check.action);
 
     await expect(check.message).toHaveText('Yes!');

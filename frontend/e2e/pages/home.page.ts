@@ -126,7 +126,9 @@ export class HomePage {
   /** The bounding boxes of every target on screen. */
   async targetBoxes(): Promise<Box[]> {
     const boxes: Box[] = [];
-    for (const t of await this.page.locator('.switch__option, .game-card, .home__lesson').all()) {
+    for (const t of await this.page
+      .locator('.switch__option, .game-card, .home__lesson, .check-card')
+      .all()) {
       const b = await t.boundingBox();
       if (b) boxes.push(b);
     }

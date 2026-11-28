@@ -26,6 +26,11 @@ export type Sound = 'on' | 'off';
 
 interface Fixtures {
   sound: Sound;
+  /**
+   * `fixed` (every behaviour spec): the clock is fixed and only moves when a spec moves it.
+   * `real`: time passes as it does for a child, for the load-time sweep alone (L2-032 #1, #2).
+   */
+  clock: 'fixed' | 'real';
   /** The seed of the random source; a spec that needs a particular round sets it (ADR 0009). */
   seed: number;
   spoken: Spoken;
@@ -124,8 +129,9 @@ async function guardNetwork(page: Page, use: () => Promise<void>): Promise<void>
 export const test = base.extend<Fixtures>({
   sound: ['on', { option: true }],
   seed: [RANDOM_SEED, { option: true }],
-  page: async ({ page, sound, seed }, use) => {
-    await page.clock.install({ time: FIXED_TIME });
+  clock: ['fixed', { option: true }],
+  page: async ({ page, sound, seed, clock }, use) => {
+    if (clock === 'fixed') await page.clock.install({ time: FIXED_TIME });
     await page.addInitScript(installFakes, { seed, sound });
     await use(page);
   },

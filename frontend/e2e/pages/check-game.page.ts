@@ -164,19 +164,30 @@ export class CheckGamePage {
           await expect(this.action).not.toHaveText('Check');
           if (miss < 2) await this.touch(this.action);
         }
+        await expect(this.action).toHaveText('Next');
+        await this.touch(this.action);
       } else {
-        for (const name of await this.choiceNames()) {
-          await this.answer(name);
-          await expect(this.action).not.toHaveText('Check');
-          if ((await this.action.textContent())!.includes('Next')) break;
-          await this.touch(this.action);
-        }
+        await this.answerRightAndGoOn();
       }
-      await expect(this.action).toHaveText('Next');
-      await this.touch(this.action);
     }
     await expect(this.results).toBeVisible();
     return asked;
+  }
+
+  /**
+   * Answers any question shown by trying one choice after another, so it is right by the
+   * third, then touches Next.
+   */
+  async answerRightAndGoOn(): Promise<void> {
+    await expect(this.action).toHaveText('Check');
+    for (const name of await this.choiceNames()) {
+      await this.answer(name);
+      await expect(this.action).not.toHaveText('Check');
+      if ((await this.action.textContent())!.includes('Next')) break;
+      await this.touch(this.action);
+    }
+    await expect(this.action).toHaveText('Next');
+    await this.touch(this.action);
   }
 
   /** The names on the earned pictures, in the order they are shown. */

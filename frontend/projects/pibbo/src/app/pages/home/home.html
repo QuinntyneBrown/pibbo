@@ -16,18 +16,22 @@
         {{ lessonLine.text }}
       </button>
     }
-    <pb-check-card [name]="checkGame.name" (touched)="openCheckGame()" />
     <pb-grown-up-entry (touched)="openGate()" />
   </header>
   <main class="home__main" id="main">
     <h1 class="visually-hidden">Choose an activity</h1>
-    <nav class="home__subjects" aria-label="Groups">
-      <pb-group-switch
-        [groups]="catalogue.groups"
-        [chosen]="chosen()?.id ?? null"
-        (touched)="chooseGroup($event)"
-      />
-    </nav>
+    <div class="home__row">
+      <nav class="home__subjects" aria-label="Groups">
+        <pb-group-switch
+          [groups]="catalogue.groups"
+          [chosen]="chosen()?.id ?? null"
+          (touched)="chooseGroup($event)"
+        />
+      </nav>
+      <div class="home__check">
+        <pb-check-card [name]="checkGame.name" (touched)="openCheckGame()" />
+      </div>
+    </div>
     <div class="home__games">
       @if (chosen(); as group) {
         <pb-activity-grid

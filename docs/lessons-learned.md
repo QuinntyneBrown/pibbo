@@ -936,3 +936,96 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Grep the flat domain API before naming (J6 #2): worked only for the names it was given.
 - Write files with the Write tool (J1, J2, J21): ignored for two heredocs, which both failed.
 - Tag the critical path in the same change (J11 #4): five questions from Home is `@critical`.
+
+## Journey 24: Grown-up gate and area
+
+**What slowed it**
+
+- The design named a CDK Dialog for the gate, and a first build used one for the gate and the
+  Clear progress confirmation. The CDK uses parts of Angular's core the app did not, and the
+  build hoisted them into the initial bundle: 238 kB to 257 kB, past the 250 kB budget. The
+  mocks were redrawn as steps of one grown-up screen, `AGENTS.md`'s other choice, and the CDK
+  was removed (ADR 0029).
+- The same hoisting came back, smaller (+10 kB), from `afterNextRender` and `viewChild` in the
+  confirmation; a plain `ngAfterViewInit` focus cost nothing.
+- An IndexedDB database the spec opened and never closed blocked its own deletion, so Clear
+  progress looked as if it had not erased it.
+- `L2-037` #1 (48 px from any activity picture) needed the row under Home's top bar 48 px
+  lower; with the check card beside the group pictures, Home still fits a Pixel 7.
+
+**New lessons**
+
+1. Before adding a library to a lazy feature, build once and read the initial total: framework
+   code the library uses lands in `main` (J2 #4 again, at 20 kB).
+2. Prefer Angular APIs the app already uses in shared components; a new core API is a bundle
+   cost even when only a lazy chunk calls it.
+3. Close every IndexedDB connection a spec opens, or a delete waits for it.
+4. Pass where to go back to in the navigation state, checked against what Home's address can
+   be, so a grown-up screen can return to Home exactly as it was.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1): the entry, gate and area were drawn, then redrawn, before any code.
+- Break the rule once (J3 #5, J19 #4): Clear progress keeping one key failed the spec.
+- Measure before redesigning (J18 #1): the 48 px gap was measured at four sizes by its spec.
+- Read the initial total after each slice (J2 #4): it caught the CDK and the focus API.
+
+## Journey 26: Performance, accessibility and privacy hardening
+
+**What slowed it**
+
+- The seven counting activities fetched a recording only when it played, so their first touch
+  waited for the network; the new spec failed on Count the toys' "one" until they preloaded.
+- The keyboard spec's "focus shows" check first accepted any box-shadow, so it passed with the
+  focus ring removed on targets that have a press edge; only the outline counts now.
+- Spot the word's first story word is a miss, which by design makes no sound, so "Enter plays
+  it" means something is spoken or shown.
+- The sweeps cannot be proved here: `AGENTS.md` runs them only when a person asks, so they are
+  type-checked and linted but not run, and have no baselines.
+
+**New lessons**
+
+1. Read the activities from Home in a spec (`everyActivity`), not from a list: a new activity
+   is covered the day Home shows it.
+2. A check that something "shows" must look for the one thing that shows it (the focus outline);
+   prove it by taking that thing away.
+3. A content walker (`contentAssets`) that lists every recording and picture an activity names
+   keeps preloading in step with the content, with no list per page.
+
+**Earlier lessons applied**
+
+- Break the rule once (J3 #5): removing the focus ring and the preload each failed its spec.
+- Read the initial total after each slice (J2 #4, J24 #1): it stayed at 239 kB, and the budget
+  now tightens to that.
+- Faking browser APIs, not bindings (J1 #1): the volume and permission checks patch the
+  browser in the spec, with nothing added to the bundle.
+
+## Fix: journeys 24 and 26 were half-dropped by a merge
+
+**What went wrong**
+
+- Two branches built journey 23. The later one resolved the merge by keeping `main`'s copy of
+  each conflicted file, which also dropped what journeys 24 and 26 had changed in those files:
+  preloading in seven activities, the sweeps' real clock, the grown-up screen's mock styles and
+  catalogue entry, three `L2-037` criteria and two entries in this file. `main` went red with 21
+  failing specs, and it was merged that way.
+- `home.html` and `home.scss` came from different sides: the styles laid out a row the markup
+  did not have.
+- Each journey had drawn Home's top bar without the other: Lesson, the check game and the
+  padlock do not fit a phone together.
+- Two journeys each added `.pibbo--lg`; the later rule undid the check results' small sizes.
+
+**New lessons**
+
+1. In a merge, drop a duplicate feature's changes, not its branch's side of every conflicted
+   file: compare from the last duplicate commit to the tip, and account for each file.
+2. After merging two branches that touch one screen, run the whole suite, not only
+   `@critical`, and do not merge while it is red.
+3. Type-check `e2e/` after a merge: page objects and specs from different sides disagreed
+   without any build noticing.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1): Home's combined top bar and row were drawn and measured at six sizes
+  before the app changed.
+- Check a layout and look at screenshots (J17 #1, J21 #3).
