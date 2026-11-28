@@ -10,6 +10,8 @@ public sealed class CountingContentStore(IContentStore inner) : IContentStore
 
     public int Lookups => _lookups;
 
+    public string? Problem => inner.Problem;
+
     public ContentSnapshot? Read()
     {
         Interlocked.Increment(ref _lookups);

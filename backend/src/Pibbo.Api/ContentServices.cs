@@ -1,4 +1,5 @@
 using Microsoft.Extensions.FileProviders;
+using Pibbo.Api.Observability;
 using Pibbo.Application.Content;
 using Pibbo.Infrastructure.Content;
 
@@ -30,6 +31,10 @@ public static class ContentServices
                 {
                     RequestPath = $"/{folder}",
                     FileProvider = new PhysicalFileProvider(directory),
+
+                    // The log names the kind of file asked for, never the path.
+                    OnPrepareResponse = served =>
+                        served.Context.Items[RequestLogMiddleware.RouteItem] = $"/{folder}/{{asset}}",
                 });
             }
         }
