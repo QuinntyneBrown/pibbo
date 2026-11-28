@@ -607,3 +607,11 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 2. `networkidle` is a load state, not "idle now". To settle in-flight requests, track each
    `Request` object and wait for its finished or failed event, with a bound, so a request that
    is never answered still fails the spec.
+- The network-guard flake (J11 to J14): "unanswered" came from requests still in flight when a
+  spec ended, since the guard's `networkidle` wait returns at once on a page that reached it
+  earlier. The guard now tracks each request object and waits, bounded at 5 s, for open ones to
+  settle. Three full e2e runs in a row then passed (203 of 203 each). One earlier run had 2
+  failures whose problem lines were not captured, and another run broke on
+  `ERR_CONNECTION_REFUSED` / `ERR_INSUFFICIENT_RESOURCES`. That was most likely another
+  worktree's Playwright run sharing port 4300 (`reuseExistingServer`). Give each worktree its
+  own port when sessions run in parallel.
