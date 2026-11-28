@@ -3,6 +3,7 @@
   layout="story"
   group="read"
   [instruction]="instruction()"
+  [mood]="mood()"
   [done]="done()"
   [rounds]="content.roundsPerPlay"
   (replay)="replay()"
@@ -15,7 +16,14 @@
     [total]="total()"
     [miss]="round().miss"
     [done]="round().phase === 'right'"
+    [status]="status()"
     (touched)="touchWord($event)"
   />
-  <pb-answer-bar answer group="read" kind="none" (action)="action()" />
+  <pb-answer-bar
+    answer
+    group="read"
+    [kind]="bar().kind"
+    [message]="bar().message"
+    (action)="action()"
+  />
 </pb-round-shell>
