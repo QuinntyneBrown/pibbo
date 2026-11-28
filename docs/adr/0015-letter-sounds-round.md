@@ -38,6 +38,10 @@ and a content API. The content showed c's sound as "/c/"; both reading mocks sho
    sound card already shows and says the sound; `L2-026`'s hint applies to rounds that check an
    answer.
 
+7. **Phone layouts.** Two columns of four pairs do not fit above the answer bar on a 360 × 640
+   or 640 × 360 phone; upright, the letters make one row and the sounds a second; on its side,
+   all eight make one row of 60 px targets. Drawn in the mocks first.
+
 ## Consequences
 
 Which letters Letter sounds covers, and in what order, stays open, as do the real recordings

@@ -433,6 +433,29 @@ img { display: block; max-width: 100%; }
 .pair__sound-left { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-read); font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); }
 .pair .picture { width: var(--size-9); height: var(--size-9); }
 .pair--tall .picture { width: 100%; height: 100%; padding: var(--space-2); background: transparent; }
+/* A short screen, journey 11 (ADR 0015): the pairs give up height. An upright phone: the
+   letters make one row and their sounds a second, each picture above its sound. A phone on its
+   side: letters and sounds make one row, so the last pair stays above the answer bar. */
+@media (max-height: 45rem) {
+  .pairs, .pairs__column { row-gap: var(--space-2); }
+  .pair { height: var(--size-10); }
+}
+@media (max-width: 30rem), (max-height: 30rem) {
+  .pairs { grid-template-columns: 1fr; }
+  .pairs__column { flex-direction: row; column-gap: var(--space-2); }
+  .pair { min-width: 0; flex: 1; }
+  .pair:has(.pair__sound) { height: auto; padding-block: var(--space-2); }
+  .pair__sound { flex-direction: column-reverse; gap: var(--space-1); padding: 0; }
+  .pair .speaker { display: none; }
+  .pair .picture { width: var(--size-7); height: var(--size-7); }
+}
+@media (max-height: 30rem) {
+  .pairs { grid-template-columns: 1fr 1fr; column-gap: var(--space-6); }
+  .pair, .pair:has(.pair__sound) { height: var(--target-child); padding-block: 0; }
+  .pair__letter { font-size: var(--font-size-4xl); }
+  .pair__sound-left { font-size: var(--font-size-lg); }
+  .pair .picture { width: var(--size-5); height: var(--size-5); }
+}
 .speaker { border: 0; display: inline-flex; width: var(--size-6); height: var(--size-6); flex: none; align-items: center; justify-content: center; border-radius: var(--radius-full); background: var(--color-read-soft); color: var(--color-read-strong); }
 
 /* ---------- Sound it out ---------- */

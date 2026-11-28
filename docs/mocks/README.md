@@ -140,6 +140,9 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   reduced motion removes it. c's sound is shown "/k/", as in both Letter sounds and Sound it
   out. Home's Read group lists Letter sounds after Sound it out; after the fifth round Next
   goes back to Home with Read chosen, as in Sound it out (ADR 0008), not to Sound it out.
+  The prototype's two columns of 80 px pairs ran under the answer bar on a 360 × 640 phone and
+  on a 640 × 360 one: upright, the letters now make one row and the sounds a second, each
+  picture above its sound; on its side, all eight make one row of 60 px targets.
 
 ## Open questions
 

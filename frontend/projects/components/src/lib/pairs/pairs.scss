@@ -171,3 +171,80 @@
   object-fit: contain;
   user-select: none;
 }
+
+// A short screen (ADR 0015): the pairs give up height. A phone, upright or on its side: the
+// letters make one row and their sounds a second row, each sound's picture above it.
+@media (max-height: 45rem) {
+  .pairs,
+  .pairs__column {
+    row-gap: var(--space-2);
+  }
+
+  .pair {
+    height: var(--size-10);
+  }
+}
+
+@media (max-width: 30rem), (max-height: 30rem) {
+  .pairs {
+    grid-template-columns: 1fr;
+  }
+
+  .pairs__column {
+    flex-direction: row;
+    column-gap: var(--space-2);
+  }
+
+  .pair {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .pair:has(.pair__sound) {
+    height: auto;
+    padding-block: var(--space-2);
+  }
+
+  .pair__sound {
+    flex-direction: column-reverse;
+    gap: var(--space-1);
+    padding: 0;
+  }
+
+  .speaker {
+    display: none;
+  }
+
+  .picture {
+    width: var(--size-7);
+    height: var(--size-7);
+  }
+}
+
+// On its side the screen is too short for two rows: the letters and their sounds make one row,
+// letters on the left and sounds on the right.
+@media (max-height: 30rem) {
+  .pairs {
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-6);
+  }
+
+  .pair,
+  .pair:has(.pair__sound) {
+    height: var(--target-child);
+    padding-block: 0;
+  }
+
+  .pair__letter {
+    font-size: var(--font-size-4xl);
+  }
+
+  .pair__sound-left {
+    font-size: var(--font-size-lg);
+  }
+
+  .picture {
+    width: var(--size-5);
+    height: var(--size-5);
+  }
+}
