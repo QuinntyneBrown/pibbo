@@ -20,11 +20,11 @@ class gateRules <<pure>> {
   +gateTask(g: Gate): string
   +touchGate(g: Gate, n: number): "pending" | "passed" | "failed"
 }
-class GrownUpScreen {
+class GrownUpArea {
   +step: "gate" | "area" | "confirm"
   +setVolume(v: VolumeLevel): void
   +clearProgress(): Promise<void>
 }
 gateRules ..> Gate
-GrownUpScreen ..> gateRules
+GrownUpArea ..> gateRules
 @enduml

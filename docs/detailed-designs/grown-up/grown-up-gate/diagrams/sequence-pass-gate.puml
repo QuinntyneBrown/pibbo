@@ -8,7 +8,7 @@ skinparam ArrowColor #344054
 actor "Grown-up" as actor
 box "Frontend — pibbo application" #E0F2FE
   participant "Home" as home
-  participant "GrownUpScreen" as screen
+  participant "GrownUpArea" as screen
 end box
 box "Frontend — @pibbo/domain library" #ECFDF3
   participant "gateRules" as rules

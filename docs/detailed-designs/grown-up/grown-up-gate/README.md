@@ -11,11 +11,11 @@ Settings and information for a grown-up sit behind a *gate*. The gate entry is a
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api` (ADRs 0026 and 0028).
 
 - **`GrownUpEntry`** (`pb-grown-up-entry`) — the corner control on Home (`.grown-up-entry`): an outline padlock, 48 × 48 px, "For grown-ups", in the top bar; Home's row under it keeps every activity picture at least 48 px away.
-- **`GrownUpScreen`** — lazy route `/grown-up` in the app, opened by the entry with Home's address in the navigation state. Its first step is always the gate; then the area; Clear progress adds a confirmation step in place of its button. Leaving goes back to Home's address as it was.
+- **`GrownUpArea`** — lazy route `/grown-up` in the app, opened by the entry with Home's address in the navigation state. Its first step is always the gate; then the area; Clear progress adds a confirmation step in place of its button. Leaving goes back to Home's address as it was.
 - **`GateView`** (`pb-gate`, `.gate`) — three numbers written as words, dots for progress and a 3 × 3 keypad, with Back to Pibbo. Nothing is spoken. The first wrong number or Back to Pibbo returns to Home unchanged; the right three show the area.
 - **`gateRules`** — pure functions in `@pibbo/domain/grown-up`: `newGate` (three different numbers from 1 to 9, from `RANDOM_SOURCE`), `gateTask` ("Touch seven, three, nine in order."), `touchGate` (`pending`, `passed` or `failed`).
 - **`VolumeSwitch`** (`pb-volume-switch`) — Quiet, Medium or Loud, a radio group with a tick; kept as `pibbo:volume` and applied through `AudioPlayer.setVolume`.
-- **`ConfirmClear`** (`pb-confirm`, `.confirm`) — "Clear progress?", Keep it (focused) and Clear progress, which calls `ProgressStore.clearProgress()`; the area then says "Progress cleared.".
+- **`Confirm`** (`pb-confirm`, `.confirm`) — "Clear progress?", Keep it (focused) and Clear progress, which calls `ProgressStore.clearProgress()`; the area then says "Progress cleared.".
 
 The gate and the confirmation are steps of the screen, not CDK dialogs: a dialog brought enough of Angular's core into the initial bundle to pass its 250 kB budget (ADR 0028).
 

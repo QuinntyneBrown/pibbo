@@ -843,3 +843,36 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Measure before redesigning (J18 #1, J19 #3): a throwaway spec found the Home overflow.
 - Commit before a break-the-rule check (J19 #4): each restore was a plain checkout.
 - Number ADRs at rebase time (J18 #4): done, in its own commit.
+
+## Journey 24: Grown-up gate and area
+
+**What slowed it**
+
+- The design named a CDK Dialog for the gate, and a first build used one for the gate and the
+  Clear progress confirmation. The CDK uses parts of Angular's core the app did not, and the
+  build hoisted them into the initial bundle: 238 kB to 257 kB, past the 250 kB budget. The
+  mocks were redrawn as steps of one grown-up screen, `AGENTS.md`'s other choice, and the CDK
+  was removed (ADR 0028).
+- The same hoisting came back, smaller (+10 kB), from `afterNextRender` and `viewChild` in the
+  confirmation; a plain `ngAfterViewInit` focus cost nothing.
+- An IndexedDB database the spec opened and never closed blocked its own deletion, so Clear
+  progress looked as if it had not erased it.
+- `L2-037` #1 (48 px from any activity picture) needed the row under Home's top bar 48 px
+  lower; with the check card beside the group pictures, Home still fits a Pixel 7.
+
+**New lessons**
+
+1. Before adding a library to a lazy feature, build once and read the initial total: framework
+   code the library uses lands in `main` (J2 #4 again, at 20 kB).
+2. Prefer Angular APIs the app already uses in shared components; a new core API is a bundle
+   cost even when only a lazy chunk calls it.
+3. Close every IndexedDB connection a spec opens, or a delete waits for it.
+4. Pass where to go back to in the navigation state, checked against what Home's address can
+   be, so a grown-up screen can return to Home exactly as it was.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1): the entry, gate and area were drawn, then redrawn, before any code.
+- Break the rule once (J3 #5, J19 #4): Clear progress keeping one key failed the spec.
+- Measure before redesigning (J18 #1): the 48 px gap was measured at four sizes by its spec.
+- Read the initial total after each slice (J2 #4): it caught the CDK and the focus API.
