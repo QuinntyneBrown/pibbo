@@ -1256,6 +1256,10 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
   .stage:has(.rule):has(.pick) .pick { grid-area: 2 / 2; }
   .stage:has(.rule):has(.pick):not(:has(.before)) .rule { grid-column: 1 / -1; }
 }
+/* A four-sound word ("stop") keeps one row beside the pictures. */
+@media (min-width: 48rem) and (max-height: 56rem) {
+  .stage:has(.rule):has(.pick) .tiles--long .tile:not(.tile--wide) { width: var(--size-11); }
+}
 @media (max-width: 22rem) and (max-height: 38rem) {
   .stage:has(.before):has(.pick) { gap: var(--space-1); }
   .stage:has(.before):has(.pick) .pick { max-width: 14rem; }

@@ -7,7 +7,7 @@
       ['Build a sentence', 'build-a-sentence/start']
     ],
     count: [
-      ['Count the toys', 'count-the-toys/start'], ['Count and write to 20', 'count-and-write/counting'],
+      ['Count the toys', 'count-the-toys/start'], ['Count and write', 'count-and-write/start'],
       ['Which is bigger?', 'which-is-bigger/default'], ['Rocket countdown', 'rocket-countdown/start'],
       ['Counting dance', 'counting-dance/start']
     ]

@@ -29,7 +29,7 @@
     const preset = /^\d+$/.test(entered) ? Number(entered) : authoredCount;
     counted = initial ? 0 : Math.min(total, preset);
   }
-  rug.setAttribute('aria-label', 'Toys on the rug');
+  rug.setAttribute('aria-label', 'The rug, ' + total + ' toys');
   toys.forEach((toy, i) => {
     const known = i < counted;
     const image = toy.querySelector('img');
