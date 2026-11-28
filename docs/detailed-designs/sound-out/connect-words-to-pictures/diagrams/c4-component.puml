@@ -3,16 +3,20 @@
 LAYOUT_WITH_LEGEND()
 title Components — Connect words to pictures
 Container_Boundary(b, "pibbo (Angular workspace)") {
-  Component(page, "WordPicturePage", "Angular route component", "Orchestrates the round")
-  Component(view, "PairingBoardComponent", "Presentation component", "Renders targets, emits touches")
-  Component(rules, "pairingRules", "Pure domain functions", "Builds rounds, judges touches")
-  Component(fb, "RoundFeedback", "Domain service", "Praise, hint, model answer")
+  Component(page, "WordsAndPictures", "Angular route component", "Orchestrates the round, recordings and timers")
+  Component(view, "WordPictures (pb-word-pictures)", "Presentation component", "Draws .pairs--pictures, emits word and picture touches")
+  Component(rules, "word-pictures-round", "Pure domain functions", "startWordPicturesRound, holdWord, matchPicture")
+  Component(content, "WORD_PICTURES", "Bundled content", "Themes naming Sound it out's words")
   Component(audio, "AudioPlayer", "Token AUDIO_PLAYER", "One recording at a time")
   Component(rnd, "RandomSource", "Token RANDOM_SOURCE", "Injected randomness")
+  Component(clock, "Clock", "Token CLOCK", "Praise and the shake")
+  Component(pre, "AssetPreloader", "Token ASSET_PRELOADER, route scope", "Fetches the next round's assets")
 }
-Rel(page, view, "Binds state; listens to touched")
+Rel(page, view, "Binds state; listens to word and picture")
 Rel(page, rules, "Calls")
+Rel(page, content, "Reads")
 Rel(rules, rnd, "Draws from")
 Rel(page, audio, "Plays recordings")
-Rel(page, fb, "Requests praise or hint")
+Rel(page, clock, "Times praise and the shake")
+Rel(page, pre, "Preloads the next round")
 @enduml

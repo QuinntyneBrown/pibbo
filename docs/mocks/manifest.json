@@ -305,9 +305,15 @@
       "kind": "page",
       "title": "Words and pictures",
       "route": "/read/word-pictures",
-      "requirements": [],
+      "requirements": [
+        "L2-018",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "default",
+        "held",
+        "miss",
         "correct"
       ],
       "prototype_frame": "i8mQ2u4bAv95bb92nf7tc5",
