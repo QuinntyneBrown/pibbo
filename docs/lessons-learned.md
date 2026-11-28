@@ -887,3 +887,52 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Lazy routes grow the initial chunk (J2 #4): measured, reduced and recorded in ADR 0026.
 - Tag the critical path in the same change (J11 #4): finishing activity 1 and moving on is
   `@critical`.
+
+## Journey 23: Play the check game
+
+**What slowed it**
+
+- Journey 22, which this one depends on, was not built: there was no lesson content, practice
+  history or storage. The smallest store `L2-023` needs and a stand-in first lesson went into
+  ADR 0027, with remembering practice left for the repository owner to confirm.
+- Journey 22's pull request (#262) opened while this one was being built, with ADR 0026 and a
+  `ProgressStore` of the same shape. This ADR became 0027; the shared files are for whichever
+  merges second.
+- The results mock named a child and drew stars, unearned rows and a recommendation, and its
+  `retry` contradicted itself. All four breaks with the purpose were redrawn before code.
+- Long Bash heredocs with quotes failed again; so did patch scripts whose anchors Prettier had
+  re-wrapped, which left an edit half applied.
+- `checkChoice` was already exported by the compare round. The search before naming had
+  covered the other new names but not that one.
+- A spec that reloaded between 14 activities failed the network guard: fonts load lazily,
+  after `load`, and the reload cancelled them.
+- A spec read a button's label before the zoneless render and took a right answer for a miss.
+- On a phone, Home on the results also opened a new check game. `pbTap` emits on `pointerup`;
+  the route change destroyed the view before `touchend`, Angular removed the host listener
+  that cancels the synthetic click, and the click landed on Home's card under the finger.
+- The mock's layouts held four pictures a subject and five things to count. The real worst
+  cases (seven earned in one subject, 14 things on a phone on its side) overflowed.
+
+**New lessons**
+
+1. A listener that must outlive its view (cancelling a touch that leaves the page) belongs to
+   the element, not to an Angular host binding.
+2. A control that navigates needs a touch spec that checks where the child ends up: what is
+   under the finger on the next screen is part of the design.
+3. Lay a screen out for the largest data the rules allow, not for the mock's cast: compute the
+   worst case from the rules and screenshot it.
+4. Change what a spec needs inside the app; reload only when the reload is what is tested.
+5. After touching a control, expect the new state before reading anything from it.
+6. Format first, then patch, or edit with the Edit tool; a script that asserts each anchor
+   still leaves the earlier edits applied when a later one misses.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1 and on): mocks, requirement, ADR and design went in the first commit.
+- Check a layout in every phase and look at screenshots (J17 #1, J21 #3): they found the 14
+  things over the instruction, a sequence broken over two lines and a tick after a right
+  answer that the mock does not draw.
+- Build before proving a failure (J8 #1): each slice's spec failed for the expected reason.
+- Grep the flat domain API before naming (J6 #2): worked only for the names it was given.
+- Write files with the Write tool (J1, J2, J21): ignored for two heredocs, which both failed.
+- Tag the critical path in the same change (J11 #4): five questions from Home is `@critical`.

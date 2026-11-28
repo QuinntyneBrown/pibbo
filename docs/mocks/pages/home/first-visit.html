@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="home">
 <meta name="mock:state" content="first-visit">
-<meta name="mock:requirements" content="L2-024, L2-035">
+<meta name="mock:requirements" content="L2-024, L2-023, L2-035">
 <meta name="description" content="First visit: the two group pictures, Count and Read, and nothing chosen yet. The first touch unlocks sound.">
 <script src="../../assets/appearance.js"></script>
 <link rel="stylesheet" href="../../assets/tokens.css">
@@ -19,6 +19,7 @@
 <div class="home">
   <header class="home__top">
     <span class="wordmark wordmark--md" role="img" aria-label="Pibbo"><span aria-hidden="true">p</span><span class="wordmark__stem" aria-hidden="true"><span class="wordmark__seed"></span><span class="wordmark__leaf"></span></span><span aria-hidden="true">bbo</span></span>
+    <a class="check-card check-card--home press" href="../progress-check/default.html"><span class="check-card__glyph" aria-hidden="true">?</span><span class="check-card__title">What do I know?</span></a>
   </header>
   <main class="home__main" id="main" tabindex="-1" aria-labelledby="screen-title">
     <h1 id="screen-title" class="visually-hidden">Choose an activity</h1>
@@ -26,7 +27,7 @@
     <div class="home__games"></div>
   </main>
 </div>
-<p class="mock-note">Touching a group picture speaks its name (a recording) and shows its activities, at most 6 per screen. Touching an activity picture once speaks its name and opens it. Only activities that exist are shown. Every target is at least 60 × 60 px with 16 px between targets.</p>
+<p class="mock-note">Touching a group picture speaks its name (a recording) and shows its activities, at most 6 per screen. Touching an activity picture once speaks its name and opens it. Only activities that exist are shown. The check game has its own picture, “What do I know?”, which is spoken when touched and opens it. Every target is at least 60 × 60 px with 16 px between targets.</p>
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html#state-home-first-visit" aria-label="All mocks">⌂</a>
   <span class="mock-bar__screen">Home · Choose an activity</span>
