@@ -24,22 +24,20 @@
       ],
       "states": [
         "default",
-        "reading-more",
         "counting",
-        "counting-more",
-        "first-visit",
+        "lesson-start",
         "offline"
       ],
       "prototype_frame": "qWbazJPhFtQFND16jvAWTf",
       "subject": "both",
       "not_applicable": {
         "loading": "Home is in the initial bundle; it never waits on anything.",
-        "empty": "Count and Read always have at least one activity; only activities that exist are listed.",
+        "empty": "Reading and Counting always have at least one activity; only activities that exist are listed.",
         "error": "Home reads nothing that can fail."
       },
       "state_subjects": {
         "default": "read",
-        "reading-more": "read"
+        "lesson-start": "read"
       }
     },
     {

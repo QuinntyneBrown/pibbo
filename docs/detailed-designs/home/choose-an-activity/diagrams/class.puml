@@ -12,34 +12,43 @@ skinparam class {
 title Class structure — Choose an activity from Home
 
 enum GroupId {
-  Count
-  Read
+  read
+  count
 }
-class ActivityEntry {
+class Activity {
   +id: string
   +group: GroupId
-  +pictureId: string
-  +nameRecordingId: string
-  +nameText: string
-  +route: string
+  +section: string
+  +name: string
+  +glyph: string
+  +recording: string
+  +path: string
 }
 class ActivityCatalogue {
-  +groups(): GroupEntry[]
-  +activitiesIn(g: GroupId): ActivityEntry[]
-  +lessonEntry: ActivityEntry
-  +checkGameEntry: ActivityEntry
+  +groups: ActivityGroup[]
+  +activities: Activity[]
 }
-class GroupEntry {
+class ActivityGroup {
   +id: GroupId
-  +pictureId: string
-  +nameRecordingId: string
+  +name: string
+  +recording: string
 }
-class HomePage {
-  -chosenGroup: Signal<GroupId | null>
-  +onGroup(g: GroupId): void
-  +onActivity(a: ActivityEntry): void
+interface ChildProfile {
+  +name: string
+  +stars: Record<string, number>
 }
-ActivityCatalogue "1" *-- "*" ActivityEntry
-ActivityCatalogue "1" *-- "2" GroupEntry
-HomePage ..> ActivityCatalogue : reads
+class Home {
+  -chosen: Signal<ActivityGroup>
+  -sections: Signal<ActivitySection[]>
+  -lessonDone: Signal<number>
+  +chooseGroup(g: ActivityGroup): void
+  +openActivity(a: Activity): void
+  +openLesson(l: Lesson): void
+  +openCheckGame(): void
+}
+ActivityCatalogue "1" *-- "*" Activity
+ActivityCatalogue "1" *-- "2" ActivityGroup
+Home ..> ActivityCatalogue : reads
+Home ..> ChildProfile : CHILD_PROFILE (SAMPLE_CHILD)
+Home ..> ProgressStore : lesson place
 @enduml

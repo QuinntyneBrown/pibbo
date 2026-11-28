@@ -62,7 +62,7 @@ args. It is the cast, not a set of rules.
   "Progress cleared." (`cleared`). Both are steps of the screen, not dialogs: a CDK Dialog grew
   the initial bundle past its budget (ADR 0029).
 - **Child:** Maya. **Grown-up:** Dad (Add together).
-- **Stars:** 26 in total across the 21 games, in the prototype; Home shows no stars (`AGENTS.md`), so the mocks draw none.
+- **Stars:** sample data, as in the prototype: 26 in total on Home's top bar and 0 to 3 on each activity card (ADR 0035).
 - **Today's lessons:** Reading, "Sounds that team up" (letter sounds, sound it out, two
   letters one sound, rhyme time, build a sentence), 2 of 5 done. Counting, "Numbers up and
   down" (count the toys, count and write, which is bigger, rocket countdown, counting
@@ -86,6 +86,20 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
 `.pairs`, and so on). Every state of a screen is the same layout with different content.
 
 ### Where the mocks depart from the prototype
+
+- **Home is the prototype's landing page again (ADR 0035).** At the repository owner's direction
+  Home is drawn as the prototype draws it, from the narrowest phone to the widest desktop: the
+  child's name ("Maya") and stars (26, and 0 to 3 per card) as sample data, today's lesson card
+  with its dots and Keep going (Start before the first game), the "What do I know?" card, the
+  Reading / Counting switch and every activity in its section (Letters, Sounds into words, Words
+  and sentences; Counting, Numbers), with the prototype's glyphs. Home scrolls. This supersedes
+  journey 2's reconciliation and the Lesson picture, check picture, More screens
+  (`reading-more`, `counting-more`) and `first-visit` recorded below, which are kept as history.
+  The mocks keep three things the prototype lacks: the grown-up padlock beside the child's name
+  (ADR 0029), every target at least 60 px (the switch is 60 px tall, not 48), and nothing spoken
+  until the first touch. Home opens with Reading chosen (`lesson-start`); only activities that
+  exist are listed, so the prototype's six Sound it out variants are one card. The page stops
+  growing at 1280 px (`--layout-container-max`).
 
 - **Short tablet and split windows.** The progress bar and spoken prompt share the top row when height is limited. In activities such as Count the toys and Spell by sound, the picture sits beside the choices so the child can see the prompt, play and reach the answer button in one view.
 

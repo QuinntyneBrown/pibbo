@@ -165,7 +165,7 @@
   var guided = (lesson === 'read' || lesson === 'count') && Number.isInteger(current) && current >= 1 && current <= 6 &&
     Number.isInteger(game) && game >= 1 && game <= 5;
   var home = params.get('home');
-  var fromHome = ['default', 'counting', 'counting-more', 'first-visit'].includes(home);
+  var fromHome = ['default', 'counting', 'lesson-start', 'offline'].includes(home);
   var shell = document.querySelector('.shell');
 
   function pathHref(step) {
@@ -214,7 +214,7 @@
 
   var homeFocus = params.get('homeFocus');
   if (homeFocus && document.querySelector('.home')) {
-    var target = homeFocus === 'subject' ? '.switch--groups [aria-pressed="true"]'
+    var target = homeFocus === 'subject' ? '.switch--subjects [aria-pressed="true"]'
       : homeFocus === 'games' ? '.game-group__grid a' : null;
     var focusTarget = target ? document.querySelector(target) : Array.from(document.querySelectorAll('.game-card')).find(function (card) {
       return new URL(card.href).pathname.split('/').at(-2) === homeFocus;
@@ -261,7 +261,7 @@
     var button = event.target.closest('button[data-mock-href]');
     if (button) {
       var targetUrl = new URL(destination(button.dataset.mockHref));
-      if (event.detail === 0 && button.closest('.switch--groups')) targetUrl.searchParams.set('homeFocus', 'subject');
+      if (event.detail === 0 && button.closest('.switch--subjects')) targetUrl.searchParams.set('homeFocus', 'subject');
       location.assign(targetUrl.href);
       return;
     }

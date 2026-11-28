@@ -8,7 +8,10 @@ The child cannot yet read; a grown-up is nearby and is never needed to make Pibb
 adding or changing anything, ask how it helps a child count or sound out a word: if it does
 not, do not build it, and if a request works against it, say so. The app stays this small:
 
-- **Home**: the child chooses an activity. Two pictures, each spoken when touched.
+- **Home**: the child chooses an activity. Decided by the repository owner (ADR 0035): Home is
+  the prototype's landing page, with a sample child's name and stars that are never asked for,
+  earned or kept, today's lesson, the check card, Reading / Counting and the activities in
+  sections. It scrolls; each picture is spoken when touched.
 - **Count**: the child touches each thing and Pibbo says the number ("one, two, three"), then
   chooses the numeral for how many. One touch, one number: a second touch never counts twice.
 - **Sound Out**: the child touches each letter of a short word to hear its sound, then blends

@@ -36,3 +36,4 @@
 | [0032](0032-offline-after-first-use.md) | Offline after first use: a small service worker of Pibbo's own, bounded to Pibbo's files | Accepted |
 | [0033](0033-publish-to-azure-static-web-apps-from-main.md) | Every commit to main is published to Azure Static Web Apps | Accepted |
 | [0034](0034-build-a-sentence-round.md) | Build a sentence: put the words on a strip, then Check | Accepted |
+| [0035](0035-home-is-the-prototype-landing-page.md) | Home is the prototype's landing page: sample name and stars, lesson and check cards, sections that scroll | Accepted |
