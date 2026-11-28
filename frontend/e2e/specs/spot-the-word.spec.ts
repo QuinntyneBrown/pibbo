@@ -141,6 +141,12 @@ test.describe('Spot the word: finding the word', () => {
     const next = await spot.word();
     await expect.poll(async () => (await spoken.recordings()).slice(-3)).toEqual(ask(next));
   });
+});
+
+// Seed 7 asks "the" first, and without repetition the next four rounds would ask only "is"
+// and "a" (found offline from the fixture's mulberry32): only the rule brings "the" back.
+test.describe('Spot the word: a missed word comes back', () => {
+  test.use({ seed: 7 });
 
   test('Given a word missed in a round, when the next rounds are played, then it is asked again in one of them; after five rounds Next returns to Home with Read chosen', async ({
     page,
@@ -149,6 +155,7 @@ test.describe('Spot the word: finding the word', () => {
     const home = new HomePage(page);
     await spot.openFromHome();
     const missed = await spot.word();
+    expect(missed).toBe('the');
     await spot.touch(spot.words.nth(await spot.otherThan(missed)));
 
     const asked: string[] = [];
