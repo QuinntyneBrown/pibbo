@@ -1,7 +1,10 @@
 # Deploying Pibbo
 
-Pibbo is a static site: `cd frontend && npm ci && npm run build` writes it to
-`frontend/dist/pibbo/browser/`. There is no backend.
+Pibbo's app is a static site: `cd frontend && npm ci && npm run build` writes it to
+`frontend/dist/pibbo/browser/`. It does not call the content service, which is deployed on its
+own: see [`backend/README.md`](../backend/README.md) for its settings and
+[`backend/deploy/`](../backend/deploy/) for the stack and the script that deploys it with a
+readiness gate and automatic rollback ([ADR 0032](adr/0032-content-backend.md)).
 
 ## What the host must do
 

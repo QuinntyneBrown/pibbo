@@ -50,7 +50,7 @@ The child uses Pibbo directly; a grown-up is beside or nearby and is not needed 
 
 ### Containers
 
-The feature runs in the `pibbo` single-page application. Content is bundled with the app; there is no backend, and nothing a child does leaves the device.
+The feature runs in the `pibbo` single-page application. Content is bundled with the app; the frontend does not call the backend (ADR 0032), and nothing a child does leaves the device.
 
 ![C4 container view for spell a word by sound](diagrams/c4-container.png)
 

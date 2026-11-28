@@ -19,7 +19,7 @@ The feature is a vertical slice through the Angular workspace: the page in the `
 - **`COUNT_AND_WRITE`**: content in `@pibbo/domain`: the numbers (the cast, 14 and 7, until the range is decided), the toys, the instructions and their recordings.
 - **`AudioPlayer`**: contract in `@pibbo/api` bound to `AUDIO_PLAYER`. Playing a recording stops the one before it; a recording that cannot play resolves as `unavailable` and the screen already shows the text.
 
-Nothing is fetched from anywhere but Pibbo's own origin, and nothing a child does leaves the device. There is no backend.
+Nothing is fetched from anywhere but Pibbo's own origin, and nothing a child does leaves the device. The frontend does not call the backend (ADR 0032).
 
 ## Requirements
 

@@ -20,7 +20,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate next)
                 headers.ContentSecurityPolicy = ContentSecurityPolicy;
                 headers.XContentTypeOptions = "nosniff";
                 headers["Referrer-Policy"] = "no-referrer";
-                headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), interest-cohort=()";
+                headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
                 headers["Cross-Origin-Opener-Policy"] = "same-origin";
                 headers.StrictTransportSecurity = StrictTransportSecurity;
                 return Task.CompletedTask;

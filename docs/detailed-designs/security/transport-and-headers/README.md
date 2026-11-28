@@ -6,7 +6,7 @@ Every response is served over HTTPS with HSTS, a strict Content-Security-Policy 
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend exists only once the ADR required by `L2-028` is accepted.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0032](../../../adr/0032-content-backend.md) records.
 
 - **`UseHttpsRedirection / UseHsts`** — ASP.NET Core middleware; HSTS max-age 31536000 or more.
 - **`SecurityHeadersMiddleware`** — adds CSP (`default-src 'self'`, no `unsafe-inline` script, `frame-ancestors 'none'`), `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`.
@@ -59,3 +59,11 @@ Options classes bind from configuration documented with the deployment.
 HTTP redirects to HTTPS; headers are added to every response; excess requests get 429.
 
 ![Sequence for a request through the hardened pipeline](diagrams/sequence-request-pipeline.png)
+
+## As built (journey 27)
+
+- HTTP is redirected to HTTPS with 308 (`Transport:RequireHttps`, on by default); health probes and the metrics scrape are not redirected. HSTS is one year with subdomains.
+- `SecurityHeadersMiddleware` sends a CSP of `default-src 'self'` and `frame-ancestors 'none'` with no `unsafe-inline`, `nosniff`, `no-referrer`, a Permissions-Policy and COOP on every response, errors included.
+- CORS allows only `Cors:FrontendOrigin`, for GET and HEAD, and none when it is empty.
+- The rate limit is 300 requests a minute for each client address, in memory only (`RateLimit:RequestsPerMinute`); the 429 carries `Retry-After`. Probes are not counted.
+- Acceptance tests: `TransportAndHeadersTests.cs`.

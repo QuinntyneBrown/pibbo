@@ -1050,3 +1050,50 @@ One entry per journey, newest last. Before a journey, read these and apply the o
    before reading what was played.
 3. Copying every design token into the app broke the initial bundle budget. The app declares only
    the tokens its styles use.
+
+## Journey 27: Content backend
+
+**What slowed it**
+
+- The ADR gate came first and was right to: the backend is the first part of Pibbo that could
+  keep something about a child. The owner then set the scope in four short messages (build it,
+  no OIDC, a database, MediatR, Serilog and FluentValidation, then everything left), and an
+  early MVP that dropped what the designs named had to be redone.
+- Serilog put the request path and request id on every event through ASP.NET Core's scope. The
+  privacy test written before Serilog caught it; an enricher now takes them off.
+- A route's `Accepts` metadata made routing answer 415 by Content-Type before authentication
+  ran, so a request with no token got 415, not 401.
+- On a fresh start the content file was published after a version an editor had just
+  published, so the older version became the newest. Publishing now brings the store up to
+  date first.
+- The first "broken" release in the rollback check was not broken: its database already held a
+  good version. The check proved nothing until the release really could not become ready.
+- `openapi-typescript` needs TypeScript 5 and the frontend is on 6; a small generator that
+  stops on unknown schema shapes replaced it.
+- `main` moved 82 commits during the journey and took ADR 0022, so the backend ADR became 0032,
+  and GitHub ran no CI on the PR while it conflicted.
+- The sandbox could not run a full `docker build` (NuGet behind its TLS proxy) nor route
+  through Swarm's virtual IP; the image was checked from a local publish and traffic through
+  `tasks.api`.
+
+**New lessons**
+
+1. When the owner names libraries or a design names components, build those or ask first. A
+   "simpler" stack is a decision, not a default.
+2. Write the privacy tests before the logging and metrics libraries go in, and assert on every
+   property an event carries, not only its message.
+3. Prove a rollback with a release that truly cannot become ready, and watch traffic through
+   the update, not only the final state.
+4. Before choosing an ADR number, fetch `main`: numbers are taken by journeys running at the
+   same time.
+5. A PR that conflicts with its base runs no `pull_request` CI: merge `main` before reading a
+   missing run as green.
+
+**Earlier lessons applied**
+
+- The Permissions-Policy lesson from the explainer videos: the backend dropped
+  `interest-cohort` too.
+- Give each checkout its own e2e port (J11–J14): the `main` worktree used to compare failing
+  specs ran beside this one without clashing.
+- Run the whole suite after merging `main` (journeys 24 and 26 fix): it showed two specs that
+  fail on `main` itself or under load, and none from this journey.

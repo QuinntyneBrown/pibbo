@@ -8,11 +8,11 @@ The content service is the read-only API that gives the frontend its activity co
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend exists only once the ADR required by `L2-028` is accepted.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0032](../../../adr/0032-content-backend.md) records.
 
 - **`ContentController`** — ASP.NET Core controller exposing `GET /api/v1/content/manifest`, `GET /api/v1/activities/{id}`, `GET /api/v1/lessons/{id}`. It validates the id route constraint and sends one MediatR request.
 - **`GetManifestQuery / GetActivityQuery / GetLessonQuery`** — MediatR requests with handlers in `Pibbo.Application`.
-- **`IContentStore`** — abstraction over the content store; the store's technology is `<TO SUPPLY>`.
+- **`IContentStore`** — abstraction over the content store; the store is EF Core over SQLite (journey 27).
 - **`OpenAPI document`** — published schema; the Angular client types in `@pibbo/api` are generated from it and the build fails on drift.
 
 ## Requirements
@@ -62,3 +62,10 @@ Ids are validated before any lookup; misses become RFC 9457 problem details.
 Invalid ids return 400 without a lookup; unknown ids 404; the manifest answers 304 to a matching If-None-Match.
 
 ![Sequence for get an activity and the manifest](diagrams/sequence-get-activity.png)
+
+## As built (journey 27)
+
+- The endpoints are minimal APIs (`Pibbo.Api/Endpoints/ContentEndpoints.cs`), not a controller; each sends one MediatR query (`GetManifestQuery`, `GetActivityQuery`, `GetLessonQuery`). The id is checked by a FluentValidation validator in a pipeline behaviour, so a malformed id reaches no handler and no database.
+- `IContentStore` is EF Core over SQLite, with migrations. The reviewed `backend/content/content.json` is published into it as a new version when it changes; the newest version is served. The ETag is a hash of the content itself.
+- The contract is `backend/openapi/v1.json`, with descriptions from the code's doc comments. `tools/content-api/generate-client.mjs` generates `@pibbo/api`'s `content-api.ts` from it, and every frontend build fails if they drift (#5). The frontend does not call the API yet.
+- Acceptance tests: `backend/tests/Pibbo.Api.AcceptanceTests/ContentApiTests.cs`, `ContentDatabaseTests.cs`, `PublishedContractTests.cs`.

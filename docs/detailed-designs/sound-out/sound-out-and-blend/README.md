@@ -22,7 +22,7 @@ The feature is a vertical slice through the Angular workspace: the page in the `
 - **`AssetPreloader`** — contract in `@pibbo/api` bound to `ASSET_PRELOADER`; fetches the next round's picture and recordings while the child plays, keeps at most two rounds and aborts on destroy.
 - **`AudioPlayer`** — contract in `@pibbo/api` bound to `AUDIO_PLAYER`. Playing a recording stops the one before it; a recording that cannot play resolves as `failed` and the screen already shows what it would have said.
 
-There is no backend: words, pictures and recordings are bundled with the app (ADR 0003, ADR 0008). The diagrams below predate this and still draw `Pibbo.Api` and a service worker; they are to be redrawn.
+The frontend does not call the backend (ADR 0032): words, pictures and recordings are bundled with the app (ADR 0003, ADR 0008). The diagrams below predate this and still draw `Pibbo.Api` and a service worker; they are to be redrawn.
 
 ## Requirements
 
