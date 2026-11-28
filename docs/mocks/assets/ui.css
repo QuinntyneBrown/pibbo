@@ -1316,7 +1316,7 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
 [data-theme="dark"] :is(.hear, .compare__number, .dance__number, .tally__number, .sum__answer, .digit-pad__slot--filled) {
   color: var(--color-count-fg);
 }
-[data-theme="dark"] :is(.speaker, .hear--read) { color: var(--color-read-fg); }
+[data-theme="dark"] :is(.speaker, .hear--read, .box__sound) { color: var(--color-read-fg); }
 [data-theme="dark"] :is(.compare__card--won .compare__number, .answer-bar--correct .answer-bar__message, .answer-bar--right .answer-bar__message,
   .box--right, .sum__answer--right, .digit-pad__slot--answer) { color: var(--color-success-fg); }
 [data-theme="dark"] .digit-pad__slot--filled:not(.digit-pad__slot--answer) { box-shadow: inset 0 0 0 3px currentColor; }
