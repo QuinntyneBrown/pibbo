@@ -121,6 +121,24 @@ test.describe('Count the toys: one touch, one number', () => {
     expect(await spoken.recordings()).toEqual([...HOME, TAP_EACH, number(1), number(2), number(3)]);
   });
 
+  test('Given a tablet or touchscreen laptop that reports a fingertip as 64 px across, when the child taps a toy, then it is counted and its number is spoken', async ({
+    page,
+    spoken,
+  }) => {
+    test.skip(
+      !(await page.evaluate(() => matchMedia('(pointer: coarse)').matches)),
+      'touch is for the phone',
+    );
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+
+    await count.fingertipTap(count.toy(0));
+
+    await expect(count.tally).toHaveText('1');
+    await expect(count.toy(0)).toHaveClass(/rug__toy--counted/);
+    expect((await spoken.recordings()).slice(3)).toEqual([number(1)]);
+  });
+
   test('Given two fingers touch two uncounted toys at the same instant, when the touches are processed, then each is counted once and the count rises by exactly 2', async ({
     page,
     spoken,

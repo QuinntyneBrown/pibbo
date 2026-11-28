@@ -28,11 +28,14 @@ a placeholder route until each activity exists. No recordings of Pibbo's voice e
 5. **Sound is unlocked by the first touch** simply by playing that touch's recording inside the
    touch's event handler; Pibbo uses one `HTMLAudioElement` (no `AudioContext` yet).
 6. **The tap rule** (`pbTap` in `@pibbo/components`, rule `tapVerdict` with unit tests): a touch
-   counts as a tap when its contact is no larger than 48 × 48 CSS px (larger is a palm), it moved
+   counts as a tap when its contact is no larger than 120 × 120 CSS px (larger is a palm), it moved
    less than 12 px and it was held less than 700 ms (longer is a long press). Each pointer is
    judged on its own, so a resting palm never blocks another finger. Mouse and keyboard
    activation arrive as `click` and always count. `contextmenu` is suppressed on targets.
-   The thresholds are first guesses to tune on real devices.
+   The thresholds are first guesses to tune on real devices. The palm limit was first 48 px:
+   on a Surface laptop and on tablets every fingertip (9-12 mm, reported as 50-65 CSS px on
+   those dense screens) was judged a palm and no tap worked (issue #272). 120 px is about
+   19-32 mm depending on the screen: above any fingertip, below any palm.
 
 ## Consequences
 
