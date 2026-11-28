@@ -588,6 +588,42 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Read shown text through `expect.poll` (J13 #3): spoken recordings are polled.
 - Tag the critical path in the same change (J11 #4): choosing st is `@critical`.
 
+## Journey 16: Silent-e words
+
+**What slowed it**
+
+- The work stopped half way and `main` moved under it twice: the mocks were aligned with the
+  prototype, then redrawn responsively, both touching every Sound it out page. Each time the
+  silent-e edits conflicted line for line, because a mock page is one long line of markup.
+- The prompt's slices again left a criterion out (`L2-016` #3, the cap picture). The rules
+  already offered the cap picture; no spec proved it, and the strip beside the tiles showed the
+  cape picture while the child was asked to pick it.
+- An eighth word moved the seeds again: the first-two choice order changed, and the page
+  object read "cap" for "cape", so a five-round spec answered the wrong picture.
+- The project pins a Playwright whose Chromium build was not the one installed.
+
+**New lessons**
+
+1. Reapply mock edits with a script over the other side's pages (take theirs, then replay the
+   edit), and regenerate the gallery and coverage with `check_mocks.py --write`; never resolve
+   the generated files by hand.
+2. Keep a mock branch short-lived. A long-open branch that edits shared mock pages pays for
+   every alignment on `main`.
+3. Whatever is shown beside a question must not be its answer: check the picking state of a
+   new kind of word, not only its sounding state.
+4. A page object helper that names the word (`word()`) must name the word the round asks for,
+   not only the letters drawn.
+
+**Earlier lessons applied**
+
+- Read the acceptance criteria, not only the slices (J15 #1): criterion 3 was found there.
+- Give a round-walking helper the new step with the step (J15 #2): `soundAll` adds the e;
+  `word()` was missed and fixed here.
+- Measure on 320 × 640, 360 × 640 and 640 × 360 (J9 #1, J11 #1): the four tiles keep one row.
+  At 320 × 568 Sound it out overlaps for every word, on `main` too; it is left to the
+  responsive mocks and journey 26.
+- Tag the critical path in the same change (J11 #4): adding the e is `@critical`.
+
 ## Fix: the e2e network guard reported requests as unanswered now and then
 
 **What slowed it**
