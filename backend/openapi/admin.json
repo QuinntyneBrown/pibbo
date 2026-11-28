@@ -200,9 +200,11 @@
         "type": "object",
         "properties": {
           "path": {
-            "type": "string"
+            "type": "string",
+            "description": "The path it is served at."
           }
-        }
+        },
+        "description": "A stored picture or recording."
       },
       "HttpValidationProblemDetails": {
         "type": "object",
@@ -369,7 +371,8 @@
               "$ref": "#/components/schemas/PublishLessonRequest"
             }
           }
-        }
+        },
+        "description": "A content version to publish: the same shape as \u0060content.json\u0060."
       },
       "PublishedVersionResponse": {
         "required": [
@@ -382,9 +385,11 @@
             "type": "string"
           },
           "eTag": {
-            "type": "string"
+            "type": "string",
+            "description": "The ETag the manifest is served with from now on."
           }
-        }
+        },
+        "description": "A published content version."
       },
       "PublishLessonRequest": {
         "type": "object",

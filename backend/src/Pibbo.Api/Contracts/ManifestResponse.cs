@@ -33,17 +33,22 @@ public sealed record ManifestResponse
 /// <summary>An activity as the manifest lists it.</summary>
 public sealed record ManifestActivityResponse
 {
+    /// <summary>The activity's id: GET /api/v1/activities/{id} returns it.</summary>
     public required string Id { get; init; }
 
+    /// <summary>The id of the group Home shows it in.</summary>
     public required string Group { get; init; }
 
+    /// <summary>The name, shown and given as the text alternative.</summary>
     public required string Name { get; init; }
 }
 
 /// <summary>A lesson as the manifest lists it.</summary>
 public sealed record ManifestLessonResponse
 {
+    /// <summary>The lesson's id: GET /api/v1/lessons/{id} returns it.</summary>
     public required string Id { get; init; }
 
+    /// <summary>The name, shown and given as the text alternative.</summary>
     public required string Name { get; init; }
 }
