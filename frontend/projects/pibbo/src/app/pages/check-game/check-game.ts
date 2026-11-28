@@ -25,10 +25,12 @@ import {
 } from '@pibbo/components';
 import {
   ACTIVITY_CATALOGUE,
+  addActivities,
   CHECK_GAME,
   canCheckChoice,
   checkQuestionRound,
   checkResults,
+  EARNED_KEY,
   CHECKED_ACTIVITIES,
   chooseAnswer,
   isCheckOver,
@@ -180,7 +182,14 @@ export class CheckGame {
   private finish(): void {
     const results = checkResults(this.earned, ACTIVITY_CATALOGUE.activities, CHECK_GAME);
     this.results.set(results);
+    this.keep();
     void this.sayResults(results.spoken);
+  }
+
+  /** Saved on this device only: the ids of what was ever earned, and nothing else. */
+  private keep(): void {
+    const kept = this.progress.read(EARNED_KEY);
+    this.progress.write(EARNED_KEY, addActivities(kept, this.earned, CHECKED_ACTIVITIES));
   }
 
   /** The title and each name in turn, until a touch or leaving stops them. */

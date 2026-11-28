@@ -488,3 +488,66 @@ for (const size of [
     });
   });
 }
+
+test.describe('Check game: what the device keeps', () => {
+  test('Given a check with one activity missed, when the results are shown, then only the ids of what was practised and earned are on the device', async ({
+    page,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openPractised(['which-is-bigger', 'rhyme-time']);
+    await check.play((asked) => (asked.startsWith('Which number') ? 'miss' : 'earn'));
+
+    expect(await check.storedKeys()).toEqual(['pibbo:earned', 'pibbo:practised']);
+    expect(await check.stored('earned')).toEqual({ version: 1, activities: ['rhyme-time'] });
+  });
+
+  test('Given something earned before, when a later check misses everything, then nothing is taken away', async ({
+    page,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openWithStored('earned', '{"version":1,"activities":["add-together"]}');
+    await check.openPractised(['which-is-bigger']);
+    await check.play(() => 'miss');
+
+    expect(await check.stored('earned')).toEqual({ version: 1, activities: ['add-together'] });
+  });
+
+  test('Given a damaged record of what was earned, when a check ends, then it is replaced by what was just earned', async ({
+    page,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openWithStored('earned', '<b>nonsense');
+    await check.openPractised(['which-is-bigger']);
+    await check.play();
+
+    expect(await check.stored('earned')).toEqual({ version: 1, activities: ['which-is-bigger'] });
+  });
+
+  test('Given a check left before its end, when the device is read, then nothing earned is kept', async ({
+    page,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openPractised(['which-is-bigger']);
+    await check.answer((await check.solve()).right);
+    await check.touch(check.leave);
+
+    expect(await check.storedKeys()).toEqual(['pibbo:practised']);
+  });
+
+  test.describe('on a device that refuses to keep anything', () => {
+    test.beforeEach(async ({ page }) => {
+      await new CheckGamePage(page).refuseStorage();
+    });
+
+    test('Given storage that is off, when the child plays from Home to the end, then the first lesson is asked and the results are shown', async ({
+      page,
+    }) => {
+      const check = new CheckGamePage(page);
+      await check.openFromHome();
+      const asked = await check.play();
+
+      for (const instruction of asked) expect(instruction).toMatch(FIRST_LESSON);
+      await expect(check.resultsTitle).toHaveText('Look what you can do!');
+    });
+  });
+});

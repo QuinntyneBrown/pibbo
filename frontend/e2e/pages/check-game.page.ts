@@ -59,7 +59,7 @@ export class CheckGamePage {
   async openWithStored(key: string, value: string): Promise<void> {
     const home = new HomePage(this.page);
     if (this.page.url() === 'about:blank') await home.open();
-    else await this.touch(this.leave);
+    else if (await this.root.isVisible()) await this.touch(this.leave);
     await expect(this.card()).toBeVisible();
     await this.page.evaluate(([k, v]) => localStorage.setItem(`pibbo:${k}`, v), [
       key,
@@ -82,6 +82,17 @@ export class CheckGamePage {
   /** The names of everything kept on the device. */
   async storedKeys(): Promise<string[]> {
     return this.page.evaluate(() => Object.keys(localStorage).sort());
+  }
+
+  /** From the next load, every read and write of on-device storage throws. */
+  async refuseStorage(): Promise<void> {
+    await this.page.addInitScript(() => {
+      const refuse = () => {
+        throw new DOMException('off', 'SecurityError');
+      };
+      Storage.prototype.getItem = refuse;
+      Storage.prototype.setItem = refuse;
+    });
   }
 
   /** Opens the check game the way a child does: its picture on Home. */
