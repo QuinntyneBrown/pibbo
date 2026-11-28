@@ -114,6 +114,14 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   The number line's labels are 44 units (were 34) so they stay readable on a phone. The number
   line, the three choices and the retry line stay as drawn, and `L2-007` was brought in line
   (ADR 0012). Home's Count group lists Skip-count.
+- **Add together reconciled with `AGENTS.md` and `L2-008` (journey 9).** The prototype named the
+  players "Maya" and "Dad"; Pibbo asks a child for nothing about themselves and `L2-008` #1
+  shows a turn by a symbol and colour, never a name, so the players are a star and a moon
+  (`.turn--star`, `.turn--moon`), and the player whose turn it is has a ring
+  (`.player[aria-current="step"]`). The + and − buttons (`.round-btn`) were 44 px, 8 px apart;
+  they are 64 px, 16 px apart. The turns are taken one after the other: `start` is the star's
+  turn, the new `moon-turn` the moon's, each ended by Done, and the three choices appear only
+  when both sets are shown (`default`). Home's Count group lists Add together (ADR 0013).
 
 ## Open questions
 

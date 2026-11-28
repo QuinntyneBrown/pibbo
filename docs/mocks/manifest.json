@@ -173,9 +173,10 @@
       "kind": "page",
       "title": "Add together",
       "route": "/count/add",
-      "requirements": [],
+      "requirements": ["L2-008", "L2-025"],
       "states": [
         "start",
+        "moon-turn",
         "default",
         "picked",
         "correct",

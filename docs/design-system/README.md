@@ -67,6 +67,7 @@ a transcription of `docs/mocks/assets/tokens.css`.
 | Added `.ten-frame__dot--extra`; a card holds two `.ten-frame`s above 10 | `L2-005` #2 highlights the extra things after a wrong choice, by shape as well as colour; `L2-005` covers 0 to 20. Added to the mocks first (journey 6, ADR 0010). |
 | Added `.launch__rocket--1` to `--9` | `L2-006` starts anywhere from 5 to 20; the rocket rises in tenths of the way to 0, 15 px each. Added to the mocks first (journey 7, ADR 0011). |
 | Added `.switch--step`; `.number-line__label` 44 units | The prototype's step switch was 44 px, 4 px apart, colour only; it is 64 px, 16 px apart, with a tick. Labels grew so a phone can read them. Added to the mocks first (journey 8, ADR 0012). |
+| Added `.turn--star`, `.turn--moon` and `.player[aria-current="step"]`; `.round-btn` 64 px, 16 px apart | The prototype named the players and its + and − were 44 px, 8 px apart. A turn is shown by a symbol and colour, never a name (`L2-008`). Added to the mocks first (journey 9, ADR 0013). |
 
 ## Open questions
 
