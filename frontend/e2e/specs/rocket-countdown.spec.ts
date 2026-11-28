@@ -37,7 +37,7 @@ test.describe('Rocket countdown', () => {
     await expect.poll(() => spoken.recordings()).toEqual([...HOME, number(10), ASK]);
   });
 
-  test('Given start 10, when the child chooses 9, 8 ... 0 in order, then each number is spoken as chosen and shown on the track, praise plays at 0, and Next starts the next round', async ({
+  test('Given start 10, when the child chooses 9, 8 ... 0 in order, then each number is spoken as chosen and shown on the track, praise plays at 0, and Next starts the next round @critical', async ({
     page,
     spoken,
   }) => {

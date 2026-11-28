@@ -19,7 +19,7 @@ const upTo = (step: number, last: number) =>
 test.describe('Skip-count', () => {
   test.use({ seed: BY_FIVES });
 
-  test('Given a round by 5s, when it begins, then "Hop by 5s" is spoken and shown, the line starts at 0 and three choices are offered', async ({
+  test('Given a round by 5s, when it begins, then "Hop by 5s" is spoken and shown, the line starts at 0 and three choices are offered @critical', async ({
     page,
     spoken,
   }) => {

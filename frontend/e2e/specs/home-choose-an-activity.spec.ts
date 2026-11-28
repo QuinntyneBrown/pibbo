@@ -108,7 +108,7 @@ test.describe('Home: choose an activity', () => {
     await expectTargetsSizedAndApart(home);
   });
 
-  test('Given the counting activities, when the child touches an activity picture once, then its name is spoken and it opens', async ({
+  test('Given the counting activities, when the child touches an activity picture once, then its name is spoken and it opens @critical', async ({
     page,
     spoken,
   }) => {

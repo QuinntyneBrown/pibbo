@@ -3,7 +3,7 @@ import { test, expect } from '../fixtures/test';
 import { HomePage } from '../pages/home.page';
 
 test.describe('Home shell', () => {
-  test('Given a child opens Pibbo, when Home loads, then the shell shows with nothing to scroll and nothing leaving localhost', async ({
+  test('Given a child opens Pibbo, when Home loads, then the shell shows with nothing to scroll and nothing leaving localhost @critical', async ({
     page,
     spoken,
   }) => {

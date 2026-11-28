@@ -46,7 +46,7 @@ test.describe('Which is bigger', () => {
     await expect.poll(() => spoken.recordings()).toEqual([...HOME, ASK, number(6), number(9)]);
   });
 
-  test('Given 6 and 9 are shown, when the child touches 9 and then Check, then "nine is bigger than six" is spoken and shown, praise plays, and Next starts the next round', async ({
+  test('Given 6 and 9 are shown, when the child touches 9 and then Check, then "nine is bigger than six" is spoken and shown, praise plays, and Next starts the next round @critical', async ({
     page,
     spoken,
   }) => {

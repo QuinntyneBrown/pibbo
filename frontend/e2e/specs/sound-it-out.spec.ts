@@ -132,7 +132,7 @@ test.describe('Sound it out: blending', () => {
 });
 
 test.describe('Sound it out: choosing the picture', () => {
-  test('Given three pictures, when the child chooses the right one and touches Check, then it is highlighted, brief praise plays, and Next starts the next round', async ({
+  test('Given three pictures, when the child chooses the right one and touches Check, then it is highlighted, brief praise plays, and Next starts the next round @critical', async ({
     page,
     spoken,
   }) => {

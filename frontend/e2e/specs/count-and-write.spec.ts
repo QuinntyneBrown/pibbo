@@ -145,7 +145,7 @@ test.describe('Count and write: write the numeral with digit tiles', () => {
       .toEqual([...HOME, TAP_EACH, ...oneTo(14), WRITE, number(1), number(4)]);
   });
 
-  test('Given the count is 14, when the child touches 1 then 4 and then Check, then "fourteen" is spoken and the answer is accepted', async ({
+  test('Given the count is 14, when the child touches 1 then 4 and then Check, then "fourteen" is spoken and the answer is accepted @critical', async ({
     page,
     spoken,
   }) => {

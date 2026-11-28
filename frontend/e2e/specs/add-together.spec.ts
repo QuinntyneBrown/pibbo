@@ -83,7 +83,7 @@ test.describe('Add together', () => {
     await expect(add.choice(7)).toBeEnabled();
   });
 
-  test('Given the total is 7, when 7 is chosen and checked, then "3 and 4 make 7! Great teamwork." is spoken and shown, with no winner, loser or score, and Next starts a new round', async ({
+  test('Given the total is 7, when 7 is chosen and checked, then "3 and 4 make 7! Great teamwork." is spoken and shown, with no winner, loser or score, and Next starts a new round @critical', async ({
     page,
     spoken,
   }) => {

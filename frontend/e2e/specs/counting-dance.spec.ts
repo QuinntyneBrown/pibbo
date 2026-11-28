@@ -14,7 +14,7 @@ const SLOW = 900;
 const FAST = 600;
 
 test.describe('Counting dance', () => {
-  test('Given the dance has started, when each beat plays, then the next number is spoken, shown and marked, the figure moves, and at 10 "You danced all the way to 10!" is spoken and shown', async ({
+  test('Given the dance has started, when each beat plays, then the next number is spoken, shown and marked, the figure moves, and at 10 "You danced all the way to 10!" is spoken and shown @critical', async ({
     page,
     spoken,
   }) => {

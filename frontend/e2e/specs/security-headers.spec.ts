@@ -3,7 +3,7 @@ import { test, expect } from '../fixtures/test';
 import { HomePage } from '../pages/home.page';
 
 test.describe('Security headers', () => {
-  test('Given Home is requested, when the response is inspected, then it allows only Pibbo’s own origin', async ({
+  test('Given Home is requested, when the response is inspected, then it allows only Pibbo’s own origin @critical', async ({
     page,
   }) => {
     const home = new HomePage(page);

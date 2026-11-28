@@ -181,7 +181,7 @@ test.describe('Count the toys: answer how many', () => {
 });
 
 test.describe('Count the toys: praise', () => {
-  test('Given numerals offered, when the child chooses the right one and touches Check, then brief praise plays, lasts no more than 1.5 s, and Next is accepted during it', async ({
+  test('Given numerals offered, when the child chooses the right one and touches Check, then brief praise plays, lasts no more than 1.5 s, and Next is accepted during it @critical', async ({
     page,
     spoken,
   }) => {

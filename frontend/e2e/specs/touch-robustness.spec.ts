@@ -6,7 +6,7 @@ import { CountTheToysPage } from '../pages/count-the-toys.page';
 test.describe('Touch robustness on Home', () => {
   test.skip(({ hasTouch }) => !hasTouch, 'touch is for the phone');
 
-  test('Given a palm resting on the screen edge, when another finger taps the Count picture, then the tap is handled and the palm activates nothing', async ({
+  test('Given a palm resting on the screen edge, when another finger taps the Count picture, then the tap is handled and the palm activates nothing @critical', async ({
     page,
     spoken,
   }) => {
