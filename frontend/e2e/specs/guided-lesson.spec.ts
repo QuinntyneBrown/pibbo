@@ -191,9 +191,7 @@ test.describe('Guided lesson: resuming on the same device', () => {
 });
 
 test.describe('Guided lesson: an activity that does not exist yet', () => {
-  // The reading lesson names Build a sentence (journey 20) before it exists (ADR 0026). When it
-  // is built, name another unknown activity here.
-  test('Given the reading lesson names an unknown activity, when it runs, then that step is left off the path and a client warning with no child data is logged', async ({
+  test('Given the reading lesson, when it opens, then its five steps end with Build a sentence and nothing is warned', async ({
     page,
   }) => {
     const lesson = new LessonPage(page);
@@ -201,12 +199,29 @@ test.describe('Guided lesson: an activity that does not exist yet', () => {
 
     await lesson.open('read');
 
-    await expect(lesson.steps).toHaveCount(4);
-    await expect(lesson.name(4)).toHaveText('Rhyme time');
-    await expect(lesson.path).toHaveAttribute('aria-label', '4 games in order');
+    await expect(lesson.steps).toHaveCount(5);
+    await expect(lesson.name(5)).toHaveText('Build a sentence');
+    await expect(lesson.path).toHaveAttribute('aria-label', '5 games in order');
+    expect(warnings).toEqual([]);
+  });
+
+  // Every activity the shipped lessons name exists, so the lesson is made to name one that
+  // does not for this spec (ADR 0034 #8).
+  test('Given the reading lesson names an unknown activity, when it runs, then that step is left off the path and a client warning with no child data is logged', async ({
+    page,
+  }) => {
+    const lesson = new LessonPage(page);
+    const warnings = lesson.warnings();
+    await lesson.nameUnknownActivity();
+
+    await lesson.open('read');
+
+    await expect(lesson.steps).toHaveCount(5);
+    await expect(lesson.name(5)).toHaveText('Build a sentence');
+    await expect(lesson.path).toHaveAttribute('aria-label', '5 games in order');
     await expect
       .poll(() => warnings)
-      .toEqual(['Lesson "read" names an unknown activity "build-a-sentence"; it is skipped.']);
+      .toEqual(['Lesson "read" names an unknown activity "make-a-story"; it is skipped.']);
   });
 });
 

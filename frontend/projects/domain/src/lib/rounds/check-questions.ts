@@ -11,6 +11,7 @@ import { SPOT } from '../sounds/common-words-content';
 import { LETTER_FORMS } from '../sounds/letter-forms-content';
 import { LETTER_SOUNDS } from '../sounds/letter-sounds-content';
 import { RHYMES } from '../sounds/rhymes-content';
+import { SENTENCES } from '../sounds/sentences-content';
 import { SOUND_OUT } from '../sounds/sound-out-content';
 import { WORD_PICTURES } from '../sounds/word-pictures-content';
 import { CHECK_GAME, type CheckLine } from './check-game-content';
@@ -300,6 +301,29 @@ function spot(random: RandomSource): Asked {
   };
 }
 
+/** A sentence shown without its last word: which word comes next? (ADR 0034). */
+function sentence(random: RandomSource): Asked {
+  const asked = pickOne(random, SENTENCES.sentences);
+  const answer = asked.words.at(-1)!;
+  const others = [
+    asked.extra,
+    ...SENTENCES.sentences.filter((s) => s !== asked).map((s) => s.words.at(-1)!),
+  ].filter((w) => w.text !== answer.text);
+  const start = asked.words
+    .slice(0, -1)
+    .map((w) => w.text)
+    .join(' ');
+  return {
+    text: CHECK_GAME.comesNext.text,
+    spoken: [CHECK_GAME.comesNext.recording],
+    show: { kind: 'text', label: `the sentence ${start}`, text: `${start} …` },
+    choices: three(random, answer, others).map((w) => written(w.text)),
+    answer: answer.text,
+    hint: hint(CHECK_GAME.hints.words),
+    answerSpoken: [asked.recording],
+  };
+}
+
 const MAKERS: Readonly<Record<string, Maker>> = {
   'count-the-toys': {
     group: 'count',
@@ -321,6 +345,7 @@ const MAKERS: Readonly<Record<string, Maker>> = {
   'spot-the-word': { group: 'read', ask: spot },
   'words-and-pictures': { group: 'read', ask: wordForPicture },
   'rhyme-time': { group: 'read', ask: rhyme },
+  'build-a-sentence': { group: 'read', ask: sentence },
 };
 
 /** The activities the check game has a question for. */

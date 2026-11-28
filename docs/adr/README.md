@@ -35,3 +35,4 @@
 | [0031](0031-explainer-films-from-the-running-app.md) | Explainer films: one a journey, pictured from the running app | Accepted |
 | [0032](0032-offline-after-first-use.md) | Offline after first use: a small service worker of Pibbo's own, bounded to Pibbo's files | Accepted |
 | [0033](0033-publish-to-azure-static-web-apps-from-main.md) | Every commit to main is published to Azure Static Web Apps | Accepted |
+| [0034](0034-build-a-sentence-round.md) | Build a sentence: put the words on a strip, then Check | Accepted |

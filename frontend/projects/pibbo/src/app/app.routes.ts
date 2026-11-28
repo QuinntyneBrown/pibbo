@@ -74,6 +74,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/rhyme-time/rhyme-time').then((m) => m.RhymeTime),
   },
   {
+    path: 'read/sentence',
+    loadComponent: () =>
+      import('./pages/build-a-sentence/build-a-sentence').then((m) => m.BuildASentence),
+  },
+  {
     path: 'lesson/:subject',
     loadChildren: () => import('./pages/guided-lesson/guided-lesson.routes').then((m) => m.routes),
   },

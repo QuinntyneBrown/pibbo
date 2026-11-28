@@ -1,0 +1,54 @@
+{
+  "roundsPerPlay": 5,
+  "ask": {
+    "text": "Look at the picture. Put the words in order to tell about it.",
+    "recording": "/recordings/read/put-the-words-in-order.wav"
+  },
+  "praise": {
+    "text": "What a great sentence!",
+    "recording": "/recordings/read/what-a-great-sentence.wav"
+  },
+  "hint": {
+    "text": "Read it out loud. Does it sound right?",
+    "recording": "/recordings/read/does-it-sound-right.wav"
+  },
+  "listen": { "text": "Listen:", "recording": "/recordings/read/listen.wav" },
+  "words": {
+    "the": "/recordings/common-words/the.wav",
+    "is": "/recordings/common-words/is.wav",
+    "cat": "/recordings/words/cat.wav",
+    "can": "/recordings/words/can.wav",
+    "sit": "/recordings/words/sit.wav",
+    "hat": "/recordings/words/hat.wav",
+    "i": "/recordings/words/i.wav",
+    "see": "/recordings/words/see.wav",
+    "sun": "/recordings/words/sun.wav",
+    "map": "/recordings/words/map.wav",
+    "boat": "/recordings/words/boat.wav",
+    "big": "/recordings/words/big.wav",
+    "sat": "/recordings/words/sat.wav"
+  },
+  "sentences": [
+    {
+      "words": ["The", "cat", "can", "sit."],
+      "extra": "hat",
+      "picture": "/pictures/words/cat.jpg",
+      "alt": "A cat sitting",
+      "recording": "/recordings/sentences/the-cat-can-sit.wav"
+    },
+    {
+      "words": ["I", "see", "the", "sun."],
+      "extra": "map",
+      "picture": "/pictures/words/sun.jpg",
+      "alt": "The sun in the sky",
+      "recording": "/recordings/sentences/i-see-the-sun.wav"
+    },
+    {
+      "words": ["The", "boat", "is", "big."],
+      "extra": "sat",
+      "picture": "/pictures/words/boat.jpg",
+      "alt": "A big boat",
+      "recording": "/recordings/sentences/the-boat-is-big.wav"
+    }
+  ]
+}

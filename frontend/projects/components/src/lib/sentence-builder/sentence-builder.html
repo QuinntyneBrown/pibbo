@@ -1,0 +1,37 @@
+<div class="stage">
+  <div class="frame-picture">
+    <img class="picture" [src]="picture()" [alt]="alt()" draggable="false" />
+  </div>
+  <div class="sentence">
+    <div class="strip" [class.strip--right]="right()" role="group" aria-label="Your sentence">
+      @for (w of strip(); track $index; let i = $index) {
+        <button
+          type="button"
+          class="strip__word"
+          [disabled]="!open()"
+          [attr.aria-label]="open() ? 'Take back ' + w.text : w.text"
+          (pbTap)="word.emit(i)"
+        >
+          {{ w.text }}
+        </button>
+      } @empty {
+        <span class="strip__hint">Tap words to build your sentence</span>
+      }
+    </div>
+    <div class="word-bank" role="group" aria-label="Words">
+      @for (t of tiles(); track $index; let i = $index) {
+        @let used = placed().includes(i);
+        <button
+          type="button"
+          class="word-tile"
+          [class.word-tile--used]="used"
+          [disabled]="used || !open()"
+          [attr.aria-label]="used ? t.text + ', used' : null"
+          (pbTap)="tile.emit(i)"
+        >
+          {{ t.text }}
+        </button>
+      }
+    </div>
+  </div>
+</div>

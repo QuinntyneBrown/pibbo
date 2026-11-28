@@ -132,5 +132,13 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       recording: '/recordings/home/rhyme-time.wav',
       path: '/read/rhymes',
     },
+    {
+      id: 'build-a-sentence',
+      group: 'read',
+      name: 'Build a sentence',
+      glyph: 'the cat',
+      recording: '/recordings/home/build-a-sentence.wav',
+      path: '/read/sentence',
+    },
   ],
 };

@@ -1090,3 +1090,38 @@ One entry per journey, newest last. Before a journey, read these and apply the o
   scratchpad worked.
 - Tag the critical path in the same change (J11 #4): playing offline after first use is
   `@critical`.
+
+## Journey 20: Build a short sentence
+
+**What slowed it**
+
+- `L2-020` described slots that wait for the next word; the mocks build the sentence on a strip
+  and Check it. The mock won (ADR 0034), and the missing `model` state was drawn first.
+- The domain rules and the page were written before slices 2 and 3's acceptance specs, so those
+  specs passed on first run. They were proved to bite by breaking three rules at once (no word
+  spoken, no take-back, every check right): seven specs failed.
+- A unit test asks for a check-game question for every activity on Home; adding the catalogue
+  entry needed one in the same change.
+- `main` was already red locally (Home on the phone, the eight earned pictures) and in CI (the
+  performance spec); checking out `main` and running the same specs told inherited failures
+  from new ones.
+- At 568 x 320 the instruction took three or four lines and pushed the bank under the answer
+  bar; the shell drew a bubble picture and a large Pibbo that the mocks do not.
+
+**New lessons**
+
+1. Write each slice's acceptance spec before its rule, even when the rule is small; otherwise
+   only a break-the-rule run proves the spec.
+2. When a spec must prove behaviour the shipped content no longer shows (an unknown lesson
+   step), rewrite the served script in the page object with `page.route`, not the content.
+3. Before blaming a change for a failing spec, run the same spec on `main`; select it by name
+   (`-g`), not by line, since lines move.
+4. Give a strip that receives targets a minimum height of one row of them, so the first placed
+   word moves nothing below it.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1 and on): `model` and the Home card went into the first commit.
+- Measure the shell before the board (J17 #1): the fault at 568 x 320 was the shell's bubble.
+- Number the ADR after fetching `main` (J17 #4, J18 #4): 0031 was taken after the rebase, so this is 0034 (0031 to 0033 were taken).
+
