@@ -5,7 +5,9 @@ namespace Pibbo.Api.Security;
 
 public static class HardeningServices
 {
-    public const string HealthPath = "/health";
+    /// <summary>Health probes and the metrics scrape: never redirected, never rate-limited.</summary>
+    public static bool IsProbe(PathString path) =>
+        path.StartsWithSegments("/health") || path.StartsWithSegments(Observability.MetricsServices.ScrapePath);
 
     /// <summary>CORS for the one configured frontend origin, the rate limit and the HTTPS redirect.</summary>
     public static IServiceCollection AddHardening(this IServiceCollection services, IConfiguration configuration)
@@ -28,8 +30,8 @@ public static class HardeningServices
             // Counted by address in memory only; the address is never written down. Idle
             // partitions are dropped by the limiter, so the count does not grow without bound.
             limiter.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
-                context.Request.Path.StartsWithSegments(HealthPath)
-                    ? RateLimitPartition.GetNoLimiter("health")
+                IsProbe(context.Request.Path)
+                    ? RateLimitPartition.GetNoLimiter("probe")
                     : RateLimitPartition.GetFixedWindowLimiter(
                         context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                         _ => new FixedWindowRateLimiterOptions
@@ -70,15 +72,15 @@ public static class HardeningServices
     }
 
     /// <summary>
-    /// Redirects HTTP to HTTPS unless <c>Transport:RequireHttps</c> is false. A health probe is
-    /// not redirected: a redirect would read as healthy.
+    /// Redirects HTTP to HTTPS unless <c>Transport:RequireHttps</c> is false. A probe or a scrape
+    /// is not redirected: a redirect would read as healthy, and scrapers speak plain HTTP.
     /// </summary>
     public static IApplicationBuilder UseHttpsOnly(this WebApplication app)
     {
         if (app.Configuration.GetValue("Transport:RequireHttps", true))
         {
             app.UseWhen(
-                context => !context.Request.Path.StartsWithSegments(HealthPath),
+                context => !IsProbe(context.Request.Path),
                 branch => branch.UseHttpsRedirection());
         }
 

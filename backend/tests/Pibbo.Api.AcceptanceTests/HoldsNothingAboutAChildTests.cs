@@ -27,6 +27,7 @@ public sealed class HoldsNothingAboutAChildTests : IDisposable
             "/pictures/words/cat.svg",
             "/health/live",
             "/health/ready",
+            "/metrics",
             "/openapi/v1.json",
             "/",
         ];
@@ -101,6 +102,7 @@ public sealed class HoldsNothingAboutAChildTests : IDisposable
     [InlineData("/api/v1/lessons/first-sounds")]
     [InlineData("/recordings/home/count-the-toys.wav")]
     [InlineData("/health/live")]
+    [InlineData("/metrics")]
     [InlineData("/openapi/v1.json")]
     [InlineData("/test/sets-a-cookie")]
     public async Task Given_a_public_response_When_inspected_Then_it_sets_no_cookie(string path)

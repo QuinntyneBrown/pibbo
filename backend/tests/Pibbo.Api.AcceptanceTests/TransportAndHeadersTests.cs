@@ -44,6 +44,7 @@ public sealed class TransportAndHeadersTests : IDisposable
     [InlineData("GET", "/recordings/home/count-the-toys.wav")]
     [InlineData("GET", "/pictures/words/cat.svg")]
     [InlineData("GET", "/health/live")]
+    [InlineData("GET", "/metrics")]
     [InlineData("GET", "/openapi/v1.json")]
     [InlineData("GET", "/nowhere")]
     [InlineData("POST", "/api/v1/content/manifest")]

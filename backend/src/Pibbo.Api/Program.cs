@@ -21,6 +21,7 @@ builder.Services.AddPibboOpenApi();
 builder.Services.AddContent(builder.Configuration, builder.Environment);
 builder.Services.AddHardening(builder.Configuration);
 builder.Services.AddHealth();
+builder.Services.AddPibboMetrics();
 
 var app = builder.Build();
 
@@ -38,6 +39,7 @@ app.UseCors();
 app.UseContentAssets();
 
 app.MapHealth();
+app.MapPibboMetrics();
 app.MapOpenApi();
 app.MapContentEndpoints();
 
