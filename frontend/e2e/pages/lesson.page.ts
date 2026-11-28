@@ -54,6 +54,15 @@ export class LessonPage {
     await this.page.evaluate(() => document.fonts.ready.then(() => undefined));
   }
 
+  /** Collects every warning Pibbo's own scripts log from now on (not the browser's own). */
+  warnings(): string[] {
+    const seen: string[] = [];
+    this.page.on('console', (m) => {
+      if (m.type() === 'warning' && m.location().url.endsWith('.js')) seen.push(m.text());
+    });
+    return seen;
+  }
+
   /** Touches (phone) or clicks (desktop) a target. */
   async touch(target: Locator): Promise<void> {
     const hasTouch = await this.page.evaluate(() => matchMedia('(pointer: coarse)').matches);

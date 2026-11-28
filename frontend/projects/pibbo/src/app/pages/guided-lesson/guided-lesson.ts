@@ -9,7 +9,7 @@ import {
   linkedSignal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AUDIO_PLAYER, PROGRESS_STORE, type LessonStep } from '@pibbo/api';
+import { AUDIO_PLAYER, CLIENT_LOG, PROGRESS_STORE, type LessonStep } from '@pibbo/api';
 import { LessonPath, Pibbo, Tap } from '@pibbo/components';
 import {
   ACTIVITY_CATALOGUE,
@@ -39,6 +39,7 @@ export class GuidedLesson {
   private readonly audio = inject(AUDIO_PLAYER);
   private readonly router = inject(Router);
   private readonly store = inject(PROGRESS_STORE);
+  private readonly log = inject(CLIENT_LOG);
 
   /** The `:subject` route parameter. */
   readonly subject = input<unknown>();
@@ -47,10 +48,11 @@ export class GuidedLesson {
 
   protected readonly lines = LESSON_LINES;
   protected readonly lesson = computed(() => lessonById(LESSONS, this.subject()));
-  protected readonly steps = computed(() => {
+  private readonly path = computed(() => {
     const lesson = this.lesson();
-    return lesson ? lessonSteps(lesson, ACTIVITY_CATALOGUE).steps : [];
+    return lesson ? lessonSteps(lesson, ACTIVITY_CATALOGUE) : { steps: [], unknown: [] };
   });
+  protected readonly steps = computed(() => this.path().steps);
   /** The current step, 1-based; one past the last once the lesson is done. */
   protected readonly current = linkedSignal(() => {
     const lesson = this.lesson();
@@ -86,6 +88,10 @@ export class GuidedLesson {
     if (!lesson) {
       void this.router.navigate(['/'], { replaceUrl: true });
       return;
+    }
+    // A step naming an activity that does not exist is left off the path (L2-022 #4).
+    for (const id of this.path().unknown) {
+      this.log.warn(`Lesson "${lesson.id}" names an unknown activity "${id}"; it is skipped.`);
     }
     this.store.write(lessonKey(lesson), lessonPlace(this.current(), this.steps()));
     const next = this.next();

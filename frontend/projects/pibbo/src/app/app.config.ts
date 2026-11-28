@@ -13,6 +13,7 @@ import { BrowserAudioPlayer } from './browser/browser-audio-player';
 import { BrowserClock } from './browser/browser-clock';
 import { BrowserProgressStore } from './browser/browser-progress-store';
 import { BrowserRandomSource } from './browser/browser-random-source';
+import { ConsoleClientLog } from './browser/console-client-log';
 import { RouterActivityExit } from './lesson/router-activity-exit';
 
 /** The composition root: binds every token the whole app shares. */
@@ -25,5 +26,6 @@ export const appConfig: ApplicationConfig = {
     { provide: AUDIO_PLAYER, useClass: BrowserAudioPlayer },
     { provide: ACTIVITY_EXIT, useClass: RouterActivityExit },
     { provide: PROGRESS_STORE, useClass: BrowserProgressStore },
+    { provide: CLIENT_LOG, useClass: ConsoleClientLog },
   ],
 };
