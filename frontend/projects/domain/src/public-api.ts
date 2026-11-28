@@ -38,3 +38,4 @@ export * from './lib/lessons/check-content';
 export * from './lib/lessons/check-round';
 export * from './lib/grown-up/gate';
 export * from './lib/grown-up/volume';
+export * from './lib/rounds/content-assets';

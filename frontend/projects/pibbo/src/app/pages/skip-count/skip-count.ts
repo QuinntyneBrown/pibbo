@@ -8,7 +8,8 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
+import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
+import { ASSET_PRELOADER, AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
 import { AnswerBar, NumberLine, RoundShell, type AnswerBarKind } from '@pibbo/components';
 import {
   chooseLanding,
@@ -21,6 +22,8 @@ import {
   skipBy,
   startSkipRound,
   type SkipRound,
+  contentAssets,
+  numberRecordings,
 } from '@pibbo/domain';
 
 /** Praise lasts no more than this (L2-026 #3). */
@@ -37,6 +40,8 @@ const PRAISE_MS = 1500;
   templateUrl: './skip-count.html',
   styleUrl: './skip-count.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Scoped to the activity: its fetches end when the child leaves.
+  providers: [{ provide: ASSET_PRELOADER, useClass: BrowserAssetPreloader }],
 })
 export class SkipCount {
   private readonly audio = inject(AUDIO_PLAYER);
@@ -77,6 +82,16 @@ export class SkipCount {
   });
 
   constructor() {
+    // Every recording and picture a round can play or show is fetched before the first touch
+    // (L2-032 #3).
+    inject(ASSET_PRELOADER).preload([
+      ...contentAssets(SKIP_COUNT),
+      ...SKIP_COUNT.steps.flatMap((step) => [
+        hopByLine(step).recording,
+        countedByLine(step).recording,
+        ...numberRecordings(step, step * SKIP_COUNT.hops, step),
+      ]),
+    ]);
     // It rests: sound stops while the tab is hidden, and nothing resumes until a touch.
     const document = inject(DOCUMENT);
     const rest = () => {
