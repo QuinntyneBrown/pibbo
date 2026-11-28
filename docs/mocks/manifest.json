@@ -283,7 +283,7 @@
       "kind": "page",
       "title": "Sound it out",
       "route": "/read/sound-out",
-      "requirements": ["L2-012", "L2-025", "L2-026"],
+      "requirements": ["L2-012", "L2-014", "L2-025", "L2-026"],
       "states": [
         "default",
         "ready",
@@ -292,7 +292,8 @@
         "retry",
         "modelled",
         "magic-e",
-        "syllables"
+        "syllables",
+        "groups"
       ],
       "prototype_frame": "7f2gDTETEj5wz2wj8j3k6S",
       "subject": "read",
