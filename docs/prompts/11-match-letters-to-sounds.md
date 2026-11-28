@@ -1,5 +1,6 @@
 # Feature: Match letters to sounds
-n**Status:** Complete (PR #11)
+
+**Status:** Complete (PR #11)
 
 Journey 11 of 27 in `docs/journeys.md`. Requirements: L2-010.
 
