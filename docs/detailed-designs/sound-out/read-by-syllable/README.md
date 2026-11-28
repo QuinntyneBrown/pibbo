@@ -19,7 +19,7 @@ As built (ADR 0022), the feature lives inside Sound it out rather than in a page
 - **`shownSounds`, `soundingPlan`, `blendPlan`, `syllableAsk`** — pure functions in `@pibbo/domain/sounds`: the tiles to show; what a touch plays (a syllable's sounds then the syllable, all lighting its tile); what blending plays (the syllables then the word); and the instruction naming the next syllable, as text and as recordings. Unit tested.
 - **`Syllable`** — contract in `@pibbo/api`: a `Sound` (the syllable on its tile, its caption, its recording) with the sounds that spell it. A longer `Word` carries `syllables`.
 - **`AudioPlayer`** — contract in `@pibbo/api` bound to `AUDIO_PLAYER`. Playing a recording stops the one before it; a recording that cannot play resolves as `unavailable` and the screen shows the text instead.
-- **Fit** — both syllable tiles keep one line at a 320 px wide viewport, each at least 60 × 60 px, with nothing to scroll.
+- **Fit** — both syllable tiles keep one line at a 320 px wide viewport, each at least 60 × 60 px, with nothing to scroll and nothing under the answer bar, at 320 × 640, 360 × 640 and 640 × 360. A longer word turns on `pb-round-shell`'s `fit` (the mocks' short-screen layout) and `pb-word-tiles`' `beats`.
 
 ## Requirements
 

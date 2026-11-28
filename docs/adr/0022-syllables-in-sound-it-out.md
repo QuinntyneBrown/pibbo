@@ -41,10 +41,17 @@ consonants (ADR 0020) are all carried by Sound it out's one round.
    four of them, and that each has a recording and recorded sounds.
 10. **Spell by sound leaves longer words out** (it has three boxes), though the sound e joins the
     letters its bank draws from.
+11. **A longer word's round uses the mocks' short-screen layout.** With the shared layout, Read
+    it fast fell behind the answer bar at 320 × 640 and 640 × 360, where a child could not
+    touch it. `pb-round-shell` gained `fit` (`shell--fit`): a smaller prompt on a short upright
+    phone, and on its side the prompt beside the way out, with the syllables beside Read it fast
+    or the pictures. Only longer words turn it on, so no other screen changes.
 
 ## Consequences
 
 A ninth word moves what a seeded round shows, so the specs that need a particular word use new
 seeds. Which longer words and syllables Sound Out teaches, in what order, whether a letter should
 light inside a syllable tile as it sounds, and the real recordings stay open questions for the
-repository owner.
+repository owner. The same overlap exists for ordinary words ("boat" at 320 × 640 and
+640 × 360), which this journey leaves unchanged; journey 26, or a fix of its own, should draw
+them the same way.
