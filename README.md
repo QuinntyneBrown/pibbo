@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/pibbo-logo-dark.png">
+    <img src="docs/brand/pibbo-logo-light.png" alt="Pibbo" width="420">
+  </picture>
+</p>
+
 # Pibbo
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
