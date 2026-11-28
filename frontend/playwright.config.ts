@@ -1,6 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const port = 4300;
+/**
+ * Each checkout serves its own build on its own port. A fixed, shared port let concurrent runs
+ * from other worktrees reuse one another's server, which served the wrong build and was stopped
+ * mid-run when its owner finished, leaving requests unanswered. The port is derived from this
+ * folder, so it is stable, and kept in the environment so every worker sees the same one.
+ */
+process.env['PIBBO_E2E_PORT'] ??= String(
+  4300 + ([...__dirname].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % 1000),
+);
+const port = Number(process.env['PIBBO_E2E_PORT']);
 
 /**
  * Chromium only, touch emulated. Specs run against the production build served by
@@ -30,6 +39,6 @@ export default defineConfig({
   webServer: {
     command: `node e2e/serve.mjs ${port}`,
     url: `http://localhost:${port}/`,
-    reuseExistingServer: !process.env['CI'],
+    reuseExistingServer: false,
   },
 });
