@@ -7,6 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="count-and-write">
 <meta name="mock:state" content="counting">
+<meta name="mock:requirements" content="L2-003, L2-004, L2-025, L2-026">
 <meta name="description" content="Six of fourteen toys counted in two ten-frames; each touch says the next number.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -29,13 +30,13 @@
   </div>
   <main class="shell__game" id="main" aria-labelledby="prompt">
     <h1 class="visually-hidden">Count and write</h1>
-    <div class="stage stage--row-lg">
+    <div class="stage stage--writing stage--row-lg">
       <div class="tenframes" role="group" aria-label="The ten-frames, 14 toys"><div class="tenframe"><button class="tenframe__thing tenframe__thing--counted" type="button" disabled aria-label="Toy counted as 1"><img class="picture" src="../../assets/pictures/teddy.jpg" alt="" draggable="false"><span class="tenframe__badge" aria-hidden="true">1</span></button><button class="tenframe__thing tenframe__thing--counted" type="button" disabled aria-label="Toy counted as 2"><img class="picture" src="../../assets/pictures/duck.jpg" alt="" draggable="false"><span class="tenframe__badge" aria-hidden="true">2</span></button><button class="tenframe__thing tenframe__thing--counted" type="button" disabled aria-label="Toy counted as 3"><img class="picture" src="../../assets/pictures/ball.jpg" alt="" draggable="false"><span class="tenframe__badge" aria-hidden="true">3</span></button><button class="tenframe__thing tenframe__thing--counted" type="button" disabled aria-label="Toy counted as 4"><img class="picture" src="../../assets/pictures/teddy.jpg" alt="" draggable="false"><span class="tenframe__badge" aria-hidden="true">4</span></button><button class="tenframe__thing tenframe__thing--counted" type="button" disabled aria-label="Toy counted as 5"><img class="picture" src="../../assets/pictures/duck.jpg" alt="" draggable="false"><span class="tenframe__badge" aria-hidden="true">5</span></button><button class="tenframe__thing tenframe__thing--counted" type="button" disabled aria-label="Toy counted as 6"><img class="picture" src="../../assets/pictures/ball.jpg" alt="" draggable="false"><span class="tenframe__badge" aria-hidden="true">6</span></button><button class="tenframe__thing press" type="button" aria-label="Count this teddy"><img class="picture" src="../../assets/pictures/teddy.jpg" alt="" draggable="false"></button><button class="tenframe__thing press" type="button" aria-label="Count this duck"><img class="picture" src="../../assets/pictures/duck.jpg" alt="" draggable="false"></button><button class="tenframe__thing press" type="button" aria-label="Count this ball"><img class="picture" src="../../assets/pictures/ball.jpg" alt="" draggable="false"></button><button class="tenframe__thing press" type="button" aria-label="Count this teddy"><img class="picture" src="../../assets/pictures/teddy.jpg" alt="" draggable="false"></button></div><div class="tenframe"><button class="tenframe__thing press" type="button" aria-label="Count this duck"><img class="picture" src="../../assets/pictures/duck.jpg" alt="" draggable="false"></button><button class="tenframe__thing press" type="button" aria-label="Count this ball"><img class="picture" src="../../assets/pictures/ball.jpg" alt="" draggable="false"></button><button class="tenframe__thing press" type="button" aria-label="Count this teddy"><img class="picture" src="../../assets/pictures/teddy.jpg" alt="" draggable="false"></button><button class="tenframe__thing press" type="button" aria-label="Count this duck"><img class="picture" src="../../assets/pictures/duck.jpg" alt="" draggable="false"></button><span class="tenframe__cell" aria-hidden="true"></span><span class="tenframe__cell" aria-hidden="true"></span><span class="tenframe__cell" aria-hidden="true"></span><span class="tenframe__cell" aria-hidden="true"></span><span class="tenframe__cell" aria-hidden="true"></span><span class="tenframe__cell" aria-hidden="true"></span></div></div>
     </div>
   </main>
   <footer class="answer-bar answer-bar--check"><button class="chunky chunky--count chunky--wide press" type="button" disabled>Check</button></footer>
 </div>
-<p class="mock-note" style="top: 6rem; right: 1rem;">Rounds of 11 to 20 things sit in ten-frames, filled in order, so all of them fit one screen. Each thing is a target of at least 60 × 60 px. Touching one says the next number and marks it; touching it again does nothing.</p>
+<p class="mock-note">Rounds of 11 to 20 things sit in ten-frames, filled in order, so all of them fit one screen. Each thing is a target of at least 60 × 60 px. Touching one says the next number and marks it; touching it again does nothing.</p>
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
   <span class="mock-bar__screen">Count and write</span>
@@ -44,5 +45,6 @@
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>
 <script src="../../assets/mock.js"></script>
+<script src="../../assets/count-and-write.js"></script>
 </body>
 </html>

@@ -7,7 +7,8 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="sound-it-out">
 <meta name="mock:state" content="pick">
-<meta name="description" content="Which picture is “ship”? boat, sun, ship.">
+<meta name="mock:requirements" content="L2-012, L2-025, L2-026">
+<meta name="description" content="The child chooses the picture for “map” from sun, map and cat.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -29,9 +30,9 @@
   </div>
   <main class="shell__game" id="main" aria-labelledby="prompt">
     <h1 class="visually-hidden">Sound it out</h1>
-    <div class="stage"><div class="tiles" role="group" aria-label="The sounds in the word"><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="m, says /m/">m</button><span class="tiles__say" aria-hidden="true">/m/</span></div><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="a, says /a/">a</button><span class="tiles__say" aria-hidden="true">/a/</span></div><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="p, says /p/">p</button><span class="tiles__say" aria-hidden="true">/p/</span></div></div><div class="pick" role="group" aria-label="Pictures"><button class="pick__option press" type="button" aria-pressed="false" aria-label="sun"><img class="picture " src="../../assets/pictures/sun.jpg" alt="" draggable="false"></button><button class="pick__option press" type="button" aria-pressed="true" aria-label="map"><img class="picture " src="../../assets/pictures/map.jpg" alt="" draggable="false"></button><button class="pick__option press" type="button" aria-pressed="false" aria-label="cat"><img class="picture " src="../../assets/pictures/cat.jpg" alt="" draggable="false"></button></div></div>
+    <div class="stage stage--activity"><div class="tiles" role="group" aria-label="The sounds in the word"><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="m, says /m/">m</button><span class="tiles__say" aria-hidden="true">/m/</span></div><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="a, says /a/">a</button><span class="tiles__say" aria-hidden="true">/a/</span></div><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="p, says /p/">p</button><span class="tiles__say" aria-hidden="true">/p/</span></div></div><div class="pick" role="group" aria-label="Pictures"><button class="pick__option press" type="button" aria-pressed="false" aria-label="sun" data-check-href="retry.html?choice=0"><img class="picture " src="../../assets/pictures/sun.jpg" alt="" draggable="false"></button><button class="pick__option press" type="button" aria-pressed="true" aria-label="map" data-check-href="correct.html"><img class="picture " src="../../assets/pictures/map.jpg" alt="" draggable="false"></button><button class="pick__option press" type="button" aria-pressed="false" aria-label="cat" data-check-href="retry.html?choice=2"><img class="picture " src="../../assets/pictures/cat.jpg" alt="" draggable="false"></button></div></div>
   </main>
-  <footer class="answer-bar answer-bar--check"><a class="chunky chunky--read chunky--wide press" href="../sound-it-out/correct.html">Check</a></footer>
+  <footer class="answer-bar answer-bar--check"><a class="chunky chunky--read chunky--wide press" href="../sound-it-out/correct.html" data-check-action>Check</a></footer>
 </div>
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
@@ -40,6 +41,9 @@
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>
+<template id="sounds-cape"><p class="rule"><span class="rule__glyph">a_e</span> The e is quiet and makes a say its name</p><div class="before"><img class="picture " src="../../assets/pictures/cap.jpg" alt="cap" draggable="false"><span class="before__word">cap</span><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg><span class="before__note">add a quiet e</span></div><div class="tiles" role="group" aria-label="The sounds in the word"><div class="tiles__unit"><button class="tile press tile--heard" type="button" disabled aria-label="c, /k/">c</button><span class="tiles__say" aria-hidden="true">/k/</span></div><div class="tiles__unit"><button class="tile press tile--heard" type="button" disabled aria-label="a, /ā/">a</button><span class="tiles__say" aria-hidden="true">/ā/</span></div><div class="tiles__unit"><button class="tile press tile--heard" type="button" disabled aria-label="p, /p/">p</button><span class="tiles__say" aria-hidden="true">/p/</span></div><div class="tiles__unit"><button class="tile press tile--heard tile--silent" type="button" disabled aria-label="e, quiet">e</button><span class="tiles__say" aria-hidden="true">quiet</span></div></div></template>
+<template id="sounds-sunset"><p class="rule"><span class="rule__glyph">sun · set</span> Read one beat at a time</p><div class="tiles" role="group" aria-label="The sounds in the word"><div class="tiles__unit"><button class="tile press tile--heard tile--wide" type="button" disabled aria-label="sun, clap 1">sun</button><span class="tiles__say" aria-hidden="true">clap 1</span></div><div class="tiles__unit"><button class="tile press tile--heard tile--wide" type="button" disabled aria-label="set, clap 2">set</button><span class="tiles__say" aria-hidden="true">clap 2</span></div></div></template>
 <script src="../../assets/mock.js"></script>
+<script src="../../assets/sound-it-out.js"></script>
 </body>
 </html>

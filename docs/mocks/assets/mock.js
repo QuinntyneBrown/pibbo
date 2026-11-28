@@ -52,15 +52,59 @@
     }
   });
 
-  // Carry the current theme across sibling-state links so a review stays consistent.
-  document.querySelectorAll('.mock-bar a[href]').forEach(function (link) {
-    link.addEventListener('click', function () {
-      try {
-        var url = new URL(link.href);
-        url.searchParams.set('theme', currentTheme());
-        if (root.dataset.chrome === 'off') url.searchParams.set('chrome', '0');
-        link.href = url.toString();
-      } catch (e) { /* relative file URLs in some viewers */ }
+  // A feedback state can show either incorrect option selected in the preceding mock.
+  var reviewed = document.querySelectorAll('[data-reviewed-choice]');
+  var choiceIndex = params.get('choice');
+  if (reviewed.length && /^\d+$/.test(choiceIndex) && reviewed[Number(choiceIndex)]) {
+    reviewed.forEach(function (option, index) {
+      option.setAttribute('aria-pressed', String(index === Number(choiceIndex)));
     });
+  }
+
+  // The prototype animates a changed feedback bar and shows the initial frame immediately.
+  var bar = document.querySelector('footer.answer-bar');
+  var barState = bar && Array.from(bar.classList).find(name => name.startsWith('answer-bar--'));
+  var previousBar = params.get('fromBar');
+  var navigation = performance.getEntriesByType('navigation')[0];
+  if (barState && previousBar && previousBar !== barState &&
+      navigation && navigation.type === 'navigate' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    bar.classList.add('answer-bar--entering');
+    bar.addEventListener('animationend', function () { bar.classList.remove('answer-bar--entering'); }, { once: true });
+  }
+
+  // State files stand in for prototype screens. Keep the review settings across them.
+  function destination(href) {
+    var url = new URL(href, location.href);
+    if (barState && new URL('.', url).href === new URL('.', location.href).href) {
+      url.searchParams.set('fromBar', barState);
+    }
+    url.searchParams.set('theme', currentTheme());
+    if (root.dataset.chrome === 'off') url.searchParams.set('chrome', '0');
+    return url.href;
+  }
+
+  document.addEventListener('click', function (event) {
+    var choice = event.target.closest('button[data-check-href]');
+    if (choice) {
+      document.querySelectorAll('[data-check-href]').forEach(function (option) {
+        option.setAttribute('aria-pressed', String(option === choice));
+      });
+      var check = document.querySelector('[data-check-action]');
+      if (check.tagName === 'A') check.href = choice.dataset.checkHref;
+      else {
+        check.disabled = false;
+        check.dataset.mockHref = choice.dataset.checkHref;
+      }
+      return;
+    }
+    var button = event.target.closest('button[data-mock-href]');
+    if (button) {
+      location.assign(destination(button.dataset.mockHref));
+      return;
+    }
+    var link = event.target.closest('a[href]');
+    if (link && /\.html$/.test(new URL(link.href).pathname) && !link.getAttribute('href').startsWith('#')) {
+      link.href = destination(link.href);
+    }
   });
 })();
