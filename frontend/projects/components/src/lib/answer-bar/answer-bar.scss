@@ -53,7 +53,11 @@
 }
 
 .answer-bar--right .answer-bar__message {
-  color: var(--color-success-fg);
+  color: var(--color-success-strong);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--color-success-fg);
+  }
 }
 
 .chunky {
@@ -101,37 +105,41 @@
   background: var(--color-success-strong);
 }
 
-// The mocks' compact bar (L2-021, ADR 0025): the message beside the way on.
+// The mocks' compact bar (L2-021, ADR 0025): the message beside the way on. Every small upright
+// phone draws it; on a phone on its side only an activity that asks for the room (`fit`) does.
+@mixin beside {
+  gap: var(--space-2);
+
+  &:not(.answer-bar--check) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .chunky {
+      flex: none;
+      width: auto;
+      min-width: var(--target-child);
+      padding-inline: var(--space-3);
+      white-space: nowrap;
+    }
+  }
+
+  .answer-bar__message {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-snug);
+  }
+}
+
 @media (max-width: 39.99rem) and (max-height: 52rem) and (orientation: portrait) {
-  .answer-bar[data-fit] {
+  .answer-bar {
+    @include beside;
     padding: var(--space-2);
   }
 }
 
-// On a phone on its side too: a narrower way on leaves the message one line, not three.
-@media (max-width: 39.99rem) and (max-height: 52rem) and (orientation: portrait),
-  (orientation: landscape) and (max-height: 30rem) {
+@media (orientation: landscape) and (max-height: 30rem) {
   .answer-bar[data-fit] {
-    gap: var(--space-2);
-
-    &:not(.answer-bar--check) {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-
-      .chunky {
-        flex: none;
-        width: auto;
-        min-width: var(--target-child);
-        padding-inline: var(--space-3);
-        white-space: nowrap;
-      }
-    }
-
-    .answer-bar__message {
-      font-size: var(--font-size-lg);
-      line-height: var(--line-height-snug);
-    }
+    @include beside;
   }
 }
 

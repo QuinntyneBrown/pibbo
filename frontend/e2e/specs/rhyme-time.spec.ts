@@ -288,3 +288,16 @@ for (const size of [
     });
   });
 }
+
+test.describe('Rhyme time: drawn as its mock', () => {
+  test('Given a round, when it is shown, then no word card has an outline inside its edge', async ({
+    page,
+  }) => {
+    const round = new RhymeTimePage(page);
+
+    await round.openFromHome();
+
+    await expect(round.cards.first()).toBeVisible();
+    expect(await round.outlined()).toBe(false);
+  });
+});

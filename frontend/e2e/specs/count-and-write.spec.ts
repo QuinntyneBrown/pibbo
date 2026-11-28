@@ -60,6 +60,18 @@ test.describe('Count and write: count to twenty in ten-frames', () => {
     expect(await spoken.recordings()).toEqual([...HOME, TAP_EACH]);
   });
 
+  test('Given a ten-frame on a 360 x 640 px viewport, when a thing is counted, then its number is a small badge at the lower right', async ({
+    page,
+  }) => {
+    const count = new CountAndWritePage(page);
+    await count.openFromHome();
+
+    await count.touch(count.thing(0));
+
+    await expect(count.badge(0)).toHaveText('1');
+    expect(await count.badgePlace(0)).toEqual({ small: true, lowerRight: true });
+  });
+
   test('Given some things counted, when the child touches a counted thing again, then it is not counted twice and nothing is spoken', async ({
     page,
     spoken,

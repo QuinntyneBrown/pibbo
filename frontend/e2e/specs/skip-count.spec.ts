@@ -126,3 +126,21 @@ test.describe('Skip-count', () => {
     });
   });
 });
+
+test.describe('Skip-count: the step switch as its mock draws it', () => {
+  test('Given a round, when the switch is shown, then the steps sit on one tray, the chosen one filled and the others flat', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    const skip = new SkipCountPage(page);
+
+    await skip.openFromHome();
+
+    await expect
+      .poll(() => skip.switchSurfaces())
+      .toEqual({
+        tray: 'rgb(237, 225, 248)',
+        options: ['rgb(80, 25, 192)', 'rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)'],
+      });
+  });
+});

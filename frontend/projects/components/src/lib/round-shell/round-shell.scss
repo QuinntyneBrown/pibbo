@@ -149,10 +149,10 @@
   }
 }
 
-// `shell--fit`, from the mocks: a small upright phone keeps the prompt, the game and its answer
-// in view (L2-017 #3).
+// From the mocks: a small upright phone keeps the prompt, the game and its answer in view, with
+// a compact prompt on every activity (L2-017 #3).
 @media (max-width: 39.99rem) and (max-height: 52rem) and (orientation: portrait) {
-  .shell--fit {
+  .shell {
     .shell__top {
       padding: var(--space-1) var(--space-2) 0;
     }

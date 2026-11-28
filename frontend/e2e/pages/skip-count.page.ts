@@ -38,6 +38,17 @@ export class SkipCountPage {
   }
 
   /** Opens Skip-count the way a child does: Count, then Skip-count on Home. */
+  /** The colours of the step switch: its tray and its options, sorted, as the chosen step varies. */
+  async switchSurfaces(): Promise<{ tray: string; options: string[] }> {
+    const background = (el: Element) => getComputedStyle(el).backgroundColor;
+    return {
+      tray: await this.page.locator('.switch--step').evaluate(background),
+      options: await this.steps
+        .evaluateAll((all) => all.map((el) => getComputedStyle(el).backgroundColor))
+        .then((colours) => colours.sort()),
+    };
+  }
+
   async openFromHome(): Promise<void> {
     const home = new HomePage(this.page);
     await home.open();

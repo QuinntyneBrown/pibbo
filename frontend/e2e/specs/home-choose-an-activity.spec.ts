@@ -183,3 +183,19 @@ test.describe('Home: choose an activity', () => {
     ]);
   });
 });
+
+test.describe('Home: the group switch as its mock draws it', () => {
+  test('Given a group is chosen, when the switch is shown, then both sit on one tray, the chosen one filled and the other flat', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    const home = new HomePage(page);
+    await home.open();
+
+    await home.touch(home.group('Count'));
+
+    await expect
+      .poll(() => home.switchSurfaces())
+      .toEqual({ tray: 'rgb(237, 225, 248)', options: ['rgb(80, 25, 192)', 'rgba(0, 0, 0, 0)'] });
+  });
+});

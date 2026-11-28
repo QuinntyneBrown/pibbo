@@ -1029,3 +1029,24 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - The mock first (J2 #1): Home's combined top bar and row were drawn and measured at six sizes
   before the app changed.
 - Check a layout and look at screenshots (J17 #1, J21 #3).
+
+## Explainer videos: before the first recording
+
+**What was broken**
+
+- The server sent a `Permissions-Policy` feature the browser does not know (`interest-cohort`),
+  so every page logged a console warning. A smoke run of every route with real playback found it.
+- The app still wore the old palette after the mocks changed: colour tokens, the compact prompt,
+  the switch trays, the toy rug, and on a small upright phone the counted-toy badge, the colour of
+  "Yes!" and the answer bar. All were restyled, each with a spec that failed first.
+
+**New lessons**
+
+1. A mock change is not done when the tokens match. `docs/mocks/assets/ui.css` held rules the
+   design system never took (the small badge, the praise colour, the compact answer bar), so the
+   app, built from the design system, matched it and not the mocks. Compare every state of a
+   screen with its mock, not only its default.
+2. Real playback shows what the fake player hides. Wait for the last recording of a sequence
+   before reading what was played.
+3. Copying every design token into the app broke the initial bundle budget. The app declares only
+   the tokens its styles use.

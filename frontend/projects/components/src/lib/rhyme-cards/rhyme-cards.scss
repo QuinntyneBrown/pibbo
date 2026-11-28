@@ -125,9 +125,7 @@
   border-radius: var(--radius-xl);
   background: var(--color-surface);
   color: var(--color-fg);
-  box-shadow:
-    inset 0 0 0 2px var(--color-border),
-    0 var(--press-depth) 0 var(--color-depth);
+  box-shadow: 0 var(--press-depth) 0 var(--color-depth);
   touch-action: manipulation;
 
   .picture {
