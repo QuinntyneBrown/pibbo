@@ -7,6 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="skip-count">
 <meta name="mock:state" content="retry">
+<meta name="mock:requirements" content="L2-007, L2-025">
 <meta name="description" content="A wrong landing: “Count on 5 more from 20.”">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -16,7 +17,7 @@
 <a class="skip-link" href="#main">Skip to the game</a>
 <div class="shell shell--count">
   <header class="shell__top">
-    <a class="chunky chunky--white chunky--icon press" href="../home/default.html" aria-label="Leave game"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
+    <a class="chunky chunky--white chunky--icon press" href="../home/counting.html" aria-label="Leave game"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
     <div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="4"><div class="progress__fill progress__fill--4"></div></div>
   </header>
   <div class="shell__ask">
@@ -28,9 +29,9 @@
   </div>
   <main class="shell__game" id="main" aria-labelledby="prompt">
     <h1 class="visually-hidden">Skip-count</h1>
-    <div class="stage">
-      <div class="switch switch--step" role="radiogroup" aria-label="Count by"><button class="switch__option" type="button" role="radio" aria-checked="false">By 2s</button><button class="switch__option" type="button" role="radio" aria-checked="true">By 5s</button><button class="switch__option" type="button" role="radio" aria-checked="false">By 10s</button></div>
-      <svg class="number-line" viewBox="0 0 1040 170" role="img" aria-label="Number line counting by 5: 0, 5, 10, 15, 20"><line class="number-line__axis" x1="20" y1="110" x2="1020" y2="110"/><circle class="number-line__dot number-line__dot--said" cx="20" cy="110" r="13"/><text class="number-line__label" x="20" y="160">0</text><path class="number-line__hop" d="M28 100 Q70 20 112 100"/><circle class="number-line__dot number-line__dot--said" cx="120" cy="110" r="13"/><text class="number-line__label" x="120" y="160">5</text><path class="number-line__hop" d="M128 100 Q170 20 212 100"/><circle class="number-line__dot number-line__dot--said" cx="220" cy="110" r="13"/><text class="number-line__label" x="220" y="160">10</text><path class="number-line__hop" d="M228 100 Q270 20 312 100"/><circle class="number-line__dot number-line__dot--said" cx="320" cy="110" r="13"/><text class="number-line__label" x="320" y="160">15</text><path class="number-line__hop" d="M328 100 Q370 20 412 100"/><circle class="number-line__dot number-line__dot--said" cx="420" cy="110" r="13"/><text class="number-line__label" x="420" y="160">20</text><circle class="number-line__dot number-line__dot--next" cx="520" cy="110" r="9"/><text class="number-line__label number-line__label--next" x="520" y="160">?</text><circle class="number-line__dot " cx="620" cy="110" r="9"/><circle class="number-line__dot " cx="720" cy="110" r="9"/><circle class="number-line__dot " cx="820" cy="110" r="9"/><circle class="number-line__dot " cx="920" cy="110" r="9"/><circle class="number-line__dot " cx="1020" cy="110" r="9"/></svg>
+    <div class="stage stage--spaced">
+      <div class="switch switch--step" role="radiogroup" aria-label="Count by"><button class="switch__option" data-by="2" type="button" role="radio" aria-checked="false">By 2s</button><button class="switch__option" data-by="5" type="button" role="radio" aria-checked="true">By 5s</button><button class="switch__option" data-by="10" type="button" role="radio" aria-checked="false">By 10s</button></div>
+      <svg class="number-line" viewBox="-24 0 1088 174" role="img" aria-label="Number line counting by 5: 0, 5, 10, 15, 20"><line class="number-line__axis" x1="20" y1="110" x2="1020" y2="110"/><circle class="number-line__dot number-line__dot--said" cx="20" cy="110" r="13"/><text class="number-line__label" x="20" y="160">0</text><path class="number-line__hop" d="M28 100 Q70 20 112 100"/><circle class="number-line__dot number-line__dot--said" cx="120" cy="110" r="13"/><text class="number-line__label" x="120" y="160">5</text><path class="number-line__hop" d="M128 100 Q170 20 212 100"/><circle class="number-line__dot number-line__dot--said" cx="220" cy="110" r="13"/><text class="number-line__label" x="220" y="160">10</text><path class="number-line__hop" d="M228 100 Q270 20 312 100"/><circle class="number-line__dot number-line__dot--said" cx="320" cy="110" r="13"/><text class="number-line__label" x="320" y="160">15</text><path class="number-line__hop" d="M328 100 Q370 20 412 100"/><circle class="number-line__dot number-line__dot--said" cx="420" cy="110" r="13"/><text class="number-line__label" x="420" y="160">20</text><circle class="number-line__dot number-line__dot--next" cx="520" cy="110" r="9"/><text class="number-line__label number-line__label--next" x="520" y="160">?</text><circle class="number-line__dot " cx="620" cy="110" r="9"/><circle class="number-line__dot " cx="720" cy="110" r="9"/><circle class="number-line__dot " cx="820" cy="110" r="9"/><circle class="number-line__dot " cx="920" cy="110" r="9"/><circle class="number-line__dot " cx="1020" cy="110" r="9"/></svg>
       <div class="choices" role="group" aria-label="Where do we land next?"><button class="numeral numeral--wide press" type="button" disabled>25</button><button class="numeral numeral--wide press" type="button" disabled>24</button><button class="numeral numeral--wide press" type="button" disabled>30</button></div>
     </div>
   </main>
@@ -44,5 +45,6 @@
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>
 <script src="../../assets/mock.js"></script>
+<script src="../../assets/skip-count.js"></script>
 </body>
 </html>

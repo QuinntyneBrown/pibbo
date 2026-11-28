@@ -10,11 +10,25 @@ frames and the "Pibbo Brand" prototype. Each screen in `manifest.json` names its
 `prototype_frame`. These mocks were transcribed from the prototype as it stands, at the
 repository owner's direction, without reconciling it with `AGENTS.md` (see *Open questions*).
 
+The [Magic Patterns alignment log](alignment-log.md) records each verified change by mock state and prototype reference.
+
 ## Opening the mocks
 
-- `index.html`: a gallery of every screen and state.
+- On a state page, scroll past the mock to reach its design note and review toolbar. At phone widths, the state pills wrap so every label stays visible.
+- The gallery shows a larger preview of each screen with review chrome hidden. The Dark theme switch updates the previews and the linked state pages. Available states appear beneath each preview; the coverage table below lists inapplicable states.
 - `?theme=dark` or `?theme=light` forces a theme; the mock bar toggles it, and so does the `t` key.
 - `?chrome=0` hides the mock bar and the yellow design notes, leaving only the product.
+- Home’s group pictures switch the visible activities. Count the toys, Which is bigger and Sound it out let a reviewer change the selected answer and check it.
+- Spell by sound, Rhyme time and Build a sentence let you build an answer, change it, and check it. Spot the word highlights each target you find and opens the completion screen after the last one.
+- Games opened from Home return to the same group. Opening Sound it out, Big and small letters or Count and write from Home starts a fresh round. Opening a state directly shows its illustrated example.
+- In a guided lesson, Leave returns to the current step. Finish the game and choose Next to unlock the following step. The second reading game uses “map” and the third introduces “sh” in “ship”.
+- Sound it out previews map, ship, boat, cape and sunset. Touch the remaining parts, choose Read it fast, and select a picture. The quiet e and the syllable captions stay visible when choosing a picture.
+- What do I know? runs through the ship, duck, rhyme and numeral questions. Feedback keeps the selected answer visible and the fourth question leads to Results. Choose Try it to practise the “oa” sound in “boat”.
+- In Count and write, touch the remaining toys, enter the total, and choose Check. Clear empties both boxes. A wrong answer demonstrates the digits in order.
+- Add together lets Star and Moon add or remove ducks in turn. Done passes the pond to the next player, then opens the total choices. A wrong answer highlights each duck before the players choose again.
+- Counting dance previews the beat visually. Start or resume to advance the chant, pause to hold a number, and choose Slow or Fast to change tempo. The playing frame opens at beat five for inspection.
+- Rocket countdown moves one notch per correct answer. Skip-count draws each hop and lets you restart the line by choosing a step size. Both keep your place when you try again.
+- In Letter sounds, Big and small letters and Words and pictures, choose one card from each column. Matched pairs keep their colour as you finish the round.
 - Each Check, Next and Try again button links to the state it leads to, so you can click
   through a game the way a child would play it.
 
@@ -47,14 +61,13 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
 
 ### Where the mocks depart from the prototype
 
+- **Replaying a completed lesson step.** Next returns to the first unfinished game. The prototype advances its step counter after each completion, which can skip an unplayed game during a replay.
 - **Dark theme added.** The prototype is light only. The dark theme is new: Pibbo and
-  the brand colours are kept, and pictures sit on a light plate.
+  the brand colours are kept, and pictures sit on a light plate. Counting, reading and success symbols use the light tints of their respective prototype colours against dark surfaces.
 - **Self-hosted fonts and pictures.** The prototype loads Fredoka and Andika from Google
   Fonts and its pictures from the Magic Patterns CDN. The mocks bundle copies so they
   open offline.
-- **Static states for live behaviour.** The prototype animates the rocket, the dance,
-  the blend sweep and a wrong pair's shake. The mocks show a single frame and describe the
-  motion in a note.
+- **Direct links to activity states.** Each page opens at its illustrated state. The rocket, dance, blending and pair-matching examples can also be played through using their controls.
 - **Links instead of handlers.** Leave, Next, Try again, Check and the game cards are
   links between mock files. In the product they are buttons and routes.
 - **Words and pictures, Spot the word, Build a sentence and What do I know?** are
@@ -172,7 +185,7 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 
 ### Pages
 
-| Screen | default | loading | empty | error | counting | counting-more | first-visit | start | done | choose | correct | retry | modelled | written | hint | picked | by-twos | moon-turn | playing | held | miss | ready | pick | magic-e | syllables | full | all-chosen | answered | counting-question | results | groups | clusters | first-two | first-two-retry | Requirements |
+| Screen | default | loading | empty | error | counting | counting-more | first-visit | start | done | choose | correct | retry | modelled | written | hint | picked | by-twos | moon-turn | playing | held | miss | ready | pick | magic-e | syllables | groups | clusters | first-two | first-two-retry | full | all-chosen | answered | counting-question | results | Requirements |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Home · Choose an activity (`home`) | [✅](pages/home/default.html) | ➖ | ➖ | ➖ | [✅](pages/home/counting.html) | [✅](pages/home/counting-more.html) | [✅](pages/home/first-visit.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-024`, `L2-035` |
 | Activity placeholder (`activity-placeholder`) | [✅](pages/activity-placeholder/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-024` |
@@ -185,14 +198,14 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 | Add together (`add-together`) | [✅](pages/add-together/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/add-together/start.html) |  |  | [✅](pages/add-together/correct.html) | [✅](pages/add-together/retry.html) |  |  |  | [✅](pages/add-together/picked.html) |  | [✅](pages/add-together/moon-turn.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-008`, `L2-025` |
 | Counting dance (`counting-dance`) | [✅](pages/counting-dance/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/counting-dance/start.html) |  |  | [✅](pages/counting-dance/correct.html) |  |  |  |  |  |  |  | [✅](pages/counting-dance/playing.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-009`, `L2-025` |
 | Letter sounds (`letter-sounds`) | [✅](pages/letter-sounds/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/letter-sounds/start.html) |  |  | [✅](pages/letter-sounds/correct.html) |  |  |  |  |  |  |  |  | [✅](pages/letter-sounds/held.html) | [✅](pages/letter-sounds/miss.html) |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-010`, `L2-025`, `L2-026` |
-| Big and small letters (`big-and-small-letters`) | [✅](pages/big-and-small-letters/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/big-and-small-letters/correct.html) |  |  |  |  |  |  |  |  | [✅](pages/big-and-small-letters/held.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Big and small letters (`big-and-small-letters`) | [✅](pages/big-and-small-letters/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/big-and-small-letters/correct.html) |  |  |  |  |  |  |  |  | [✅](pages/big-and-small-letters/held.html) | [✅](pages/big-and-small-letters/miss.html) |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-011`, `L2-025`, `L2-026` |
 | Words and pictures (`words-and-pictures`) | [✅](pages/words-and-pictures/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/words-and-pictures/correct.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| Sound it out (`sound-it-out`) | [✅](pages/sound-it-out/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/sound-it-out/correct.html) | [✅](pages/sound-it-out/retry.html) | [✅](pages/sound-it-out/modelled.html) |  |  |  |  |  |  |  |  | [✅](pages/sound-it-out/ready.html) | [✅](pages/sound-it-out/pick.html) | [✅](pages/sound-it-out/magic-e.html) | [✅](pages/sound-it-out/syllables.html) |  |  |  |  |  | [✅](pages/sound-it-out/groups.html) | [✅](pages/sound-it-out/clusters.html) | [✅](pages/sound-it-out/first-two.html) | [✅](pages/sound-it-out/first-two-retry.html) | `L2-012`, `L2-014`, `L2-015`, `L2-025`, `L2-026` |
-| Spell by sound (`spell-by-sound`) | [✅](pages/spell-by-sound/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/spell-by-sound/correct.html) | [✅](pages/spell-by-sound/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/spell-by-sound/full.html) |  |  |  |  |  |  |  |  |  |
-| Rhyme time (`rhyme-time`) | [✅](pages/rhyme-time/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/rhyme-time/start.html) |  |  | [✅](pages/rhyme-time/correct.html) | [✅](pages/rhyme-time/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/rhyme-time/all-chosen.html) |  |  |  |  |  |  |  |  |
+| Sound it out (`sound-it-out`) | [✅](pages/sound-it-out/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/sound-it-out/correct.html) | [✅](pages/sound-it-out/retry.html) | [✅](pages/sound-it-out/modelled.html) |  |  |  |  |  |  |  |  | [✅](pages/sound-it-out/ready.html) | [✅](pages/sound-it-out/pick.html) | [✅](pages/sound-it-out/magic-e.html) | [✅](pages/sound-it-out/syllables.html) | [✅](pages/sound-it-out/groups.html) | [✅](pages/sound-it-out/clusters.html) | [✅](pages/sound-it-out/first-two.html) | [✅](pages/sound-it-out/first-two-retry.html) |  |  |  |  |  | `L2-012`, `L2-014`, `L2-015`, `L2-025`, `L2-026` |
+| Spell by sound (`spell-by-sound`) | [✅](pages/spell-by-sound/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/spell-by-sound/correct.html) | [✅](pages/spell-by-sound/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/spell-by-sound/full.html) |  |  |  |  | `L2-013`, `L2-025`, `L2-026` |
+| Rhyme time (`rhyme-time`) | [✅](pages/rhyme-time/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/rhyme-time/start.html) |  |  | [✅](pages/rhyme-time/correct.html) | [✅](pages/rhyme-time/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/rhyme-time/all-chosen.html) |  |  |  |  |
 | Spot the word (`spot-the-word`) | [✅](pages/spot-the-word/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/spot-the-word/correct.html) |  |  |  |  |  |  |  |  |  | [✅](pages/spot-the-word/miss.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| Build a sentence (`build-a-sentence`) | [✅](pages/build-a-sentence/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/build-a-sentence/start.html) |  |  | [✅](pages/build-a-sentence/correct.html) | [✅](pages/build-a-sentence/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/build-a-sentence/full.html) |  |  |  |  |  |  |  |  |  |
-| What do I know? (`progress-check`) | [✅](pages/progress-check/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/progress-check/correct.html) | [✅](pages/progress-check/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/progress-check/answered.html) | [✅](pages/progress-check/counting-question.html) | [✅](pages/progress-check/results.html) |  |  |  |  |  |
+| Build a sentence (`build-a-sentence`) | [✅](pages/build-a-sentence/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/build-a-sentence/start.html) |  |  | [✅](pages/build-a-sentence/correct.html) | [✅](pages/build-a-sentence/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/build-a-sentence/full.html) |  |  |  |  |  |
+| What do I know? (`progress-check`) | [✅](pages/progress-check/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/progress-check/correct.html) | [✅](pages/progress-check/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/progress-check/answered.html) | [✅](pages/progress-check/counting-question.html) | [✅](pages/progress-check/results.html) |  |
 | Pibbo brand (`brand`) | [✅](pages/brand/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 
 <!-- coverage:end -->

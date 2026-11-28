@@ -7,6 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="which-is-bigger">
 <meta name="mock:state" content="picked">
+<meta name="mock:requirements" content="L2-005, L2-025">
 <meta name="description" content="7 chosen and outlined; Check is ready.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -16,7 +17,7 @@
 <a class="skip-link" href="#main">Skip to the game</a>
 <div class="shell shell--count">
   <header class="shell__top">
-    <a class="chunky chunky--white chunky--icon press" href="../home/default.html" aria-label="Leave game"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
+    <a class="chunky chunky--white chunky--icon press" href="../home/counting.html" aria-label="Leave game"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
     <div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"><div class="progress__fill progress__fill--3"></div></div>
   </header>
   <div class="shell__ask">
@@ -28,9 +29,9 @@
   </div>
   <main class="shell__game" id="main" aria-labelledby="prompt">
     <h1 class="visually-hidden">Which is bigger?</h1>
-    <div class="compare"><button class="compare__card press" type="button" aria-pressed="true" aria-label="7, 7 dots"><span class="compare__number" aria-hidden="true">7</span><span class="ten-frame" aria-hidden="true"><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span></span></button><button class="compare__card press" type="button" aria-pressed="false" aria-label="4, 4 dots"><span class="compare__number" aria-hidden="true">4</span><span class="ten-frame" aria-hidden="true"><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span></span></button></div>
+    <div class="compare"><button class="compare__card press" type="button" aria-pressed="true" aria-label="7, 7 dots" data-check-href="correct.html"><span class="compare__number" aria-hidden="true">7</span><span class="ten-frame" aria-hidden="true"><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span></span></button><button class="compare__card press" type="button" aria-pressed="false" aria-label="4, 4 dots" data-check-href="retry.html"><span class="compare__number" aria-hidden="true">4</span><span class="ten-frame" aria-hidden="true"><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"><span class="ten-frame__dot"></span></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span><span class="ten-frame__cell"></span></span></button></div>
   </main>
-  <footer class="answer-bar answer-bar--check"><a class="chunky chunky--count chunky--wide press" href="../which-is-bigger/correct.html">Check</a></footer>
+  <footer class="answer-bar answer-bar--check"><a class="chunky chunky--count chunky--wide press" href="../which-is-bigger/correct.html" data-check-action>Check</a></footer>
 </div>
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>

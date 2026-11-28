@@ -1,21 +1,86 @@
-/* ==========================================================================
-   Pibbo design tokens: the single source of truth (docs/design-system).
-   Colour: only the ramps in palette-source.md (plus white and black).
-   Tiers: primitives (--palette-*), semantic (--color-*, --space-*, ...),
-   component tokens live in assets/components.css.
-   Light is :root. Dark is [data-theme="dark"], or the OS preference
-   unless the page forces [data-theme="light"]. Generated; keep blocks in step.
-   ========================================================================== */
+/* Pibbo design tokens from tokens.json. */
+@font-face {
+  font-family: "Andika";
+  src: url("../../mocks/assets/fonts/andika-400.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
 
-@font-face { font-family: "Fredoka"; font-weight: 400; font-display: swap; src: url("../assets/fonts/fredoka-400.ttf") format("truetype"); }
-@font-face { font-family: "Fredoka"; font-weight: 500; font-display: swap; src: url("../assets/fonts/fredoka-500.ttf") format("truetype"); }
-@font-face { font-family: "Fredoka"; font-weight: 600; font-display: swap; src: url("../assets/fonts/fredoka-600.ttf") format("truetype"); }
-@font-face { font-family: "Fredoka"; font-weight: 700; font-display: swap; src: url("../assets/fonts/fredoka-700.ttf") format("truetype"); }
-@font-face { font-family: "Andika"; font-weight: 400; font-display: swap; src: url("../assets/fonts/andika-400.ttf") format("truetype"); }
-@font-face { font-family: "Andika"; font-weight: 700; font-display: swap; src: url("../assets/fonts/andika-700.ttf") format("truetype"); }
+@font-face {
+  font-family: "Andika";
+  src: url("../../mocks/assets/fonts/andika-700.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fredoka";
+  src: url("../../mocks/assets/fonts/fredoka-400.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fredoka";
+  src: url("../../mocks/assets/fonts/fredoka-500.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fredoka";
+  src: url("../../mocks/assets/fonts/fredoka-600.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fredoka";
+  src: url("../../mocks/assets/fonts/fredoka-700.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
 
 :root {
-  /* ---------- Primitives: colour (palette-source.md) ---------- */
+  --palette-app-paper: #f7f1fc;
+  --palette-app-ink: #210b4a;
+  --palette-brand-paper: #fff7e8;
+  --palette-brand-ink: #2a2140;
+  --palette-mascot-sun: #ffc23d;
+  --palette-mascot-wing: #f0a516;
+  --palette-mascot-belly: #ffe39b;
+  --palette-mascot-leaf: #2fb26a;
+  --palette-mascot-stem: #1b8549;
+  --palette-mascot-berry: #ef4e5a;
+  --palette-mascot-beak: #c22f3d;
+  --palette-mascot-foot: #f28b3c;
+  --palette-app-line: #e2d2f1;
+  --palette-app-muted: #625485;
+  --palette-app-well: #ede1f8;
+  --palette-app-sun: #f4a6e6;
+  --palette-app-berry: #d43cbc;
+  --palette-app-sky: #6d2ee6;
+  --palette-app-leaf: #3a4fe0;
+  --palette-app-sun-deep: #b02f9c;
+  --palette-app-sun-soft: #fce9f8;
+  --palette-app-berry-deep: #a1228e;
+  --palette-app-berry-soft: #fbe3f6;
+  --palette-app-sky-deep: #5019c0;
+  --palette-app-sky-soft: #ece3fd;
+  --palette-app-leaf-deep: #22309f;
+  --palette-app-leaf-soft: #e2e6ff;
+  --palette-app-sky-edge: #11508f;
+  --palette-app-berry-edge: #8f1f2b;
+  --palette-app-leaf-edge: #126236;
+  --palette-app-ink-edge: #120c20;
+  --palette-brand-muted: #645b78;
+  --palette-brand-line: #ecdcc0;
+  --palette-brand-sky: #2e8fe8;
+  --palette-pair-1: #fff0c4;
+  --palette-pair-2: #dcedff;
+  --palette-pair-3: #dcf5e6;
+  --palette-pair-4: #ffe3e2;
+  --palette-pair-5: #efe6ff;
   --palette-white: #ffffff;
   --palette-black: #000000;
   --palette-neutral-50: #f6f5f2;
@@ -51,161 +116,160 @@
   --palette-red-300: #ea7b7b;
   --palette-red-600: #e30450;
   --palette-navy-900: #06065d;
-
-  /* ---------- Semantic: colour (light) ---------- */
-  --color-bg-canvas: var(--palette-neutral-50);  /* page background */
-  --color-bg-surface: var(--palette-white);  /* cards, tiles, buttons */
-  --color-bg-surface-raised: var(--palette-white);  /* speech bubble, raised cards */
-  --color-bg-surface-sunken: var(--palette-neutral-100);  /* tracks, wells, progress track */
-  --color-bg-subtle: var(--palette-neutral-100);  /* quiet chips, hover rows */
-  --color-bg-subtle-hover: var(--palette-neutral-200);  /* hovered quiet chips */
-  --color-bg-inverse: var(--palette-neutral-900);  /* inverse surfaces */
-  --color-bg-backdrop: rgb(42 41 35 / 0.55);  /* scrim (unused by the child) */
-  --color-fg-default: var(--palette-neutral-900);  /* text */
-  --color-fg-muted: var(--palette-neutral-700);  /* secondary text */
-  --color-fg-subtle: var(--palette-neutral-700);  /* metadata (same as muted: #807b74 fails 4.5:1) */
-  --color-fg-disabled: var(--palette-neutral-500);  /* disabled text, exempt */
-  --color-fg-inverse: var(--palette-neutral-50);  /* text on inverse */
-  --color-fg-link: var(--palette-purple-500);  /* links */
-  --color-fg-link-hover: var(--palette-purple-600);  /* hovered links */
-  --color-fg-accent: var(--palette-purple-500);  /* accent text */
-  --color-fg-on-accent: var(--palette-white);  /* text on accent */
-  --color-border-default: var(--palette-neutral-200);  /* decorative edges */
-  --color-border-strong: var(--palette-neutral-500);  /* edges that must be seen (3:1) */
-  --color-border-inverse: var(--palette-neutral-700);  /* edges on inverse */
-  --color-accent: var(--palette-purple-500);  /* primary accent */
-  --color-accent-hover: var(--palette-purple-600);  /* accent hover */
-  --color-accent-active: var(--palette-purple-800);  /* accent pressed */
-  --color-accent-subtle: var(--palette-purple-50);  /* accent tint */
-  --color-accent-subtle-hover: var(--palette-purple-200);  /* accent tint hover */
-  --color-focus-ring: var(--palette-purple-500);  /* focus outline */
+  --color-bg: var(--color-bg-canvas);
+  --color-bg-canvas: var(--palette-app-paper);
+  --color-bg-surface: var(--palette-white);
+  --color-bg-surface-raised: var(--palette-white);
+  --color-bg-surface-sunken: var(--palette-app-well);
+  --color-bg-subtle: var(--palette-neutral-100);
+  --color-bg-subtle-hover: var(--palette-neutral-200);
+  --color-bg-inverse: var(--palette-neutral-900);
+  --color-bg-backdrop: rgb(42 41 35 / 0.55);
+  --color-bg-sunken: var(--color-bg-surface-sunken);
+  --color-fg: var(--color-fg-default);
+  --color-fg-default: var(--palette-app-ink);
+  --color-fg-muted: var(--palette-app-muted);
+  --color-fg-subtle: var(--palette-neutral-700);
+  --color-fg-disabled: var(--palette-neutral-500);
+  --color-fg-inverse: var(--palette-neutral-50);
+  --color-fg-link: var(--palette-purple-500);
+  --color-fg-link-hover: var(--palette-purple-600);
+  --color-fg-accent: var(--palette-purple-500);
+  --color-fg-on-accent: var(--palette-white);
+  --color-fg-on-danger: var(--palette-white);
+  --color-fg-on-strong: var(--palette-white);
+  --color-border: var(--color-border-default);
+  --color-border-default: var(--palette-app-line);
+  --color-border-strong: var(--palette-neutral-500);
+  --color-border-inverse: var(--palette-neutral-700);
+  --color-accent: var(--palette-purple-500);
+  --color-accent-hover: var(--palette-purple-600);
+  --color-accent-active: var(--palette-purple-800);
+  --color-accent-subtle: var(--palette-purple-50);
+  --color-accent-subtle-hover: var(--palette-purple-200);
+  --color-focus: var(--color-focus-ring);
+  --color-focus-ring: var(--palette-purple-500);
+  --color-focus-ring-offset: var(--color-bg-surface);
   --color-info-bg: var(--palette-blue-50);
   --color-info-fg: var(--palette-blue-900);
   --color-info-border: var(--palette-blue-200);
   --color-info-icon: var(--palette-blue-600);
   --color-info-solid: var(--palette-blue-600);
+  --color-success: var(--palette-app-leaf);
   --color-success-bg: var(--palette-green-50);
-  --color-success-fg: var(--palette-green-700);  /* dark shades for text */
+  --color-success-fg: var(--palette-green-700);
   --color-success-border: var(--palette-green-400);
   --color-success-icon: var(--palette-green-700);
   --color-success-solid: var(--palette-green-700);
-  --color-warning-bg: var(--palette-purple-50);  /* retry: calm, never alarming */
+  --color-success-strong: var(--palette-app-leaf-deep);
+  --color-success-depth: var(--palette-app-leaf-edge);
+  --color-success-soft: var(--palette-app-leaf-soft);
+  --color-warning-bg: var(--palette-purple-50);
   --color-warning-fg: var(--palette-neutral-900);
   --color-warning-border: var(--palette-purple-200);
   --color-warning-icon: var(--palette-purple-600);
   --color-warning-solid: var(--palette-purple-600);
-  --color-danger-bg: var(--palette-pink-50);  /* grown-up errors only */
+  --color-danger-bg: var(--palette-pink-50);
   --color-danger-fg: var(--palette-pink-800);
   --color-danger-border: var(--palette-red-300);
   --color-danger-icon: var(--palette-red-600);
   --color-danger-solid: var(--palette-red-600);
   --color-danger-solid-hover: var(--palette-pink-800);
-  --color-fg-on-danger: var(--palette-white);
-  --color-depth: var(--palette-neutral-200);  /* pressed-in edge under a white button */
-  --color-fg-on-strong: var(--palette-white);  /* label on a strong subject colour */
-  --color-read: var(--palette-pink-400);  /* Read subject, fills */
-  --color-read-strong: var(--palette-pink-600);  /* Read buttons (white label) */
-  --color-read-depth: var(--palette-pink-800);  /* Read press edge */
-  --color-read-soft: var(--palette-pink-50);  /* Read tint */
-  --color-read-fg: var(--palette-pink-800);  /* Read-coloured text on surfaces and tints */
-  --color-count: var(--palette-blue-500);  /* Count subject, fills */
-  --color-count-strong: var(--palette-blue-600);  /* Count buttons (white label) */
-  --color-count-depth: var(--palette-blue-900);  /* Count press edge */
-  --color-count-soft: var(--palette-blue-50);  /* Count tint (the rug) */
-  --color-count-trace: var(--palette-blue-200);  /* dashed guides */
-  --color-count-fg: var(--palette-blue-600);  /* Count-coloured text on surfaces and tints */
-  --color-success: var(--palette-green-500);  /* success fills */
-  --color-success-strong: var(--palette-green-700);  /* success buttons (white label) */
-  --color-success-depth: var(--palette-green-950);  /* success press edge */
-  --color-success-soft: var(--palette-green-50);  /* correct answer bar */
-  --color-reward: var(--palette-purple-200);  /* stars, reward buttons */
-  --color-reward-strong: var(--palette-purple-500);  /* star outline */
-  --color-reward-soft: var(--palette-purple-50);  /* retry answer bar */
-  --color-on-reward: var(--palette-neutral-900);  /* label on reward */
-  --color-reward-depth: var(--palette-purple-500);  /* reward press edge */
-  --color-ink-button: var(--palette-neutral-900);  /* ink button */
-  --color-ink-button-depth: var(--palette-black);
-  --color-pair-1: var(--palette-purple-50);  /* matched pairs, in order */
-  --color-pair-2: var(--palette-blue-50);
-  --color-pair-3: var(--palette-green-50);
-  --color-pair-4: var(--palette-pink-50);
-  --color-pair-5: var(--palette-neutral-100);
-  --color-pair-depth: rgb(42 41 35 / 0.12);
-  --color-picture-plate: transparent;  /* plate behind a sticker picture */
-  --color-on-strong-dim: rgb(255 255 255 / 0.35);  /* lesson dots, quiet */
-  --color-on-strong-line: rgb(255 255 255 / 0.7);  /* rule on a tint */
-  --color-brand-seed: var(--palette-purple-500);  /* wordmark seed */
-  --color-brand-leaf: var(--palette-green-500);  /* wordmark leaf */
-  --color-pibbo-body: var(--palette-green-200);  /* mascot art: constant across themes */
-  --color-pibbo-belly: var(--palette-green-50);
-  --color-pibbo-wing: var(--palette-green-400);
-  --color-pibbo-foot: var(--palette-pink-400);
-  --color-pibbo-leaf: var(--palette-green-500);
-  --color-pibbo-stem: var(--palette-green-700);
+  --color-depth: var(--palette-app-line);
+  --color-read: var(--palette-app-berry);
+  --color-read-strong: var(--palette-app-berry-deep);
+  --color-read-depth: var(--palette-app-berry-edge);
+  --color-read-soft: var(--palette-app-berry-soft);
+  --color-read-fg: var(--palette-pink-800);
+  --color-count: var(--palette-app-sky);
+  --color-count-strong: var(--palette-app-sky-deep);
+  --color-count-depth: var(--palette-app-sky-edge);
+  --color-count-soft: var(--palette-app-sky-soft);
+  --color-count-trace: var(--palette-blue-200);
+  --color-count-fg: var(--palette-blue-600);
+  --color-reward: var(--palette-app-sun);
+  --color-reward-strong: var(--palette-app-sun-deep);
+  --color-reward-soft: var(--palette-app-sun-soft);
+  --color-reward-depth: var(--palette-app-sun-deep);
+  --color-on-reward: var(--palette-app-ink);
+  --color-on-strong-dim: rgb(255 255 255 / 0.35);
+  --color-on-strong-line: rgb(255 255 255 / 0.7);
+  --color-ink-button: var(--palette-app-ink);
+  --color-ink-button-depth: var(--palette-app-ink-edge);
+  --color-pair-1: var(--palette-pair-1);
+  --color-pair-2: var(--palette-pair-2);
+  --color-pair-3: var(--palette-pair-3);
+  --color-pair-4: var(--palette-pair-4);
+  --color-pair-5: var(--palette-pair-5);
+  --color-pair-depth: rgb(33 11 74 / 0.12);
+  --color-picture-plate: transparent;
+  --color-brand-seed: var(--palette-mascot-sun);
+  --color-brand-leaf: var(--palette-mascot-leaf);
+  --color-pibbo-body: var(--palette-mascot-sun);
+  --color-pibbo-belly: var(--palette-mascot-belly);
+  --color-pibbo-wing: var(--palette-mascot-wing);
+  --color-pibbo-foot: var(--palette-mascot-foot);
+  --color-pibbo-leaf: var(--palette-mascot-leaf);
+  --color-pibbo-stem: var(--palette-mascot-stem);
   --color-pibbo-eye: var(--palette-white);
-  --color-pibbo-ink: var(--palette-neutral-900);
-  --color-pibbo-cheek: var(--palette-pink-400);
-  --color-pibbo-beak: var(--palette-pink-600);
-  --color-pibbo-beak-deep: var(--palette-pink-800);
-  --color-art-light: var(--palette-white);  /* art: rocket body, path rail, badge ring */
-  --color-art-ink: var(--palette-neutral-900);  /* art outline */
-  --color-art-flame: var(--palette-pink-400);  /* rocket flame */
-  --color-art-fin: var(--palette-purple-500);  /* rocket fin */
-  --color-art-window: var(--palette-blue-400);  /* rocket window */
-
-  /* ---------- Primitives: typography ---------- */
-  --font-display: "Fredoka", ui-rounded, system-ui, sans-serif;  /* Pibbo's voice, buttons, titles */
-  --font-read: "Andika", "Fredoka", system-ui, sans-serif;       /* anything a child reads to learn: single-storey a and g */
+  --color-pibbo-ink: var(--palette-brand-ink);
+  --color-pibbo-cheek: var(--palette-mascot-berry);
+  --color-pibbo-beak: var(--palette-mascot-berry);
+  --color-pibbo-beak-deep: var(--palette-mascot-beak);
+  --color-art-light: var(--palette-white);
+  --color-art-ink: var(--palette-app-ink);
+  --color-art-flame: var(--palette-app-sun);
+  --color-art-fin: var(--palette-app-berry);
+  --color-art-window: var(--palette-app-sky);
+  --color-surface: var(--color-bg-surface);
+  --font-display: "Fredoka", ui-rounded, system-ui, sans-serif;
+  --font-read: "Andika", "Fredoka", system-ui, sans-serif;
   --font-family-sans: var(--font-display);
-  --font-family-mono: ui-monospace, "Cascadia Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-family-mono: ui-monospace, Cascadia Mono, SFMono-Regular, Menlo, Consolas, monospace;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  --font-size-xs: 0.75rem;    /* 12 */
-  --font-size-sm: 0.875rem;   /* 14 */
-  --font-size-md: 1rem;       /* 16 */
-  --font-size-lg: 1.125rem;   /* 18 */
-  --font-size-xl: 1.25rem;    /* 20 button label */
-  --font-size-2xl: 1.5rem;    /* 24 spoken prompt (>= 40rem) */
-  --font-size-3xl: 1.875rem;  /* 30 */
-  --font-size-4xl: 2.25rem;   /* 36 */
-  --font-size-5xl: 3rem;      /* 48 numeral */
-  --font-size-6xl: 3.75rem;   /* 60 */
-  --font-size-7xl: 4.5rem;    /* 72 */
-  --font-size-8xl: 6rem;      /* 96 tally */
-  --font-size-hero: 7rem;     /* 112 */
-  --font-size-giant: 9rem;    /* 144 */
-  --line-height-tight: 1.15;
-  --line-height-snug: 1.35;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --font-size-7xl: 4.5rem;
+  --font-size-8xl: 6rem;
+  --font-size-hero: 7rem;
+  --font-size-giant: 9rem;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.6;
   --letter-spacing-tight: -0.01em;
   --letter-spacing-normal: 0;
   --letter-spacing-wide: 0.06em;
   --letter-spacing-wordmark: -0.025em;
-
-  /* ---------- Semantic: typography roles ---------- */
-  --text-display: var(--font-weight-bold) var(--font-size-5xl) / var(--line-height-tight) var(--font-display);
-  --text-h1: var(--font-weight-bold) var(--font-size-4xl) / var(--line-height-tight) var(--font-display);
-  --text-h2: var(--font-weight-semibold) var(--font-size-3xl) / var(--line-height-tight) var(--font-display);
-  --text-h3: var(--font-weight-semibold) var(--font-size-2xl) / var(--line-height-snug) var(--font-display);
-  --text-h4: var(--font-weight-semibold) var(--font-size-xl) / var(--line-height-snug) var(--font-display);
-  --text-body-lg: var(--font-weight-regular) var(--font-size-lg) / var(--line-height-normal) var(--font-display);
-  --text-body: var(--font-weight-regular) var(--font-size-md) / var(--line-height-normal) var(--font-display);
-  --text-body-sm: var(--font-weight-regular) var(--font-size-sm) / var(--line-height-normal) var(--font-display);
-  --text-caption: var(--font-weight-medium) var(--font-size-sm) / 1.3 var(--font-display);
-  --text-label: var(--font-weight-medium) var(--font-size-sm) / var(--line-height-normal) var(--font-display);
-  --text-overline: var(--font-weight-semibold) var(--font-size-xs) / var(--line-height-normal) var(--font-display);
-  --text-code: var(--font-weight-regular) var(--font-size-sm) / var(--line-height-normal) var(--font-family-mono);
-  --text-prompt: var(--font-weight-semibold) var(--font-size-xl) / var(--line-height-snug) var(--font-display);
-  --text-numeral: var(--font-weight-bold) var(--font-size-5xl) / 1 var(--font-read);
-
-  /* ---------- Semantic: spacing (4px grid) ---------- */
+  --text-display: 700 3rem / 1.15 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-h1: 700 2.25rem / 1.15 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-h2: 600 1.875rem / 1.15 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-h3: 600 1.5rem / 1.35 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-h4: 600 1.25rem / 1.35 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-body: 400 1rem / 1.5 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-body-lg: 400 1.125rem / 1.5 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-body-sm: 400 0.875rem / 1.5 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-caption: 500 0.875rem / 1.3 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-label: 500 0.875rem / 1.5 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-overline: 600 0.75rem / 1.5 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-code: 400 0.875rem / 1.5 ui-monospace, "Cascadia Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --text-prompt: 600 1.25rem / 1.35 "Fredoka", ui-rounded, system-ui, sans-serif;
+  --text-numeral: 700 3rem / 1 "Andika", "Fredoka", system-ui, sans-serif;
   --space-0: 0;
   --space-0-5: 0.125rem;
   --space-1: 0.25rem;
-  --space-1-5: 0.375rem;  /* 6px: off-grid, kept for the pill and switch insets (drift) */
+  --space-1-5: 0.375rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
@@ -218,8 +282,6 @@
   --space-16: 4rem;
   --space-20: 5rem;
   --space-24: 6rem;
-
-  /* ---------- Semantic: size ---------- */
   --size-1: 0.75rem;
   --size-2: 1rem;
   --size-3: 1.25rem;
@@ -235,30 +297,23 @@
   --size-13: 7rem;
   --size-14: 8rem;
   --size-15: 9rem;
-
-  /* ---------- Semantic: interaction ---------- */
-  --target-min: 3rem;           /* 48px: smallest target anywhere */
-  --target-comfortable: 3.5rem; /* 56px */
-  --target-child: 3.75rem;      /* 60px: smallest target a child touches (AGENTS.md, L2-024) */
-  --gap-targets: 1rem;          /* 16px: least space between two child targets */
-  --control-height: 3.5rem;     /* Chunky, large */
-  --control-height-md: 3rem;    /* Chunky, medium */
+  --target-min: 3rem;
+  --target-comfortable: 3.5rem;
+  --target-child: 3.75rem;
+  --gap-targets: 1rem;
+  --control-height: 3.5rem;
+  --control-height-md: 3rem;
   --progress-height: 1rem;
   --stroke-focus: 4px;
   --focus-ring-width: var(--stroke-focus);
   --focus-ring-offset: 3px;
   --border-width-hairline: 1px;
   --border-width-thick: 2px;
-
-  /* ---------- Semantic: layout ---------- */
   --layout-breakpoint-sm: 40rem;
   --layout-breakpoint-md: 48rem;
   --layout-breakpoint-lg: 64rem;
   --layout-breakpoint-xl: 80rem;
   --layout-breakpoint-2xl: 96rem;
-  --bp-sm: 40rem;
-  --bp-md: 48rem;
-  --bp-lg: 64rem;
   --layout-columns: 4;
   --layout-gutter: var(--space-4);
   --layout-margin: var(--space-4);
@@ -266,38 +321,35 @@
   --layout-measure: 65ch;
   --layout-sidebar-width: 16rem;
   --layout-topbar-height: 3.5rem;
+  --bp-sm: 40rem;
+  --bp-md: 48rem;
+  --bp-lg: 64rem;
   --content-max: 64rem;
   --content-narrow: 48rem;
-
-  /* ---------- Semantic: shape ---------- */
-  --radius-sm: 0.75rem;   /* 12 */
-  --radius-md: 1rem;      /* 16 icon buttons, numerals small, tiles */
-  --radius-lg: 1.25rem;   /* 20 Chunky */
-  --radius-xl: 1.5rem;    /* 24 cards, bubble, numerals */
-  --radius-2xl: 2rem;     /* 32 rug, lesson card, write pad */
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
   --radius-full: 999px;
-
-  /* ---------- Semantic: elevation (the press edge) ---------- */
   --press-depth: 5px;
   --press-depth-down: 1px;
   --press-travel: 4px;
   --shadow-color: 42 41 35;
-  --shadow-2: 0 4px 12px rgb(var(--shadow-color) / 0.12);
-  --shadow-3: 0 8px 24px rgb(var(--shadow-color) / 0.18);
-  --shadow-4: 0 16px 40px rgb(var(--shadow-color) / 0.24);
-
-  /* ---------- Semantic: motion ---------- */
-  --duration-instant: 120ms;    /* the press */
-  --duration-fast: 150ms;       /* colour changes */
+  --shadow-2: 0 4px 12px rgb(42 41 35 / 0.12);
+  --shadow-3: 0 8px 24px rgb(42 41 35 / 0.18);
+  --shadow-4: 0 16px 40px rgb(42 41 35 / 0.24);
+  --shadow-1: 0 2px 0 var(--color-border);
+  --shadow-focus: 0 0 0 3px #ffffff, 0 0 0 calc(3px + 4px) #7e2ee9;
+  --duration-instant: 120ms;
+  --duration-fast: 150ms;
   --duration-base: 220ms;
-  --duration-slow: 300ms;       /* progress fill */
-  --duration-deliberate: 500ms; /* Pibbo counting a toy */
+  --duration-slow: 300ms;
+  --duration-deliberate: 500ms;
   --ease-standard: ease-out;
-  --ease-enter: cubic-bezier(0, 0, 0, 1);
-  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
-  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
-
-  /* ---------- Semantic: z-order ---------- */
+  --ease-enter: cubic-bezier(0.0, 0.0, 0.0, 1.0);
+  --ease-exit: cubic-bezier(0.3, 0.0, 1.0, 1.0);
+  --ease-out-quint: cubic-bezier(0.23, 1.0, 0.32, 1.0);
   --z-base: 0;
   --z-raised: 10;
   --z-sticky: 20;
@@ -307,106 +359,15 @@
   --z-popover: 40;
   --z-toast: 45;
   --z-tooltip: 50;
-
   --picture-blend: multiply;
   color-scheme: light;
 }
 
-:root, [data-theme] {
-  /* Derived: re-resolved inside every themed wrapper so nested [data-theme] works */
-  --color-bg: var(--color-bg-canvas);
-  --color-bg-sunken: var(--color-bg-surface-sunken);
-  --color-surface: var(--color-bg-surface);
-  --color-border: var(--color-border-default);
-  --color-fg: var(--color-fg-default);
-  --color-focus: var(--color-focus-ring);
-  --color-focus-ring-offset: var(--color-bg-surface);
-  --shadow-1: 0 2px 0 var(--color-depth);
-  --shadow-focus: 0 0 0 var(--focus-ring-offset) var(--color-focus-ring-offset), 0 0 0 calc(var(--focus-ring-offset) + var(--stroke-focus)) var(--color-focus-ring);
+@media (min-width: 40rem) {
+  :root { --layout-margin: var(--space-8); }
 }
 
-@media (min-width: 40rem) { :root { --layout-margin: var(--space-8); } }
-@media (min-width: 48rem) { :root { --layout-columns: 8; --layout-gutter: var(--space-6); } }
-@media (min-width: 64rem) { :root { --layout-columns: 12; --layout-gutter: var(--space-8); --layout-margin: var(--space-12); } }
-
-/* Light forced on a nested wrapper (e.g. inside a dark page) */
-[data-theme="light"] {
-  --color-bg-canvas: var(--palette-neutral-50);
-  --color-bg-surface: var(--palette-white);
-  --color-bg-surface-raised: var(--palette-white);
-  --color-bg-surface-sunken: var(--palette-neutral-100);
-  --color-bg-subtle: var(--palette-neutral-100);
-  --color-bg-subtle-hover: var(--palette-neutral-200);
-  --color-bg-inverse: var(--palette-neutral-900);
-  --color-bg-backdrop: rgb(42 41 35 / 0.55);
-  --color-fg-default: var(--palette-neutral-900);
-  --color-fg-muted: var(--palette-neutral-700);
-  --color-fg-subtle: var(--palette-neutral-700);
-  --color-fg-inverse: var(--palette-neutral-50);
-  --color-fg-link: var(--palette-purple-500);
-  --color-fg-link-hover: var(--palette-purple-600);
-  --color-fg-accent: var(--palette-purple-500);
-  --color-fg-on-accent: var(--palette-white);
-  --color-border-default: var(--palette-neutral-200);
-  --color-border-strong: var(--palette-neutral-500);
-  --color-border-inverse: var(--palette-neutral-700);
-  --color-accent: var(--palette-purple-500);
-  --color-accent-hover: var(--palette-purple-600);
-  --color-accent-active: var(--palette-purple-800);
-  --color-accent-subtle: var(--palette-purple-50);
-  --color-accent-subtle-hover: var(--palette-purple-200);
-  --color-focus-ring: var(--palette-purple-500);
-  --color-info-bg: var(--palette-blue-50);
-  --color-info-fg: var(--palette-blue-900);
-  --color-info-border: var(--palette-blue-200);
-  --color-info-icon: var(--palette-blue-600);
-  --color-info-solid: var(--palette-blue-600);
-  --color-success-bg: var(--palette-green-50);
-  --color-success-fg: var(--palette-green-700);
-  --color-success-border: var(--palette-green-400);
-  --color-success-icon: var(--palette-green-700);
-  --color-success-solid: var(--palette-green-700);
-  --color-warning-bg: var(--palette-purple-50);
-  --color-warning-fg: var(--palette-neutral-900);
-  --color-warning-border: var(--palette-purple-200);
-  --color-warning-icon: var(--palette-purple-600);
-  --color-warning-solid: var(--palette-purple-600);
-  --color-danger-bg: var(--palette-pink-50);
-  --color-danger-fg: var(--palette-pink-800);
-  --color-danger-icon: var(--palette-red-600);
-  --color-danger-solid: var(--palette-red-600);
-  --color-danger-solid-hover: var(--palette-pink-800);
-  --color-fg-on-danger: var(--palette-white);
-  --color-depth: var(--palette-neutral-200);
-  --color-read-depth: var(--palette-pink-800);
-  --color-read-soft: var(--palette-pink-50);
-  --color-read-fg: var(--palette-pink-800);
-  --color-count-depth: var(--palette-blue-900);
-  --color-count-soft: var(--palette-blue-50);
-  --color-count-trace: var(--palette-blue-200);
-  --color-count-fg: var(--palette-blue-600);
-  --color-success: var(--palette-green-500);
-  --color-success-soft: var(--palette-green-50);
-  --color-reward-strong: var(--palette-purple-500);
-  --color-reward-soft: var(--palette-purple-50);
-  --color-reward-depth: var(--palette-purple-500);
-  --color-pair-1: var(--palette-purple-50);
-  --color-pair-2: var(--palette-blue-50);
-  --color-pair-3: var(--palette-green-50);
-  --color-pair-4: var(--palette-pink-50);
-  --color-pair-5: var(--palette-neutral-100);
-  --color-pair-depth: rgb(42 41 35 / 0.12);
-  --color-picture-plate: transparent;
-  --color-on-strong-line: rgb(255 255 255 / 0.7);
-  --color-brand-seed: var(--palette-purple-500);
-  --color-brand-leaf: var(--palette-green-500);
-  --shadow-color: 42 41 35;
-  --picture-blend: multiply;
-  color-scheme: light;
-}
-
-/* ---------- Dark: the darker shades of the same ramps ---------- */
-[data-theme="dark"] {
+:root[data-theme="dark"] {
   --color-bg-canvas: var(--palette-purple-950);
   --color-bg-surface: var(--palette-neutral-900);
   --color-bg-surface-raised: var(--palette-neutral-900);
@@ -423,6 +384,7 @@
   --color-fg-link-hover: var(--palette-purple-50);
   --color-fg-accent: var(--palette-purple-200);
   --color-fg-on-accent: var(--palette-purple-950);
+  --color-fg-on-danger: var(--palette-neutral-900);
   --color-border-default: var(--palette-neutral-700);
   --color-border-strong: var(--palette-neutral-200);
   --color-border-inverse: var(--palette-neutral-200);
@@ -437,11 +399,13 @@
   --color-info-border: var(--palette-blue-500);
   --color-info-icon: var(--palette-blue-400);
   --color-info-solid: var(--palette-blue-400);
+  --color-success: var(--palette-green-400);
   --color-success-bg: var(--palette-green-950);
-  --color-success-fg: var(--palette-green-200);
+  --color-success-fg: var(--palette-app-leaf-soft);
   --color-success-border: var(--palette-green-700);
   --color-success-icon: var(--palette-green-400);
   --color-success-solid: var(--palette-green-400);
+  --color-success-soft: var(--palette-green-950);
   --color-warning-bg: var(--palette-purple-950);
   --color-warning-fg: var(--palette-neutral-50);
   --color-warning-border: var(--palette-purple-600);
@@ -452,20 +416,18 @@
   --color-danger-icon: var(--palette-red-300);
   --color-danger-solid: var(--palette-red-300);
   --color-danger-solid-hover: var(--palette-pink-200);
-  --color-fg-on-danger: var(--palette-neutral-900);
   --color-depth: var(--palette-black);
   --color-read-depth: var(--palette-pink-900);
   --color-read-soft: var(--palette-pink-900);
-  --color-read-fg: var(--palette-pink-200);
+  --color-read-fg: var(--palette-app-berry-soft);
   --color-count-depth: var(--palette-navy-900);
   --color-count-soft: var(--palette-blue-900);
   --color-count-trace: var(--palette-blue-500);
-  --color-count-fg: var(--palette-blue-200);
-  --color-success: var(--palette-green-400);
-  --color-success-soft: var(--palette-green-950);
+  --color-count-fg: var(--palette-app-sky-soft);
   --color-reward-strong: var(--palette-purple-200);
   --color-reward-soft: var(--palette-purple-950);
   --color-reward-depth: var(--palette-purple-600);
+  --color-on-strong-line: rgb(255 255 255 / 0.2);
   --color-pair-1: var(--palette-purple-950);
   --color-pair-2: var(--palette-blue-900);
   --color-pair-3: var(--palette-green-950);
@@ -473,7 +435,6 @@
   --color-pair-5: var(--palette-navy-900);
   --color-pair-depth: rgb(0 0 0 / 0.35);
   --color-picture-plate: var(--palette-white);
-  --color-on-strong-line: rgb(255 255 255 / 0.2);
   --color-brand-seed: var(--palette-purple-200);
   --color-brand-leaf: var(--palette-green-400);
   --shadow-color: 0 0 0;
@@ -485,7 +446,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme]) {
     --color-bg-canvas: var(--palette-purple-950);
     --color-bg-surface: var(--palette-neutral-900);
     --color-bg-surface-raised: var(--palette-neutral-900);
@@ -502,6 +463,7 @@
     --color-fg-link-hover: var(--palette-purple-50);
     --color-fg-accent: var(--palette-purple-200);
     --color-fg-on-accent: var(--palette-purple-950);
+    --color-fg-on-danger: var(--palette-neutral-900);
     --color-border-default: var(--palette-neutral-700);
     --color-border-strong: var(--palette-neutral-200);
     --color-border-inverse: var(--palette-neutral-200);
@@ -516,11 +478,13 @@
     --color-info-border: var(--palette-blue-500);
     --color-info-icon: var(--palette-blue-400);
     --color-info-solid: var(--palette-blue-400);
+    --color-success: var(--palette-green-400);
     --color-success-bg: var(--palette-green-950);
-    --color-success-fg: var(--palette-green-200);
+    --color-success-fg: var(--palette-app-leaf-soft);
     --color-success-border: var(--palette-green-700);
     --color-success-icon: var(--palette-green-400);
     --color-success-solid: var(--palette-green-400);
+    --color-success-soft: var(--palette-green-950);
     --color-warning-bg: var(--palette-purple-950);
     --color-warning-fg: var(--palette-neutral-50);
     --color-warning-border: var(--palette-purple-600);
@@ -531,20 +495,18 @@
     --color-danger-icon: var(--palette-red-300);
     --color-danger-solid: var(--palette-red-300);
     --color-danger-solid-hover: var(--palette-pink-200);
-    --color-fg-on-danger: var(--palette-neutral-900);
     --color-depth: var(--palette-black);
     --color-read-depth: var(--palette-pink-900);
     --color-read-soft: var(--palette-pink-900);
-    --color-read-fg: var(--palette-pink-200);
+    --color-read-fg: var(--palette-app-berry-soft);
     --color-count-depth: var(--palette-navy-900);
     --color-count-soft: var(--palette-blue-900);
     --color-count-trace: var(--palette-blue-500);
-    --color-count-fg: var(--palette-blue-200);
-    --color-success: var(--palette-green-400);
-    --color-success-soft: var(--palette-green-950);
+    --color-count-fg: var(--palette-app-sky-soft);
     --color-reward-strong: var(--palette-purple-200);
     --color-reward-soft: var(--palette-purple-950);
     --color-reward-depth: var(--palette-purple-600);
+    --color-on-strong-line: rgb(255 255 255 / 0.2);
     --color-pair-1: var(--palette-purple-950);
     --color-pair-2: var(--palette-blue-900);
     --color-pair-3: var(--palette-green-950);
@@ -552,7 +514,6 @@
     --color-pair-5: var(--palette-navy-900);
     --color-pair-depth: rgb(0 0 0 / 0.35);
     --color-picture-plate: var(--palette-white);
-    --color-on-strong-line: rgb(255 255 255 / 0.2);
     --color-brand-seed: var(--palette-purple-200);
     --color-brand-leaf: var(--palette-green-400);
     --shadow-color: 0 0 0;
@@ -564,13 +525,12 @@
   }
 }
 
-/* ---------- Preferences ---------- */
 @media (prefers-reduced-motion: reduce) {
-  :root { --duration-instant: 0ms; --duration-fast: 0ms; --duration-base: 0ms; --duration-slow: 0ms; --duration-deliberate: 0ms; }
-}
-@media (prefers-contrast: more) {
-  :root { --color-border-default: var(--color-border-strong); --color-fg-muted: var(--color-fg-default); }
-}
-@media (forced-colors: active) {
-  :root { --color-focus-ring: Highlight; --color-border-default: CanvasText; --color-border-strong: CanvasText; }
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+    --duration-deliberate: 0ms;
+  }
 }

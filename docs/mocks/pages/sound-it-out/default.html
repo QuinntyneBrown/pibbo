@@ -7,7 +7,8 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="sound-it-out">
 <meta name="mock:state" content="default">
-<meta name="description" content="map: “m” heard, “a” is next; Read it fast waits.">
+<meta name="mock:requirements" content="L2-012, L2-014, L2-015, L2-025, L2-026">
+<meta name="description" content="In “map”, m has sounded. The child touches a next.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -29,11 +30,11 @@
   </div>
   <main class="shell__game" id="main" aria-labelledby="prompt">
     <h1 class="visually-hidden">Sound it out</h1>
-    <div class="stage"><div class="tiles" role="group" aria-label="The sounds in the word"><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="m, says /m/">m</button><span class="tiles__say" aria-hidden="true">/m/</span></div><div class="tiles__unit"><button class="tile tile--next press" type="button" aria-label="a, tap to hear it">a</button><span class="tiles__say tiles__say--hidden" aria-hidden="true">/a/</span></div><div class="tiles__unit"><button class="tile press" type="button" disabled aria-label="p">p</button><span class="tiles__say tiles__say--hidden" aria-hidden="true">/p/</span></div></div><div class="blend"><div class="blend__bar" aria-hidden="true"><div class="blend__fill blend__fill--33"></div></div><button class="chunky chunky--read press" type="button" disabled>Read it fast</button></div></div>
+    <div class="stage stage--activity"><div class="tiles" role="group" aria-label="The sounds in the word"><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="m, says /m/">m</button><span class="tiles__say" aria-hidden="true">/m/</span></div><div class="tiles__unit"><button class="tile tile--next press" type="button" aria-label="a, tap to hear it">a</button><span class="tiles__say tiles__say--hidden" aria-hidden="true">/a/</span></div><div class="tiles__unit"><button class="tile press" type="button" disabled aria-label="p">p</button><span class="tiles__say tiles__say--hidden" aria-hidden="true">/p/</span></div></div><div class="blend"><div class="blend__bar" aria-hidden="true"><div class="blend__fill blend__fill--33"></div></div><button class="chunky chunky--read press" type="button" disabled>Read it fast</button></div></div>
   </main>
   <footer class="answer-bar answer-bar--check"><span class="answer-bar__spacer" aria-hidden="true"></span></footer>
 </div>
-<p class="mock-note" style="top: 6rem; right: 1rem;">Each letter plays its sound alone (“mmm”, “a”, “p”), never its name, and shows it underneath. The letters are touched in order; Read it fast waits until every sound is heard.</p>
+<p class="mock-note">Each letter plays its sound alone (“mmm”, “a”, “p”), never its name, and shows it underneath. The letters are touched in order; Read it fast waits until every sound is heard.</p>
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
   <span class="mock-bar__screen">Sound it out</span>
@@ -42,5 +43,6 @@
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>
 <script src="../../assets/mock.js"></script>
+<script src="../../assets/sound-it-out.js"></script>
 </body>
 </html>

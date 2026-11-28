@@ -7,6 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="spell-by-sound">
 <meta name="mock:state" content="full">
+<meta name="mock:requirements" content="L2-013, L2-025, L2-026">
 <meta name="description" content="s, u, n placed; Check is ready.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -26,9 +27,9 @@
       <button class="hear hear--read" type="button" aria-label="Hear it again"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button>
     </div>
   </div>
-  <main class="shell__game" id="main" aria-labelledby="prompt">
+  <main data-reading-review="spelling" data-answer="s u n" class="shell__game" id="main" aria-labelledby="prompt">
     <h1 class="visually-hidden">Spell by sound</h1>
-    <div class="stage stage--row-md">
+    <div class="stage stage--activity stage--spelling stage--row-md">
       <div class="frame-picture"><img class="picture " src="../../assets/pictures/sun.jpg" alt="sun" draggable="false"></div>
       <div class="spell">
         <div class="boxes" role="group" aria-label="One box for each sound"><div class="boxes__unit"><button class="box box--filled" type="button" aria-label="Remove s">s</button><button class="speaker" type="button" aria-label="Hear sound 1"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button></div><div class="boxes__unit"><button class="box box--filled" type="button" aria-label="Remove u">u</button><button class="speaker" type="button" aria-label="Hear sound 2"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button></div><div class="boxes__unit"><button class="box box--filled" type="button" aria-label="Remove n">n</button><button class="speaker" type="button" aria-label="Hear sound 3"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button></div></div>
@@ -46,5 +47,6 @@
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>
 <script src="../../assets/mock.js"></script>
+<script src="../../assets/reading-choices.js"></script>
 </body>
 </html>

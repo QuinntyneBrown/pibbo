@@ -396,13 +396,11 @@ def write_index(root: Path, coverage: dict, manifest: dict) -> None:
             links = []
             for state, info in row["states"].items():
                 if info["status"] == "ok":
-                    links.append(f'<li><a href="{info["path"]}">{state}</a></li>')
-                elif info["status"] == "n/a":
-                    links.append(f'<li class="na" title="{info["reason"]}">{state} <span>n/a</span></li>')
-                else:
+                    links.append(f'<li><a href="{info["path"]}?theme=light">{state}</a></li>')
+                elif info["status"] != "n/a":
                     links.append(f'<li class="missing">{state} <span>missing</span></li>')
             first = next((i["path"] for i in row["states"].values() if i["status"] == "ok"), None)
-            preview = f'<iframe loading="lazy" tabindex="-1" aria-hidden="true" src="{first}"></iframe>' if first else '<div class="no-preview">No mock yet</div>'
+            preview = f'<iframe loading="lazy" tabindex="-1" aria-hidden="true" src="{first}?chrome=0&amp;theme=light"></iframe>' if first else '<div class="no-preview">No mock yet</div>'
             route = f'<code>{row["route"]}</code>' if row["route"] else ""
             reqs = " ".join(f"<code>{r}</code>" for r in row["requirements"])
             cards.append(
@@ -424,10 +422,10 @@ def write_index(root: Path, coverage: dict, manifest: dict) -> None:
   header nav a {{ margin-right: var(--space-4); color: var(--color-fg-link); }}
   main {{ padding: var(--space-6) var(--layout-margin); max-width: var(--layout-container-max); margin-inline: auto; }}
   h2 {{ font: var(--text-h3); margin: var(--space-8) 0 var(--space-4); }}
-  .grid {{ display: grid; gap: var(--layout-gutter); grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }}
+  .grid {{ display: grid; gap: var(--layout-gutter); grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr)); }}
   .card {{ background: var(--color-bg-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-1); display: flex; flex-direction: column; }}
   .preview {{ aspect-ratio: 16 / 10; background: var(--color-bg-surface-sunken); overflow: hidden; position: relative; }}
-  .preview iframe {{ width: 400%; height: 400%; transform: scale(0.25); transform-origin: top left; border: 0; pointer-events: none; }}
+  .preview iframe {{ width: 250%; height: 250%; transform: scale(0.4); transform-origin: top left; border: 0; pointer-events: none; }}
   .no-preview {{ display: grid; place-items: center; height: 100%; color: var(--color-fg-subtle); }}
   .body {{ padding: var(--space-4); }}
   .body h3 {{ margin: 0 0 var(--space-1); font: var(--text-h4); }}
@@ -435,10 +433,13 @@ def write_index(root: Path, coverage: dict, manifest: dict) -> None:
   .meta code {{ font: var(--text-code); background: var(--color-bg-subtle); padding: 0 var(--space-1); border-radius: var(--radius-sm); }}
   .states {{ list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }}
   .states li {{ font: var(--text-label); }}
-  .states a {{ display: inline-block; padding: var(--space-1) var(--space-2); border-radius: var(--radius-full); background: var(--color-accent-subtle); color: var(--color-fg-accent); text-decoration: none; min-height: var(--target-min); }}
+  .states a, .states .missing {{
+    box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;
+    gap: var(--space-1); min-height: var(--target-min); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full);
+  }}
+  .states a {{ background: var(--color-accent-subtle); color: var(--color-fg-accent); text-decoration: none; }}
   .states a:hover {{ background: var(--color-accent-subtle-hover); }}
   .states a:focus-visible {{ outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }}
-  .states .na, .states .missing {{ padding: var(--space-1) var(--space-2); border-radius: var(--radius-full); background: var(--color-bg-subtle); color: var(--color-fg-muted); }}
   .states .missing {{ background: var(--color-danger-bg); color: var(--color-danger-fg); }}
   .states span {{ font: var(--text-caption); }}
   button.theme {{ font: var(--text-label); padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); border: 1px solid var(--color-border-strong); background: var(--color-bg-surface); color: var(--color-fg-default); cursor: pointer; min-height: var(--target-min); }}
@@ -449,11 +450,31 @@ def write_index(root: Path, coverage: dict, manifest: dict) -> None:
 <header>
   <h1>{title} mocks</h1>
   <nav aria-label="Sections">{"".join(f'<a href="#{KIND_FOLDERS[k]}">{KIND_FOLDERS[k].capitalize()}</a>' for k, rows in coverage.items() if rows)}<a href="README.md">Coverage</a></nav>
-  <button class="theme" type="button" onclick="var r=document.documentElement;r.dataset.theme=r.dataset.theme==='dark'?'light':'dark';">Toggle theme</button>
+  <button class="theme" type="button" aria-pressed="false">Dark theme</button>
 </header>
 <main id="main">
 {"".join(sections)}
 </main>
+<script>
+  const themeControl = document.querySelector('button.theme');
+  function setGalleryTheme(dark) {{
+    const theme = dark ? 'dark' : 'light';
+    document.documentElement.dataset.theme = theme;
+    themeControl.setAttribute('aria-pressed', String(dark));
+    for (const frame of document.querySelectorAll('.preview iframe')) {{
+      const url = new URL(frame.src);
+      url.searchParams.set('theme', theme);
+      frame.src = url.href;
+    }}
+    for (const link of document.querySelectorAll('.states a')) {{
+      const url = new URL(link.href);
+      url.searchParams.set('theme', theme);
+      link.href = url.href;
+    }}
+  }}
+  if (new URLSearchParams(location.search).get('theme') === 'dark') setGalleryTheme(true);
+  themeControl.addEventListener('click', () => setGalleryTheme(document.documentElement.dataset.theme !== 'dark'));
+</script>
 </body>
 </html>
 """

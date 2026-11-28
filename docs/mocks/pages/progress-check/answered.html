@@ -28,9 +28,9 @@
   </div>
   <main class="shell__game" id="main" aria-labelledby="prompt">
     <h1 class="visually-hidden">What do I know?</h1>
-    <div class="stage"><div class="show show--one" role="img" aria-label="1 ship"><img class="picture " src="../../assets/pictures/ship.jpg" alt="" draggable="false"></div><div class="pick" role="group" aria-label="Answers"><button class="pick__option press pick__option--text" type="button" aria-pressed="false">sip</button><button class="pick__option press pick__option--text" type="button" aria-pressed="true">ship</button><button class="pick__option press pick__option--text" type="button" aria-pressed="false">hip</button></div></div>
+    <div class="stage stage--question"><div class="show show--one" role="img" aria-label="1 ship"><img class="picture " src="../../assets/pictures/ship.jpg" alt="" draggable="false"></div><div class="pick" role="group" aria-label="Answers"><button class="pick__option press pick__option--text" type="button" aria-pressed="false" data-check-href="retry.html?choice=0">sip</button><button class="pick__option press pick__option--text" type="button" aria-pressed="true" data-check-href="correct.html">ship</button><button class="pick__option press pick__option--text" type="button" aria-pressed="false" data-check-href="retry.html?choice=2">hip</button></div></div>
   </main>
-  <footer class="answer-bar answer-bar--check"><a class="chunky chunky--read chunky--wide press" href="../progress-check/answered.html">Check</a></footer>
+  <footer class="answer-bar answer-bar--check"><a class="chunky chunky--read chunky--wide press" href="correct.html" data-check-action>Check</a></footer>
 </div>
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
@@ -40,5 +40,6 @@
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>
 <script src="../../assets/mock.js"></script>
+<script src="../../assets/progress-check.js"></script>
 </body>
 </html>
