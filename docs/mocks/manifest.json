@@ -216,11 +216,16 @@
       "kind": "page",
       "title": "Letter sounds",
       "route": "/read/letter-sounds",
-      "requirements": [],
+      "requirements": [
+        "L2-010",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "start",
         "default",
         "held",
+        "miss",
         "correct"
       ],
       "prototype_frame": "3wxvUaHV82kSHpo6v6bP3Q",

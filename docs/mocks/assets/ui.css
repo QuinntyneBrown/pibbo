@@ -423,6 +423,9 @@ img { display: block; max-width: 100%; }
 .pair--found-2 { background: var(--color-pair-2); --depth: var(--color-pair-depth); }
 .pair--found-3 { background: var(--color-pair-3); --depth: var(--color-pair-depth); }
 .pair--found-4 { background: var(--color-pair-4); --depth: var(--color-pair-depth); }
+.pair--miss { animation: pair-miss var(--duration-slow) var(--ease-standard) 1; }
+@keyframes pair-miss { 0%, 100% { translate: 0; } 25% { translate: calc(-1 * var(--space-2)); } 75% { translate: var(--space-2); } }
+@media (prefers-reduced-motion: reduce) { .pair--miss { animation: none; } }
 .pair__letter { font-family: var(--font-read); font-size: var(--font-size-5xl); font-weight: var(--font-weight-bold); }
 @media (min-width: 40rem) { .pair__letter { font-size: var(--font-size-6xl); } }
 .pair__word { font-family: var(--font-read); font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); }
