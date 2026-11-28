@@ -206,7 +206,7 @@ test.describe('Guided lesson: an activity that does not exist yet', () => {
   });
 
   // Every activity the shipped lessons name exists, so the lesson is made to name one that
-  // does not for this spec (ADR 0032 #8).
+  // does not for this spec (ADR 0034 #8).
   test('Given the reading lesson names an unknown activity, when it runs, then that step is left off the path and a client warning with no child data is logged', async ({
     page,
   }) => {

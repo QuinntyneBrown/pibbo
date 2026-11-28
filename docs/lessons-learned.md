@@ -1051,12 +1051,52 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 3. Copying every design token into the app broke the initial bundle budget. The app declares only
    the tokens its styles use.
 
+## Journey 25: Offline after first use
+
+**What slowed it**
+
+- The design named `@angular/service-worker`; it would have grown an initial bundle already over
+  its warning. A hundred-line worker of Pibbo's own, written after the build (ADR 0032), did
+  the job for 0.15 kB.
+- Playwright's fake clock replaces `performance`, so `getEntriesByType('resource')` is empty in
+  specs: a first attempt to tell the worker what the page had loaded passed nowhere. Home's code
+  is now found from the build itself and cached on install.
+- The update spec passed alone and failed when repeated: the e2e server's "next version" was a
+  flag, so the second ask served the same bytes. Every ask now serves a new version.
+- A reload after an activity stayed on the activity's route; the spec meant Home.
+- The worker caches a folder in the background; going offline straight after left it half kept.
+
+**New lessons**
+
+1. A test-only switch on the shared e2e server must change state on every call, never once:
+   specs run in parallel and repeat against one server.
+2. Under the fake clock, `performance` is not the browser's; never build behaviour a spec must
+   observe on resource timing.
+3. Block service workers in the shared config and allow them only in the specs about them, so
+   no other spec is served from a cache it did not ask for.
+4. Before a spec goes offline, wait for what the worker fetches in the background, not only for
+   what the page asked for.
+5. Allow a failure while offline only by naming it (`network.offline(expected)`); the guard
+   keeps catching every other one.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1 and on): `home/offline`, the design-system card state, ADR and design
+  went in before code.
+- Compare the initial bundle with `main` (J22 #1): 243.09 kB before, 243.24 kB after.
+- Wait for fonts before reloading (J22 #3): `OfflineDevice.reload`.
+- Format first, then patch, or use the Edit tool (J23 #6): two Bash heredocs failed again
+  (an escaped newline written as a real one, a stray `cat` waiting on input); scripts in the
+  scratchpad worked.
+- Tag the critical path in the same change (J11 #4): playing offline after first use is
+  `@critical`.
+
 ## Journey 20: Build a short sentence
 
 **What slowed it**
 
 - `L2-020` described slots that wait for the next word; the mocks build the sentence on a strip
-  and Check it. The mock won (ADR 0032), and the missing `model` state was drawn first.
+  and Check it. The mock won (ADR 0034), and the missing `model` state was drawn first.
 - The domain rules and the page were written before slices 2 and 3's acceptance specs, so those
   specs passed on first run. They were proved to bite by breaking three rules at once (no word
   spoken, no take-back, every check right): seven specs failed.
@@ -1083,5 +1123,5 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 
 - The mock first (J2 #1 and on): `model` and the Home card went into the first commit.
 - Measure the shell before the board (J17 #1): the fault at 568 x 320 was the shell's bubble.
-- Number the ADR after fetching `main` (J17 #4, J18 #4): 0031 was taken after the rebase, so this is 0032.
+- Number the ADR after fetching `main` (J17 #4, J18 #4): 0031 was taken after the rebase, so this is 0034 (0031 to 0033 were taken).
 

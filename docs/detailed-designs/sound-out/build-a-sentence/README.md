@@ -2,7 +2,7 @@
 
 ## Overview
 
-A picture, an empty strip and a bank of word tiles are shown: the words of a short sentence and one word that does not belong, in an order the random source chooses. Each tile speaks its word when touched and puts it at the end of the strip; a word on the strip goes back when touched. Once the strip is full, Check judges the sentence (ADR 0032, docs/mocks/pages/build-a-sentence).
+A picture, an empty strip and a bank of word tiles are shown: the words of a short sentence and one word that does not belong, in an order the random source chooses. Each tile speaks its word when touched and puts it at the end of the strip; a word on the strip goes back when touched. Once the strip is full, Check judges the sentence (ADR 0034, docs/mocks/pages/build-a-sentence).
 
 ## Description
 
@@ -37,7 +37,7 @@ Acceptance criteria of `L2-020` (Build a short sentence):
 ## Open questions
 
 - Which sentences Pibbo covers, and in what order, is not decided; the three sentences are the mock's cast. The recordings are silent placeholders.
-- The check game asks "What comes next?" about a practised Build a sentence (ADR 0032).
+- The check game asks "What comes next?" about a practised Build a sentence (ADR 0034).
 
 ## Diagrams
 

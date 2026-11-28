@@ -301,7 +301,7 @@ function spot(random: RandomSource): Asked {
   };
 }
 
-/** A sentence shown without its last word: which word comes next? (ADR 0032). */
+/** A sentence shown without its last word: which word comes next? (ADR 0034). */
 function sentence(random: RandomSource): Asked {
   const asked = pickOne(random, SENTENCES.sentences);
   const answer = asked.words.at(-1)!;

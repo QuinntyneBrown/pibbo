@@ -14,5 +14,7 @@ export class ActivityPicture {
   readonly activity = input.required<Activity>();
   /** Drawn as More, an arrow to the next screen of Home (ADR 0014). */
   readonly more = input(false);
+  /** Offline and never opened: greyed with the no-network symbol; it does not open (L2-033). */
+  readonly offline = input(false);
   readonly touched = output<Activity>();
 }

@@ -5,7 +5,7 @@ and for whoever works on Pibbo. The text files are the source; the media is gene
 Where this page differs from the defaults of the `creating-videos` skill, this page wins: the films
 follow the standard of the owner's sibling repository `wattzup`, with the same voice, music and
 transitions (its `docs/videos/11-1-results-screen`), in Pibbo's own brand. Decision:
-[ADR 0032](../adr/0031-explainer-films-from-the-running-app.md).
+[ADR 0031](../adr/0031-explainer-films-from-the-running-app.md).
 
 | Journey | Video | Runtime | What it is |
 |---------|-------|---------|------------|

@@ -1,4 +1,4 @@
-# 0032: Build a sentence: put the words on a strip, then Check
+# 0034: Build a sentence: put the words on a strip, then Check
 
 **Status:** Accepted (journey 20)
 

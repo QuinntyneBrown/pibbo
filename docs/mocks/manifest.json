@@ -19,6 +19,7 @@
         "L2-023",
         "L2-024",
         "L2-035",
+        "L2-033",
         "L2-037"
       ],
       "states": [
@@ -26,7 +27,8 @@
         "reading-more",
         "counting",
         "counting-more",
-        "first-visit"
+        "first-visit",
+        "offline"
       ],
       "prototype_frame": "qWbazJPhFtQFND16jvAWTf",
       "subject": "both",

@@ -11,7 +11,7 @@ export interface SentenceLine {
 export interface Sentence {
   /** The sentence as shown and spoken when right: "The cat can sit." */
   readonly text: string;
-  /** In order; the first carries the capital and the last the full stop (ADR 0032). */
+  /** In order; the first carries the capital and the last the full stop (ADR 0034). */
   readonly words: readonly SentenceWord[];
   readonly extra: SentenceWord;
   readonly picture: string;
@@ -24,7 +24,7 @@ export interface Sentence {
 /**
  * The content of Build a sentence, checked before every build by
  * `tools/content/check-content.mjs`. The sentences are the cast of the mock; which sentences
- * Pibbo covers, and in what order, is not decided (ADR 0032).
+ * Pibbo covers, and in what order, is not decided (ADR 0034).
  */
 export interface SentenceContent {
   readonly roundsPerPlay: number;

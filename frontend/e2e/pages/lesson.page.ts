@@ -65,7 +65,7 @@ export class LessonPage {
 
   /**
    * Makes the reading lesson name an activity that does not exist, `make-a-story`, after its
-   * last step, by rewriting the served script for this page only (ADR 0032 #8). The shipped
+   * last step, by rewriting the served script for this page only (ADR 0034 #8). The shipped
    * content names only activities that exist.
    */
   async nameUnknownActivity(): Promise<void> {
