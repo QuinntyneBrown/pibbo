@@ -433,3 +433,43 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - `--reporter=line` and timeouts (J8 #3): no hang; verify ran in the background once and was
   awaited with an `until` loop.
 - Count the group against `L2-024` (J10 #1): Read has two activities; no second screen needed.
+
+## Journey 12: Recognise uppercase and lowercase
+
+**What slowed it**
+
+- `L2-011` described one big letter, three small choices and a side-by-side hint; the mock is
+  Letter sounds' four-pair match with Big and Small heads, and draws no wrong choice. The mock
+  won: `L2-011`, the design and ADR 0017 were rewritten first, and a `miss` state was drawn with
+  Letter sounds' shake.
+- Reusing `Pairs` pushed `pairs.scss` 27 bytes over its 4 kB error budget. Sharing one rule for
+  `.pairs` and `.pairs__heads` brought it under, but the first try put the heads' phone rule
+  before the shared `display: grid`, which silently undid `display: none`.
+- A Python script's assertion matched "Letter sounds (" in the new page's own comment and
+  stopped the write; and a bash heredoc with a quote inside failed to parse (J11 again), so the
+  ADR and design were written with the Write tool.
+
+**New lessons**
+
+1. When a new activity has the same shape as an earlier one, make the earlier rules generic
+   (`LetterSoundsRound<P extends MatchPair>`) and give the component a `kind` input, instead of
+   copying both; the whole feature then costs a content block, a page and its specs.
+2. When two selectors share a rule, put any media query that overrides it after the shared
+   rule; equal specificity means the later one wins.
+3. When reuse makes every rule exist in the first slice, the later slices' specs pass on their
+   first run; say so and keep them as regression guards, as J11 #3 said.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1, J7–J11): the `miss` state, the Home card and the phone rule for the
+  heads went into the mocks in the first commit, before any code.
+- Measure the game area on 360 × 640 and 640 × 360 (J11 #1, J9 #1): a throwaway spec logged
+  the last pair's bottom against the answer bar (470 vs 550 upright, 241 vs 270 on its side);
+  every target at least 60 × 60; nothing scrolls. Hiding the heads on a phone made it fit first
+  time.
+- Grep the specs for helpers that rebuild shown text (J11 #2): no spec rebuilds a letter's form.
+- Tag the critical path in the same change (J11 #4): the praise-and-Next path is `@critical`.
+- Build before proving a failure (J8 #1): the first run failed for the expected reason, no Big
+  and small letters on Home.
+- `--reporter=line` and timeouts (J8 #3): no hang.
+- Avoid heredocs with quotes (J11): learned again; files with prose go through the Write tool.
