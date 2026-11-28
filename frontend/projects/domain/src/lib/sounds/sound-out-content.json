@@ -36,6 +36,12 @@
       "sounds": ["b", "oa", "t"],
       "picture": "/pictures/words/boat.jpg",
       "recording": "/recordings/words/boat.wav"
+    },
+    {
+      "word": "stop",
+      "sounds": ["s", "t", "o", "p"],
+      "picture": "/pictures/words/stop.jpg",
+      "recording": "/recordings/words/stop.wav"
     }
   ],
   "sounds": {
@@ -94,6 +100,11 @@
       "shown": "/t/",
       "recording": "/recordings/sounds/t.wav"
     },
+    "o": {
+      "letters": "o",
+      "shown": "/o/",
+      "recording": "/recordings/sounds/o.wav"
+    },
     "i": {
       "letters": "i",
       "shown": "/i/",
@@ -141,6 +152,25 @@
   },
   "model": {
     "recording": "/recordings/read/this-is.wav"
+  },
+  "firstTwo": {
+    "instruction": {
+      "text": "What are the first two sounds?",
+      "recording": "/recordings/read/first-two-sounds.wav",
+      "picture": "ask"
+    },
+    "praise": {
+      "text": "You heard both sounds!",
+      "recording": "/recordings/read/you-heard-both.wav"
+    },
+    "listen": {
+      "text": "Listen:",
+      "recording": "/recordings/read/listen.wav"
+    },
+    "again": {
+      "text": "Choose again.",
+      "recording": "/recordings/read/choose-again.wav"
+    }
   },
   "letterSounds": {
     "roundsPerPlay": 5,

@@ -15,6 +15,7 @@ import {
   CLOCK,
   RANDOM_SOURCE,
   type Instruction,
+  type PlaybackStep,
   type PlayOutcome,
 } from '@pibbo/api';
 import {
@@ -28,6 +29,7 @@ import {
   blendDone,
   blendPlan,
   checkPicture,
+  chooseFirstTwo,
   choosePicture,
   nextLetter,
   roundAssets,
@@ -72,6 +74,8 @@ export class SoundItOut {
 
   protected readonly nextToTouch = computed(() => nextLetter(this.round()));
   protected readonly praising = signal(false);
+  /** What the answer bar says about the first two sounds: the praise or the model. */
+  protected readonly firstTwoMessage = signal('');
   private endPraise: (() => void) | null = null;
   /** The letter whose sound is playing. */
   protected readonly sounding = signal<number | null>(null);
@@ -83,6 +87,8 @@ export class SoundItOut {
       case 'ready':
       case 'blending':
         return SOUND_OUT.instructions.ready;
+      case 'first-two':
+        return SOUND_OUT.firstTwo.instruction;
       default:
         return {
           ...SOUND_OUT.instructions.picking,
@@ -108,10 +114,12 @@ export class SoundItOut {
           return { kind: 'model', message: `This is “${word}”.`, ready: true };
         case 'retry':
           return { kind: 'retry', message: SOUND_OUT.hint.text, ready: true };
+        case 'first-two':
+          return { kind: 'none', message: this.firstTwoMessage(), ready: false };
         default:
           return {
             kind: 'check',
-            message: '',
+            message: this.firstTwoMessage(),
             ready: round.phase === 'picking' && round.chosen !== null,
           };
       }
@@ -125,7 +133,14 @@ export class SoundItOut {
   /** Whether the pictures are offered. */
   protected readonly picking = computed(() => {
     const phase = this.round().phase;
-    return phase !== 'sounding' && phase !== 'ready' && phase !== 'blending';
+    return (
+      phase !== 'sounding' && phase !== 'ready' && phase !== 'blending' && phase !== 'first-two'
+    );
+  });
+  /** The first two sounds to choose from, while they are asked (L2-015 #2). */
+  protected readonly choices = computed(() => {
+    const round = this.round();
+    return round.phase === 'first-two' ? round.firstTwo!.choices : null;
   });
 
   constructor() {
@@ -179,9 +194,53 @@ export class SoundItOut {
     }
     this.sounding.set(null);
     if (this.round() !== round) return;
-    const picking = blendDone(round);
-    this.round.set(picking);
-    if (outcome !== 'stopped') void this.askWhichPicture(picking);
+    const after = blendDone(round);
+    this.round.set(after);
+    if (outcome === 'stopped') return;
+    if (after.phase === 'first-two') void this.audio.play(SOUND_OUT.firstTwo.instruction.recording);
+    else void this.askWhichPicture(after);
+  }
+
+  /**
+   * The first two sounds (L2-015 #2): both together speaks them, praises and offers the
+   * pictures; one alone models both, each tile lit, and the child chooses again.
+   */
+  protected chooseFirstTwo(choice: string): void {
+    const result = chooseFirstTwo(this.round(), choice);
+    if (result === null) return;
+    const { round, right, plan } = result;
+    const line = SOUND_OUT.firstTwo;
+    if (right) {
+      this.round.set(round);
+      this.firstTwoMessage.set(line.praise.text);
+      this.startPraise();
+      void this.playSteps(round, [
+        ...plan,
+        { recording: line.praise.recording, letter: null },
+      ]).then((outcome) => {
+        if (outcome !== 'stopped' && this.round() === round) void this.askWhichPicture(round);
+      });
+    } else {
+      const shown = round.firstTwo!.sounds.map((s) => s.shown).join(' ');
+      this.firstTwoMessage.set(`${line.listen.text} ${shown}. ${line.again.text}`);
+      void this.playSteps(round, [
+        { recording: line.listen.recording, letter: null },
+        ...plan,
+        { recording: line.again.recording, letter: null },
+      ]);
+    }
+  }
+
+  /** Plays steps back to back, each letter lit, until something newer cuts it short. */
+  private async playSteps(round: SoundOutRound, steps: PlaybackStep[]): Promise<PlayOutcome> {
+    let outcome: PlayOutcome = 'played';
+    for (const step of steps) {
+      if (outcome === 'stopped' || this.round() !== round) return 'stopped';
+      this.sounding.set(step.letter);
+      outcome = await this.audio.play(step.recording);
+      if (this.sounding() === step.letter) this.sounding.set(null);
+    }
+    return this.round() === round ? outcome : 'stopped';
   }
 
   /** "Which picture is", then the word. */
@@ -193,6 +252,7 @@ export class SoundItOut {
     const round = choosePicture(this.round(), word);
     if (round === this.round()) return;
     this.round.set(round);
+    this.firstTwoMessage.set('');
     void this.audio.play(round.pictures.find((w) => w.word === word)!.recording);
   }
 
@@ -228,8 +288,13 @@ export class SoundItOut {
 
   /** Brief praise that never blocks Next: it ends itself after at most 1.5 s. */
   private praise(round: SoundOutRound): void {
-    this.praising.set(true);
+    this.firstTwoMessage.set('');
+    this.startPraise();
     void this.say(SOUND_OUT.praise.recording, round);
+  }
+
+  private startPraise(): void {
+    this.praising.set(true);
     this.endPraise?.();
     this.endPraise = this.clock.after(PRAISE_MS, () => this.stopPraise());
   }
@@ -248,6 +313,7 @@ export class SoundItOut {
       return;
     }
     this.done.set(done);
+    this.firstTwoMessage.set('');
     this.round.set(this.upcoming);
     this.upcoming = this.prepareNext(this.upcoming);
     void this.audio.play(SOUND_OUT.instructions.sounding.recording);

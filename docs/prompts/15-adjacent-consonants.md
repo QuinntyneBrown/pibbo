@@ -1,5 +1,7 @@
 # Feature: Adjacent consonants
 
+**Status:** Complete (PR #16)
+
 Journey 15 of 27 in `docs/journeys.md`. Requirements: L2-015.
 
 ## Goal

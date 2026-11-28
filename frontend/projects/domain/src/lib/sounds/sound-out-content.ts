@@ -18,6 +18,19 @@ export interface SoundOutContent {
   readonly praise: { readonly recording: string };
   readonly hint: { readonly text: string; readonly recording: string };
   readonly model: { readonly recording: string };
+  /** The first-two-sounds question of a word with adjacent consonants (L2-015 #2). */
+  readonly firstTwo: FirstTwoContent;
+}
+
+/** What the first-two-sounds question shows and says. */
+export interface FirstTwoContent {
+  readonly instruction: Instruction;
+  /** Shown and spoken after both sounds, when they are chosen. */
+  readonly praise: { readonly text: string; readonly recording: string };
+  /** Before the modelled sounds: "Listen:". */
+  readonly listen: { readonly text: string; readonly recording: string };
+  /** After the modelled sounds: "Choose again." */
+  readonly again: { readonly text: string; readonly recording: string };
 }
 
 /** The data file's shape: a word names its sounds by key. */
@@ -34,6 +47,7 @@ interface SoundOutData {
   readonly praise: SoundOutContent['praise'];
   readonly hint: SoundOutContent['hint'];
   readonly model: SoundOutContent['model'];
+  readonly firstTwo: FirstTwoContent;
 }
 
 /** Resolves each word's sound keys into its sounds. Throws on a sound that is not in the data. */

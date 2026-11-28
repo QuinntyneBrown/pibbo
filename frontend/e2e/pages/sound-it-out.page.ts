@@ -16,6 +16,7 @@ export class SoundItOutPage {
   readonly shownSounds: Locator;
   readonly blend: Locator;
   readonly blendFill: Locator;
+  readonly choices: Locator;
   readonly pictures: Locator;
   readonly rightPicture: Locator;
   readonly message: Locator;
@@ -35,6 +36,7 @@ export class SoundItOutPage {
     this.shownSounds = page.locator('.tiles__say:not(.tiles__say--hidden)');
     this.blend = page.locator('.blend .chunky');
     this.blendFill = page.locator('.blend__fill');
+    this.choices = page.locator('.choose__option');
     this.pictures = page.locator('.pick__option');
     this.rightPicture = page.locator('.pick__option--right');
     this.message = page.locator('.answer-bar__message');
@@ -43,6 +45,11 @@ export class SoundItOutPage {
 
   letter(index: number): Locator {
     return this.letters.nth(index);
+  }
+
+  /** A choice of the first two sounds, by its letters ("st"). */
+  choice(letters: string): Locator {
+    return this.choices.filter({ hasText: new RegExp(`^\\s*${letters}\\s*$`) });
   }
 
   picture(word: string): Locator {
@@ -75,6 +82,16 @@ export class SoundItOutPage {
     return (await this.letters.allTextContents()).map((t) => t.trim());
   }
 
+  /** Where each tile is drawn, in order. */
+  async tileBoxes(): Promise<{ x: number; y: number; width: number; height: number }[]> {
+    return this.letters.evaluateAll((tiles) =>
+      tiles.map((t) => {
+        const r = t.getBoundingClientRect();
+        return { x: r.x, y: r.y, width: r.width, height: r.height };
+      }),
+    );
+  }
+
   /** Touches every tile in order. */
   async soundAll(): Promise<string> {
     const word = await this.word();
@@ -83,10 +100,15 @@ export class SoundItOutPage {
     return word;
   }
 
-  /** Sounds every letter, blends, and waits for the pictures. */
+  /**
+   * Sounds every letter, blends, chooses the first two sounds when a word with adjacent
+   * consonants asks for them, and waits for the pictures.
+   */
   async soundAndBlend(): Promise<string> {
     const word = await this.soundAll();
     await this.touch(this.blend);
+    await expect(this.pictures.or(this.choices).first()).toBeVisible();
+    if ((await this.choices.count()) > 0) await this.touch(this.choice(word.slice(0, 2)));
     await expect(this.pictures).toHaveCount(3);
     return word;
   }

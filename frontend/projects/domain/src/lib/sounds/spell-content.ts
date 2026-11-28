@@ -3,6 +3,9 @@ import { isLetterGroup } from './sound-out-round';
 import data from './sound-out-content.json';
 import { SOUND_OUT } from './sound-out-content';
 
+/** Spell by sound draws three boxes (docs/mocks/pages/spell-by-sound). */
+export const SPELL_BOXES = 3;
+
 /** A line shown and spoken. */
 export interface SpellLine {
   readonly text: string;
@@ -48,8 +51,9 @@ export function spellContent(
 ): SpellContent {
   return {
     ...raw,
-    // Spell by sound spells one letter per box (ADR 0019): a word with a letter group waits.
-    words: words.filter((w) => !w.sounds.some(isLetterGroup)),
+    // Spell by sound spells one letter per box (ADR 0019) into three boxes (ADR 0020): a word
+    // with a letter group, or of more than three sounds, waits.
+    words: words.filter((w) => !w.sounds.some(isLetterGroup) && w.sounds.length <= SPELL_BOXES),
     letters: Object.values(sounds).filter((s) => !isLetterGroup(s)),
   };
 }
