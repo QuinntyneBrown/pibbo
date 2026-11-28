@@ -9,18 +9,31 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
-import { ASSET_PRELOADER, AUDIO_PLAYER, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
-import { AnswerBar, RoundShell, SpellBoxes } from '@pibbo/components';
+import {
+  ASSET_PRELOADER,
+  AUDIO_PLAYER,
+  CLOCK,
+  RANDOM_SOURCE,
+  type Instruction,
+  type PlayOutcome,
+} from '@pibbo/api';
+import { AnswerBar, RoundShell, SpellBoxes, type AnswerBarKind } from '@pibbo/components';
 import {
   boxSound,
+  checkSpelling,
   nextBox,
   placeLetter,
   removeLetter,
   SPELL,
   spellAssets,
+  spellSounds,
   startSpellRound,
+  trySpellingAgain,
   type SpellRound,
 } from '@pibbo/domain';
+
+/** Praise lasts no more than this (L2-026 #3). */
+const PRAISE_MS = 1500;
 
 /**
  * Spell by sound (docs/mocks/pages/spell-by-sound): the child hears a word and fills its boxes
@@ -38,6 +51,7 @@ import {
 })
 export class SpellBySound {
   private readonly audio = inject(AUDIO_PLAYER);
+  private readonly clock = inject(CLOCK);
   private readonly random = inject(RANDOM_SOURCE);
   private readonly router = inject(Router);
   private readonly preloader = inject(ASSET_PRELOADER);
@@ -48,7 +62,7 @@ export class SpellBySound {
   private upcoming: SpellRound;
   /** Rounds finished in this play. */
   protected readonly done = signal(0);
-  protected readonly next = computed(() => nextBox(this.round()));
+  protected readonly nextToFill = computed(() => nextBox(this.round()));
   protected readonly instruction = computed<Instruction>(() =>
     this.round().phase === 'spelling'
       ? {
@@ -57,6 +71,30 @@ export class SpellBySound {
           picture: 'tap',
         }
       : { ...SPELL.full, picture: 'ask' },
+  );
+  protected readonly praising = signal(false);
+  private endPraise: (() => void) | null = null;
+  protected readonly mood = computed(() =>
+    this.praising() ? 'cheer' : this.round().phase === 'retry' ? 'oh' : 'rest',
+  );
+  protected readonly bar = computed<{ kind: AnswerBarKind; message: string; ready: boolean }>(
+    () => {
+      const round = this.round();
+      switch (round.phase) {
+        case 'right': {
+          const sounds = round.word.sounds.map((s) => s.letters).join(' – ');
+          return {
+            kind: 'right',
+            message: `${sounds}. ${SPELL.praise.text} “${round.word.word}”!`,
+            ready: true,
+          };
+        }
+        case 'retry':
+          return { kind: 'retry', message: SPELL.hint.text, ready: true };
+        default:
+          return { kind: 'check', message: '', ready: round.phase === 'full' };
+      }
+    },
   );
   /** Whether the letters take a touch: only while a box is empty. */
   protected readonly canPlace = computed(() => this.round().phase === 'spelling');
@@ -77,6 +115,7 @@ export class SpellBySound {
     document.addEventListener('visibilitychange', rest);
     inject(DestroyRef).onDestroy(() => {
       document.removeEventListener('visibilitychange', rest);
+      this.endPraise?.();
       this.audio.stop();
     });
     void this.ask();
@@ -116,6 +155,57 @@ export class SpellBySound {
   protected touchBox(index: number): void {
     if (this.round().boxes[index] === null) this.speak(index);
     else this.round.set(removeLetter(this.round(), index));
+  }
+
+  /** Check while the boxes are full; Try again after a hint; Next once the word is right. */
+  protected action(): void {
+    const phase = this.round().phase;
+    if (phase === 'right') this.next();
+    else if (phase === 'retry') this.round.set(trySpellingAgain(this.round()));
+    else if (phase === 'full') this.check();
+  }
+
+  /** A right word is praised (L2-013 #5); a wrong one gives a hint, nothing lost (#6). */
+  private check(): void {
+    const round = checkSpelling(this.round());
+    this.round.set(round);
+    if (round.phase === 'right') void this.praise(round);
+    else void this.audio.play(SPELL.hint.recording);
+  }
+
+  /**
+   * Each sound, then "You spelled" and the word; brief praise that never blocks Next, ending
+   * itself after at most 1.5 s. Any newer sound, or leaving, cuts it short.
+   */
+  private async praise(round: SpellRound): Promise<void> {
+    this.praising.set(true);
+    this.endPraise?.();
+    this.endPraise = this.clock.after(PRAISE_MS, () => this.stopPraise());
+    let outcome: PlayOutcome = 'played';
+    for (const recording of [...spellSounds(round), SPELL.praise.recording, round.word.recording]) {
+      if (outcome === 'stopped' || this.round() !== round) return;
+      outcome = await this.audio.play(recording);
+    }
+  }
+
+  private stopPraise(): void {
+    this.endPraise?.();
+    this.endPraise = null;
+    this.praising.set(false);
+  }
+
+  /** The next round; after the last, Home with Read chosen. */
+  private next(): void {
+    this.stopPraise();
+    const done = this.done() + 1;
+    if (done >= SPELL.roundsPerPlay) {
+      this.leave();
+      return;
+    }
+    this.done.set(done);
+    this.round.set(this.upcoming);
+    this.upcoming = this.prepareNext(this.upcoming);
+    void this.ask();
   }
 
   /** Chooses the round after `current` and fetches its assets while this one is played. */

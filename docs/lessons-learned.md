@@ -473,3 +473,44 @@ One entry per journey, newest last. Before a journey, read these and apply the o
   and small letters on Home.
 - `--reporter=line` and timeouts (J8 #3): no hang.
 - Avoid heredocs with quotes (J11): learned again; files with prose go through the Write tool.
+
+## Journey 13: Spell a word by sound
+
+**What slowed it**
+
+- `L2-013` said a wrong letter never fills its slot; the mock lets any letter fill a box, takes
+  a placed letter back out on a touch, and checks the whole word with Check. The mock won:
+  `L2-013`, the design and ADR 0018 were rewritten first.
+- The mock's speaker under each box is 40 px, under the 60 px rule, and on 360 × 640 and
+  640 × 360 the letters fell behind the answer bar (634 vs 546 upright, 325 vs 266 on its side).
+  The phone layouts were redrawn in the mock CSS: upright, the picture beside 60 px boxes;
+  on its side, one row with the picture hidden; on both, no speakers, and an empty box says its
+  own sound instead, so `L2-013` #3 holds on every screen.
+- A spec read the boxes' text once, straight after a touch, and failed one run in ten; every
+  read of shown text after a touch now goes through `expect.poll`.
+- A page-object regex built in a template literal (`\s`) tripped `no-useless-escape`;
+  `getByRole('button', { name, exact: true })` is simpler and exact.
+- `count-and-write.spec.ts:193` failed once under verify's full load and passed 60 of 60 alone;
+  it is an existing flake, not this journey's, and is noted here so the next journey watches it.
+
+**New lessons**
+
+1. When a mock's control is under 60 px, redraw it in the mock CSS and say so in the ADR; the
+   size rule is not the mock's cast.
+2. When a phone hides a control (Pairs' speakers, these speakers), give its job to a target
+   that stays, so the requirement holds on every screen rather than only on a tablet.
+3. Read shown text through `expect.poll` (or a retrying `toHaveText`) after any touch; a bare
+   `allTextContents()` races the render.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1, J7–J12): the requirement, the Home card, the 60 px speaker and the
+  phone layouts went into the mocks before the component, in the first two commits.
+- Measure on 360 × 640 and 640 × 360 (J9 #1, J11 #1): a throwaway spec found both overflows
+  before the first code commit; after the redraw, 532 vs 546 upright and 239 vs 266 on its side.
+- Reuse the earlier content (J12 #1): the words and sounds are Sound it out's; the content check
+  gained only the `spell` lines.
+- Build before proving a failure (J8 #1): each slice's spec was committed first and failed for
+  the expected reason (no Spell by sound on Home; letters do not fill; Check does nothing).
+- Tag the critical path in the same change (J11 #4): the right check and Next is `@critical`.
+- Avoid heredocs with quotes (J11, J12): prose went through Python or the Write tool.

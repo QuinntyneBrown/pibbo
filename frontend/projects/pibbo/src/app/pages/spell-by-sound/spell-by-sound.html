@@ -2,6 +2,7 @@
   title="Spell by sound"
   group="read"
   [instruction]="instruction()"
+  [mood]="mood()"
   [done]="done()"
   [rounds]="content.roundsPerPlay"
   (replay)="replay()"
@@ -12,12 +13,20 @@
     [word]="round().word.word"
     [boxes]="round().boxes"
     [bank]="round().bank"
-    [next]="next()"
+    [next]="nextToFill()"
     [canPlace]="canPlace()"
     [canRemove]="canRemove()"
+    [right]="round().phase === 'right'"
     (letter)="placeLetter($event)"
     (speaker)="speak($event)"
     (box)="touchBox($event)"
   />
-  <pb-answer-bar answer group="read" kind="check" [ready]="round().phase === 'full'" />
+  <pb-answer-bar
+    answer
+    group="read"
+    [kind]="bar().kind"
+    [message]="bar().message"
+    [ready]="bar().ready"
+    (action)="action()"
+  />
 </pb-round-shell>
