@@ -10,3 +10,39 @@
   align-items: center;
   gap: var(--space-5);
 }
+
+// A longer word (L2-017) as the mock draws it on a short screen: upright, closer together; on
+// its side, the rule across the top and the syllables beside the blend control or the pictures.
+@media (max-width: 39.99rem) and (max-height: 52rem) and (orientation: portrait) {
+  .stage--syllables {
+    gap: var(--space-2);
+  }
+
+  .stage__word {
+    gap: var(--space-2);
+  }
+}
+
+@media (orientation: landscape) and (min-width: 32rem) and (max-height: 30rem) {
+  .stage--syllables {
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-4);
+
+    pb-rule {
+      flex-basis: 100%;
+    }
+
+    .stage__word {
+      width: auto;
+      flex: 1;
+      flex-direction: row;
+      justify-content: center;
+      gap: var(--space-4);
+    }
+
+    pb-picture-pick {
+      flex: 1;
+    }
+  }
+}

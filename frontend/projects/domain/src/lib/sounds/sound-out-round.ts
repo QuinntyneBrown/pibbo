@@ -222,10 +222,13 @@ export function toggleSilentE(round: SoundOutRound): LetterResult {
   };
 }
 
-/** Blending (L2-012 #2): each sound again, back to back, each letter lit, then the word. */
+/**
+ * Blending (L2-012 #2): each tile's recording again, back to back, each tile lit, then the
+ * word. A longer word blends its syllables, not its single sounds (L2-017 #2).
+ */
 export function blendPlan(word: Word): PlaybackStep[] {
   return [
-    ...word.sounds.map((s, letter) => ({ recording: s.recording, letter })),
+    ...wordTiles(word).map((s, letter) => ({ recording: s.recording, letter })),
     { recording: word.recording, letter: null },
   ];
 }

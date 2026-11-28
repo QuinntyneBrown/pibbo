@@ -153,6 +153,32 @@ export class SoundItOutPage {
     return srcs.map((s) => s.replace(/^.*\//, '').replace(/\.jpg$/, ''));
   }
 
+  /** How many tiles are too small for their letters. */
+  async truncatedTiles(): Promise<number> {
+    return this.letters.evaluateAll(
+      (tiles) =>
+        tiles.filter((t) => t.scrollWidth > t.clientWidth || t.scrollHeight > t.clientHeight)
+          .length,
+    );
+  }
+
+  /**
+   * The targets in the game that reach below the top of the answer bar, where they cannot be
+   * seen or touched even though nothing scrolls (journey 10, lesson 2).
+   */
+  async hiddenUnderAnswerBar(): Promise<string[]> {
+    return this.page.evaluate(() => {
+      const bar = document.querySelector('.answer-bar')!.getBoundingClientRect();
+      return [...document.querySelectorAll('.tile, .pick__option, .blend .chunky')]
+        .map((el) => ({ el, r: el.getBoundingClientRect() }))
+        .filter(({ r }) => r.bottom > bar.top + 1 && r.right > bar.left && r.left < bar.right)
+        .map(
+          ({ el, r }) =>
+            `${el.getAttribute('aria-label') ?? el.textContent!.trim()} ${r.bottom}>${bar.top}`,
+        );
+    });
+  }
+
   async scrolls(): Promise<boolean> {
     return this.page.evaluate(() => {
       const el = document.scrollingElement ?? document.documentElement;

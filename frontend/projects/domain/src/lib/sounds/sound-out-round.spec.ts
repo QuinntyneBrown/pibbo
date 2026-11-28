@@ -378,6 +378,13 @@ describe('a longer word read by syllable (L2-017)', () => {
     expect(syllableAsk(both, before, after)).toBeNull();
   });
 
+  it('blends the syllables, then the word', () => {
+    expect(recordings(blendPlan(sunset))).toEqual([
+      ...sunset.syllables!.map((s) => s.recording),
+      sunset.recording,
+    ]);
+  });
+
   it('fetches every sound and syllable before the round is shown', () => {
     const assets = roundAssets(start());
     for (const s of [...sunset.sounds, ...sunset.syllables!]) expect(assets).toContain(s.recording);

@@ -43,6 +43,9 @@ export class WordTiles {
   /** The letter the added e changes, if any. */
   readonly changed = input<number | null>(null);
 
+  /** Whether the tiles are a longer word's syllables (L2-017). */
+  readonly beats = input(false);
+
   /** The index of the letter touched. */
   readonly touched = output<number>();
   readonly blend = output<void>();

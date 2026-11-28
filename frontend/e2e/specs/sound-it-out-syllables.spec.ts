@@ -77,4 +77,70 @@ test.describe('Sound it out: a longer word read by syllable', () => {
       .poll(async () => (await spoken.recordings()).slice(before))
       .toEqual([sound('s'), sound('e'), sound('t'), SET, read_('say-them-fast')]);
   });
+
+  test('Given both syllables read, when the child touches blend, then "sunset" is spoken and its picture is highlighted', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    await read.soundAll();
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(read_('say-them-fast'));
+    const blended = (await spoken.recordings()).length;
+
+    await read.touch(read.blend);
+
+    await expect(read.instruction).toHaveText('Which picture is “sunset”?');
+    await expect(read.pictures).toHaveCount(3);
+    // The syllables, then the word, then the question.
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(blended))
+      .toEqual([word('sun'), SET, word('sunset'), read_('which-picture'), word('sunset')]);
+    await expect(read.rule).toHaveText('sun · set Read one beat at a time');
+    await expect(read.shownSounds).toHaveText(['clap 1', 'clap 2']);
+
+    await read.answer('sunset');
+
+    await expect(read.rightPicture).toHaveCount(1);
+    await expect(read.picture('sunset')).toHaveClass(/pick__option--right/);
+    await expect(read.message).toHaveText('You read “sunset”!');
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(word('sunset'));
+  });
 });
+
+for (const viewport of [
+  { width: 320, height: 640 },
+  { width: 360, height: 640 },
+  { width: 640, height: 360 },
+]) {
+  test.describe(`Sound it out: a two-syllable word fits at ${viewport.width} x ${viewport.height}`, () => {
+    test.use({ seed: SUNSET, viewport });
+
+    test('Given a two-syllable word, when shown, then both syllables fit on one line without scrolling or truncation', async ({
+      page,
+    }) => {
+      const read = new SoundItOutPage(page);
+      await read.openFromHome();
+      await expect.poll(() => read.tileLetters()).toEqual(['sun', 'set']);
+
+      const fits = async () => {
+        const boxes = await read.tileBoxes();
+        expect(new Set(boxes.map((b) => Math.round(b.y))).size).toBe(1);
+        for (const b of boxes) {
+          expect(b.width).toBeGreaterThanOrEqual(60);
+          expect(b.height).toBeGreaterThanOrEqual(60);
+          expect(b.x).toBeGreaterThanOrEqual(0);
+          expect(b.x + b.width).toBeLessThanOrEqual(viewport.width);
+        }
+        expect(await read.truncatedTiles()).toBe(0);
+        expect(await read.scrolls()).toBe(false);
+        expect(await read.hiddenUnderAnswerBar()).toEqual([]);
+      };
+      await fits();
+
+      // And with the pictures offered.
+      await read.soundAndBlend();
+      await fits();
+    });
+  });
+}
