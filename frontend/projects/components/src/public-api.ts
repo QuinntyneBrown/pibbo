@@ -33,3 +33,4 @@ export * from './lib/check-card/check-card';
 export * from './lib/check-question/check-question';
 export * from './lib/earned-pictures/earned-pictures';
 export * from './lib/progress/progress';
+export * from './lib/grown-up-entry/grown-up-entry';

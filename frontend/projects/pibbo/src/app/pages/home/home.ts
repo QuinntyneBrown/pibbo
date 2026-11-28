@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { AUDIO_PLAYER, PROGRESS_STORE, type Activity, type ActivityGroup } from '@pibbo/api';
-import { ActivityGrid, CheckCard, GroupSwitch, Wordmark } from '@pibbo/components';
+import { ActivityGrid, CheckCard, GroupSwitch, GrownUpEntry, Wordmark } from '@pibbo/components';
 import {
   ACTIVITY_CATALOGUE,
   activityScreen,
@@ -26,7 +26,7 @@ import {
  */
 @Component({
   selector: 'pb-home',
-  imports: [Wordmark, GroupSwitch, ActivityGrid, CheckCard],
+  imports: [Wordmark, GroupSwitch, ActivityGrid, CheckCard, GrownUpEntry],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -82,6 +82,11 @@ export class Home {
   /** The check game's picture: "What do I know?" is spoken and the game opens (L2-023 #6). */
   protected openCheck(): void {
     this.open(this.check.name.recording, '/check');
+  }
+
+  /** The grown-up entry: the gate opens (journey 24). */
+  protected openGate(): void {
+    /* The gate comes with its slice. */
   }
 
   private open(recording: string, path: string): void {
