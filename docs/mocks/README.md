@@ -86,6 +86,14 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   its side the product makes the words and pictures one row, words on the left: at 568 × 320
   the mock's two rows of 60 px targets do not fit above the answer bar.
 
+- **Guided lesson aligned (journey 22, ADR 0025).** Home's Count and Read screens gain a
+  Lesson picture beside the wordmark (`.home__lesson`, `L2-024` #4); it opens the chosen
+  group's lesson where the child left off. The done state no longer earns a star: praise is
+  for effort and nothing is counted, so it says "Lesson done! You played every game." On the
+  path, "Up next" is spoken as well as shown. The five-game paths are the cast, not a rule:
+  the product's lessons are content, and a game a lesson names that does not exist yet is left
+  off the path.
+
 - **Home reconciled with `AGENTS.md` (journey 2).** The prototype's Home (the child's
   name and stars, today's lesson card, the check card and 21 game cards) is replaced by what
   `L2-024` and *Children's privacy and safety* allow: two group pictures, Count and Read, and
@@ -207,7 +215,7 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Home · Choose an activity (`home`) | [✅](pages/home/default.html) | ➖ | ➖ | ➖ | [✅](pages/home/counting.html) | [✅](pages/home/counting-more.html) | [✅](pages/home/first-visit.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-024`, `L2-035` |
 | Activity placeholder (`activity-placeholder`) | [✅](pages/activity-placeholder/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-024` |
-| Guided lesson (`guided-lesson`) | [✅](pages/guided-lesson/default.html) | ➖ | ➖ | ➖ | [✅](pages/guided-lesson/counting.html) |  |  | [✅](pages/guided-lesson/start.html) | [✅](pages/guided-lesson/done.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Guided lesson (`guided-lesson`) | [✅](pages/guided-lesson/default.html) | ➖ | ➖ | ➖ | [✅](pages/guided-lesson/counting.html) |  |  | [✅](pages/guided-lesson/start.html) | [✅](pages/guided-lesson/done.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-022` |
 | Count the toys (`count-the-toys`) | [✅](pages/count-the-toys/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/count-the-toys/start.html) |  | [✅](pages/count-the-toys/choose.html) | [✅](pages/count-the-toys/correct.html) | [✅](pages/count-the-toys/retry.html) | [✅](pages/count-the-toys/modelled.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-001`, `L2-002`, `L2-025`, `L2-026` |
 | Count and write (`count-and-write`) | [✅](pages/count-and-write/default.html) | ➖ | ➖ | ➖ | [✅](pages/count-and-write/counting.html) |  |  |  |  |  | [✅](pages/count-and-write/correct.html) |  | [✅](pages/count-and-write/modelled.html) | [✅](pages/count-and-write/written.html) | [✅](pages/count-and-write/hint.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-003`, `L2-004`, `L2-025`, `L2-026` |
 | Which is bigger? (`which-is-bigger`) | [✅](pages/which-is-bigger/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/which-is-bigger/correct.html) | [✅](pages/which-is-bigger/retry.html) |  |  |  | [✅](pages/which-is-bigger/picked.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-005`, `L2-025` |
