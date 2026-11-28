@@ -21,7 +21,7 @@
 | 19 | Recognise common words | `L2-019` | [sound-out/recognise-common-words](detailed-designs/sound-out/recognise-common-words/README.md) | It adds common-word data. | [prompt](prompts/19-recognise-common-words.md) | 100% |
 | 20 | Build a short sentence | `L2-020` | [sound-out/build-a-sentence](detailed-designs/sound-out/build-a-sentence/README.md) | It needs common words (journey 19). | [prompt](prompts/20-build-a-sentence.md) | 0% |
 | 21 | Hear rhymes | `L2-021` | [sound-out/hear-rhymes](detailed-designs/sound-out/hear-rhymes/README.md) | It reuses word recordings. | [prompt](prompts/21-hear-rhymes.md) | 100% |
-| 22 | Follow a guided lesson | `L2-022` | [lessons/guided-lesson](detailed-designs/lessons/guided-lesson/README.md) | It strings together activities that now exist. | [prompt](prompts/22-guided-lesson.md) | 0% |
+| 22 | Follow a guided lesson | `L2-022` | [lessons/guided-lesson](detailed-designs/lessons/guided-lesson/README.md) | It strings together activities that now exist. | [prompt](prompts/22-guided-lesson.md) | 100% |
 | 23 | Play the check game | `L2-023` | [lessons/check-game](detailed-designs/lessons/check-game/README.md) | It needs practice history and the on-device storage from journey 22. | [prompt](prompts/23-check-game.md) | 0% |
 | 24 | Grown-up gate and area | `L2-037` | [grown-up/grown-up-gate](detailed-designs/grown-up/grown-up-gate/README.md) | It lets a grown-up clear what journeys 22 and 23 keep. | [prompt](prompts/24-grown-up-gate.md) | 0% |
 | 25 | Offline after first use | `L2-033` | [performance/offline-after-first-use](detailed-designs/performance/offline-after-first-use/README.md) | It comes once the content is settled. | [prompt](prompts/25-offline-after-first-use.md) | 0% |

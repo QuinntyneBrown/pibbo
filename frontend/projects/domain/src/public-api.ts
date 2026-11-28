@@ -32,3 +32,5 @@ export * from './lib/sounds/word-pictures-content';
 export * from './lib/sounds/word-pictures-round';
 export * from './lib/sounds/common-words-content';
 export * from './lib/sounds/spot-round';
+export * from './lib/lessons/lesson-content';
+export * from './lib/lessons/lesson-rules';

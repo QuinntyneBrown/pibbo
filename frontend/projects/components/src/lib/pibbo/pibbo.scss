@@ -9,6 +9,16 @@
   height: 4.5rem;
 }
 
+.pibbo--sm {
+  width: 3.5rem;
+  height: 3.5rem;
+
+  @media (max-width: 22rem) and (orientation: portrait) {
+    width: var(--size-5);
+    height: var(--size-5);
+  }
+}
+
 .pibbo--xl {
   width: 9.375rem;
   height: 9.375rem;

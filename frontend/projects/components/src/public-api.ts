@@ -29,3 +29,4 @@ export * from './lib/rule/rule';
 export * from './lib/rhyme-cards/rhyme-cards';
 export * from './lib/word-pictures/word-pictures';
 export * from './lib/spot/spot';
+export * from './lib/lesson-path/lesson-path';

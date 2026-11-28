@@ -73,5 +73,9 @@ export const routes: Routes = [
     path: 'read/rhymes',
     loadComponent: () => import('./pages/rhyme-time/rhyme-time').then((m) => m.RhymeTime),
   },
+  {
+    path: 'lesson/:subject',
+    loadChildren: () => import('./pages/guided-lesson/guided-lesson.routes').then((m) => m.routes),
+  },
   { path: '**', redirectTo: '' },
 ];

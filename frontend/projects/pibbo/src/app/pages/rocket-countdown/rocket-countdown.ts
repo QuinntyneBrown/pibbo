@@ -7,8 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
+import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction, ACTIVITY_EXIT } from '@pibbo/api';
 import { AnswerBar, Countdown, RoundShell, type AnswerBarKind } from '@pibbo/components';
 import {
   chooseNext,
@@ -39,7 +38,7 @@ export class RocketCountdown {
   private readonly audio = inject(AUDIO_PLAYER);
   private readonly clock = inject(CLOCK);
   private readonly random = inject(RANDOM_SOURCE);
-  private readonly router = inject(Router);
+  private readonly exit = inject(ACTIVITY_EXIT);
 
   protected readonly content = ROCKET_COUNTDOWN;
   protected readonly round = signal(startCountdownRound(this.random, ROCKET_COUNTDOWN));
@@ -149,7 +148,7 @@ export class RocketCountdown {
     this.stopPraise();
     const done = this.done() + 1;
     if (done >= ROCKET_COUNTDOWN.roundsPerPlay) {
-      this.leave();
+      this.finish();
       return;
     }
     this.done.set(done);
@@ -163,6 +162,12 @@ export class RocketCountdown {
 
   protected leave(): void {
     this.audio.stop();
-    void this.router.navigate(['/'], { queryParams: { group: 'count' } });
+    this.exit.leave('count');
+  }
+
+  /** After the last round: Home, or back to the lesson's path (ADR 0026). */
+  protected finish(): void {
+    this.audio.stop();
+    this.exit.finish('count');
   }
 }
