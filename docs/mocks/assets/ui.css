@@ -663,6 +663,8 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
 .box--filled { border: 0; background: var(--color-surface); }
 .box--next { border-color: var(--color-read); background: color-mix(in srgb, var(--color-surface) 60%, transparent); }
 .box--right { border: 0; background: var(--color-success-soft); color: var(--color-success-strong); }
+/* Spell by sound: an empty box shows the sound it says (L2-013 #3), smaller than a placed letter. */
+.box__sound { color: var(--color-read-strong); font-size: var(--font-size-xl); line-height: 1; }
 .bank { display: grid; grid-template-columns: repeat(3, var(--size-10)); gap: var(--gap-targets); }
 @media (min-width: 40rem) { .bank { grid-template-columns: repeat(6, var(--size-10)); } }
 .bank__letter { width: var(--size-10); height: var(--size-10); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-fg); font-family: var(--font-read); font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); }
