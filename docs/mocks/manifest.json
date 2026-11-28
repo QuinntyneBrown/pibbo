@@ -307,7 +307,11 @@
       "kind": "page",
       "title": "Spell by sound",
       "route": "/read/spell",
-      "requirements": [],
+      "requirements": [
+        "L2-013",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "default",
         "full",

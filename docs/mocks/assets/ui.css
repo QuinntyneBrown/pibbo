@@ -527,6 +527,25 @@ img { display: block; max-width: 100%; }
 @media (min-width: 40rem) { .bank { grid-template-columns: repeat(6, var(--size-10)); } }
 .bank__letter { width: var(--size-10); height: var(--size-10); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-fg); font-family: var(--font-read); font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); }
 .bank__letter:disabled { opacity: 0.45; }
+/* A box's speaker is a child's target: 60 x 60 px at least (AGENTS.md; ADR 0018). */
+.boxes .speaker { width: var(--target-child); height: var(--target-child); }
+/* Spell by sound on a phone (ADR 0018): upright, the picture beside 60 px boxes and the letters
+   under them; on its side, one row of boxes then letters, the word in the bubble. There is no
+   room for the speakers: an empty box says its own sound instead. */
+@media (max-width: 40rem), (max-height: 30rem) {
+  .stage:has(> .spell) { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: var(--space-4); }
+  .stage:has(> .spell) .frame-picture { width: var(--size-11); height: var(--size-11); padding: var(--space-3); }
+  .spell { display: contents; }
+  .boxes .box { width: var(--target-child); height: var(--size-11); }
+  .boxes .speaker { display: none; }
+}
+@media (max-height: 30rem) {
+  .stage:has(> .spell) { flex-wrap: nowrap; }
+  .stage:has(> .spell) .frame-picture { display: none; }
+  .boxes .box { height: var(--target-child); }
+  .bank { grid-template-columns: repeat(6, var(--target-child)); gap: var(--space-2); }
+  .bank__letter { width: var(--target-child); height: var(--target-child); }
+}
 
 /* ---------- Rhyme time ---------- */
 .rhyme-target { display: flex; flex: none; align-items: center; gap: var(--space-4); padding: var(--space-4); border-radius: var(--radius-2xl); background: var(--color-read-strong); color: var(--color-fg-on-strong); }

@@ -1,5 +1,7 @@
 # Feature: Spell a word by sound
 
+**Status:** Complete (PR #14)
+
 Journey 13 of 27 in `docs/journeys.md`. Requirements: L2-013.
 
 ## Goal
