@@ -10,6 +10,7 @@ export const COUNT_AND_WRITE = {
   roundsPerPlay: 5,
   toys: COUNT_THE_TOYS.toys,
   count: COUNT_THE_TOYS.count,
+  praise: COUNT_THE_TOYS.praise,
   write: {
     text: 'Write how many.',
     recording: '/recordings/count/write-how-many.wav',

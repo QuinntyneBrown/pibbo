@@ -1,6 +1,7 @@
 <pb-round-shell
   title="Count and write"
   [instruction]="instruction()"
+  [mood]="mood()"
   [done]="done()"
   [rounds]="content.roundsPerPlay"
   (replay)="replay()"
@@ -15,7 +16,12 @@
       (touched)="countThing($event)"
     />
     @if (round().phase !== 'counting') {
-      <pb-digit-pad [written]="round().written" />
+      <pb-digit-pad
+        [written]="round().written"
+        [locked]="round().phase !== 'writing'"
+        (wrote)="writeDigit($event)"
+        (cleared)="clearDigits()"
+      />
     }
   </div>
   <pb-answer-bar

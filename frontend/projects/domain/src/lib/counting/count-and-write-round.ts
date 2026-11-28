@@ -1,10 +1,14 @@
 import type { RandomSource, Thing } from '@pibbo/api';
+import { answerOutcome, type AnswerOutcome } from '../rounds/answer-outcome';
 
 /** A ten-frame holds ten things in two rows of five. */
 export const FRAME_SIZE = 10;
 
 /** The largest number Count and write can ask: L2-003 says up to twenty. */
 export const LARGEST_WRITTEN = 20;
+
+/** The digit pad has two boxes: a third digit is ignored (L2-004 #4). */
+export const MAX_DIGITS = 2;
 
 /** What a Count and write round can be made from: content, not rules. */
 export interface CountAndWriteContent {
@@ -98,4 +102,62 @@ export function countThing(round: CountAndWriteRound, index: number): CountAndWr
   const countedAs = round.countedAs.map((n, i) => (i === index ? next : n));
   const phase = next === round.things.length ? 'writing' : 'counting';
   return { round: { ...round, countedAs, phase }, spoken: next };
+}
+
+/** The digits of a number, most significant first: 14 is [1, 4]. */
+export function digitsOf(n: number): number[] {
+  return String(n).split('').map(Number);
+}
+
+/**
+ * The child touches a digit tile (L2-004 #5): it is written in the next box and spoken. Only
+ * while writing, only a digit 0 to 9, and never a third (L2-004 #4).
+ */
+export function writeDigit(round: CountAndWriteRound, digit: number): CountAndWriteTouch {
+  if (
+    round.phase !== 'writing' ||
+    !Number.isInteger(digit) ||
+    digit < 0 ||
+    digit > 9 ||
+    round.written.length >= MAX_DIGITS
+  ) {
+    return { round, spoken: null };
+  }
+  return { round: { ...round, written: [...round.written, digit] }, spoken: digit };
+}
+
+/** Clear empties the boxes, only while writing. */
+export function clearDigits(round: CountAndWriteRound): CountAndWriteRound {
+  return round.phase === 'writing' && round.written.length > 0 ? { ...round, written: [] } : round;
+}
+
+/** What Check did: the round after it and what follows, or null when there was nothing to check. */
+export interface CountAndWriteCheck {
+  readonly round: CountAndWriteRound;
+  readonly outcome: AnswerOutcome | null;
+}
+
+/**
+ * Check the numeral written (L2-004, L2-026). Right ends the round; a wrong one clears the
+ * boxes and has Pibbo show the right touches (`hinting`); the third wrong one is modelled,
+ * with the answer written in the boxes. Nothing counted is taken away.
+ */
+export function checkNumeral(round: CountAndWriteRound): CountAndWriteCheck {
+  if (round.phase !== 'writing' || round.written.length === 0) return { round, outcome: null };
+  const right = round.written.join('') === String(round.answer);
+  const outcome = answerOutcome(round.wrong, right);
+  if (outcome === 'right') return { round: { ...round, phase: 'right' }, outcome };
+  const wrong = round.wrong + 1;
+  if (outcome === 'model') {
+    return {
+      round: { ...round, phase: 'modelled', wrong, written: digitsOf(round.answer) },
+      outcome,
+    };
+  }
+  return { round: { ...round, phase: 'hinting', wrong, written: [] }, outcome };
+}
+
+/** Pibbo has shown the right touches; the child writes again. */
+export function hintDone(round: CountAndWriteRound): CountAndWriteRound {
+  return round.phase === 'hinting' ? { ...round, phase: 'writing' } : round;
 }

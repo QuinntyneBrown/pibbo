@@ -5,11 +5,13 @@ import { CountAndWritePage } from '../pages/count-and-write.page';
 const HOME = ['/recordings/home/count.wav', '/recordings/home/count-and-write.wav'];
 const TAP_EACH = '/recordings/count/tap-each-toy.wav';
 const WRITE = '/recordings/count/write-how-many.wav';
+const YES = '/recordings/count/yes.wav';
 const number = (n: number) => `/recordings/numbers/${n}.wav`;
 const oneTo = (n: number) => Array.from({ length: n }, (_, i) => number(i + 1));
 
 /** Seeds whose first round asks for 14 and for 7 things (ADR 0009). */
 const ROUND_OF_14 = 14;
+const ROUND_OF_7 = 1;
 
 interface Box {
   x: number;
@@ -95,5 +97,90 @@ test.describe('Count and write: count to twenty in ten-frames', () => {
     expect(await count.scrolls()).toBe(false);
     await expect(count.action).toBeDisabled();
     await expect.poll(() => spoken.recordings()).toEqual([...HOME, TAP_EACH, ...oneTo(14), WRITE]);
+  });
+});
+
+test.describe('Count and write: write the numeral with digit tiles', () => {
+  test.use({ seed: ROUND_OF_14 });
+
+  test('Given the count is done, when the child touches a digit tile, then the digit is spoken and shown in the next box, and Clear empties the boxes', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountAndWritePage(page);
+    await count.openFromHome();
+    await count.countAll();
+
+    await count.write('1');
+
+    await expect(count.filledSlots).toHaveText(['1']);
+    await expect(count.written).toHaveAttribute('aria-label', 'You wrote 1');
+    await expect(count.action).toBeEnabled();
+    await count.touch(count.clear);
+    await expect(count.filledSlots).toHaveCount(0);
+    await expect(count.action).toBeDisabled();
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([...HOME, TAP_EACH, ...oneTo(14), WRITE, number(1)]);
+  });
+
+  test('Given two digits entered, when a third digit is touched, then it is ignored', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountAndWritePage(page);
+    await count.openFromHome();
+    await count.countAll();
+    await count.write('14');
+    await expect(count.filledSlots).toHaveText(['1', '4']);
+
+    await count.write('7');
+
+    await expect(count.filledSlots).toHaveText(['1', '4']);
+    await expect(count.written).toHaveAttribute('aria-label', 'You wrote 14');
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([...HOME, TAP_EACH, ...oneTo(14), WRITE, number(1), number(4)]);
+  });
+
+  test('Given the count is 14, when the child touches 1 then 4 and then Check, then "fourteen" is spoken and the answer is accepted', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountAndWritePage(page);
+    await count.openFromHome();
+    await count.countAll();
+
+    await count.answer('14');
+
+    await expect(count.answerBar).toHaveClass(/answer-bar--right/);
+    await expect(count.message).toHaveText('Yes! 14.');
+    await expect(count.keys.first()).toBeDisabled();
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([...HOME, TAP_EACH, ...oneTo(14), WRITE, number(1), number(4), number(14), YES]);
+  });
+});
+
+test.describe('Count and write: a one-digit count', () => {
+  test.use({ seed: ROUND_OF_7 });
+
+  test('Given the count is 7, when the child touches 7 and then Check, then the answer is accepted without a second digit', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountAndWritePage(page);
+    await count.openFromHome();
+    await expect(count.things).toHaveCount(7);
+    await expect(count.frames).toHaveCount(1);
+    await count.countAll();
+
+    await count.answer('7');
+
+    await expect(count.answerBar).toHaveClass(/answer-bar--right/);
+    await expect(count.message).toHaveText('Yes! 7.');
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([...HOME, TAP_EACH, ...oneTo(7), WRITE, number(7), number(7), YES]);
   });
 });

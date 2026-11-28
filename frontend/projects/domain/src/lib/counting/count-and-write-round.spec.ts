@@ -1,6 +1,11 @@
 import type { RandomSource } from '@pibbo/api';
 import {
+  checkNumeral,
+  clearDigits,
   countThing,
+  digitsOf,
+  hintDone,
+  writeDigit,
   startCountAndWriteRound,
   tenFrames,
   type CountAndWriteContent,
@@ -88,5 +93,96 @@ describe('countThing', () => {
     expect(done.phase).toBe('writing');
     expect(done.countedAs[13]).toBe(14);
     expect(countThing(done, 0).round).toBe(done);
+  });
+});
+
+describe('writing the numeral', () => {
+  const counted = (answer = 14) =>
+    countAll(startCountAndWriteRound(sequence(answer === 14 ? 0.1 : 0.9), content));
+  const write = (round: CountAndWriteRound, digits: number[]) =>
+    digits.reduce((r, d) => writeDigit(r, d).round, round);
+
+  it('splits a number into its digits', () => {
+    expect(digitsOf(14)).toEqual([1, 4]);
+    expect(digitsOf(7)).toEqual([7]);
+    expect(digitsOf(20)).toEqual([2, 0]);
+  });
+
+  it('writes each digit touched in the next box and speaks it', () => {
+    const { round, spoken } = writeDigit(counted(), 1);
+    expect(spoken).toBe(1);
+    expect(round.written).toEqual([1]);
+    expect(write(round, [4]).written).toEqual([1, 4]);
+  });
+
+  it('ignores a third digit', () => {
+    const two = write(counted(), [1, 4]);
+    const third = writeDigit(two, 7);
+    expect(third.round).toBe(two);
+    expect(third.spoken).toBeNull();
+  });
+
+  it('writes nothing while counting, or once the round is done', () => {
+    const counting = startCountAndWriteRound(sequence(0.1), content);
+    expect(writeDigit(counting, 1).round).toBe(counting);
+    const right = checkNumeral(write(counted(), [1, 4])).round;
+    expect(writeDigit(right, 1).round).toBe(right);
+  });
+
+  it('ignores anything that is not a digit', () => {
+    const round = counted();
+    expect(writeDigit(round, 10).round).toBe(round);
+    expect(writeDigit(round, -1).round).toBe(round);
+    expect(writeDigit(round, 1.5).round).toBe(round);
+  });
+
+  it('clears the boxes', () => {
+    expect(clearDigits(write(counted(), [4])).written).toEqual([]);
+  });
+
+  it('checks nothing until a digit is written', () => {
+    const round = counted();
+    expect(checkNumeral(round)).toEqual({ round, outcome: null });
+  });
+
+  it('accepts 1 then 4 for fourteen', () => {
+    const { round, outcome } = checkNumeral(write(counted(), [1, 4]));
+    expect(outcome).toBe('right');
+    expect(round.phase).toBe('right');
+  });
+
+  it('accepts a one-digit count without a second digit', () => {
+    const round = counted(7);
+    expect(round.answer).toBe(7);
+    expect(checkNumeral(write(round, [7])).outcome).toBe('right');
+  });
+
+  it('does not accept 4 then 1 for fourteen: the boxes clear and Pibbo hints, keeping every count', () => {
+    const before = write(counted(), [4, 1]);
+    const { round, outcome } = checkNumeral(before);
+    expect(outcome).toBe('hint');
+    expect(round.phase).toBe('hinting');
+    expect(round.written).toEqual([]);
+    expect(round.wrong).toBe(1);
+    expect(round.countedAs).toEqual(before.countedAs);
+    expect(writeDigit(round, 1).round).toBe(round);
+    const again = hintDone(round);
+    expect(again.phase).toBe('writing');
+    expect(writeDigit(again, 1).round.written).toEqual([1]);
+  });
+
+  it('models the answer on the third wrong numeral', () => {
+    let round = counted();
+    for (let i = 0; i < 2; i++) round = hintDone(checkNumeral(write(round, [4, 1])).round);
+    const { round: third, outcome } = checkNumeral(write(round, [4, 1]));
+    expect(outcome).toBe('model');
+    expect(third.phase).toBe('modelled');
+    expect(third.written).toEqual([1, 4]);
+    expect(third.wrong).toBe(3);
+  });
+
+  it('leaves the round alone when the hint is not showing', () => {
+    const round = counted();
+    expect(hintDone(round)).toBe(round);
   });
 });
