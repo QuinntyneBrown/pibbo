@@ -106,6 +106,25 @@ export class CountAndWritePage {
     await this.touch(this.action);
   }
 
+  /** Starts noting each digit tile Pibbo lights, in order, however briefly it is lit. */
+  async watchLitKeys(): Promise<void> {
+    await this.page.evaluate(() => {
+      const seen: string[] = [];
+      (window as unknown as { __lit: string[] }).__lit = seen;
+      new MutationObserver((changes) => {
+        for (const c of changes) {
+          const el = c.target as HTMLElement;
+          if (el.classList?.contains('digit-pad__key--lit')) seen.push(el.textContent!.trim());
+        }
+      }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    });
+  }
+
+  /** The digit tiles Pibbo has lit since `watchLitKeys`. */
+  async litKeys(): Promise<string[]> {
+    return this.page.evaluate(() => [...(window as unknown as { __lit: string[] }).__lit]);
+  }
+
   async boxes(target: Locator): Promise<{ x: number; y: number; width: number; height: number }[]> {
     const boxes = [];
     for (const t of await target.all()) {

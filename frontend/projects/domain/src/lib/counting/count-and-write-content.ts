@@ -11,6 +11,8 @@ export const COUNT_AND_WRITE = {
   toys: COUNT_THE_TOYS.toys,
   count: COUNT_THE_TOYS.count,
   praise: COUNT_THE_TOYS.praise,
+  hint: { text: 'Watch me write it.', recording: '/recordings/count/watch-me.wav' },
+  model: COUNT_THE_TOYS.model,
   write: {
     text: 'Write how many.',
     recording: '/recordings/count/write-how-many.wav',

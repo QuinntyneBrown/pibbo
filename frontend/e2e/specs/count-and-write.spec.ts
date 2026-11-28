@@ -6,6 +6,8 @@ const HOME = ['/recordings/home/count.wav', '/recordings/home/count-and-write.wa
 const TAP_EACH = '/recordings/count/tap-each-toy.wav';
 const WRITE = '/recordings/count/write-how-many.wav';
 const YES = '/recordings/count/yes.wav';
+const WATCH = '/recordings/count/watch-me.wav';
+const THERE_ARE = '/recordings/count/there-are.wav';
 const number = (n: number) => `/recordings/numbers/${n}.wav`;
 const oneTo = (n: number) => Array.from({ length: n }, (_, i) => number(i + 1));
 
@@ -182,5 +184,94 @@ test.describe('Count and write: a one-digit count', () => {
     await expect
       .poll(() => spoken.recordings())
       .toEqual([...HOME, TAP_EACH, ...oneTo(7), WRITE, number(7), number(7), YES]);
+  });
+});
+
+test.describe('Count and write: a wrong numeral is a chance to try again', () => {
+  test.use({ seed: ROUND_OF_14 });
+
+  test('Given the count is 14, when the child touches 4 then 1 and then Check, then the answer is not accepted, the tiles clear, and Pibbo shows 1 then 4 being touched as a hint before the child writes again', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountAndWritePage(page);
+    await count.openFromHome();
+    await count.countAll();
+    await count.watchLitKeys();
+
+    await count.answer('41');
+
+    await expect(count.answerBar).toHaveClass(/answer-bar--hint/);
+    await expect(count.message).toHaveText('Watch me write it.');
+    await expect(count.filledSlots).toHaveCount(0);
+    await expect(count.counted).toHaveCount(14);
+    await expect.poll(() => count.litKeys()).toEqual(['1', '4']);
+    await expect(count.litKey).toHaveCount(0);
+    await expect(count.key(1)).toBeEnabled();
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([
+        ...HOME,
+        TAP_EACH,
+        ...oneTo(14),
+        WRITE,
+        number(4),
+        number(1),
+        WATCH,
+        number(1),
+        number(4),
+        WRITE,
+      ]);
+
+    await count.answer('14');
+    await expect(count.answerBar).toHaveClass(/answer-bar--right/);
+    await expect.poll(async () => (await spoken.recordings()).slice(-2)).toEqual([number(14), YES]);
+  });
+
+  test('Given two wrong numerals, when the third is wrong, then Pibbo writes 14 and says it, and Next starts the next round', async ({
+    page,
+    spoken,
+  }) => {
+    const count = new CountAndWritePage(page);
+    await count.openFromHome();
+    await count.countAll();
+    for (let i = 0; i < 2; i++) {
+      await count.answer('41');
+      await expect(count.key(4)).toBeEnabled();
+    }
+
+    await count.answer('41');
+
+    await expect(count.answerBar).toHaveClass(/answer-bar--model/);
+    await expect(count.message).toHaveText('There are 14 toys.');
+    await expect(count.answerSlots).toHaveText(['1', '4']);
+    await expect(count.keys.first()).toBeDisabled();
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(-2))
+      .toEqual([THERE_ARE, number(14)]);
+
+    await count.touch(count.action);
+
+    await expect(count.progress).toHaveAttribute('aria-valuenow', '1');
+    await expect(count.instruction).toHaveText('Tap each toy once to count it.');
+    await expect(count.counted).toHaveCount(0);
+    await expect(count.pad).toHaveCount(0);
+  });
+});
+
+test.describe('Count and write: with the sound off', () => {
+  test.use({ seed: ROUND_OF_7, sound: 'off' });
+
+  test('Given the sound is off, when the child counts and writes, then the round still goes on and what Pibbo says is shown', async ({
+    page,
+  }) => {
+    const count = new CountAndWritePage(page);
+    await count.openFromHome();
+    await count.countAll();
+    await expect(count.instruction).toHaveText('Write how many.');
+
+    await count.answer('7');
+
+    await expect(count.message).toHaveText('Yes! 7.');
   });
 });

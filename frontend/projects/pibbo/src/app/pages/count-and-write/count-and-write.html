@@ -18,6 +18,8 @@
     @if (round().phase !== 'counting') {
       <pb-digit-pad
         [written]="round().written"
+        [answer]="round().phase === 'modelled'"
+        [lit]="lit()"
         [locked]="round().phase !== 'writing'"
         (wrote)="writeDigit($event)"
         (cleared)="clearDigits()"

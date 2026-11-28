@@ -14,6 +14,8 @@ import {
   checkNumeral,
   clearDigits,
   countThing,
+  digitsOf,
+  hintDone,
   COUNT_AND_WRITE,
   numberRecording,
   startCountAndWriteRound,
@@ -24,6 +26,9 @@ import {
 
 /** Praise lasts no more than this (L2-026 #3). */
 const PRAISE_MS = 1500;
+
+/** Each tile Pibbo touches in a hint stays lit at least this long, so it is seen even muted. */
+const HINT_STEP_MS = 700;
 
 /**
  * Count and write (docs/mocks/pages/count-and-write): up to twenty things in ten-frames, each
@@ -48,20 +53,37 @@ export class CountAndWrite {
   /** Rounds finished in this play. */
   protected readonly done = signal(0);
   protected readonly praising = signal(false);
+  /** The digit tile Pibbo is touching in a hint. */
+  protected readonly lit = signal<number | null>(null);
   private endPraise: (() => void) | null = null;
+  private endHold: (() => void) | null = null;
 
   protected readonly frames = computed(() => tenFrames(this.round().answer));
   protected readonly instruction = computed<Instruction>(() =>
     this.round().phase === 'counting' ? COUNT_AND_WRITE.count : COUNT_AND_WRITE.write,
   );
-  protected readonly mood = computed(() => (this.praising() ? 'cheer' : 'rest'));
+  protected readonly mood = computed(() =>
+    this.praising()
+      ? 'cheer'
+      : this.round().wrong > 0 && this.round().phase !== 'right'
+        ? 'oh'
+        : 'rest',
+  );
   protected readonly bar = computed<{ kind: AnswerBarKind; message: string; ready: boolean }>(
     () => {
       const round = this.round();
-      if (round.phase === 'right') {
-        return { kind: 'right', message: `Yes! ${round.answer}.`, ready: true };
+      switch (round.phase) {
+        case 'right':
+          return { kind: 'right', message: `Yes! ${round.answer}.`, ready: true };
+        case 'modelled':
+          return { kind: 'model', message: `There are ${round.answer} toys.`, ready: true };
+        case 'hinting':
+          return { kind: 'hint', message: COUNT_AND_WRITE.hint.text, ready: false };
+        default:
+          return round.wrong > 0
+            ? { kind: 'hint', message: COUNT_AND_WRITE.hint.text, ready: round.written.length > 0 }
+            : { kind: 'check', message: '', ready: round.written.length > 0 };
       }
-      return { kind: 'check', message: '', ready: round.written.length > 0 };
     },
   );
 
@@ -75,6 +97,7 @@ export class CountAndWrite {
     inject(DestroyRef).onDestroy(() => {
       document.removeEventListener('visibilitychange', rest);
       this.endPraise?.();
+      this.endHold?.();
       this.audio.stop();
     });
     void this.audio.play(this.instruction().recording);
@@ -114,6 +137,31 @@ export class CountAndWrite {
     if (outcome === null) return;
     this.round.set(round);
     if (outcome === 'right') void this.praise(round);
+    else if (outcome === 'hint') void this.showHow();
+    else
+      void this.audio.play(COUNT_AND_WRITE.model.recording).then((played) => {
+        if (played !== 'stopped' && this.round() === round) {
+          void this.audio.play(numberRecording(round.answer));
+        }
+      });
+  }
+
+  /**
+   * The hint (L2-004 #2): the boxes are clear; Pibbo lights each right digit tile in turn and
+   * says it, then the child writes again. Any newer sound ends it.
+   */
+  private async showHow(): Promise<void> {
+    const round = this.round();
+    let outcome = await this.audio.play(COUNT_AND_WRITE.hint.recording);
+    for (const digit of digitsOf(round.answer)) {
+      if (outcome === 'stopped' || this.round() !== round) break;
+      this.lit.set(digit);
+      [outcome] = await Promise.all([this.audio.play(numberRecording(digit)), this.hold()]);
+    }
+    this.lit.set(null);
+    if (this.round() !== round) return;
+    this.round.set(hintDone(round));
+    if (outcome !== 'stopped') void this.audio.play(COUNT_AND_WRITE.write.recording);
   }
 
   /** The number is said, then brief praise that never blocks Next: it ends after 1.5 s. */
@@ -127,6 +175,17 @@ export class CountAndWrite {
     }
   }
 
+  /** Waits `HINT_STEP_MS` on the injected clock. */
+  private hold(): Promise<void> {
+    return new Promise((resolve) => {
+      this.endHold?.();
+      this.endHold = this.clock.after(HINT_STEP_MS, () => {
+        this.endHold = null;
+        resolve();
+      });
+    });
+  }
+
   private stopPraise(): void {
     this.endPraise?.();
     this.endPraise = null;
@@ -135,6 +194,7 @@ export class CountAndWrite {
 
   private next(): void {
     this.stopPraise();
+    this.lit.set(null);
     const done = this.done() + 1;
     if (done >= COUNT_AND_WRITE.roundsPerPlay) {
       this.leave();
