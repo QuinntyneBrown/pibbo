@@ -37,7 +37,7 @@ Acceptance criteria of `L2-020` (Build a short sentence):
 ## Open questions
 
 - Which sentences Pibbo covers, and in what order, is not decided; the three sentences are the mock's cast. The recordings are silent placeholders.
-- No check-game question asks about Build a sentence yet (ADR 0027).
+- The check game asks "What comes next?" about a practised Build a sentence (ADR 0031).
 
 ## Diagrams
 

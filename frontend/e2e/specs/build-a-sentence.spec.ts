@@ -1,7 +1,8 @@
-// Traces to: L2-020, L2-025, L2-026
+// Traces to: L2-020, L2-022, L2-025, L2-026
 import { test, expect } from '../fixtures/test';
 import { BuildASentencePage } from '../pages/build-a-sentence.page';
 import { HomePage } from '../pages/home.page';
+import { LessonPage } from '../pages/lesson.page';
 
 const HOME = [
   '/recordings/home/read.wav',
@@ -294,5 +295,30 @@ test.describe('Build a sentence: muted', () => {
 
     await expect(sentence.message).toHaveText(`“${text(words)}” What a great sentence!`);
     await expect(sentence.action).toContainText('Next');
+  });
+});
+
+test.describe('Build a sentence: in the reading lesson', () => {
+  test('Given the reading lesson at its fifth step, when the child plays Build a sentence to the end, then the path shows every step done', async ({
+    page,
+  }) => {
+    const lesson = new LessonPage(page);
+    const sentence = new BuildASentencePage(page);
+    await lesson.storeBeforeLoad('read', '{"v":1,"step":5,"at":"build-a-sentence"}');
+    await lesson.open('read');
+    await expect(lesson.name(5)).toHaveText('Build a sentence');
+
+    await lesson.touch(lesson.play);
+    await expect(page).toHaveURL(/\/read\/sentence\?lesson=read&step=5$/);
+    await expect(sentence.tiles.first()).toBeVisible();
+    for (let i = 0; i < 5; i++) {
+      await expect(sentence.action).toHaveText('Check');
+      await sentence.build(CAST[await sentence.pictureAlt()]!.words);
+      await sentence.touch(sentence.action);
+      await expect(sentence.action).toContainText('Next');
+      await sentence.touch(sentence.action);
+    }
+
+    await expect(page.locator('.lesson__next p')).toHaveText('Lesson done! You played every game.');
   });
 });

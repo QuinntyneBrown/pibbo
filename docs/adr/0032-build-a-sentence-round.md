@@ -45,5 +45,14 @@ answers. The reading lesson (ADR 0026) already names `build-a-sentence`.
 ## Consequences
 
 Which sentences are covered, their order and the real recordings stay open; the recordings are
-short silent placeholders (ADR 0008). No check-game question asks about Build a sentence yet
-(ADR 0027 asks only activities that have one); a practised Build a sentence is not asked.
+short silent placeholders (ADR 0008). The check game asks one question about a practised
+Build a sentence (ADR 0027 asks about every activity on Home): "What comes next?" shows a
+sentence without its last word and offers that word, the extra word and another sentence's
+last word, written and never said. On a phone on its side (`shell--fit`, under 30 rem tall)
+the shell draws no picture beside the instruction and a smaller Pibbo, as the mocks of every
+fit screen do, so the instruction keeps to two lines and the strip and the words stay above
+the answer bar. Measured with nothing scrolling, every word at least 60 x 60 px, clear of the
+answer bar and the instruction, for all three sentences in the start, full, hint, modelled and
+praise states at 320 x 568, 360 x 640, 568 x 320, 640 x 360 and 1920 x 1080. The initial
+bundle grows by 0.1 kB raw (243.09 to 243.19 kB): Home's catalogue entry; the rest loads with
+the activity's route.

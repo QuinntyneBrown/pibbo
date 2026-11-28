@@ -247,6 +247,24 @@
       padding-block: var(--space-1);
     }
 
+    // As the mocks of these screens draw it: no picture beside the instruction and a smaller
+    // Pibbo, so a long instruction ("Look at the picture. Put the words…") keeps to two lines.
+    .shell__ask {
+      --pibbo-size: var(--size-7);
+
+      gap: var(--space-1);
+      padding-inline: var(--space-2);
+    }
+
+    .bubble {
+      gap: var(--space-1);
+      padding-inline: var(--space-2);
+    }
+
+    .bubble__picture {
+      display: none;
+    }
+
     .shell__game {
       grid-column: 1 / -1;
       padding: var(--space-2) var(--space-4);
