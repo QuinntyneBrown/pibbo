@@ -82,9 +82,9 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   are linked from Home and the lesson, as `journeys.ts` describes.
 - **Words and pictures aligned (journey 18, ADR 0023).** Home's Read group lists it after
   Spell by sound. The `held` state (a word pressed while its sounds are spoken) and the `miss`
-  state (both words spoken, the picture shaken and the word let go) are drawn. The product's
-  shell still keeps the ask above the game on a phone on its side, so there the words and
-  pictures make one row, words on the left, until the shell takes the mock's side-by-side ask.
+  state (both words spoken, the picture shaken and the word let go) are drawn. On a phone on
+  its side the product makes the words and pictures one row, words on the left: at 568 × 320
+  the mock's two rows of 60 px targets do not fit above the answer bar.
 
 - **Home reconciled with `AGENTS.md` (journey 2).** The prototype's Home (the child's
   name and stars, today's lesson card, the check card and 21 game cards) is replaced by what

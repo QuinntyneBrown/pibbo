@@ -699,10 +699,9 @@ One entry per journey, newest last. Before a journey, read these and apply the o
   design and ADR 0023 were rewritten, and `held`, `miss` and the Home card drawn, before code.
   The mock's fourth word, sunset, needs journey 17's syllables, so the theme has three.
 - At 320 px wide the shell's bubble left the instruction a 48 px column, 270 px tall, and the
-  board fell under the answer bar. The app's `RoundShell` had not taken the mock's responsive
-  shell rules; porting the small-upright-phone ask rule fixed it for every activity. On a phone
-  on its side the mock moves the ask beside the progress bar and the shell does not, so the
-  board takes one row there.
+  board fell under the answer bar. The fix was the mock's small-screen shell rules; journey 17
+  landed the same rules on `main` as `shell--fit` while this branch was open, so the rebase kept
+  theirs and the page opts in. Journey 17 also took ADR 0022; this one became 0023.
 - A `git stash` to measure the base bundle rebuilt `dist` from the base; the next layout spec
   ran against it and timed out on a missing Home card.
 - A screenshot path written in single quotes kept `${process.env.W}` literally.
@@ -711,11 +710,13 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 
 1. When an activity's layout fails on a small phone, measure the shell parts (top, ask, bubble
    text, game) before redesigning the board; the fault may be the shared shell lagging the
-   mock, and the fix then helps every activity.
+   mock (`shell--fit` now carries the mock's small-screen rules).
 2. A page that plays a sequence (a word's sounds, then praise) should treat "the sequence was
    stopped" as the end: praise only when the last recording was not stopped, or a hidden tab
    brings praise on return with no touch.
 3. After any `git stash` and build, rebuild before the next spec (J8 #1 again).
+4. Number a new ADR when the branch is rebased, not when it is started: parallel journeys pick
+   the same next number.
 
 **Earlier lessons applied**
 

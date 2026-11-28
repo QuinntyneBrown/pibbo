@@ -44,23 +44,23 @@ tiles. The design named `WordPicturePage`, `PairingBoardComponent` (`pb-pairingb
 5. **Content is data.** `wordPictures` in `sound-out-content.json` names themes, each with its
    words (by name, from Sound it out's `words`, so every word has its picture, recording and
    recorded sounds), its instruction and its praise, both naming the theme. The build-time
-   content check covers it. The one theme is the mock's "by the sea" with boat, ship and sun:
-   sunset waits for journey 17, which adds two-syllable words. Each round chooses a theme with
+   content check covers it. The one theme is the mock's "by the sea" with boat, ship and sun;
+   sunset, which journey 17 added as a two-syllable word while this one was built, can join it as
+   a content change. Each round chooses a theme with
    the random source; five rounds make a play, and after the fifth Next returns to Home with
    Read chosen. The mock's Next to Spot the word is the prototype's cast.
-6. **The board fits every phone in today's shell.** Each target is at least 60 × 60 px and
-   rows share the game area's height. The app's `RoundShell` takes the mock's small-upright-phone
-   rule for the ask (a smaller bubble picture, tighter spacing, `--font-size-lg`): at 320 px wide
-   the instruction had collapsed to a 48 px column. On a phone on its side the shell still keeps
-   the ask above the game (the mock moves it beside the progress bar), which leaves room for one
-   row of targets only, so there the words take the left half of one row and their pictures the
-   right, as Letter sounds does (ADR 0015). Measured at 320 × 568, 320 × 640, 360 × 640,
-   568 × 320, 640 × 360, 768 × 1024, 1280 × 720 and 1920 × 1080.
+6. **The board fits every phone.** Each target is at least 60 × 60 px and rows share the game
+   area's height. The page asks `RoundShell` for `shell--fit` (ADR 0022), the mock's rules for
+   small screens: on a small upright phone the bubble gives way, so at 320 px wide the
+   instruction keeps a readable column (it had collapsed to 48 px), and on a phone on its side the
+   ask stands beside the progress bar. At 568 × 320 that still leaves 117 px for the board, too
+   little for the mock's two rows of 60 px, so on its side the words take the left half of one
+   row and their pictures the right, as Letter sounds does (ADR 0015). Measured at 320 × 568,
+   320 × 640, 360 × 640, 568 × 320, 640 × 360, 768 × 1024, 1280 × 720 and 1920 × 1080, with and
+   without the praise bar.
 
 ## Consequences
 
 Which themes and words the activity covers, how many pairs a round shows and in what order the
 themes come stay open, as do the real recordings. A theme of two to four words is all the layout
-holds; the content check refuses more. At 568 × 320 the praise bar covers the bottom 14 px of
-the matched pairs; nothing is left to touch then and nothing scrolls. When the shell takes the mock's side-by-side ask on a phone on its side (journey 26),
-the board can return to the mock's two rows there.
+holds; the content check refuses more.
