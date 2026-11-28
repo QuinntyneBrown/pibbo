@@ -60,3 +60,125 @@ test.describe('Spot the word: a round', () => {
     await expect(home.activity('Spot the word')).toBeVisible();
   });
 });
+
+test.describe('Spot the word: finding the word', () => {
+  test('Given a round, when the child touches the word, then it is spoken, stays highlighted, takes no further touch and fills one dot; a second touch never counts twice', async ({
+    page,
+    spoken,
+  }) => {
+    const spot = new SpotTheWordPage(page);
+    await spot.openFromHome();
+    const w = await spot.word();
+    const [first] = await spot.indexesOf(w);
+    const total = (await spot.indexesOf(w)).length;
+    await expect.poll(() => spoken.recordings()).toEqual([...HOME, ...ask(w)]);
+
+    await spot.touch(spot.words.nth(first!));
+
+    await expect(spot.words.nth(first!)).toHaveClass(/story__word--found/);
+    await expect(spot.words.nth(first!)).toBeDisabled();
+    await expect(spot.words.nth(first!)).toHaveAttribute('aria-label', `${STORY[first!]}, found`);
+    await expect.poll(() => spot.filled()).toBe(1);
+    await expect(spot.found).toHaveAttribute('aria-label', `1 of ${total} found`);
+    await expect(spot.status).toHaveText(`Found “${w}”. 1 of ${total} found.`);
+    await spot.words.nth(first!).dispatchEvent('click');
+    await expect.poll(() => spot.filled()).toBe(1);
+    await expect.poll(() => spoken.recordings()).toEqual([...HOME, ...ask(w), word(w)]);
+  });
+
+  test('Given a round with one word found, when the child touches another word, then it greys with no sound, the grey fades after 0.4 s, and nothing found is lost', async ({
+    page,
+    spoken,
+  }) => {
+    const spot = new SpotTheWordPage(page);
+    await spot.openFromHome();
+    const w = await spot.word();
+    const [first] = await spot.indexesOf(w);
+    const other = await spot.otherThan(w);
+    await spot.touch(spot.words.nth(first!));
+    await expect.poll(() => spoken.recordings()).toEqual([...HOME, ...ask(w), word(w)]);
+
+    await spot.touch(spot.words.nth(other));
+
+    await expect(spot.words.nth(other)).toHaveClass(/story__word--miss/);
+    await expect(spot.status).toHaveText(`Look for “${w}”. You chose “${STORY[other]}”.`);
+    await expect.poll(() => spot.filled()).toBe(1);
+    await expect(spot.words.nth(first!)).toHaveClass(/story__word--found/);
+    await page.clock.runFor(400);
+    await expect(spot.words.nth(other)).not.toHaveClass(/story__word--miss/);
+    await expect(spot.words.nth(other)).toBeEnabled();
+    expect(await spoken.recordings()).toEqual([...HOME, ...ask(w), word(w)]);
+  });
+
+  test('Given every one but the last is found, when the child touches the last, then "You found" with the word, how many and "times" is spoken and shown with Next, the story takes no touch, and Next starts a new round @critical', async ({
+    page,
+    spoken,
+  }) => {
+    const spot = new SpotTheWordPage(page);
+    await spot.openFromHome();
+    const w = await spot.word();
+    const own = await spot.indexesOf(w);
+
+    await spot.findAll();
+
+    await expect(spot.message).toHaveText(`You found “${w}” ${own.length} times!`);
+    await expect(spot.action).toContainText('Next');
+    await expect.poll(() => spot.filled()).toBe(own.length);
+    for (const target of await spot.words.all()) await expect(target).toBeDisabled();
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(-4))
+      .toEqual([
+        '/recordings/read/you-found.wav',
+        word(w),
+        `/recordings/numbers/${own.length}.wav`,
+        '/recordings/read/times.wav',
+      ]);
+
+    await spot.touch(spot.action);
+    await expect.poll(() => spot.word()).not.toBe(w);
+    await expect.poll(() => spot.filled()).toBe(0);
+    await expect(spot.message).toHaveCount(0);
+    const next = await spot.word();
+    await expect.poll(async () => (await spoken.recordings()).slice(-3)).toEqual(ask(next));
+  });
+
+  test('Given a word missed in a round, when the next rounds are played, then it is asked again in one of them; after five rounds Next returns to Home with Read chosen', async ({
+    page,
+  }) => {
+    const spot = new SpotTheWordPage(page);
+    const home = new HomePage(page);
+    await spot.openFromHome();
+    const missed = await spot.word();
+    await spot.touch(spot.words.nth(await spot.otherThan(missed)));
+
+    const asked: string[] = [];
+    for (let i = 0; i < 5; i++) {
+      if (i > 0) asked.push(await spot.word());
+      await spot.findAll();
+      await expect(spot.action).toContainText('Next');
+      await spot.touch(spot.action);
+      if (i < 4) await expect.poll(() => spot.filled()).toBe(0);
+    }
+
+    expect(asked).toContain(missed);
+    await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
+  });
+});
+
+test.describe('Spot the word: muted', () => {
+  test.use({ sound: 'off' });
+
+  test('Given the device is muted, when the child plays a round, then it can be finished from what is shown alone', async ({
+    page,
+  }) => {
+    const spot = new SpotTheWordPage(page);
+    await spot.openFromHome();
+    const w = await spot.word();
+    await expect(spot.instruction).toHaveText(`Find every “${w}” in the story.`);
+
+    await spot.findAll();
+
+    await expect(spot.message).toContainText(`You found “${w}”`);
+    await expect(spot.action).toContainText('Next');
+  });
+});
