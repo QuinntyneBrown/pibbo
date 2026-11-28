@@ -8,7 +8,7 @@ import { test as base, expect, type Page } from '@playwright/test';
  * - The audio player is stood in for: `HTMLMediaElement.play` records the recording it was
  *   asked to play and ends at once; no real sound is played and no spec waits for one.
  * - A network guard fails the spec on any request off localhost, any request left unanswered
- *   and any page error.
+ *   and any page error, and on any ask for the microphone or the camera (L2-009 #6).
  */
 
 export const FIXED_TIME = new Date('2026-01-05T09:00:00Z');
@@ -60,6 +60,15 @@ function installFakes({ seed, sound }: { seed: number; sound: Sound }): void {
   HTMLMediaElement.prototype.load = function load() {
     /* nothing is fetched */
   };
+
+  // The microphone and the camera are never asked for: any ask is noted for the guard.
+  const media = navigator.mediaDevices;
+  if (media) {
+    media.getUserMedia = () => {
+      console.error('the microphone or camera was asked for');
+      return Promise.reject(new DOMException('never', 'NotAllowedError'));
+    };
+  }
 }
 
 function isLocal(url: string): boolean {
