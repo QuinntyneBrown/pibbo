@@ -48,9 +48,19 @@ tiles. The design named `WordPicturePage`, `PairingBoardComponent` (`pb-pairingb
    sunset waits for journey 17, which adds two-syllable words. Each round chooses a theme with
    the random source; five rounds make a play, and after the fifth Next returns to Home with
    Read chosen. The mock's Next to Spot the word is the prototype's cast.
+6. **The board fits every phone in today's shell.** Each target is at least 60 × 60 px and
+   rows share the game area's height. The app's `RoundShell` takes the mock's small-upright-phone
+   rule for the ask (a smaller bubble picture, tighter spacing, `--font-size-lg`): at 320 px wide
+   the instruction had collapsed to a 48 px column. On a phone on its side the shell still keeps
+   the ask above the game (the mock moves it beside the progress bar), which leaves room for one
+   row of targets only, so there the words take the left half of one row and their pictures the
+   right, as Letter sounds does (ADR 0015). Measured at 320 × 568, 320 × 640, 360 × 640,
+   568 × 320, 640 × 360, 768 × 1024, 1280 × 720 and 1920 × 1080.
 
 ## Consequences
 
 Which themes and words the activity covers, how many pairs a round shows and in what order the
 themes come stay open, as do the real recordings. A theme of two to four words is all the layout
-holds; the content check refuses more.
+holds; the content check refuses more. At 568 × 320 the praise bar covers the bottom 14 px of
+the matched pairs; nothing is left to touch then and nothing scrolls. When the shell takes the mock's side-by-side ask on a phone on its side (journey 26),
+the board can return to the mock's two rows there.

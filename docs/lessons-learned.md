@@ -688,3 +688,43 @@ One entry per journey, newest last. Before a journey, read these and apply the o
   `ERR_CONNECTION_REFUSED` / `ERR_INSUFFICIENT_RESOURCES`. That was most likely another
   worktree's Playwright run sharing port 4300 (`reuseExistingServer`). Give each worktree its
   own port when sessions run in parallel.
+
+## Journey 18: Connect words to pictures
+
+**What slowed it**
+
+- `L2-018` asked for three words, a wrong pair that "speaks both", and a word's letters that
+  sound out when touched; the mock draws four words as whole targets, lets the word go after a
+  miss (`data-release-on-miss`) and drew only default and correct. The mock won: `L2-018`, the
+  design and ADR 0022 were rewritten, and `held`, `miss` and the Home card drawn, before code.
+  The mock's fourth word, sunset, needs journey 17's syllables, so the theme has three.
+- At 320 px wide the shell's bubble left the instruction a 48 px column, 270 px tall, and the
+  board fell under the answer bar. The app's `RoundShell` had not taken the mock's responsive
+  shell rules; porting the small-upright-phone ask rule fixed it for every activity. On a phone
+  on its side the mock moves the ask beside the progress bar and the shell does not, so the
+  board takes one row there.
+- A `git stash` to measure the base bundle rebuilt `dist` from the base; the next layout spec
+  ran against it and timed out on a missing Home card.
+- A screenshot path written in single quotes kept `${process.env.W}` literally.
+
+**New lessons**
+
+1. When an activity's layout fails on a small phone, measure the shell parts (top, ask, bubble
+   text, game) before redesigning the board; the fault may be the shared shell lagging the
+   mock, and the fix then helps every activity.
+2. A page that plays a sequence (a word's sounds, then praise) should treat "the sequence was
+   stopped" as the end: praise only when the last recording was not stopped, or a hidden tab
+   brings praise on return with no touch.
+3. After any `git stash` and build, rebuild before the next spec (J8 #1 again).
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1, J7 to J16): states, Home card and requirement went in the first commit.
+- Read the acceptance criteria, not only the slices (J15 #1): #2 (sounding out) became its own
+  part of slice 2, and #4 (two touches) its own spec.
+- Measure 320 × 568 to 1920 × 1080 with a throwaway spec (J9 #1, J11 #1), in the praise state
+  too: it found the shell fault before any commit.
+- Grep the flat domain API before naming (J6 #2): `holdWord`, `matchPicture`, `joinColour`.
+- A spec that passes before its slice is a guard (J3 #5, J12 #3): reduced motion, said so.
+- Tag the critical path in the same change (J11 #4): praise and Next is `@critical`.
+- Build before proving a failure (J8 #1): each slice failed for the expected reason first.
