@@ -1,5 +1,6 @@
 # Feature: Spell a word by sound
-n**Status:** Complete (PR #14)
+
+**Status:** Complete (PR #14)
 
 Journey 13 of 27 in `docs/journeys.md`. Requirements: L2-013.
 
