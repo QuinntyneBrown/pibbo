@@ -1,4 +1,5 @@
 import type { Sound, Word } from '@pibbo/api';
+import { isLetterGroup } from './sound-out-round';
 import data from './sound-out-content.json';
 import { SOUND_OUT } from './sound-out-content';
 
@@ -47,8 +48,9 @@ export function spellContent(
 ): SpellContent {
   return {
     ...raw,
-    words,
-    letters: Object.values(sounds).filter((s) => s.letters.length === 1),
+    // Spell by sound spells one letter per box (ADR 0019): a word with a letter group waits.
+    words: words.filter((w) => !w.sounds.some(isLetterGroup)),
+    letters: Object.values(sounds).filter((s) => !isLetterGroup(s)),
   };
 }
 

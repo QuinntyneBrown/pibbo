@@ -18,6 +18,24 @@
       "sounds": ["c", "a", "t"],
       "picture": "/pictures/words/cat.jpg",
       "recording": "/recordings/words/cat.wav"
+    },
+    {
+      "word": "ship",
+      "sounds": ["sh", "i", "p"],
+      "picture": "/pictures/words/ship.jpg",
+      "recording": "/recordings/words/ship.wav"
+    },
+    {
+      "word": "night",
+      "sounds": ["n", "igh", "t"],
+      "picture": "/pictures/words/night.jpg",
+      "recording": "/recordings/words/night.wav"
+    },
+    {
+      "word": "boat",
+      "sounds": ["b", "oa", "t"],
+      "picture": "/pictures/words/boat.jpg",
+      "recording": "/recordings/words/boat.wav"
     }
   ],
   "sounds": {
@@ -75,6 +93,26 @@
       "letters": "t",
       "shown": "/t/",
       "recording": "/recordings/sounds/t.wav"
+    },
+    "i": {
+      "letters": "i",
+      "shown": "/i/",
+      "recording": "/recordings/sounds/i.wav"
+    },
+    "sh": {
+      "letters": "sh",
+      "shown": "/sh/",
+      "recording": "/recordings/sounds/sh.wav"
+    },
+    "igh": {
+      "letters": "igh",
+      "shown": "/ī/",
+      "recording": "/recordings/sounds/igh.wav"
+    },
+    "oa": {
+      "letters": "oa",
+      "shown": "/ō/",
+      "recording": "/recordings/sounds/oa.wav"
     }
   },
   "instructions": {

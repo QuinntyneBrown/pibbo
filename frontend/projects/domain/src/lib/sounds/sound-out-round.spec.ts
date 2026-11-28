@@ -5,6 +5,7 @@ import {
   blendPlan,
   checkPicture,
   choosePicture,
+  isLetterGroup,
   nextLetter,
   roundAssets,
   startBlend,
@@ -46,6 +47,46 @@ describe('Sound it out content', () => {
         words: [{ word: 'm', sounds: ['m'], picture: '', recording: '' }],
       } as never),
     ).toThrowError(/not recorded/);
+  });
+});
+
+describe('letter groups (L2-014)', () => {
+  const ship: Word = {
+    word: 'ship',
+    sounds: [
+      { letters: 'sh', shown: '/sh/', recording: '/s/sh.wav' },
+      { letters: 'i', shown: '/i/', recording: '/s/i.wav' },
+      { letters: 'p', shown: '/p/', recording: '/s/p.wav' },
+    ],
+    picture: '/p/ship.jpg',
+    recording: '/w/ship.wav',
+  };
+
+  it('knows a group of letters that makes one sound', () => {
+    expect(isLetterGroup(ship.sounds[0]!)).toBe(true);
+    expect(isLetterGroup(ship.sounds[1]!)).toBe(false);
+  });
+
+  it('plays one recording when the group is touched (#1)', () => {
+    const round = startSoundOutRound(sequence(0), [ship, word('sun'), word('cat')]);
+    expect(round.heard).toEqual([false, false, false]);
+    const { round: after, spoken } = touchLetter(round, 0);
+    expect(spoken).toBe('/s/sh.wav');
+    expect(nextLetter(after)).toBe(1);
+  });
+
+  it('blends one sound per group, then the word (#2, #3)', () => {
+    expect(blendPlan(ship).map((s) => s.recording)).toEqual([
+      '/s/sh.wav',
+      '/s/i.wav',
+      '/s/p.wav',
+      '/w/ship.wav',
+    ]);
+  });
+
+  it('marks the groups in the content, each with its own sound', () => {
+    const groups = SOUND_OUT.words.flatMap((w) => w.sounds.filter(isLetterGroup));
+    expect(groups.map((g) => g.letters)).toEqual(['sh', 'igh', 'oa']);
   });
 });
 

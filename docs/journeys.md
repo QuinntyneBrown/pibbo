@@ -2,7 +2,7 @@
 
 These are the user journeys to implement, in the order to build them. Each one is a thin vertical slice with its own implementation prompt in [`docs/prompts/`](prompts/). Each prompt is run as one session and ends with a PR.
 
-**% complete:** 48% (13 of 27 journeys done)
+**% complete:** 52% (14 of 27 journeys done)
 
 ## Order
 
@@ -33,7 +33,7 @@ The order follows what makes sense to build first:
 | 11 | Match letters to sounds | `L2-010` | [sound-out/match-letters-to-sounds](detailed-designs/sound-out/match-letters-to-sounds/README.md) | It is the simplest reading round and reuses the sound data from journey 4. | [prompt](prompts/11-match-letters-to-sounds.md) | Done |
 | 12 | Recognise uppercase and lowercase | `L2-011` | [sound-out/recognise-letter-forms](detailed-designs/sound-out/recognise-letter-forms/README.md) | It pairs letter forms with the sounds already built. | [prompt](prompts/12-recognise-letter-forms.md) | Done |
 | 13 | Spell a word by sound | `L2-013` | [sound-out/spell-by-sound](detailed-designs/sound-out/spell-by-sound/README.md) | It is the reverse of journey 4 and reuses its word data. | [prompt](prompts/13-spell-by-sound.md) | Done |
-| 14 | Letter groups that make one sound | `L2-014` | [sound-out/letter-groups](detailed-designs/sound-out/letter-groups/README.md) | It extends Sound it out with groups of letters that make one sound. | [prompt](prompts/14-letter-groups.md) | Not started |
+| 14 | Letter groups that make one sound | `L2-014` | [sound-out/letter-groups](detailed-designs/sound-out/letter-groups/README.md) | It extends Sound it out with groups of letters that make one sound. | [prompt](prompts/14-letter-groups.md) | Done |
 | 15 | Adjacent consonants | `L2-015` | [sound-out/adjacent-consonants](detailed-designs/sound-out/adjacent-consonants/README.md) | It extends Sound it out to longer words. | [prompt](prompts/15-adjacent-consonants.md) | Not started |
 | 16 | Silent-e words | `L2-016` | [sound-out/silent-e](detailed-designs/sound-out/silent-e/README.md) | It extends Sound it out with the `magic-e` state. | [prompt](prompts/16-silent-e.md) | Not started |
 | 17 | Read longer words by syllable | `L2-017` | [sound-out/read-by-syllable](detailed-designs/sound-out/read-by-syllable/README.md) | It is the last Sound it out extension. | [prompt](prompts/17-read-by-syllable.md) | Not started |
@@ -51,5 +51,5 @@ The order follows what makes sense to build first:
 ## Notes
 
 - Cross-cutting requirements are built inside the first journey that needs them and checked in every later one: `L2-025` and `L2-026` (journey 3), `L2-034` (journey 1) and `L2-035` (journey 2). Journey 26 closes `L2-029`, `L2-032` and `L2-036` across the whole app.
-- Journeys 14, 15 and 24 have no mock state yet. Their prompts draw the mock first.
+- Journeys 15 and 24 have no mock state yet. Their prompts draw the mock first.
 - Journeys 22 and 23 keep data on the device, so they need an ADR first.

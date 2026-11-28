@@ -12,8 +12,9 @@ const THIS_IS = '/recordings/read/this-is.wav';
 const WHICH = '/recordings/read/which-picture.wav';
 const wordRecording = (w: string) => `/recordings/words/${w}.wav`;
 const sound = (s: string) => `/recordings/sounds/${s}.wav`;
-/** How a letter's sound is shown: c makes /k/. */
-const shown = (l: string) => (l === 'c' ? '/k/' : `/${l}/`);
+/** How a tile's sound is shown: c makes /k/, and a letter group shows the sound it makes. */
+const SHOWN: Record<string, string> = { c: '/k/', igh: '/ī/', oa: '/ō/' };
+const shown = (l: string) => SHOWN[l] ?? `/${l}/`;
 
 test.describe('Sound it out: a round', () => {
   test('Given the child chooses Sound it out, when the round is shown, then a three-letter word appears with the first letter marked, blend not yet active, and the instruction spoken and shown with a picture', async ({
@@ -24,7 +25,7 @@ test.describe('Sound it out: a round', () => {
     await read.openFromHome();
 
     await expect(read.letters).toHaveCount(3);
-    expect(await read.word()).toMatch(/^[a-z]{3}$/);
+    expect(await read.word()).toMatch(/^[a-z]+$/);
     await expect(read.next).toHaveCount(1);
     await expect(read.letter(0)).toHaveClass(/tile--next/);
     await expect(read.letter(1)).toBeDisabled();
@@ -56,25 +57,20 @@ test.describe('Sound it out: each letter makes its sound', () => {
   }) => {
     const read = new SoundItOutPage(page);
     await read.openFromHome();
-    const word = await read.word();
+    const tiles = await read.tileLetters();
 
     await read.touch(read.letter(0));
     await expect(read.letter(0)).toHaveClass(/tile--heard/);
-    await expect(read.shownSounds).toHaveText([shown(word[0]!)]);
+    await expect(read.shownSounds).toHaveText([shown(tiles[0]!)]);
     await expect(read.letter(1)).toHaveClass(/tile--next/);
     await read.touch(read.letter(1));
     await read.touch(read.letter(2));
 
     await expect(read.heard).toHaveCount(3);
-    await expect(read.shownSounds).toHaveText([...word].map(shown));
+    await expect(read.shownSounds).toHaveText(tiles.map(shown));
     await expect(read.blend).toBeEnabled();
     await expect(read.instruction).toHaveText('Now say the sounds fast to read the word.');
-    expect(await spoken.recordings()).toEqual([
-      ...HOME,
-      TAP_EACH,
-      ...[...word].map(sound),
-      SAY_FAST,
-    ]);
+    expect(await spoken.recordings()).toEqual([...HOME, TAP_EACH, ...tiles.map(sound), SAY_FAST]);
   });
 
   test('Given a sound is playing, when the next letter is touched, then the playing recording stops and the new one starts', async ({
@@ -83,14 +79,14 @@ test.describe('Sound it out: each letter makes its sound', () => {
   }) => {
     const read = new SoundItOutPage(page);
     await read.openFromHome();
-    const word = await read.word();
+    const tiles = await read.tileLetters();
     const before = await spoken.stops();
 
     await read.touch(read.letter(0));
     await read.touch(read.letter(1));
 
     expect(await spoken.stops()).toBeGreaterThan(before);
-    expect((await spoken.recordings()).slice(-2)).toEqual([sound(word[0]!), sound(word[1]!)]);
+    expect((await spoken.recordings()).slice(-2)).toEqual([sound(tiles[0]!), sound(tiles[1]!)]);
   });
 
   test('Given the next letter is marked, when a later letter is touched, then nothing is spoken', async ({
@@ -115,6 +111,7 @@ test.describe('Sound it out: blending', () => {
     const read = new SoundItOutPage(page);
     await read.openFromHome();
     const word = await read.soundAll();
+    const tiles = await read.tileLetters();
     const before = (await spoken.recordings()).length;
 
     await read.touch(read.blend);
@@ -125,7 +122,7 @@ test.describe('Sound it out: blending', () => {
     await expect(read.sounding).toHaveCount(0);
     await expect(read.instruction).toHaveText(`Which picture is “${word}”?`);
     expect((await spoken.recordings()).slice(before)).toEqual([
-      ...[...word].map(sound),
+      ...tiles.map(sound),
       wordRecording(word),
       WHICH,
       wordRecording(word),
@@ -165,6 +162,7 @@ test.describe('Sound it out: choosing the picture', () => {
     const read = new SoundItOutPage(page);
     await read.openFromHome();
     const word = await read.soundAndBlend();
+    const tiles = await read.tileLetters();
     const wrong = (await read.pictureWords()).find((w) => w !== word)!;
 
     await read.answer(wrong);
@@ -179,7 +177,7 @@ test.describe('Sound it out: choosing the picture', () => {
 
     await expect(read.pictures.first()).toBeEnabled();
     expect((await spoken.recordings()).slice(before)).toEqual([
-      ...[...word].map(sound),
+      ...tiles.map(sound),
       wordRecording(word),
       WHICH,
       wordRecording(word),
@@ -238,7 +236,7 @@ test.describe('Sound it out: with the sound off', () => {
     await read.openFromHome();
 
     const word = await read.soundAndBlend();
-    await expect(read.shownSounds).toHaveText([...word].map(shown));
+    await expect(read.shownSounds).toHaveText((await read.tileLetters()).map(shown));
     await read.answer(word);
 
     await expect(read.message).toHaveText(`You read “${word}”!`);
@@ -260,9 +258,10 @@ test.describe('Sound it out: the next round is ready', () => {
     await read.touch(read.action);
     await expect(read.progress).toHaveAttribute('aria-valuenow', '1');
     const next = await read.word();
+    const tiles = await read.tileLetters();
 
     for (const asset of [
-      ...[...next].map((l) => `/recordings/sounds/${l}.wav`),
+      ...tiles.map((l) => `/recordings/sounds/${l}.wav`),
       `/recordings/words/${next}.wav`,
       `/pictures/words/${next}.jpg`,
     ]) {
