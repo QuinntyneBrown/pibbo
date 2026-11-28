@@ -388,7 +388,8 @@
         "default",
         "all-chosen",
         "correct",
-        "retry"
+        "retry",
+        "model"
       ],
       "prototype_frame": "oyGFSwVHG2Nz2m28fZ8sqi",
       "subject": "read",

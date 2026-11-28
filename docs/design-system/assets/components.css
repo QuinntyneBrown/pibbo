@@ -479,15 +479,26 @@ img { display: block; max-width: 100%; }
 .rhyme-target__picture .picture { width: 100%; height: 100%; mix-blend-mode: multiply; background: transparent; }
 .rhyme-target__word { font-family: var(--font-read); font-size: var(--font-size-5xl); font-weight: var(--font-weight-bold); }
 .rhyme-target__end { text-decoration: underline; text-decoration-color: var(--color-reward); text-decoration-thickness: 6px; text-underline-offset: 8px; }
-.word-cards { display: grid; width: 100%; flex: 1; grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+.word-cards { display: grid; width: 100%; flex: 1; grid-template-columns: repeat(2, 1fr); gap: var(--gap-targets); }
 @media (min-width: 40rem) { .word-cards { grid-template-columns: repeat(4, 1fr); } }
 .word-card { position: relative; display: flex; flex-direction: column; align-items: center; padding: var(--space-3) var(--space-3) var(--space-4); border-radius: var(--radius-xl); background: var(--color-surface); }
 .word-card .picture { width: 100%; max-width: var(--size-15); aspect-ratio: 1; }
 .word-card__word { margin-top: var(--space-1); font-family: var(--font-read); font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); }
 .word-card[aria-pressed="true"] { background: var(--color-read-soft); box-shadow: inset 0 0 0 4px var(--color-read-strong), 0 var(--press-depth) 0 var(--color-read-strong); }
 .word-card--good { background: var(--color-success-soft) !important; box-shadow: inset 0 0 0 4px var(--color-success), 0 var(--press-depth) 0 var(--color-success) !important; }
+.word-card[aria-pressed="false"] .word-card__tick { display: none; }
 .word-card__tick { position: absolute; right: var(--space-2); top: var(--space-2); display: flex; width: var(--size-5); height: var(--size-5); align-items: center; justify-content: center; border-radius: var(--radius-full); background: var(--color-read-strong); color: var(--color-fg-on-strong); }
 .word-card--good .word-card__tick { background: var(--color-success-strong); }
+@media (max-width: 39.99rem), (orientation: landscape) and (max-height: 30rem) {
+  .rhyme-target { flex-direction: row; padding: var(--space-2) var(--space-3); }
+  .rhyme-target__picture { width: var(--size-10); height: var(--size-10); }
+  .word-card { padding: var(--space-2); }
+  .word-card .picture { width: var(--size-9); }
+  .word-card__word { font-size: var(--font-size-2xl); line-height: 2rem; }
+}
+@media (orientation: landscape) and (min-width: 32rem) and (max-height: 30rem) {
+  .word-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
 
 /* ---------- Spot the word ---------- */
 .spot { display: flex; width: 100%; max-width: var(--content-max); flex-direction: column; align-items: center; gap: var(--space-6); }
