@@ -1,4 +1,4 @@
-import { Directive, output } from '@angular/core';
+import { Directive, ElementRef, inject, output } from '@angular/core';
 import { tapVerdict } from './tap-rule';
 
 interface Contact {
@@ -29,9 +29,6 @@ const SYNTHETIC_CLICK_WINDOW_MS = 800;
     '(pointerup)': 'up($event)',
     '(pointercancel)': 'cancel($event)',
     '(click)': 'click($event)',
-    // The browser's click after a touch can land on whatever replaced the target under the
-    // finger (blend gives way to the pictures); cancelling the touch's end prevents it.
-    '(touchend)': '$event.cancelable && $event.preventDefault()',
     '(contextmenu)': '$event.preventDefault()',
   },
 })
@@ -40,6 +37,16 @@ export class Tap {
 
   private readonly contacts = new Map<number, Contact>();
   private swallowClickUntil = -Infinity;
+
+  constructor() {
+    // The browser's click after a touch can land on whatever replaced the target under the
+    // finger (blend gives way to the pictures); cancelling the touch's end prevents it. The
+    // listener is the element's own, not a host binding: a tap that leaves the page destroys
+    // this view before the touch ends, and Angular would remove the binding with it. It goes
+    // when the element does.
+    const element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+    element.addEventListener('touchend', (event) => event.cancelable && event.preventDefault());
+  }
 
   protected down(event: PointerEvent): void {
     if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;

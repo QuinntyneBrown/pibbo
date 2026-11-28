@@ -1,11 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import type { CheckChoice, CheckShown, GroupId } from '@pibbo/api';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import type { CheckChoice, CheckShow } from '@pibbo/api';
 import { Tap } from '../tap/tap';
 
+/** More pictures than this are drawn small, so they stay above the choices. */
+const FEW_PICTURES = 6;
+
 /**
- * One question of the check game (`.stage--question`, docs/mocks/pages/progress-check): what
- * is shown (one picture, or a thing several times) and three choices. The chosen one is
- * pressed; a modelled answer carries a tick and an outline, not colour alone.
+ * One check question (docs/mocks/pages/progress-check, `.stage--question`): what it asks
+ * about, then three choices. The chosen one is pressed; when the right one is shown it
+ * carries a tick and an outline, not colour alone. The shell's `--subject` colours it.
  */
 @Component({
   selector: 'pb-check-question',
@@ -14,20 +17,18 @@ import { Tap } from '../tap/tap';
   styleUrl: './check-question.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckQuestion {
-  readonly group = input<GroupId>('read');
-  readonly shown = input.required<CheckShown>();
+export class CheckQuestionView {
+  readonly show = input.required<CheckShow>();
   readonly choices = input.required<readonly CheckChoice[]>();
-  readonly chosen = input<number | null>(null);
-  /** The choice shown as the answer once Pibbo has modelled it. */
-  readonly modelled = input<number | null>(null);
+  /** The id of the choice the child has made. */
+  readonly chosen = input<string | null>(null);
+  /** The id of the choice shown as right, once the question is over. */
+  readonly right = input<string | null>(null);
   /** Whether the choices take a touch. */
   readonly locked = input(false);
 
-  /** The index of the choice touched. */
-  readonly chose = output<number>();
+  /** The id of the choice touched. */
+  readonly chose = output<string>();
 
-  protected readonly copies = computed(() =>
-    Array.from({ length: this.shown().count }, (_, i) => i),
-  );
+  protected readonly few = FEW_PICTURES;
 }

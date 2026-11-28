@@ -2,23 +2,49 @@
 
 ## Overview
 
-The *check game* presents 5 to 8 mixed rounds from what the child has practised and ends with *earned pictures* of what they can do. It shows no score, percentage, red mark or count of misses.
+The *check game* presents 5 to 8 mixed *check questions* from what the child has practised and ends with *earned pictures* of what they can do. It shows no score, percentage, red mark, count of misses or name (ADR 0027).
 
-- **earned picture** — picture standing for a skill the child answered correctly
+- **check question** — one instruction, something shown, three choices and Check
+- **practised** — an activity the child has opened from Home
+- **earned picture** — an activity's picture, standing for a question answered right
 
-With no practice history on the device the rounds come from the first lesson's activities. Wrong answers follow the normal retry rule: a hint, the choice kept, and the third wrong answer modelled.
+With nothing practised the questions come from the first lesson's activities. Wrong answers follow the normal retry rule.
 
 ## Description
 
-The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api` (ADRs 0026 and 0027).
+The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
-- **`CheckGame`** (`pb-check-game`) — lazy route `/check` that runs the rounds and then the results. It reads the practice history from the store, asks `checkSkills` for the skills, preloads each round's pictures and recordings before it shows and the next round's during it, speaks each choice, the hint, the praise and the modelled answer, and writes the earned skills when results show. Leave goes to Home.
-- **`CheckQuestion`** (`pb-check-question`) — presentation of one question (`.stage--question`): the things or the picture (`.show`) and three choices (`.pick__option--text`), `aria-pressed` on the chosen one and a tick on the modelled one (`.pick__option--right`).
-- **`EarnedPictures`** (`pb-earned-pictures`) — presentation of the results (`.results`): "Look what you can do!" or "Well played!", Home, and the earned skills only (`.skills__row`, `.skills__tick`), grouped as Reading and Counting, each spoken when touched.
-- **`CheckCard`** (`pb-check-card`) — the check game's picture on Home (`.check-card`), always shown under the group pictures.
-- **`checkRules`** — pure functions in `@pibbo/domain/lessons`: `checkSkills` (from the history, or `firstLessonSkills` with none; 5 to 8, shuffled and taken in turn), `startCheck`, `chooseCheckOption`, `checkCheckAnswer` (with `answerOutcome`), `nextCheckRound`, `earnedSkills`, `checkAssets`.
-- **`LESSONS`** — the lessons as data: ordered activity ids; an unknown id is skipped.
-- **`ProgressStore`** — `PROGRESS_STORE` in `@pibbo/api`, bound to `BrowserProgressStore` over `localStorage` (`pibbo:practice`, `pibbo:check`). `read` takes a guard (`isPracticeHistory`, `isCheckResult`) and a damaged value counts as absent; Home notes each activity it opens (`notePractised`). Clear progress (`grown-up/grown-up-gate`) erases both.
+- **`CheckGame`** — lazy route `/check` that plays the questions and then shows the results. It provides the asset preloader, fetches this question's and the next question's pictures and recordings, and stops sound and timers when it is destroyed or hidden.
+- **`CheckQuestionView`** (`pb-check-question`) — presentation of what is shown and the three choices (`.stage--question`, `.show`, `.pick`).
+- **`EarnedPictures`** (`pb-earned-pictures`) — presentation of the results: earned pictures grouped as Reading and Counting, each a button, and Home (`.results`, `.skills`).
+- **`CheckCard`** (`pb-check-card`) — the check game's picture on Home (`.check-card--home`).
+- **`ProgressBar`** (`pb-progress-bar`) — the shell's progress bar, also for 6 to 8 rounds.
+- **`planCheck`**, **`makeQuestion`** — pure functions in `@pibbo/domain/rounds`: which activities are asked, and one question for each, from the activities' own content and the injected random source.
+- **`CheckRound`** — pure state machine: `choosing`, `retry`, `right`, `modelled`, using `answerOutcome` (`L2-026`). `checkQuestionRound` checks the choice. After a right answer the choice stays pressed; after the third miss the right one is ticked and outlined.
+- **`checkResults`** — what the child sees and hears at the end: the activities answered right (`earnedActivities`: once each, in Home's order), grouped as Reading then Counting, with the title and the recordings to say. It is given no score, count or miss.
+- **Practice and results** (`@pibbo/domain/storage`) — `readActivities` checks a stored value (version 1, known ids, no repeats); `addActivities` adds without duplicates.
+- **`ProgressStore`** — contract `PROGRESS_STORE` in `@pibbo/api`; `BrowserProgressStore` keeps JSON in `localStorage` under `pibbo:`, never throws, and `clearAll` removes every `pibbo:` key. Home records `pibbo:practised` when an activity is opened; the check game writes `pibbo:earned` when its results are shown.
+- **`CHECK_GAME`** — content in `check-game-content.json`: the number of rounds, the first lesson's activities (a stand-in until journey 22), each question's instruction and hint, and the result lines. The content check fails the build when a recording is missing.
+
+### Questions
+
+| Activity | Shown | Choices | Hint |
+|---|---|---|---|
+| Count the toys, Count and write | toys | numerals | count them one more time |
+| Which is bigger? | — | three numbers | which has more |
+| Rocket countdown, Skip-count, Counting dance | numbers in order | numerals | listen to the numbers again |
+| Add together | two sets | numerals | count them all |
+| Sound it out | a word | pictures | its sounds, one by one |
+| Letter sounds | a sound as shown | letters | the sound again |
+| Big and small letters | a big letter | small letters | look at its shape |
+| Spell by sound | a picture, and its word spoken | words | listen again |
+| Words and pictures | a picture | words | say each word slowly |
+| Spot the word | — (the word is spoken) | common words | listen again |
+| Rhyme time | — | pictures | the rhyme's own hint |
+
+On the narrowest phones the results header is shorter, and on a phone on its side each subject's heading sits beside its pictures, so eight earned pictures never scroll. In that orientation sequences stay on one line and 14 things are drawn small beside the choices.
+
+Reading choices are silent, a numeral says its number and a picture its word. Spell by sound shows the picture and speaks its word, so the spelling is not given away; Spot the word shows the word in its instruction, as the activity does.
 
 ## Requirements
 
@@ -28,14 +54,15 @@ The feature realises the following level-2 (L2) requirements. Each L2 requiremen
 |-------|--------------|-------------|
 | `L2-023` | `L1-021` | Check game. A check game presents 5-8 mixed rounds from what the child has practised and ends with pictures of what they can do. |
 
-Acceptance criteria of `L2-023` (Check game):
+Acceptance criteria of `L2-023` (Check game), in short:
 
-1. Given the check game ends, when results are shown, then only skills answered correctly are shown, as earned pictures; no score, percentage, red mark or count of misses is shown.
-2. Given a wrong answer in the check game, when it happens, then the normal retry rule (L2-026) applies.
-3. Given results, when saved, then they stay in on-device storage only and are erased by "clear progress" in the grown-up area.
-4. Given no practice history on the device, when the check game starts, then its rounds come from the first lesson's activities.
-5. Given results, when an earned picture is touched, then its name is spoken; when nothing was answered correctly, then the child is praised for playing and nothing is marked.
-6. Given Home, when the check game's picture is touched, then "What do I know?" is spoken and the check game opens.
+1. Results show only earned pictures: no score, percentage, red mark, count of misses or name. They are spoken and shown; each says its name when touched; with none, "You played the check game!" is shown with no list.
+2. A wrong answer follows the normal retry rule (`L2-026`); a question answered only by being shown earns nothing.
+3. Saved results stay on the device only and are erased by "clear progress": only the ids of activities practised and earned.
+4. With no practice history, or one that is damaged or unreadable, the questions come from the first lesson's activities.
+5. With history, the questions come from the practised activities only, 5 to 8 of them, never the same activity twice in a row when there are two or more.
+6. Each question is spoken and shown, offers three choices, and Check takes no touch until one is chosen.
+7. Home's check game picture says "What do I know?" and opens the game.
 
 ## Diagrams
 
@@ -47,19 +74,19 @@ The child uses Pibbo directly; a grown-up is beside or nearby and is not needed 
 
 ### Containers
 
-The feature runs in the `pibbo` single-page application. Content arrives from `Pibbo.Api` through the service worker cache; nothing a child does is sent back.
+The feature runs in the `pibbo` single-page application. Its content and recordings are bundled and served from Pibbo's own origin; nothing a child does is sent anywhere.
 
 ![C4 container view for play the check game](diagrams/c4-container.png)
 
 ### Components
 
-`CheckGamePage` reuses each activity's component for its rounds and `checkRules` for selection and results.
+`CheckGame` asks the rules for a plan and its questions, draws them with the presentation components, and reads and writes progress through `ProgressStore`.
 
 ![C4 component view for play the check game](diagrams/c4-component.png)
 
 ### Class structure
 
-`CheckResult` holds earned skills only; misses are never stored.
+Only activity ids are stored; misses are never stored.
 
 ![Class diagram for play the check game](diagrams/class.png)
 
@@ -68,3 +95,9 @@ The feature runs in the `pibbo` single-page application. Content arrives from `P
 Selection falls back to the first lesson; results show earned pictures and are saved on the device only.
 
 ![Sequence for run the check game](diagrams/sequence-run-check-game.png)
+
+## Open questions
+
+- Whether Pibbo remembers what a child has practised is for the repository owner to confirm (ADR 0027 #5).
+- The first lesson's activities are a stand-in until journey 22 (ADR 0027 #4).
+- "Clear progress" has no screen until journey 24; `ProgressStore.clearAll` is ready for it.

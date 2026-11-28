@@ -11,7 +11,7 @@ The feature is a vertical slice through the Angular workspace: the page in the `
 - **`ProgressStore`** — contract in `@pibbo/api` (`PROGRESS_STORE`) with `BrowserProgressStore` over `localStorage` under a `pibbo:` key prefix (ADR 0026). `read` takes a guard and treats missing, old or damaged data as absent; `clearProgress` removes every Pibbo key but the volume, and every IndexedDB database named `pibbo…`.
 - **`Content Security Policy`** — `connect-src 'self'` and `default-src 'self'` stop calls to any other origin.
 - **`Network-guard fixture`** — Playwright fixture that fails a spec on any request off the Pibbo origin, any request left unanswered and any ask for the microphone or the camera.
-- **`privacy.spec.ts`** — opens every activity Home lists and plays it a little, then the check game and the grown-up area: only GET requests to the Pibbo origin, with no query and no body; no permission asked for; nothing on any screen leads to another origin (ADR 0029).
+- **`privacy.spec.ts`** — opens every activity Home lists and plays it a little, then the check game and the grown-up area: only GET requests to the Pibbo origin, with no query and no body; no permission asked for; nothing on any screen leads to another origin (ADR 0030).
 
 ## Requirements
 

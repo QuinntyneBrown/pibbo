@@ -18,7 +18,7 @@ type Step = 'gate' | 'area' | 'confirm';
 
 /**
  * The grown-up screen (docs/mocks/pages/grown-up): first the gate, then the area with volume,
- * clear progress and about Pibbo, with no link out (L2-037, ADR 0028). Leaving goes back to
+ * clear progress and about Pibbo, with no link out (L2-037, ADR 0029). Leaving goes back to
  * the address Home was at, so Home is as it was.
  */
 @Component({
@@ -39,9 +39,7 @@ export class GrownUpArea {
   protected readonly gate = signal(newGate(inject(RANDOM_SOURCE)));
   protected readonly task = computed(() => gateTask(this.gate()));
   protected readonly volumes = VOLUMES;
-  protected readonly volume = signal<VolumeLevel>(
-    this.store.read('volume', isVolumeLevel) ?? DEFAULT_VOLUME,
-  );
+  protected readonly volume = signal<VolumeLevel>(storedVolume(this.store.read('volume')));
   /** Said once progress is cleared, in a status. */
   protected readonly cleared = signal(false);
 
@@ -69,8 +67,8 @@ export class GrownUpArea {
   }
 
   /** Erases all progress on this device; the volume stays (L2-029 #4, L2-037 #5). */
-  protected async clear(): Promise<void> {
-    await this.store.clearProgress();
+  protected clear(): void {
+    this.store.clearAll();
     this.step.set('area');
     this.cleared.set(true);
   }
@@ -83,4 +81,9 @@ export class GrownUpArea {
 /** A stored or passed address counts only if it is Home's; anything else is Home itself. */
 function homeAddress(value: unknown): string {
   return typeof value === 'string' && /^\/(\?group=(count|read))?$/.test(value) ? value : '/';
+}
+
+/** A stored volume counts only if it is one of the volumes; anything else is the default. */
+function storedVolume(value: unknown): VolumeLevel {
+  return isVolumeLevel(value) ? value : DEFAULT_VOLUME;
 }

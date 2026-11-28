@@ -3,16 +3,16 @@
 LAYOUT_WITH_LEGEND()
 title Components — Play the check game
 Container_Boundary(b, "pibbo (Angular workspace)") {
-  Component(home, "Home", "Angular route", "Notes practised activities; the check card")
-  Component(page, "CheckGame", "Angular route /check", "Runs mixed rounds, then the results")
-  Component(q, "CheckQuestion", "Presentation", "Things or picture, three choices")
-  Component(res, "EarnedPictures", "Presentation", "Earned skills only")
-  Component(rules, "checkRules, LESSONS", "Pure domain functions and data", "Selection, retry, results")
-  Component(store, "BrowserProgressStore", "Token PROGRESS_STORE", "localStorage, device only")
+  Component(home, "Home", "Angular route", "Records practised activities")
+  Component(page, "CheckGame", "Angular route /check", "Runs mixed questions")
+  Component(q, "pb-check-question", "Presentation", "What is shown, and the choices")
+  Component(res, "pb-earned-pictures", "Presentation", "Earned activities only")
+  Component(rules, "checkRules, progressRules", "Pure domain functions", "Plan, questions, retry, stored values")
+  Component(store, "ProgressStore", "Token PROGRESS_STORE", "Device-only")
 }
-Rel(home, store, "Notes each activity opened")
-Rel(page, q, "Binds the round")
-Rel(page, res, "Binds earned skills")
+Rel(home, store, "Writes practised")
+Rel(page, q, "Binds the question")
+Rel(page, res, "Binds earned activities")
 Rel(page, rules, "Calls")
-Rel(page, store, "Reads history, writes results")
+Rel(page, store, "Reads practised, writes earned")
 @enduml

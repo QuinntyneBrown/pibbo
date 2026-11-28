@@ -14,33 +14,33 @@ import {
   CLOCK,
   PROGRESS_STORE,
   RANDOM_SOURCE,
-  type Activity,
-  type PibboMood,
+  type CheckChoice,
 } from '@pibbo/api';
 import {
   AnswerBar,
-  CheckQuestion,
+  CheckQuestionView,
   EarnedPictures,
   RoundShell,
   type AnswerBarKind,
 } from '@pibbo/components';
 import {
   ACTIVITY_CATALOGUE,
-  CHECK,
-  checkAssets,
-  checkCheckAnswer,
-  checkFinished,
-  checkSkills,
-  chooseCheckOption,
-  currentCheckRound,
-  earnedSkills,
-  isPracticeHistory,
-  LESSONS,
-  nextCheckRound,
-  startCheck,
-  withCheckRound,
-  type StoredCheckResult,
-  type CheckRound,
+  addActivities,
+  CHECK_GAME,
+  canCheckChoice,
+  checkQuestionRound,
+  checkResults,
+  EARNED_KEY,
+  CHECKED_ACTIVITIES,
+  chooseAnswer,
+  isCheckOver,
+  makeQuestion,
+  planCheck,
+  PRACTISED_KEY,
+  readActivities,
+  startCheckRound,
+  tryCheckAgain,
+  type CheckResults,
 } from '@pibbo/domain';
 import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
 
@@ -48,14 +48,12 @@ import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
 const PRAISE_MS = 1500;
 
 /**
- * What do I know? (docs/mocks/pages/progress-check): five to eight mixed questions about what
- * the child has practised, with the normal retry, then only what they answered correctly, as
- * earned pictures (L2-023, ADR 0027). Orchestrates recordings and the store; every rule is in
- * `@pibbo/domain`.
+ * The check game (docs/mocks/pages/progress-check): a few mixed questions, then what the
+ * child can do. Orchestrates recordings; every rule is in `@pibbo/domain` (ADR 0027).
  */
 @Component({
   selector: 'pb-check-game',
-  imports: [RoundShell, CheckQuestion, AnswerBar, EarnedPictures],
+  imports: [RoundShell, CheckQuestionView, AnswerBar, EarnedPictures],
   templateUrl: './check-game.html',
   styleUrl: './check-game.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -68,57 +66,54 @@ export class CheckGame {
   private readonly random = inject(RANDOM_SOURCE);
   private readonly router = inject(Router);
   private readonly preloader = inject(ASSET_PRELOADER);
-  private readonly store = inject(PROGRESS_STORE);
+  private readonly progress = inject(PROGRESS_STORE);
 
-  protected readonly content = CHECK;
-  protected readonly game = signal(
-    startCheck(
-      checkSkills(
-        this.store.read('practice', isPracticeHistory),
-        ACTIVITY_CATALOGUE,
-        LESSONS,
-        this.random,
-        CHECK,
-      ),
-      ACTIVITY_CATALOGUE,
-      CHECK,
-      this.random,
-    ),
+  protected readonly questions = planCheck(
+    this.random,
+    CHECK_GAME,
+    readActivities(this.progress.read(PRACTISED_KEY), CHECKED_ACTIVITIES),
+    CHECKED_ACTIVITIES,
+  ).map((activity) => makeQuestion(this.random, activity));
+  /** Which question is asked. */
+  protected readonly at = signal(0);
+  protected readonly question = computed(() => this.questions[this.at()]!);
+  protected readonly round = signal(startCheckRound());
+  protected readonly over = computed(() => isCheckOver(this.round()));
+  /** The choice Pibbo shows as the answer, after the third miss. */
+  protected readonly shownAnswer = computed(() =>
+    this.round().phase === 'modelled' ? this.question().answer : null,
   );
-  protected readonly round = computed(() => currentCheckRound(this.game()));
-  protected readonly finished = computed(() => checkFinished(this.game()));
+  /** The child's choice, until Pibbo shows the answer in its place. */
+  protected readonly chosen = computed(() => (this.shownAnswer() ? null : this.round().chosen));
+
+  /** The activities answered right: all that is carried from one question to the next. */
+  private readonly earned: string[] = [];
+  /** Set once the last question is over. */
+  protected readonly results = signal<CheckResults | null>(null);
+
   protected readonly praising = signal(false);
   private endPraise: (() => void) | null = null;
-
-  protected readonly earned = computed(() => earnedSkills(this.game().earned, ACTIVITY_CATALOGUE));
-  protected readonly results = computed(() =>
-    this.earned().length > 0 ? CHECK.results.earned : CHECK.results.none,
+  protected readonly mood = computed(() =>
+    this.praising() ? 'cheer' : this.round().phase === 'retry' ? 'oh' : 'rest',
   );
-
-  protected readonly mood = computed<PibboMood>(() => {
-    const round = this.round();
-    if (this.praising()) return 'cheer';
-    return round && round.wrong > 0 && round.phase === 'choosing' ? 'oh' : 'rest';
-  });
-
   protected readonly bar = computed<{ kind: AnswerBarKind; message: string; ready: boolean }>(
     () => {
-      const round = this.round();
-      if (!round) return { kind: 'check', message: '', ready: false };
-      switch (round.phase) {
+      switch (this.round().phase) {
         case 'right':
-          return { kind: 'right', message: CHECK.praise.text, ready: true };
+          return { kind: 'right', message: CHECK_GAME.praise.text, ready: true };
         case 'modelled':
-          return { kind: 'model', message: round.model.text, ready: true };
+          return { kind: 'model', message: CHECK_GAME.answerIs.text, ready: true };
+        case 'retry':
+          return { kind: 'retry', message: this.question().hint.text, ready: true };
         default:
-          return round.wrong > 0
-            ? { kind: 'hint', message: round.hint.text, ready: round.chosen !== null }
-            : { kind: 'check', message: '', ready: round.chosen !== null };
+          return { kind: 'check', message: '', ready: canCheckChoice(this.round()) };
       }
     },
   );
 
   constructor() {
+    this.fetch(0);
+    this.fetch(1);
     // It rests: sound stops while the tab is hidden, and nothing resumes until a touch.
     const document = inject(DOCUMENT);
     const rest = () => {
@@ -130,55 +125,46 @@ export class CheckGame {
       this.endPraise?.();
       this.audio.stop();
     });
-    // This round's pictures and recordings, then the next round's, are fetched at once.
-    this.preloadFrom(0);
-    this.preloadFrom(1);
-    const round = this.round();
-    if (round) void this.audio.play(round.ask.recording);
-    else this.finish();
+    this.replay();
   }
 
-  protected choose(index: number): void {
-    const round = this.round();
-    if (!round) return;
-    const { round: next, spoken } = chooseCheckOption(round, index);
-    if (spoken === null) return;
-    this.setRound(next);
-    void this.audio.play(spoken);
+  protected replay(): void {
+    void this.say(this.question().spoken);
   }
 
-  /** Check while answering; Next once the round is done. */
+  /** The choice is pressed; a numeral or a picture is said, a word to read is not. */
+  protected choose(id: string): void {
+    if (this.round().phase !== 'choosing') return;
+    this.round.set(chooseAnswer(this.round(), id));
+    const choice: CheckChoice | undefined = this.question().choices.find((c) => c.id === id);
+    if (choice?.recording) void this.audio.play(choice.recording);
+    else this.audio.stop();
+  }
+
+  /** Check while choosing; Try again after a hint; Next once the question is over. */
   protected action(): void {
-    const phase = this.round()?.phase;
-    if (phase === 'right' || phase === 'modelled') this.next();
+    if (this.over()) this.next();
+    else if (this.round().phase === 'retry') this.round.set(tryCheckAgain(this.round()));
     else this.check();
   }
 
+  /** The right choice is praised; a wrong one gives a hint, or after the third, the answer. */
   private check(): void {
-    const round = this.round();
-    if (!round) return;
-    const { round: judged, outcome } = checkCheckAnswer(round);
-    if (outcome === null) return;
-    this.setRound(judged);
-    if (outcome === 'right') this.praise();
-    else if (outcome === 'hint') void this.playAll(judged.hint.recordings, judged);
-    else void this.playAll(judged.model.recordings, judged);
-  }
-
-  /** Plays recordings one after another; a newer sound or a newer round ends it. */
-  private async playAll(recordings: readonly string[], round: CheckRound): Promise<void> {
-    for (const recording of recordings) {
-      if (this.round() !== round) return;
-      if ((await this.audio.play(recording)) === 'stopped') return;
+    if (!canCheckChoice(this.round())) return;
+    const question = this.question();
+    const round = checkQuestionRound(this.round(), question);
+    this.round.set(round);
+    if (round.phase === 'retry') void this.say(question.hint.spoken);
+    else if (round.phase === 'modelled') {
+      void this.say([CHECK_GAME.answerIs.recording, ...question.answerSpoken]);
+    } else {
+      this.earned.push(question.activity);
+      // Brief praise that never blocks Next: it ends itself after at most 1.5 s.
+      this.praising.set(true);
+      this.endPraise?.();
+      this.endPraise = this.clock.after(PRAISE_MS, () => this.stopPraise());
+      void this.audio.play(CHECK_GAME.praise.recording);
     }
-  }
-
-  /** Brief praise that never blocks Next: it ends itself after at most 1.5 s. */
-  private praise(): void {
-    this.praising.set(true);
-    void this.audio.play(CHECK.praise.recording);
-    this.endPraise?.();
-    this.endPraise = this.clock.after(PRAISE_MS, () => this.stopPraise());
   }
 
   private stopPraise(): void {
@@ -187,35 +173,43 @@ export class CheckGame {
     this.praising.set(false);
   }
 
+  /** An earned picture says its name. */
+  protected hear(recording: string): void {
+    void this.audio.play(recording);
+  }
+
+  /** What the child can do, spoken and shown. */
+  private finish(): void {
+    const results = checkResults(this.earned, ACTIVITY_CATALOGUE.activities, CHECK_GAME);
+    this.results.set(results);
+    this.keep();
+    void this.sayResults(results.spoken);
+  }
+
+  /** Saved on this device only: the ids of what was ever earned, and nothing else. */
+  private keep(): void {
+    const kept = this.progress.read(EARNED_KEY);
+    this.progress.write(EARNED_KEY, addActivities(kept, this.earned, CHECKED_ACTIVITIES));
+  }
+
+  /** The title and each name in turn, until a touch or leaving stops them. */
+  private async sayResults(recordings: readonly string[]): Promise<void> {
+    for (const recording of recordings) {
+      if ((await this.audio.play(recording)) === 'stopped') return;
+    }
+  }
+
+  /** The next question; after the last, the results. */
   private next(): void {
     this.stopPraise();
-    const game = nextCheckRound(this.game());
-    this.game.set(game);
-    if (checkFinished(game)) {
+    if (this.at() + 1 >= this.questions.length) {
       this.finish();
       return;
     }
-    this.preloadFrom(game.at + 1);
-    void this.audio.play(this.round()!.ask.recording);
-  }
-
-  /** The results: kept on this device only, earned skills and nothing else (L2-023 #3). */
-  private finish(): void {
-    const result: StoredCheckResult = { version: 1, earned: this.game().earned };
-    this.store.write('check', result);
-    const { title, next } = this.results();
-    void this.audio.play(title.recording).then((played) => {
-      if (played !== 'stopped') void this.audio.play(next.recording);
-    });
-  }
-
-  protected touchEarned(activity: Activity): void {
-    void this.audio.play(activity.recording);
-  }
-
-  protected replay(): void {
-    const round = this.round();
-    if (round) void this.audio.play(round.ask.recording);
+    this.at.update((at) => at + 1);
+    this.round.set(startCheckRound());
+    this.fetch(this.at() + 1);
+    this.replay();
   }
 
   protected leave(): void {
@@ -223,12 +217,29 @@ export class CheckGame {
     void this.router.navigate(['/']);
   }
 
-  private setRound(round: CheckRound): void {
-    this.game.update((game) => withCheckRound(game, round));
+  /** A question's assets; past the last, what the results will say. */
+  private fetch(at: number): void {
+    this.preloader.preload(this.questions[at]?.assets ?? this.resultRecordings());
   }
 
-  private preloadFrom(at: number): void {
-    const round = this.game().rounds[at];
-    if (round) this.preloader.preload(checkAssets(round));
+  private resultRecordings(): string[] {
+    const asked = this.questions.map((question) => question.activity);
+    return [
+      CHECK_GAME.look.recording,
+      CHECK_GAME.played.recording,
+      ...ACTIVITY_CATALOGUE.activities
+        .filter((activity) => asked.includes(activity.id))
+        .map((activity) => activity.recording),
+    ];
+  }
+
+  /** The recordings in turn, until a newer sound or step stops them. */
+  private async say(recordings: readonly string[]): Promise<void> {
+    const at = this.at();
+    const round = this.round();
+    for (const recording of recordings) {
+      const heard = await this.audio.play(recording);
+      if (heard === 'stopped' || this.at() !== at || this.round() !== round) return;
+    }
   }
 }

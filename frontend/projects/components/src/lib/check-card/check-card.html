@@ -1,4 +1,4 @@
-<button type="button" class="check-card press" (pbTap)="touched.emit()">
-  <pb-pibbo size="xs" label="" aria-hidden="true" />
-  <span class="check-card__title">{{ title() }}</span>
+<button type="button" class="check-card check-card--home" (pbTap)="touched.emit()">
+  <span class="check-card__glyph" aria-hidden="true">?</span>
+  <span class="check-card__title">{{ name() }}</span>
 </button>

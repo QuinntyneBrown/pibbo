@@ -12,18 +12,40 @@ skinparam class {
 title Class structure — Follow a guided lesson
 
 class Lesson {
-  +id: string
-  +steps: string[]
+  +id: "count" | "read"
+  +kicker: string
+  +title: string
+  +activities: string[3..6]
 }
-class LessonProgress {
-  +lessonId: string
-  +stepIndex: number
+class LessonStep {
+  +number: number
+  +activity: Activity
+}
+class LessonPlace <<device-only>> {
+  +v: 1
+  +step: number
+  +at: string | "done"
 }
 class lessonRules <<pure>> {
-  +start(l: Lesson, known: Set<string>): LessonProgress
-  +advance(l: Lesson, p: LessonProgress, known: Set<string>): LessonProgress | "done"
-  +resume(stored: unknown, l: Lesson): LessonProgress
+  +lessonSteps(l: Lesson, catalogue): {steps, unknown}
+  +readLessonPlace(stored: unknown, steps): number | null
+  +lessonPlace(step, steps): LessonPlace
+  +finishStep(current, finished, steps): number
 }
-Lesson "1" --> "3..6" ActivityRef
-lessonRules ..> LessonProgress
+interface ProgressStore {
+  +read(key): unknown
+  +write(key, value): void
+  +clearAll(): void
+}
+interface ActivityExit {
+  +leave(group): void
+  +finish(group): void
+}
+interface ClientLog {
+  +warn(message): void
+}
+Lesson "1" --> "3..6" LessonStep
+lessonRules ..> LessonPlace
+lessonRules ..> LessonStep
+ProgressStore ..> LessonPlace
 @enduml

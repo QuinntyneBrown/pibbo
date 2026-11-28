@@ -1,38 +1,45 @@
 :host {
-  display: flex;
-  flex: 1;
+  display: block;
+  min-width: 0;
 }
 
 .check-card {
-  --depth: var(--color-reward-depth);
   display: flex;
-  width: 100%;
-  min-height: var(--target-child);
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  padding: var(--space-2);
+  gap: var(--space-2);
+  min-width: var(--target-child);
+  min-height: var(--target-child);
+  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
   border: 0;
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-lg);
   background: var(--color-reward);
   color: var(--color-on-reward);
-  text-align: center;
-  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  text-align: left;
+  box-shadow: 0 var(--press-depth) 0 var(--color-reward-depth);
   touch-action: manipulation;
-  transition:
-    transform var(--duration-instant) var(--ease-out-quint),
-    box-shadow var(--duration-instant) var(--ease-out-quint);
 
   &:active {
     transform: translateY(var(--press-travel));
-    box-shadow: 0 var(--press-depth-down) 0 var(--depth);
+    box-shadow: 0 var(--press-depth-down) 0 var(--color-reward-depth);
   }
 }
 
+.check-card__glyph {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-8);
+  height: var(--size-8);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+}
+
 .check-card__title {
-  font-family: var(--font-display);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
 }

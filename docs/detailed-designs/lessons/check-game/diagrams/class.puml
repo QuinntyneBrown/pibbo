@@ -11,45 +11,46 @@ skinparam class {
 }
 title Class structure — Play the check game
 
-class CheckRound {
-  +skill: string
-  +kind: 'count' | 'word'
-  +phase: 'choosing' | 'right' | 'modelled'
+class CheckQuestion {
+  +activity: string
+  +group: count | read
+  +show: CheckShow
   +choices: CheckChoice[]
-  +answer: number
-  +chosen: number | null
+  +answer: string
+}
+class CheckRound {
+  +phase: choosing | retry | right | modelled
+  +chosen: string | null
   +wrong: number
 }
-class CheckGame {
-  +rounds: CheckRound[]
-  +at: number
-  +earned: string[]
+class CheckResults {
+  +title: string
+  +sections: CheckResultSection[]
+  +spoken: string[]
 }
-class CheckResult {
+class StoredActivities {
   +version: 1
-  +earned: string[]
-}
-class PracticeHistory {
-  +version: 1
-  +practised: string[]
+  +activities: string[]
 }
 class checkRules <<pure>> {
-  +checkSkills(history, catalogue, lessons, rnd): string[]
-  +startCheck(skills, catalogue, content, rnd): CheckGame
-  +chooseCheckOption(round, i): CheckTouch
-  +checkCheckAnswer(round): CheckJudged
-  +nextCheckRound(game): CheckGame
-  +earnedSkills(game, catalogue): Activity[]
-  +notePractised(history, id, catalogue): PracticeHistory
+  +planCheck(rnd, content, practised, askable): string[]
+  +makeQuestion(rnd, activity): CheckQuestion
+  +checkQuestionRound(round, question): CheckRound
+  +checkResults(right, activities, content): CheckResults
 }
-interface ProgressStore <<PROGRESS_STORE>> {
-  +read(key, guard): T | null
-  +write(key, value): void
-  +clearProgress(): Promise<void>
+class progressRules <<pure>> {
+  +readActivities(value: unknown): string[]
+  +addActivities(have, more): StoredActivities
 }
-checkRules ..> CheckGame
-checkRules ..> CheckResult
-checkRules ..> PracticeHistory
-CheckGame *-- CheckRound
-note bottom of CheckResult : Earned skills only;\nmisses are never stored.
+interface ProgressStore {
+  +read(key): unknown
+  +write(key, value)
+  +clearAll()
+}
+checkRules ..> CheckQuestion
+checkRules ..> CheckRound
+checkRules ..> CheckResults
+CheckRound o--> CheckQuestion
+progressRules ..> StoredActivities
+ProgressStore ..> StoredActivities
 @enduml

@@ -4,7 +4,7 @@ import { Tap } from '../tap/tap';
 /**
  * The gate a grown-up passes (`.gate`, docs/mocks/pages/grown-up/gate): the task in words, dots
  * for the numbers touched, a 3 × 3 keypad and Back to Pibbo. It shows text only and
- * speaks nothing (L2-037 #2, ADR 0028).
+ * speaks nothing (L2-037 #2, ADR 0029).
  */
 @Component({
   selector: 'pb-gate',

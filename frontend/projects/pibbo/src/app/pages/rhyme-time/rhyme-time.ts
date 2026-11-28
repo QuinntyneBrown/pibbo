@@ -7,8 +7,14 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { ASSET_PRELOADER, AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
+import {
+  ASSET_PRELOADER,
+  AUDIO_PLAYER,
+  CLOCK,
+  RANDOM_SOURCE,
+  type Instruction,
+  ACTIVITY_EXIT,
+} from '@pibbo/api';
 import { AnswerBar, RhymeCards, RoundShell, type AnswerBarKind } from '@pibbo/components';
 import {
   canCheckRhymes,
@@ -45,7 +51,7 @@ export class RhymeTime {
   private readonly audio = inject(AUDIO_PLAYER);
   private readonly clock = inject(CLOCK);
   private readonly random = inject(RANDOM_SOURCE);
-  private readonly router = inject(Router);
+  private readonly exit = inject(ACTIVITY_EXIT);
   private readonly preloader = inject(ASSET_PRELOADER);
 
   protected readonly content = RHYMES;
@@ -156,7 +162,7 @@ export class RhymeTime {
     this.stopPraise();
     const done = this.done() + 1;
     if (done >= RHYMES.roundsPerPlay) {
-      this.leave();
+      this.finish();
       return;
     }
     this.done.set(done);
@@ -182,6 +188,12 @@ export class RhymeTime {
 
   protected leave(): void {
     this.audio.stop();
-    void this.router.navigate(['/'], { queryParams: { group: 'read' } });
+    this.exit.leave('read');
+  }
+
+  /** After the last round: Home, or back to the lesson's path (ADR 0026). */
+  protected finish(): void {
+    this.audio.stop();
+    this.exit.finish('read');
   }
 }

@@ -7,16 +7,32 @@ import {
   linkedSignal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AUDIO_PLAYER, PROGRESS_STORE, type Activity, type ActivityGroup } from '@pibbo/api';
-import { ActivityGrid, CheckCard, GroupSwitch, GrownUpEntry, Wordmark } from '@pibbo/components';
+import {
+  AUDIO_PLAYER,
+  PROGRESS_STORE,
+  type Activity,
+  type ActivityGroup,
+  type Lesson,
+} from '@pibbo/api';
+import {
+  ActivityGrid,
+  CheckCard,
+  GroupSwitch,
+  GrownUpEntry,
+  Tap,
+  Wordmark,
+} from '@pibbo/components';
 import {
   ACTIVITY_CATALOGUE,
   activityScreen,
-  CHECK,
+  addActivities,
+  CHECK_GAME_CARD,
   groupById,
-  isPracticeHistory,
+  LESSON_LINES,
+  LESSONS,
+  lessonById,
   moreFor,
-  notePractised,
+  PRACTISED_KEY,
 } from '@pibbo/domain';
 
 /**
@@ -26,7 +42,7 @@ import {
  */
 @Component({
   selector: 'pb-home',
-  imports: [Wordmark, GroupSwitch, ActivityGrid, CheckCard, GrownUpEntry],
+  imports: [Wordmark, CheckCard, GroupSwitch, ActivityGrid, Tap, GrownUpEntry],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,13 +50,16 @@ import {
 export class Home {
   private readonly audio = inject(AUDIO_PLAYER);
   private readonly router = inject(Router);
-  private readonly store = inject(PROGRESS_STORE);
+  private readonly progress = inject(PROGRESS_STORE);
 
   /** The `group` query parameter; anything that is not a group means none is chosen. */
   readonly group = input<unknown>();
 
   protected readonly catalogue = ACTIVITY_CATALOGUE;
-  protected readonly check = CHECK;
+  protected readonly checkGame = CHECK_GAME_CARD;
+  /** The chosen group's guided lesson, shown as its own picture (L2-024 #4, ADR 0026). */
+  protected readonly lesson = computed(() => lessonById(LESSONS, this.chosen()?.id));
+  protected readonly lessonLine = LESSON_LINES.picture;
   protected readonly chosen = linkedSignal(() => groupById(this.catalogue, this.group()));
   /** Which screen of the chosen group's activities is shown; a new group starts at the first. */
   protected readonly at = linkedSignal({ source: this.chosen, computation: () => 0 });
@@ -71,17 +90,21 @@ export class Home {
     this.at.update((at) => at + 1);
   }
 
-  /** An activity opened is practised; it is noted on this device only (ADR 0026). */
   protected openActivity(activity: Activity): void {
     if (this.opening) return;
-    const history = this.store.read('practice', isPracticeHistory);
-    this.store.write('practice', notePractised(history, activity.id, this.catalogue));
-    this.open(activity.recording, activity.path);
+    this.practise(activity.id);
+    this.open(activity);
   }
 
-  /** The check game's picture: "What do I know?" is spoken and the game opens (L2-023 #6). */
-  protected openCheck(): void {
-    this.open(this.check.name.recording, '/check');
+  /** The Lesson picture: "Lesson" is spoken and the lesson opens where the child left off. */
+  protected openLesson(lesson: Lesson): void {
+    if (this.opening) return;
+    this.opening = true;
+    void this.audio.play(LESSON_LINES.picture.recording);
+    void this.router.navigate(['/lesson', lesson.id]).then(
+      (opened) => (this.opening = opened),
+      () => (this.opening = false),
+    );
   }
 
   /** The grown-up entry: the grown-up screen opens at its gate, remembering Home's address. */
@@ -90,7 +113,18 @@ export class Home {
     void this.router.navigate(['/grown-up'], { state: { from: this.router.url } });
   }
 
-  private open(recording: string, path: string): void {
+  protected openCheckGame(): void {
+    this.open(this.checkGame);
+  }
+
+  /** An activity opened from Home is practised: its id, and nothing else, is kept (ADR 0027). */
+  private practise(activity: string): void {
+    const known = this.catalogue.activities.map((a) => a.id);
+    const kept = this.progress.read(PRACTISED_KEY);
+    this.progress.write(PRACTISED_KEY, addActivities(kept, [activity], known));
+  }
+
+  private open({ recording, path }: Pick<Activity, 'recording' | 'path'>): void {
     if (this.opening) return;
     this.opening = true;
     void this.audio.play(recording);

@@ -1,39 +1,39 @@
-@if (round(); as round) {
+@if (results(); as shown) {
+  <pb-earned-pictures
+    [title]="shown.title"
+    [sections]="shown.sections"
+    (heard)="hear($event)"
+    (home)="leave()"
+  />
+} @else {
+  @let asked = question();
   <pb-round-shell
     title="What do I know?"
-    [group]="round.group"
-    [instruction]="round.ask"
+    [group]="asked.group"
+    [fit]="true"
+    [instruction]="asked.instruction"
     [mood]="mood()"
-    [done]="game().at"
-    [rounds]="game().rounds.length"
+    [done]="at()"
+    [rounds]="questions.length"
     (replay)="replay()"
     (leave)="leave()"
   >
     <pb-check-question
-      [group]="round.group"
-      [shown]="round.shown"
-      [choices]="round.choices"
-      [chosen]="round.phase === 'choosing' || round.phase === 'right' ? round.chosen : null"
-      [modelled]="round.phase === 'modelled' ? round.answer : null"
-      [locked]="round.phase !== 'choosing'"
+      [show]="asked.show"
+      [choices]="asked.choices"
+      [chosen]="chosen()"
+      [right]="shownAnswer()"
+      [locked]="round().phase !== 'choosing'"
       (chose)="choose($event)"
     />
     <pb-answer-bar
       answer
-      [group]="round.group"
+      [group]="asked.group"
+      [fit]="true"
       [kind]="bar().kind"
       [message]="bar().message"
       [ready]="bar().ready"
       (action)="action()"
     />
   </pb-round-shell>
-} @else {
-  <pb-earned-pictures
-    [title]="results().title.text"
-    [next]="results().next.text"
-    [earned]="earned()"
-    [headings]="content.headings"
-    (touched)="touchEarned($event)"
-    (home)="leave()"
-  />
 }

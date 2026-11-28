@@ -804,105 +804,135 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Tag the critical path in the same change (J11 #4): praise and Next is `@critical`.
 - Grep the flat domain API before naming (J6 #2): the names are rhyme-specific; no clash.
 
+## Journey 21, follow-up: the smallest phones and Home's mock
+
+**What slowed it**
+
+- Two sessions built journey 21 at once from the same prompt. The second finished its own
+  version, fetched `main` before opening its pull request and found the first already merged.
+  Its version was dropped; only what the merged one lacked was kept, on top of `main`.
+- The merged fit spec ran three sizes with the default seed, which asks "cat". On 320 × 568
+  "map" makes the instruction four lines, the word ran under it and the last cards under the
+  bar; on 568 × 320 the praise took three lines beside a wide Next and pushed the word up.
+- The Home mock still showed six Read activities and no Rhyme time card.
+
+**New lessons**
+
+1. Before starting a journey, list the open pull requests and remote branches for it, and
+   fetch `main` at the end of every slice, not only before the pull request.
+2. A fit spec walks every word of the cast and every state with a bar (hint, model, praise),
+   on the smallest upright and sideways phones (320 × 568, 568 × 320), not only one seed.
+3. Size a child component from its parent with a custom property the child reads
+   (`--pibbo-size`): nothing styles another block and the default stays in the child.
+4. When a journey adds an activity to Home, the Home mock gains its card in the same change.
+
+**Earlier lessons applied**
+
+- Measure the shell before the board (J18 #1): Pibbo's size, not the cards, was the first fault.
+- Measure every state (J19 #3): only the praise state showed the fault on 568 × 320.
+- Build before proving a failure (J8 #1): both spec changes were committed failing first.
+
+## Journey 22: Follow a guided lesson
+
+**What slowed it**
+
+- `L2-022` said the next activity starts automatically after praise; the mock returns to the
+  path after Next, lights the next step and waits for one touch on Play. The mock won: `L2-022`
+  was rewritten ("the child never chooses what comes next"), and ADR 0026 records why no timer
+  starts an activity. The done state's "You earned a star" was redrawn without the star, and
+  Home's Lesson picture (`L2-024` #4) was drawn first.
+- Resuming keeps something on the device for the first time. ADR 0026 limits it to one value
+  per lesson, `{"v":1,"step":n,"at":"<activity>"}`, checked against the path when read.
+- Every activity had its own `router.navigate(['/'], …)` in `leave()`. Routing all thirteen
+  through `ACTIVITY_EXIT` took one script; `leave` and the new `finish` differ only in a lesson.
+- The initial bundle grew 6.4 kB. Binding the lesson's store and log at its lazy route
+  (`loadChildren` with route providers) took 2.2 kB back; the rest is framework code the new
+  lazy code reaches, which a source-map diff of `main` showed (same modules, larger).
+- The path's first build scrolled 281 px at 320 x 568: the mock's small-phone rules for the
+  lesson sit far from `.lesson` in `ui.css` (around line 1130), and a first read missed them.
+- Journey 21 (Rhyme time) landed while this branch was open and took ADR 0025, so this one
+  became 0026. The rebase joined two route entries without the brace between them, and Rhyme
+  time needed `ACTIVITY_EXIT` too; the reading lesson then had four steps, not three.
+- Two specs failed now and then on `net::ERR_ABORTED`: a `goto` straight after a navigation cut
+  off fonts or Home's lazy chunk that were still loading.
+
+**New lessons**
+
+1. When a feature adds a root binding or a token, compare `main` with the base build before
+   committing (a worktree with a junction to `node_modules` builds `main` in a minute). Bind
+   anything only one route uses at that route.
+2. Grep the whole mock stylesheet for a screen's blocks (`grep -n "lesson\|\.path" ui.css`),
+   not only the section named after it: small-phone rules are grouped by breakpoint.
+3. Before a spec navigates with `goto` again, wait for the page to settle (`document.fonts.ready`,
+   the next screen's content); the network guard counts an aborted font or chunk as a failure.
+4. Assert what a page speaks on arrival from the end of the list (`slice(-n)`), or read the
+   count before the touch that leads there: the fake player can finish before the next line of
+   the spec runs.
+5. A picture whose word changes while it loads aborts its image under load (seen once in a
+   full run, never alone in 84 runs); the network guard now allows an aborted image as it
+   allows an aborted recording or fetch.
+6. Filter console warnings by `location().url` when asserting the app's own: the browser logs
+   header warnings (`Permissions-Policy`) as warnings too.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1 and on): the Lesson picture, the done state and `L2-022` went in before
+  code.
+- Prove a rule bites by breaking it (J2 #3, J19 #2): with the stored place read unchecked, three
+  of the four damaged-value specs failed; the fourth (unreadable JSON) is the store's own check.
+- Commit before a break-the-rule check (J19 #4): restoring was one `git checkout`.
+- A spec that passes before its slice is a guard (J3 #5): the pausing specs, said so in the commit.
+- Measure 320 x 568 to 1920 x 1080 in every state (J9 #1, J19 #3): a throwaway spec found the
+  path overflow, fixed with the mock's rules, and Home's pre-existing overflow (left to journey 26).
+- Lazy routes grow the initial chunk (J2 #4): measured, reduced and recorded in ADR 0026.
+- Tag the critical path in the same change (J11 #4): finishing activity 1 and moving on is
+  `@critical`.
+
 ## Journey 23: Play the check game
 
 **What slowed it**
 
-- `AGENTS.md` listed remembering practice and a grown-up screen as undecided, and the journey
-  needed both. The owner was asked before any work and decided both (ADR 0026); the list in
-  `AGENTS.md` now points to it. Journey 22 (lessons) was not built, so only the lessons' data
-  came with this journey.
-- The progress-check mock was the prototype's: a wrong answer moved on, results named the child
-  and scored every game in stars. It was redrawn to `L2-023` and `L2-026` first, with
-  `modelled` and `results-empty` added (ADR 0027).
-- The check card under the group pictures pushed Home past a Pixel 7's 839 px; beside them, as
-  tall as they are (101 px, a 2.5 rem Pibbo), Home grew no taller.
-- Twenty-one progress widths in the shell's stylesheet went over its 5 kB budget; the bar became
-  its own block, `pb-progress`, which also fits any number of rounds.
-- `answer()` in the page object read the next question before Angular re-rendered it; `goOn()`
-  now waits for the progress bar to move.
-- Running a downloaded PlantUML jar was refused in this environment, so the check game's
-  `.puml` sources changed and their PNGs were not re-rendered.
-- Journey 21 merged while this branch was open and took ADR 0025, and Rhyme time joined the
-  first lesson; the ADRs became 0026 to 0028 before the rebase, and the expectations followed.
+- Journey 22, which this one depends on, was not built: there was no lesson content, practice
+  history or storage. The smallest store `L2-023` needs and a stand-in first lesson went into
+  ADR 0027, with remembering practice left for the repository owner to confirm.
+- Journey 22's pull request (#262) opened while this one was being built, with ADR 0026 and a
+  `ProgressStore` of the same shape. This ADR became 0027; the shared files are for whichever
+  merges second.
+- The results mock named a child and drew stars, unearned rows and a recommendation, and its
+  `retry` contradicted itself. All four breaks with the purpose were redrawn before code.
+- Long Bash heredocs with quotes failed again; so did patch scripts whose anchors Prettier had
+  re-wrapped, which left an edit half applied.
+- `checkChoice` was already exported by the compare round. The search before naming had
+  covered the other new names but not that one.
+- A spec that reloaded between 14 activities failed the network guard: fonts load lazily,
+  after `load`, and the reload cancelled them.
+- A spec read a button's label before the zoneless render and took a right answer for a miss.
+- On a phone, Home on the results also opened a new check game. `pbTap` emits on `pointerup`;
+  the route change destroyed the view before `touchend`, Angular removed the host listener
+  that cancels the synthetic click, and the click landed on Home's card under the finger.
+- The mock's layouts held four pictures a subject and five things to count. The real worst
+  cases (seven earned in one subject, 14 things on a phone on its side) overflowed.
 
 **New lessons**
 
-1. Ask about anything `AGENTS.md` says is undecided before planning slices, not mid-journey.
-2. Renumber ADRs in their own commit before a rebase: every later conflict is then a plain
-   union of two lists.
-3. When a page object reads the screen right after a touch, wait for something the touch
-   changes (the progress bar) before reading.
-4. A rule written in `domain` ahead of its slice still needs its spec to fail once: break the
-   rule after committing (J3 #5, J19 #4), as done for the hint, the earned skills and the
-   practice note.
+1. A listener that must outlive its view (cancelling a touch that leaves the page) belongs to
+   the element, not to an Angular host binding.
+2. A control that navigates needs a touch spec that checks where the child ends up: what is
+   under the finger on the next screen is part of the design.
+3. Lay a screen out for the largest data the rules allow, not for the mock's cast: compute the
+   worst case from the rules and screenshot it.
+4. Change what a spec needs inside the app; reload only when the reload is what is tested.
+5. After touching a control, expect the new state before reading anything from it.
+6. Format first, then patch, or edit with the Edit tool; a script that asserts each anchor
+   still leaves the earlier edits applied when a later one misses.
 
 **Earlier lessons applied**
 
-- The mock first (J2 #1): the redraw, the Home card and `L2-023` went in the first commit.
-- Measure before redesigning (J18 #1, J19 #3): a throwaway spec found the Home overflow.
-- Commit before a break-the-rule check (J19 #4): each restore was a plain checkout.
-- Number ADRs at rebase time (J18 #4): done, in its own commit.
-
-## Journey 24: Grown-up gate and area
-
-**What slowed it**
-
-- The design named a CDK Dialog for the gate, and a first build used one for the gate and the
-  Clear progress confirmation. The CDK uses parts of Angular's core the app did not, and the
-  build hoisted them into the initial bundle: 238 kB to 257 kB, past the 250 kB budget. The
-  mocks were redrawn as steps of one grown-up screen, `AGENTS.md`'s other choice, and the CDK
-  was removed (ADR 0028).
-- The same hoisting came back, smaller (+10 kB), from `afterNextRender` and `viewChild` in the
-  confirmation; a plain `ngAfterViewInit` focus cost nothing.
-- An IndexedDB database the spec opened and never closed blocked its own deletion, so Clear
-  progress looked as if it had not erased it.
-- `L2-037` #1 (48 px from any activity picture) needed the row under Home's top bar 48 px
-  lower; with the check card beside the group pictures, Home still fits a Pixel 7.
-
-**New lessons**
-
-1. Before adding a library to a lazy feature, build once and read the initial total: framework
-   code the library uses lands in `main` (J2 #4 again, at 20 kB).
-2. Prefer Angular APIs the app already uses in shared components; a new core API is a bundle
-   cost even when only a lazy chunk calls it.
-3. Close every IndexedDB connection a spec opens, or a delete waits for it.
-4. Pass where to go back to in the navigation state, checked against what Home's address can
-   be, so a grown-up screen can return to Home exactly as it was.
-
-**Earlier lessons applied**
-
-- The mock first (J2 #1): the entry, gate and area were drawn, then redrawn, before any code.
-- Break the rule once (J3 #5, J19 #4): Clear progress keeping one key failed the spec.
-- Measure before redesigning (J18 #1): the 48 px gap was measured at four sizes by its spec.
-- Read the initial total after each slice (J2 #4): it caught the CDK and the focus API.
-
-## Journey 26: Performance, accessibility and privacy hardening
-
-**What slowed it**
-
-- The seven counting activities fetched a recording only when it played, so their first touch
-  waited for the network; the new spec failed on Count the toys' "one" until they preloaded.
-- The keyboard spec's "focus shows" check first accepted any box-shadow, so it passed with the
-  focus ring removed on targets that have a press edge; only the outline counts now.
-- Spot the word's first story word is a miss, which by design makes no sound, so "Enter plays
-  it" means something is spoken or shown.
-- The sweeps cannot be proved here: `AGENTS.md` runs them only when a person asks, so they are
-  type-checked and linted but not run, and have no baselines.
-
-**New lessons**
-
-1. Read the activities from Home in a spec (`everyActivity`), not from a list: a new activity
-   is covered the day Home shows it.
-2. A check that something "shows" must look for the one thing that shows it (the focus outline);
-   prove it by taking that thing away.
-3. A content walker (`contentAssets`) that lists every recording and picture an activity names
-   keeps preloading in step with the content, with no list per page.
-
-**Earlier lessons applied**
-
-- Break the rule once (J3 #5): removing the focus ring and the preload each failed its spec.
-- Read the initial total after each slice (J2 #4, J24 #1): it stayed at 239 kB, and the budget
-  now tightens to that.
-- Faking browser APIs, not bindings (J1 #1): the volume and permission checks patch the
-  browser in the spec, with nothing added to the bundle.
+- The mock first (J2 #1 and on): mocks, requirement, ADR and design went in the first commit.
+- Check a layout in every phase and look at screenshots (J17 #1, J21 #3): they found the 14
+  things over the instruction, a sequence broken over two lines and a tick after a right
+  answer that the mock does not draw.
+- Build before proving a failure (J8 #1): each slice's spec failed for the expected reason.
+- Grep the flat domain API before naming (J6 #2): worked only for the names it was given.
+- Write files with the Write tool (J1, J2, J21): ignored for two heredocs, which both failed.
+- Tag the critical path in the same change (J11 #4): five questions from Home is `@critical`.

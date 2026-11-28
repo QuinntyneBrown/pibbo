@@ -16,7 +16,7 @@ export const NUMBER_WORDS = [
 /** How many numbers the gate asks for. */
 export const GATE_LENGTH = 3;
 
-/** A gate: the numbers asked for, in order, and how many have been touched (ADR 0028). */
+/** A gate: the numbers asked for, in order, and how many have been touched (ADR 0029). */
 export interface Gate {
   readonly asked: readonly number[];
   readonly touched: number;

@@ -26,11 +26,6 @@ export type Sound = 'on' | 'off';
 
 interface Fixtures {
   sound: Sound;
-  /**
-   * `fixed` (every behaviour spec): the clock is fixed and only moves when a spec moves it.
-   * `real`: time passes as it does for a child, for the load-time sweep alone (L2-032 #1, #2).
-   */
-  clock: 'fixed' | 'real';
   /** The seed of the random source; a spec that needs a particular round sets it (ADR 0009). */
   seed: number;
   spoken: Spoken;
@@ -99,8 +94,9 @@ async function guardNetwork(page: Page, use: () => Promise<void>): Promise<void>
   page.on('requestfinished', (r) => pending.delete(r));
   page.on('requestfailed', (r) => {
     pending.delete(r);
-    // A recording cut short by the next one (one sound at a time) aborts its download, and
-    // leaving an activity aborts the fetches of its rounds, pictures as well as recordings.
+    // A recording cut short by the next one (one sound at a time) aborts its download, leaving
+    // an activity aborts the fetches of its next round, and a picture whose word changes while
+    // it loads (a fast touch under load) aborts its image.
     const stoppedRecording =
       ['media', 'fetch', 'image'].includes(r.resourceType()) &&
       r.failure()?.errorText === 'net::ERR_ABORTED';
@@ -128,9 +124,8 @@ async function guardNetwork(page: Page, use: () => Promise<void>): Promise<void>
 export const test = base.extend<Fixtures>({
   sound: ['on', { option: true }],
   seed: [RANDOM_SEED, { option: true }],
-  clock: ['fixed', { option: true }],
-  page: async ({ page, sound, seed, clock }, use) => {
-    if (clock === 'fixed') await page.clock.install({ time: FIXED_TIME });
+  page: async ({ page, sound, seed }, use) => {
+    await page.clock.install({ time: FIXED_TIME });
     await page.addInitScript(installFakes, { seed, sound });
     await use(page);
   },

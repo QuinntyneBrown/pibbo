@@ -1,0 +1,38 @@
+{
+  "lessons": [
+    {
+      "id": "count",
+      "kicker": "Counting lesson",
+      "title": "Numbers up and down",
+      "recording": "/recordings/lessons/count.wav",
+      "activities": [
+        "count-the-toys",
+        "count-and-write",
+        "which-is-bigger",
+        "rocket-countdown",
+        "counting-dance"
+      ]
+    },
+    {
+      "id": "read",
+      "kicker": "Reading lesson",
+      "title": "Sounds that team up",
+      "recording": "/recordings/lessons/read.wav",
+      "activities": [
+        "letter-sounds",
+        "sound-it-out",
+        "spell-by-sound",
+        "rhyme-time",
+        "build-a-sentence"
+      ]
+    }
+  ],
+  "lines": {
+    "upNext": { "text": "Up next:", "recording": "/recordings/lessons/up-next.wav" },
+    "done": {
+      "text": "Lesson done! You played every game.",
+      "recording": "/recordings/lessons/done.wav"
+    },
+    "picture": { "text": "Lesson", "recording": "/recordings/home/lesson.wav" }
+  }
+}

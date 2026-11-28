@@ -1,4 +1,4 @@
-/** The volumes a grown-up can choose (ADR 0028). */
+/** The volumes a grown-up can choose (ADR 0029). */
 export type VolumeLevel = 'quiet' | 'medium' | 'loud';
 
 /** Each volume as shown, and how loud it plays, from 0 to 1. */

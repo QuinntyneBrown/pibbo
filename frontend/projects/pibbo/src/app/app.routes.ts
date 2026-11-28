@@ -74,6 +74,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/rhyme-time/rhyme-time').then((m) => m.RhymeTime),
   },
   {
+    path: 'lesson/:subject',
+    loadChildren: () => import('./pages/guided-lesson/guided-lesson.routes').then((m) => m.routes),
+  },
+  {
     path: 'check',
     loadComponent: () => import('./pages/check-game/check-game').then((m) => m.CheckGame),
   },

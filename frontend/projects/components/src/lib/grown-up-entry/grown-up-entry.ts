@@ -3,7 +3,7 @@ import { Tap } from '../tap/tap';
 
 /**
  * The way in for a grown-up (`.grown-up-entry`, docs/mocks/pages/home): a quiet outline padlock
- * in Home's top corner, 48 × 48 px, never a child's target (L2-037 #1, ADR 0028). Touching it
+ * in Home's top corner, 48 × 48 px, never a child's target (L2-037 #1, ADR 0029). Touching it
  * speaks nothing.
  */
 @Component({

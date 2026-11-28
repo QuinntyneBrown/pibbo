@@ -1,4 +1,6 @@
-// Checks the content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0027): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0025, 0026): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0026): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0027): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -284,40 +286,46 @@ for (const set of rhymes.sets ?? []) {
 if ((content.words ?? []).length < 3)
   problems.push("fewer than 3 words: a round offers 3 pictures");
 
-// What do I know? (ADR 0027): every line has text and a recording, every thing a picture and its
-// question, and the rounds and numbers make sense. Its words are Sound it out's, checked above.
-const checkPath = `${frontend}projects/domain/src/lib/lessons/check-content.json`;
+// Guided lessons (L2-022, ADR 0026): 3 to 6 activities each, every line recorded. An activity
+// a lesson names that does not exist yet is allowed: the lesson leaves it off its path.
+const lessonPath = `${frontend}projects/domain/src/lib/lessons/lesson-content.json`;
+const lessonContent = JSON.parse(readFileSync(lessonPath, "utf8"));
+for (const lesson of lessonContent.lessons ?? []) {
+  const n = lesson.activities?.length ?? 0;
+  if (n < 3 || n > 6)
+    problems.push(`lesson "${lesson.id}": ${n} activities, not 3 to 6`);
+  if (!lesson.title) problems.push(`lesson "${lesson.id}": no title`);
+  fileExists(lesson.recording, `lesson "${lesson.id}" recording`);
+}
+for (const line of ["upNext", "done", "picture"]) {
+  if (!lessonContent.lines?.[line]?.text)
+    problems.push(`lesson ${line}: no text`);
+  fileExists(
+    lessonContent.lines?.[line]?.recording,
+    `lesson ${line} recording`,
+  );
+}
+// The check game (ADR 0026): 5 to 8 questions, a first lesson of 3 to 6 activities, and every
+// The check game (ADR 0027): 5 to 8 questions, a first lesson of 3 to 6 activities, and every
+// line shown and recorded.
+const checkPath = `${frontend}projects/domain/src/lib/rounds/check-game-content.json`;
 const check = JSON.parse(readFileSync(checkPath, "utf8"));
-const line = (l, what) => {
-  if (typeof l?.text !== "string" || l.text.length === 0)
-    problems.push(`${what}: no text`);
-  fileExists(l?.recording, `${what} recording`);
+if (!(check.rounds?.fewest === 5 && check.rounds?.most === 8))
+  problems.push("check game: not 5 to 8 rounds");
+if (!(check.firstLesson?.length >= 3 && check.firstLesson.length <= 6))
+  problems.push("check game: the first lesson is not 3 to 6 activities");
+const checkLines = (node, name) => {
+  if (node === null || typeof node !== "object" || Array.isArray(node)) return;
+  if (!("recording" in node)) {
+    for (const [key, child] of Object.entries(node))
+      checkLines(child, `${name} ${key}`);
+    return;
+  }
+  if (typeof node.text !== "string" || node.text.length === 0)
+    problems.push(`${name}: no text`);
+  fileExists(node.recording, `${name} recording`);
 };
-if (!(check.minRounds >= 5 && check.maxRounds <= 8 && check.minRounds <= check.maxRounds))
-  problems.push("check: rounds must be between 5 and 8 (L2-023)");
-line(check.name, "check name");
-line(check.praise, "check praise");
-for (const kind of ["count", "word"]) {
-  line(check[kind]?.hint, `check ${kind} hint`);
-  line(check[kind]?.model, `check ${kind} model`);
-}
-line(check.word?.ask, "check word question");
-for (const r of ["earned", "none"]) {
-  line(check.results?.[r]?.title, `check results ${r} title`);
-  line(check.results?.[r]?.next, `check results ${r} line`);
-}
-if (!Array.isArray(check.count?.things) || check.count.things.length === 0)
-  problems.push("check: no things to count");
-for (const t of check.count?.things ?? []) {
-  fileExists(t.picture, `check thing "${t.name}" picture`);
-  line(t.ask, `check thing "${t.name}" question`);
-}
-for (const n of check.count?.numbers ?? []) {
-  if (!Number.isInteger(n) || n < 2 || n > 19)
-    problems.push(`check number ${n}: a question offers n - 1, n and n + 1`);
-  for (const k of [n - 1, n, n + 1])
-    fileExists(`/recordings/numbers/${k}.wav`, `check number ${k}`);
-}
+checkLines(check, "check game");
 
 if (problems.length) {
   console.error(

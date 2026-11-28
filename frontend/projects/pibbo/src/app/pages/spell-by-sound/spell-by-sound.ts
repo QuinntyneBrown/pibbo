@@ -7,7 +7,6 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
 import {
   ASSET_PRELOADER,
@@ -16,6 +15,7 @@ import {
   RANDOM_SOURCE,
   type Instruction,
   type PlayOutcome,
+  ACTIVITY_EXIT,
 } from '@pibbo/api';
 import { AnswerBar, RoundShell, SpellBoxes, type AnswerBarKind } from '@pibbo/components';
 import {
@@ -53,7 +53,7 @@ export class SpellBySound {
   private readonly audio = inject(AUDIO_PLAYER);
   private readonly clock = inject(CLOCK);
   private readonly random = inject(RANDOM_SOURCE);
-  private readonly router = inject(Router);
+  private readonly exit = inject(ACTIVITY_EXIT);
   private readonly preloader = inject(ASSET_PRELOADER);
 
   protected readonly content = SPELL;
@@ -199,7 +199,7 @@ export class SpellBySound {
     this.stopPraise();
     const done = this.done() + 1;
     if (done >= SPELL.roundsPerPlay) {
-      this.leave();
+      this.finish();
       return;
     }
     this.done.set(done);
@@ -222,6 +222,12 @@ export class SpellBySound {
 
   protected leave(): void {
     this.audio.stop();
-    void this.router.navigate(['/'], { queryParams: { group: 'read' } });
+    this.exit.leave('read');
+  }
+
+  /** After the last round: Home, or back to the lesson's path (ADR 0026). */
+  protected finish(): void {
+    this.audio.stop();
+    this.exit.finish('read');
   }
 }

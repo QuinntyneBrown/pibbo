@@ -17,9 +17,9 @@ export class BrowserAudioPlayer implements AudioPlayer {
   private readonly createElement = inject(AUDIO_ELEMENT_FACTORY);
   private element: HTMLAudioElement | null = null;
   private settleCurrent: ((outcome: PlayOutcome) => void) | null = null;
-  /** The volume a grown-up chose, kept on this device (ADR 0028). */
+  /** The volume a grown-up chose, kept on this device (ADR 0029). */
   private gain = volumeGain(
-    inject(PROGRESS_STORE, { optional: true })?.read('volume', isVolumeLevel) ?? null,
+    storedLevel(inject(PROGRESS_STORE, { optional: true })?.read('volume')),
   );
 
   constructor() {
@@ -70,4 +70,9 @@ export class BrowserAudioPlayer implements AudioPlayer {
       this.element = null;
     }
   }
+}
+
+/** A stored volume, checked before use; anything else counts as none. */
+function storedLevel(value: unknown) {
+  return isVolumeLevel(value) ? value : null;
 }

@@ -16,13 +16,13 @@
       "title": "Home · Choose an activity",
       "route": "/",
       "requirements": [
-        "L2-024",
-        "L2-035",
         "L2-023",
-        "L2-037"
+        "L2-024",
+        "L2-035"
       ],
       "states": [
         "default",
+        "reading-more",
         "counting",
         "counting-more",
         "first-visit"
@@ -35,7 +35,8 @@
         "error": "Home reads nothing that can fail."
       },
       "state_subjects": {
-        "default": "read"
+        "default": "read",
+        "reading-more": "read"
       }
     },
     {
@@ -61,7 +62,9 @@
       "kind": "page",
       "title": "Guided lesson",
       "route": "/lesson/:subject",
-      "requirements": [],
+      "requirements": [
+        "L2-022"
+      ],
       "states": [
         "default",
         "start",
@@ -467,50 +470,27 @@
         "answered",
         "correct",
         "retry",
-        "modelled",
+        "model",
         "counting-question",
+        "letter-question",
+        "adding-question",
         "results",
-        "results-empty"
+        "results-none"
       ],
       "prototype_frame": "uqsXti2BwppQA9k9zEtnFN",
       "subject": "both",
       "not_applicable": {
-        "loading": "The rounds' pictures and recordings are fetched before the first question shows; there is nothing to wait for on screen.",
-        "empty": "There are always five questions: with no practice history they come from the first lesson's activities.",
-        "error": "A recording that cannot play never blocks a question: what it would say is shown. A damaged stored history counts as none."
+        "loading": "A question's pictures and recordings are bundled and fetched before it is shown.",
+        "empty": "With nothing practised the questions come from the first lesson; results with nothing earned is the results-none state.",
+        "error": "A recording that cannot play never blocks a question, and storage that cannot be read counts as nothing practised."
       },
       "state_subjects": {
         "default": "read",
         "answered": "read",
         "correct": "read",
         "retry": "read",
-        "modelled": "read",
-        "counting-question": "count",
-        "results": "both",
-        "results-empty": "both"
-      }
-    },
-    {
-      "id": "grown-up",
-      "kind": "page",
-      "title": "For grown-ups",
-      "route": "/grown-up",
-      "requirements": [
-        "L2-029",
-        "L2-037"
-      ],
-      "states": [
-        "gate",
-        "gate-progress",
-        "default",
-        "confirm",
-        "cleared"
-      ],
-      "subject": "none",
-      "not_applicable": {
-        "loading": "Everything shown is in the bundle; nothing is fetched.",
-        "empty": "The area always offers volume, clear progress and about Pibbo.",
-        "error": "Nothing here can fail: a store that cannot be used behaves as an empty one."
+        "model": "read",
+        "letter-question": "read"
       }
     },
     {

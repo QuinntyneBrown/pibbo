@@ -158,6 +158,9 @@
     }
 
     .shell__ask {
+      // The mock's smaller Pibbo: the instruction keeps its width and fewer lines.
+      --pibbo-size: var(--size-7);
+
       align-items: center;
       gap: var(--space-1);
       padding: var(--space-1) var(--space-2) 0;
