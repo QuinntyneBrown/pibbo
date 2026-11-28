@@ -53,7 +53,8 @@ test.describe('The gate', () => {
     const grownUp = new GrownUpPage(page);
     await grownUp.openGate();
 
-    await expect(grownUp.gate).toHaveAttribute('role', 'dialog');
+    await expect(page.getByRole('heading', { name: 'For grown-ups' })).toBeVisible();
+    await expect(grownUp.area).toHaveCount(0);
     await expect(grownUp.gateTask).toHaveText(
       /^Touch (one|two|three|four|five|six|seven|eight|nine), [a-z]+, [a-z]+ in order\.$/,
     );
@@ -100,33 +101,29 @@ test.describe('The gate', () => {
     expect(await spoken.recordings()).toEqual([]);
   });
 
-  test('Given the gate, when it is closed or Escape is pressed, then Home is unchanged', async ({
+  test('Given the gate, when Back to Pibbo is touched, then Home is unchanged', async ({
     page,
   }) => {
     const home = new HomePage(page);
     const grownUp = new GrownUpPage(page);
     await home.open('/?group=read');
     await grownUp.touch(grownUp.entry);
+    await expect(grownUp.gate).toBeVisible();
 
     await grownUp.touch(grownUp.gateClose);
-    await expect(grownUp.gate).toHaveCount(0);
 
-    await grownUp.touch(grownUp.entry);
-    await expect(grownUp.gate).toBeVisible();
-    await page.keyboard.press('Escape');
     await expect(grownUp.gate).toHaveCount(0);
     await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
     await expect(page).toHaveURL(/\/\?group=read$/);
   });
 
-  test('Given the grown-up area, when it is opened without passing the gate, then Home shows instead', async ({
+  test('Given the grown-up screen, when it is opened by typing its address, then the gate is shown first', async ({
     page,
   }) => {
-    const home = new HomePage(page);
     const grownUp = new GrownUpPage(page);
     await page.goto('/grown-up');
 
-    await expect(home.root).toBeVisible();
+    await expect(grownUp.gate).toBeVisible();
     await expect(grownUp.area).toHaveCount(0);
   });
 });

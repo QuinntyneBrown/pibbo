@@ -20,17 +20,17 @@ export class GrownUpPage {
 
   constructor(private readonly page: Page) {
     this.entry = page.locator('.home__top .grown-up-entry');
-    this.gate = page.locator('.dialog.gate');
+    this.gate = page.locator('.grown-up--gate .gate');
     this.gateTask = page.locator('.gate__task');
     this.gateKeys = page.locator('.gate__keys .gate__key');
     this.gateDots = page.locator('.gate__dots .gate__dot--done');
-    this.gateClose = page.locator('.gate .dialog__close');
-    this.area = page.locator('.grown-up');
+    this.gateClose = page.locator('.gate .gate__close');
+    this.area = page.locator('.grown-up:not(.grown-up--gate)');
     this.back = page.locator('.grown-up__top .chunky');
     this.volume = page.locator('.switch--volume .switch__option');
     this.clear = page.locator('.grown-up__section .chunky--ink');
     this.status = page.locator('.grown-up__status');
-    this.confirm = page.locator('.dialog.confirm');
+    this.confirm = page.locator('.confirm');
     this.keep = page.locator('.confirm__actions .chunky--white');
     this.confirmClear = page.locator('.confirm__actions .chunky--ink');
   }

@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { Tap } from '../tap/tap';
 
 /**
- * The gate a grown-up passes (`.dialog.gate`, docs/mocks/dialogs/grown-up-gate): the task in
- * words, dots for the numbers touched, a 3 × 3 keypad and Close. It shows text only and
+ * The gate a grown-up passes (`.gate`, docs/mocks/pages/grown-up/gate): the task in words, dots
+ * for the numbers touched, a 3 × 3 keypad and Back to Pibbo. It shows text only and
  * speaks nothing (L2-037 #2, ADR 0028).
  */
 @Component({

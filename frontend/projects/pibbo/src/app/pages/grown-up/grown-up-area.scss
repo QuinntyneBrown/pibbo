@@ -7,6 +7,13 @@
   padding-bottom: var(--space-12);
 }
 
+.grown-up--gate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--layout-margin);
+}
+
 .grown-up__top {
   padding: var(--space-5) var(--layout-margin) 0;
 }

@@ -1,8 +1,20 @@
-<div class="grown-up">
-  <header class="grown-up__top">
-    <button type="button" class="chunky" (click)="back()">Back to Pibbo</button>
-  </header>
-  <main class="grown-up__main" id="main" aria-labelledby="area-title">
-    <h1 class="grown-up__title" id="area-title">For grown-ups</h1>
+@if (step() === 'gate') {
+  <main class="grown-up grown-up--gate" id="main" aria-labelledby="gate-title">
+    <pb-gate
+      [task]="task()"
+      [touched]="gate().touched"
+      [length]="gate().asked.length"
+      (key)="touchKey($event)"
+      (closed)="back()"
+    />
   </main>
-</div>
+} @else {
+  <div class="grown-up">
+    <header class="grown-up__top">
+      <button type="button" class="chunky" (click)="back()">Back to Pibbo</button>
+    </header>
+    <main class="grown-up__main" id="main" aria-labelledby="area-title">
+      <h1 class="grown-up__title" id="area-title">For grown-ups</h1>
+    </main>
+  </div>
+}

@@ -84,9 +84,10 @@ export class Home {
     this.open(this.check.name.recording, '/check');
   }
 
-  /** The grown-up entry: the gate opens (journey 24). */
+  /** The grown-up entry: the grown-up screen opens at its gate, remembering Home's address. */
   protected openGate(): void {
-    /* The gate comes with its slice. */
+    if (this.opening) return;
+    void this.router.navigate(['/grown-up'], { state: { from: this.router.url } });
   }
 
   private open(recording: string, path: string): void {
