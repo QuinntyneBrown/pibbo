@@ -8,10 +8,12 @@ Pibbo is often opened on an old phone on a slow network. Home loads cold with La
 
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
-- **`Lazy routes`** — every activity is a `loadComponent` route; `angular.json` budgets fail the build above 250 KB initial.
-- **`RoundAssetLoader`** — route-scoped service that decodes the current and next round's recordings and pictures before the round shows, with a fixed-size cache.
-- **`WebAudioPlayer`** — implementation of `AUDIO_PLAYER` over one `AudioContext`, playing decoded buffers; it closes the context on destroy.
-- **`Load test`** — k6 or equivalent run of the content API at 500 requests per second (`<TO SUPPLY>` tool choice).
+- **`Lazy routes`** — every activity is a `loadComponent` route; `angular.json` warns above 240 kB initial and fails above 245 kB (239 kB raw, 64 kB gzipped today).
+- **`BrowserAssetPreloader`** — route-scoped `ASSET_PRELOADER` that fetches a round's recordings and pictures before it shows and the next round's during it, keeping two rounds and aborting the rest; every activity uses it, the counting ones through `contentAssets` and `numberRecordings` (ADR 0029).
+- **`BrowserAudioPlayer`** — `AUDIO_PLAYER` over one `<audio>` element, one recording at a time, at the grown-up's volume; a Web Audio player waits until a measured need.
+- **`performance.spec.ts`** — what each activity's first touch plays has been fetched before the touch (`L2-032` #3).
+- **`load.sweep.ts`** — on request: Home's Largest Contentful Paint, script size and touch response on a throttled phone, with time passing (`L2-032` #1, #2).
+- **`Load test`** — the content API at 500 requests per second waits for the backend (journey 27).
 
 ## Requirements
 

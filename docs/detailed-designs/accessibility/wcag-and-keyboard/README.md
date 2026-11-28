@@ -8,11 +8,12 @@ Pibbo meets WCAG 2.2 AA. Every target is reachable by Tab or arrow keys in a log
 
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
-- **`RovingFocus`** — CDK `FocusKeyManager` in grids of targets for arrow-key movement.
-- **`Accessible names`** — each presentation component takes an `accessibleName` input built from content text (for example "letter m, sound mmm").
+- **`Tab order`** — every target is a native button in the order a child meets it (the way out and progress, the instruction, the game, the answer bar), so Tab, Enter and Space play every round; CDK roving focus is not used, since it would grow the initial bundle (ADRs 0028, 0029).
+- **`Accessible names`** — each target is named by its own text or an `aria-label` built from content (for example "letter m, sound mmm").
+- **`keyboard.spec.ts`** — every activity, the check game and the gate played from the keyboard on a desktop, each target reached in order with its focus outline and a name.
 - **`State icons`** — counted, correct and current states carry an icon and an ARIA attribute (`aria-pressed`, `aria-current`).
-- **`Reduced motion`** — `prefers-reduced-motion` media query and a `MOTION` signal read by components with animation.
-- **`axe sweep`** — Playwright accessibility sweep run on request.
+- **`Reduced motion`** — a `prefers-reduced-motion` media query in each stylesheet that animates removes every animation that is not the answer itself.
+- **`axe sweep`** — `accessibility.sweep.ts`, run on request (`npm run sweep:a11y`): every screen, light and dark, with and without reduced motion, with no serious or critical violation; `heap.sweep.ts` and `visual.sweep.ts` sit beside it.
 
 ## Requirements
 

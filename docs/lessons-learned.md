@@ -876,3 +876,33 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Break the rule once (J3 #5, J19 #4): Clear progress keeping one key failed the spec.
 - Measure before redesigning (J18 #1): the 48 px gap was measured at four sizes by its spec.
 - Read the initial total after each slice (J2 #4): it caught the CDK and the focus API.
+
+## Journey 26: Performance, accessibility and privacy hardening
+
+**What slowed it**
+
+- The seven counting activities fetched a recording only when it played, so their first touch
+  waited for the network; the new spec failed on Count the toys' "one" until they preloaded.
+- The keyboard spec's "focus shows" check first accepted any box-shadow, so it passed with the
+  focus ring removed on targets that have a press edge; only the outline counts now.
+- Spot the word's first story word is a miss, which by design makes no sound, so "Enter plays
+  it" means something is spoken or shown.
+- The sweeps cannot be proved here: `AGENTS.md` runs them only when a person asks, so they are
+  type-checked and linted but not run, and have no baselines.
+
+**New lessons**
+
+1. Read the activities from Home in a spec (`everyActivity`), not from a list: a new activity
+   is covered the day Home shows it.
+2. A check that something "shows" must look for the one thing that shows it (the focus outline);
+   prove it by taking that thing away.
+3. A content walker (`contentAssets`) that lists every recording and picture an activity names
+   keeps preloading in step with the content, with no list per page.
+
+**Earlier lessons applied**
+
+- Break the rule once (J3 #5): removing the focus ring and the preload each failed its spec.
+- Read the initial total after each slice (J2 #4, J24 #1): it stayed at 239 kB, and the budget
+  now tightens to that.
+- Faking browser APIs, not bindings (J1 #1): the volume and permission checks patch the
+  browser in the spec, with nothing added to the bundle.

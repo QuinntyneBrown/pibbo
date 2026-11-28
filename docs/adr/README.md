@@ -30,3 +30,4 @@
 | [0026](0026-practice-kept-on-the-device-and-a-grown-up-area.md) | Practice is kept on the device, and a grown-up has an area | Accepted |
 | [0027](0027-check-game-round.md) | What do I know?: mixed questions, the normal retry, and earned pictures | Accepted |
 | [0028](0028-grown-up-gate-and-area.md) | The grown-up gate and area: a corner padlock, three numbers in words, and Clear progress | Accepted |
+| [0029](0029-performance-accessibility-and-privacy-checks.md) | Performance, accessibility and privacy: behaviour specs over every activity, and sweeps on request | Accepted |
