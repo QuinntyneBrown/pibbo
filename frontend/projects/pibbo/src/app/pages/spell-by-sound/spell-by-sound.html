@@ -13,8 +13,11 @@
     [boxes]="round().boxes"
     [bank]="round().bank"
     [next]="next()"
+    [canPlace]="canPlace()"
+    [canRemove]="canRemove()"
+    (letter)="placeLetter($event)"
     (speaker)="speak($event)"
     (box)="touchBox($event)"
   />
-  <pb-answer-bar answer group="read" kind="check" [ready]="false" />
+  <pb-answer-bar answer group="read" kind="check" [ready]="round().phase === 'full'" />
 </pb-round-shell>

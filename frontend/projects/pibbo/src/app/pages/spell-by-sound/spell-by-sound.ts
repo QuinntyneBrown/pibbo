@@ -14,6 +14,8 @@ import { AnswerBar, RoundShell, SpellBoxes } from '@pibbo/components';
 import {
   boxSound,
   nextBox,
+  placeLetter,
+  removeLetter,
   SPELL,
   spellAssets,
   startSpellRound,
@@ -47,11 +49,22 @@ export class SpellBySound {
   /** Rounds finished in this play. */
   protected readonly done = signal(0);
   protected readonly next = computed(() => nextBox(this.round()));
-  protected readonly instruction = computed<Instruction>(() => ({
-    text: `${SPELL.listen.text} “${this.round().word.word}.” ${SPELL.pick.text}`,
-    recording: SPELL.pick.recording,
-    picture: 'tap',
-  }));
+  protected readonly instruction = computed<Instruction>(() =>
+    this.round().phase === 'spelling'
+      ? {
+          text: `${SPELL.listen.text} “${this.round().word.word}.” ${SPELL.pick.text}`,
+          recording: SPELL.pick.recording,
+          picture: 'tap',
+        }
+      : { ...SPELL.full, picture: 'ask' },
+  );
+  /** Whether the letters take a touch: only while a box is empty. */
+  protected readonly canPlace = computed(() => this.round().phase === 'spelling');
+  /** Whether a filled box gives its letter back: not once checked. */
+  protected readonly canRemove = computed(() => {
+    const phase = this.round().phase;
+    return phase === 'spelling' || phase === 'full';
+  });
 
   constructor() {
     this.preloader.preload(spellAssets(this.round()));
@@ -69,6 +82,20 @@ export class SpellBySound {
     void this.ask();
   }
 
+  /**
+   * A letter says its sound and fills the next box (L2-013 #1); once every box is filled,
+   * Pibbo asks for Check after the last sound (#4).
+   */
+  protected async placeLetter(index: number): Promise<void> {
+    const { round, spoken } = placeLetter(this.round(), index);
+    if (spoken === null) return;
+    this.round.set(round);
+    const outcome = await this.audio.play(spoken);
+    if (round.phase === 'full' && outcome !== 'stopped' && this.round() === round) {
+      void this.audio.play(SPELL.full.recording);
+    }
+  }
+
   /** "Listen:", the word, then "Pick a letter for each sound." (L2-013 #1). */
   private async ask(): Promise<void> {
     const round = this.round();
@@ -84,9 +111,11 @@ export class SpellBySound {
     if (spoken) void this.audio.play(spoken);
   }
 
-  /** An empty box says the sound that belongs there, as its speaker does (ADR 0018). */
+  /** An empty box says the sound that belongs there, as its speaker does (ADR 0018); a filled
+   * one gives its letter back and becomes the next to fill (L2-013 #2). */
   protected touchBox(index: number): void {
     if (this.round().boxes[index] === null) this.speak(index);
+    else this.round.set(removeLetter(this.round(), index));
   }
 
   /** Chooses the round after `current` and fetches its assets while this one is played. */
@@ -97,7 +126,8 @@ export class SpellBySound {
   }
 
   protected replay(): void {
-    void this.ask();
+    if (this.round().phase === 'spelling') void this.ask();
+    else void this.audio.play(this.instruction().recording);
   }
 
   protected leave(): void {

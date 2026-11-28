@@ -29,7 +29,7 @@ test.describe('Spell by sound: a round', () => {
     expect(letters).toBeDefined();
     await expect(spell.instruction).toHaveText(`Listen: “${w}.” Pick a letter for each sound.`);
     await expect(spell.boxes).toHaveCount(letters.length);
-    expect(await spell.boxTexts()).toEqual(letters.map(() => ''));
+    await expect.poll(() => spell.boxTexts()).toEqual(letters.map(() => ''));
     await expect(spell.boxes.nth(0)).toHaveClass(/box--next/);
     await expect(spell.boxes.nth(0)).toHaveAttribute('aria-label', 'Empty box for sound 1');
     const bank = await spell.bankTexts();
@@ -61,7 +61,7 @@ test.describe('Spell by sound: a round', () => {
 
     await spell.touch(spell.boxes.nth(1));
     await expect.poll(() => spoken.recordings()).toEqual([...HOME, LISTEN, word(w), PICK, second]);
-    expect(await spell.boxTexts()).toEqual(['', '', '']);
+    await expect.poll(() => spell.boxTexts()).toEqual(['', '', '']);
     if (await spell.speakers.nth(1).isVisible()) {
       await spell.touch(spell.speakers.nth(1));
       await expect
@@ -103,14 +103,14 @@ test.describe('Spell by sound: filling the boxes', () => {
     await expect.poll(() => spoken.recordings()).toEqual([...HOME, LISTEN, word(w), PICK]);
 
     await spell.touch(spell.letter(first!));
-    expect(await spell.boxTexts()).toEqual([first, '', '']);
+    await expect.poll(() => spell.boxTexts()).toEqual([first, '', '']);
     await expect(spell.boxes.nth(0)).toHaveAttribute('aria-label', `Remove ${first}`);
     await expect(spell.boxes.nth(1)).toHaveClass(/box--next/);
     await spell.touch(spell.letter(second!));
-    expect(await spell.boxTexts()).toEqual([first, second, '']);
+    await expect.poll(() => spell.boxTexts()).toEqual([first, second, '']);
     await spell.touch(spell.boxes.nth(0));
 
-    expect(await spell.boxTexts()).toEqual(['', second, '']);
+    await expect.poll(() => spell.boxTexts()).toEqual(['', second, '']);
     await expect(spell.boxes.nth(0)).toHaveClass(/box--next/);
     await expect
       .poll(() => spoken.recordings())
@@ -129,7 +129,7 @@ test.describe('Spell by sound: filling the boxes', () => {
 
     await spell.spell(letters);
 
-    expect(await spell.boxTexts()).toEqual(letters);
+    await expect.poll(() => spell.boxTexts()).toEqual(letters);
     await expect(spell.instruction).toHaveText('Does it say the word? Check it!');
     for (const l of await spell.bank.all()) await expect(l).toBeDisabled();
     await expect(spell.action).toHaveText('Check');
