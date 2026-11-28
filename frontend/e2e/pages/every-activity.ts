@@ -26,8 +26,9 @@ export async function everyActivity(page: Page): Promise<Listed[]> {
       for (const name of names) listed.push({ group, name, screen });
       if ((await home.more.count()) === 0) break;
       await home.touch(home.more);
-      // Wait for the next screen before reading it.
-      await expect(home.activities.first()).not.toHaveText(names[0]!);
+      // Wait for the next screen before reading it. The title, not the whole card: the card's
+      // text is more than its name, so the card never matches it and the wait would not wait.
+      await expect(home.activities.first().locator('.game-card__title')).not.toHaveText(names[0]!);
     }
   }
   return listed;
