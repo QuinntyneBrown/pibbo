@@ -681,3 +681,9 @@ img { display: block; max-width: 100%; }
 @media (min-width: 40rem) { .digit-pad__key { height: var(--size-11); } }
 .digit-pad__key:disabled { cursor: default; }
 .digit-pad__key--lit { --depth: var(--color-count-depth); background: var(--color-count-strong); color: var(--color-fg-on-strong); outline: 4px solid var(--color-reward); outline-offset: 3px; transform: translateY(var(--press-travel)); }
+
+/* Which is bigger (journey 6): after a wrong choice the ten-frames line the sets up one-to-one
+   and the extra dots of the bigger set are marked by shape (a ring) as well as colour. */
+.compare__card { gap: var(--space-2); }
+.compare__card .ten-frame + .ten-frame { margin-top: 0; }
+.ten-frame__dot--extra { background: var(--color-reward); box-shadow: 0 0 0 3px var(--color-surface), 0 0 0 6px var(--color-reward-strong); }

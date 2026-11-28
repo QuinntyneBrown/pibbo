@@ -112,7 +112,7 @@
       "kind": "page",
       "title": "Which is bigger?",
       "route": "/count/compare",
-      "requirements": [],
+      "requirements": ["L2-005", "L2-025"],
       "states": [
         "default",
         "picked",

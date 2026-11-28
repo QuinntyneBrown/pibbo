@@ -94,6 +94,11 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   `modelled` (`digit-pad__slot--answer`) states. The title is "Count and write"; the
   cells between digit keys and things are 6 px, not 16 px, so five 60 px targets fit a 360 px
   phone (ADR 0009).
+- **Which is bigger reconciled with `L2-005` (journey 6).** The `retry` state now marks the
+  dots of the bigger set beyond the smaller number (`ten-frame__dot--extra`, a ring as well as a
+  colour), so the ten-frames line the sets up one-to-one and show the extra. A number above 10
+  is drawn as two `.ten-frame`s in its card. Choosing a card and then Check stays as drawn, and
+  `L2-005` was brought in line (ADR 0010).
 
 ## Open questions
 
