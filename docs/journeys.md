@@ -2,7 +2,7 @@
 
 These are the user journeys to implement, in the order to build them. Each one is a thin vertical slice with its own implementation prompt in [`docs/prompts/`](prompts/). Each prompt is run as one session and ends with a PR.
 
-**% complete:** 37% (10 of 27 journeys done)
+**% complete:** 41% (11 of 27 journeys done)
 
 ## Order
 
@@ -30,7 +30,7 @@ The order follows what makes sense to build first:
 | 8 | Skip-count by twos, fives and tens | `L2-007` | [count/skip-count](detailed-designs/count/skip-count/README.md) | It builds on counting forward. | [prompt](prompts/08-skip-count.md) | Done |
 | 9 | Add two numbers together (pass and play) | `L2-008` | [count/add-two-numbers](detailed-designs/count/add-two-numbers/README.md) | It combines two counted sets and adds turn-taking on one device. | [prompt](prompts/09-add-two-numbers.md) | Done |
 | 10 | Count to music | `L2-009` | [count/count-to-music](detailed-designs/count/count-to-music/README.md) | It needs a timed audio track, so it comes after the plain counting activities. | [prompt](prompts/10-count-to-music.md) | Done |
-| 11 | Match letters to sounds | `L2-010` | [sound-out/match-letters-to-sounds](detailed-designs/sound-out/match-letters-to-sounds/README.md) | It is the simplest reading round and reuses the sound data from journey 4. | [prompt](prompts/11-match-letters-to-sounds.md) | Not started |
+| 11 | Match letters to sounds | `L2-010` | [sound-out/match-letters-to-sounds](detailed-designs/sound-out/match-letters-to-sounds/README.md) | It is the simplest reading round and reuses the sound data from journey 4. | [prompt](prompts/11-match-letters-to-sounds.md) | Done |
 | 12 | Recognise uppercase and lowercase | `L2-011` | [sound-out/recognise-letter-forms](detailed-designs/sound-out/recognise-letter-forms/README.md) | It pairs letter forms with the sounds already built. | [prompt](prompts/12-recognise-letter-forms.md) | Not started |
 | 13 | Spell a word by sound | `L2-013` | [sound-out/spell-by-sound](detailed-designs/sound-out/spell-by-sound/README.md) | It is the reverse of journey 4 and reuses its word data. | [prompt](prompts/13-spell-by-sound.md) | Not started |
 | 14 | Letter groups that make one sound | `L2-014` | [sound-out/letter-groups](detailed-designs/sound-out/letter-groups/README.md) | It extends Sound it out with groups of letters that make one sound. | [prompt](prompts/14-letter-groups.md) | Not started |

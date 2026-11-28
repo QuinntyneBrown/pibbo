@@ -387,3 +387,49 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Build before proving a failure (J8 #1): the first runs failed for the expected reasons (six
   activities and no More; no route).
 - `--reporter=line` and timeouts (J8 #3): no hang.
+
+## Journey 11: Match letters to sounds
+
+**What slowed it**
+
+- `L2-010` described one sound and three letters; the mock is a pair match of four letters and
+  their four sounds. The mock won: `L2-010`, the design and ADR 0015 were rewritten first, and the
+  prototype's "small shake" for a wrong partner, which no class drew, became `.pair--miss` and a
+  `miss` state.
+- c's sound was shown "/c/" in the content while both reading mocks show "/k/"; fixing the data
+  broke Sound it out's spec helper, which built `/${letter}/`.
+- The mock's two columns of 80 px pairs ran under the answer bar on 360 × 640 (by 70 px) and
+  640 × 360 (by 150 px). Upright took one try (two rows, the picture above each sound); on its
+  side took four, because the game area there is only 100 px tall: two rows of 60 px targets
+  cannot fit, so all eight make one row. Each attempt went into the mock CSS and the component.
+- A bash heredoc with an unmatched quote in a comment silently wrote nothing; the files were
+  written with the Write tool instead.
+- CI took 3 min 15 s at journey 10. ADR 0016 tags one test per feature `@critical` and CI runs
+  only those (`--grep @critical`); `verify.mjs` still runs every spec.
+
+**New lessons**
+
+1. On a phone on its side, measure the game area itself (`.shell__game`), not just the screen:
+   it is about 100 px tall, so anything with two rows of targets must become one row there.
+2. When content data changes how a sound is shown, grep the specs for helpers that rebuild the
+   shown text from the letter.
+3. A spec whose rule the domain already covers (matching arrived with `matchSound` in slice 2)
+   passes before its slice; say so, and keep it as a regression guard.
+4. Tag a feature's critical path in the same change that adds the feature, so CI cost grows by
+   one test per feature, not by the feature's whole suite.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1, J7–J10): the pair match, the miss state and the phone layouts went
+  into the mocks before or with the component, each in the same commit.
+- Measure the largest case on 360 × 640 and 640 × 360 (J9 #1, J10 #2): a throwaway spec logged
+  the last pair against the answer bar's top; it found both overflows before the commit.
+- A round as a pure state machine (J3 #1): `LetterSoundsRound` with `matching`, `right`.
+- `CLOCK.after` for timing (J3 #3): praise and the shake.
+- Grep the flat domain API before naming (J6 #2): done first; `holdLetter` and `matchSound`
+  avoid Sound it out's `touchLetter`.
+- Build before proving a failure (J8 #1): the first run failed for the expected reason, no
+  Letter sounds on Home.
+- `--reporter=line` and timeouts (J8 #3): no hang; verify ran in the background once and was
+  awaited with an `until` loop.
+- Count the group against `L2-024` (J10 #1): Read has two activities; no second screen needed.
