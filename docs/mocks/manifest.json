@@ -241,10 +241,15 @@
       "kind": "page",
       "title": "Big and small letters",
       "route": "/read/letter-forms",
-      "requirements": [],
+      "requirements": [
+        "L2-011",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "default",
         "held",
+        "miss",
         "correct"
       ],
       "prototype_frame": "ssCmdyySHgJieyyT6RSNsG",
