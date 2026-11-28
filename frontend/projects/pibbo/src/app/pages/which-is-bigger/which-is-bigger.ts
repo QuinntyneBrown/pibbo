@@ -13,7 +13,9 @@ import { AnswerBar, Compare, RoundShell, type AnswerBarKind } from '@pibbo/compo
 import {
   biggerCard,
   checkChoice,
+  chooseAgain,
   chooseCard,
+  extraDots,
   numberRecording,
   startCompareRound,
   WHICH_IS_BIGGER,
@@ -51,13 +53,19 @@ export class WhichIsBigger {
   protected readonly won = computed(() =>
     this.round().phase === 'right' ? biggerCard(this.round()) : null,
   );
-  protected readonly mood = computed(() => (this.praising() ? 'cheer' : 'rest'));
+  protected readonly extra = computed(() => extraDots(this.round()));
+  protected readonly mood = computed(() =>
+    this.praising() ? 'cheer' : this.round().phase === 'retry' ? 'oh' : 'rest',
+  );
   protected readonly bar = computed<{ kind: AnswerBarKind; message: string; ready: boolean }>(
     () => {
       const round = this.round();
       if (round.phase === 'right') {
         const [big, small] = [Math.max(...round.numbers), Math.min(...round.numbers)];
         return { kind: 'right', message: `${big} is bigger than ${small}!`, ready: true };
+      }
+      if (round.phase === 'retry') {
+        return { kind: 'retry', message: WHICH_IS_BIGGER.retry.text, ready: true };
       }
       return { kind: 'check', message: '', ready: round.chosen !== null };
     },
@@ -86,16 +94,24 @@ export class WhichIsBigger {
     void this.audio.play(numberRecording(spoken));
   }
 
-  /** Check while choosing; Next once the round is done. */
+  /** Check while choosing; Try again after a wrong choice; Next once the round is done. */
   protected action(): void {
-    if (this.round().phase === 'right') {
+    const phase = this.round().phase;
+    if (phase === 'right') {
       this.next();
+      return;
+    }
+    if (phase === 'retry') {
+      this.round.set(chooseAgain(this.round()));
+      void this.audio.play(WHICH_IS_BIGGER.ask.recording);
       return;
     }
     const { round, outcome } = checkChoice(this.round());
     if (outcome === null) return;
     this.round.set(round);
     if (outcome === 'right') void this.praise(round);
+    // A wrong choice (L2-005 #2): the extra dots show the way, and the hint is said.
+    else void this.audio.play(WHICH_IS_BIGGER.retry.recording);
   }
 
   /**

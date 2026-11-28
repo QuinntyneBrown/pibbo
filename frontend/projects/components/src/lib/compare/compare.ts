@@ -4,7 +4,11 @@ import { Tap } from '../tap/tap';
 /** One card: its number, and its ten-frames as cells that hold a dot or not. */
 interface Card {
   readonly number: number;
-  readonly frames: readonly (readonly { readonly index: number; readonly dot: boolean }[])[];
+  readonly frames: readonly (readonly {
+    readonly index: number;
+    readonly dot: boolean;
+    readonly extra: boolean;
+  }[])[];
 }
 
 /**
@@ -27,6 +31,11 @@ export class Compare {
   readonly chosen = input<number | null>(null);
   /** The card shown as the right answer, or null. */
   readonly won = input<number | null>(null);
+  /**
+   * The dots to highlight after a wrong choice: those of the bigger set beyond the smaller
+   * number, which the lined-up ten-frames leave without a partner (`ten-frame__dot--extra`).
+   */
+  readonly extra = input<{ readonly card: number; readonly dots: readonly number[] } | null>(null);
   /** No card takes a touch. */
   readonly locked = input(false);
 
@@ -34,11 +43,17 @@ export class Compare {
   readonly chose = output<number>();
 
   protected readonly cards = computed<Card[]>(() =>
-    this.numbers().map((number) => ({
-      number,
-      frames: Array.from({ length: Math.max(1, Math.ceil(number / 10)) }, (_, f) =>
-        Array.from({ length: 10 }, (_, c) => ({ index: f * 10 + c, dot: f * 10 + c < number })),
-      ),
-    })),
+    this.numbers().map((number, card) => {
+      const extra = this.extra()?.card === card ? new Set(this.extra()!.dots) : new Set<number>();
+      return {
+        number,
+        frames: Array.from({ length: Math.max(1, Math.ceil(number / 10)) }, (_, f) =>
+          Array.from({ length: 10 }, (_, c) => {
+            const index = f * 10 + c;
+            return { index, dot: index < number, extra: extra.has(index) };
+          }),
+        ),
+      };
+    }),
   );
 }

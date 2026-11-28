@@ -11,6 +11,7 @@
     [numbers]="round().numbers"
     [chosen]="round().chosen"
     [won]="won()"
+    [extra]="extra()"
     [locked]="round().phase !== 'choosing'"
     (chose)="choose($event)"
   />

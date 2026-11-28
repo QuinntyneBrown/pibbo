@@ -97,7 +97,8 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
 - **Which is bigger reconciled with `L2-005` (journey 6).** The `retry` state now marks the
   dots of the bigger set beyond the smaller number (`ten-frame__dot--extra`, a ring as well as a
   colour), so the ten-frames line the sets up one-to-one and show the extra. A number above 10
-  is drawn as two `.ten-frame`s in its card. Choosing a card and then Check stays as drawn, and
+  is drawn as two `.ten-frame`s in its card; on a short screen the numeral shrinks, and on a phone on
+  its side it sits beside its ten-frames, so a card of 20 and the answer bar fit with no scrolling. Choosing a card and then Check stays as drawn, and
   `L2-005` was brought in line (ADR 0010).
 
 ## Open questions
