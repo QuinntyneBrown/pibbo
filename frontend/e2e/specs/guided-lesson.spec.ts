@@ -1,4 +1,4 @@
-// Traces to: L2-022
+// Traces to: L2-022, L2-024
 import { test, expect } from '../fixtures/test';
 import { CountTheToysPage } from '../pages/count-the-toys.page';
 import { HomePage } from '../pages/home.page';
@@ -7,6 +7,7 @@ import { LessonPage } from '../pages/lesson.page';
 const COUNT_TITLE = '/recordings/lessons/count.wav';
 const UP_NEXT = '/recordings/lessons/up-next.wav';
 const DONE = '/recordings/lessons/done.wav';
+const LESSON = '/recordings/home/lesson.wav';
 const YES = '/recordings/count/yes.wav';
 const name = (id: string) => `/recordings/home/${id}.wav`;
 
@@ -209,5 +210,63 @@ test.describe('Guided lesson: an activity that does not exist yet', () => {
         'Lesson "read" names an unknown activity "rhyme-time"; it is skipped.',
         'Lesson "read" names an unknown activity "build-a-sentence"; it is skipped.',
       ]);
+  });
+});
+
+test.describe('Guided lesson: its picture on Home', () => {
+  test('Given Home has just opened, when nothing is chosen, then no lesson picture is shown', async ({
+    page,
+  }) => {
+    const home = new HomePage(page);
+    await home.open();
+
+    await expect(home.lesson).toHaveCount(0);
+  });
+
+  test('Given a group is chosen on Home, when the child touches its Lesson picture, then "Lesson" is spoken and the lesson opens where the child left off', async ({
+    page,
+    spoken,
+  }) => {
+    const home = new HomePage(page);
+    const lesson = new LessonPage(page);
+    await lesson.storeBeforeLoad('read', '{"v":1,"step":2,"at":"sound-it-out"}');
+    await home.open();
+    await home.touch(home.group('Read'));
+    await expect(home.lesson).toHaveText('Lesson');
+
+    await home.touch(home.lesson);
+
+    await expect(lesson.title).toHaveText('Sounds that team up');
+    await expect(lesson.node(2)).toHaveAttribute('aria-current', 'step');
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([
+        '/recordings/home/read.wav',
+        LESSON,
+        '/recordings/lessons/read.wav',
+        UP_NEXT,
+        name('sound-it-out'),
+      ]);
+  });
+
+  test('Given Count is chosen on Home, when shown, then the Lesson picture is at least 60 px, 16 px from every other target, and nothing scrolls', async ({
+    page,
+  }) => {
+    const home = new HomePage(page);
+    await home.open();
+    await home.touch(home.group('Count'));
+    await expect(home.lesson).toBeVisible();
+
+    const boxes = await home.targetBoxes();
+    const picture = (await home.lesson.boundingBox())!;
+    expect(picture.width).toBeGreaterThanOrEqual(60);
+    expect(picture.height).toBeGreaterThanOrEqual(60);
+    for (const b of boxes) {
+      if (b.x === picture.x && b.y === picture.y) continue;
+      const dx = Math.max(b.x - (picture.x + picture.width), picture.x - (b.x + b.width), 0);
+      const dy = Math.max(b.y - (picture.y + picture.height), picture.y - (b.y + b.height), 0);
+      expect(Math.max(dx, dy)).toBeGreaterThanOrEqual(16);
+    }
+    expect(await home.scrolls()).toBe(false);
   });
 });

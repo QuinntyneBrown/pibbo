@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import type { ActivityExit, GroupId } from '@pibbo/api';
-import { LESSONS, lessonById } from '@pibbo/domain';
 
 /**
  * Where an activity goes when it ends (ADR 0025). An activity opened from a lesson's path has
@@ -29,8 +28,12 @@ export class RouterActivityExit implements ActivityExit {
 
   private lesson(): { id: string; step: number } | null {
     const params = this.router.routerState.snapshot.root.queryParamMap;
-    const lesson = lessonById(LESSONS, params.get('lesson'));
+    // Only a group can name a lesson; the path itself checks the rest. Kept free of the lesson
+    // content so that nothing of the lesson is in the initial bundle.
+    const id = params.get('lesson');
     const step = Number(params.get('step'));
-    return lesson && Number.isInteger(step) && step >= 1 ? { id: lesson.id, step } : null;
+    return (id === 'count' || id === 'read') && Number.isInteger(step) && step >= 1
+      ? { id, step }
+      : null;
   }
 }

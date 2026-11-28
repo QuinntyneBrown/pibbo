@@ -26,3 +26,49 @@
   gap: var(--space-8);
   padding: var(--space-6) var(--layout-margin) 0;
 }
+
+// The chosen group's lesson picture, beside the wordmark (docs/mocks/pages/home, ADR 0025).
+.chunky {
+  --depth: var(--color-count-depth);
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-width: var(--target-child);
+  min-height: var(--target-child);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-count-strong);
+  color: var(--color-fg-on-strong);
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
+
+  &:active {
+    transform: translateY(var(--press-travel));
+    box-shadow: 0 var(--press-depth-down) 0 var(--depth);
+  }
+}
+
+.chunky--read {
+  --depth: var(--color-read-depth);
+  background: var(--color-read-strong);
+}
+
+.home__lesson {
+  padding: 0 var(--space-5);
+}
+
+.icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

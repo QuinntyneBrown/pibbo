@@ -26,7 +26,7 @@
     </main>
     <footer class="lesson__foot" role="status">
       <div class="lesson__next">
-        <pb-pibbo [mood]="next() ? 'rest' : 'cheer'" />
+        <pb-pibbo size="sm" [mood]="next() ? 'rest' : 'cheer'" />
         @if (next(); as next) {
           <p>{{ lines.upNext.text }} {{ next.activity.name }}</p>
         } @else {

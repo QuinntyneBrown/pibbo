@@ -167,3 +167,49 @@
     padding-block: var(--space-3);
   }
 }
+
+// A phone upright with little height (docs/mocks/assets/ui.css): the path and Play both fit.
+@media (max-width: 39.99rem) and (orientation: portrait) and (max-height: 51rem) {
+  .lesson__main {
+    padding-block: var(--space-2);
+  }
+}
+
+@media (max-width: 39.99rem) and (orientation: portrait) and (max-height: 42rem) {
+  .lesson__foot {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+  }
+
+  .lesson__foot .chunky {
+    width: auto;
+    padding-inline: var(--space-3);
+  }
+}
+
+@media (max-width: 39.99rem) and (orientation: portrait) and (max-height: 38rem) {
+  .lesson__top {
+    padding: var(--space-1) var(--space-2) 0;
+  }
+
+  .lesson__main,
+  .lesson__foot {
+    padding-inline: var(--space-2);
+  }
+}
+
+@media (max-width: 22rem) and (orientation: portrait) {
+  .lesson__next {
+    gap: var(--space-1);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-tight);
+  }
+}
+
+@media (min-width: 32rem) and (max-width: 39.99rem) and (orientation: landscape) and (max-height: 22rem) {
+  .lesson__main {
+    padding-block: var(--space-1);
+  }
+}

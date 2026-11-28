@@ -1,6 +1,21 @@
 <div class="home">
   <header class="home__top">
     <pb-wordmark size="md" />
+    @if (lesson(); as lesson) {
+      <button
+        type="button"
+        class="chunky home__lesson"
+        [class.chunky--read]="lesson.id === 'read'"
+        (pbTap)="openLesson(lesson)"
+      >
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="5" cy="18" r="2.5" />
+          <circle cx="19" cy="6" r="2.5" />
+          <path d="M7.5 18H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h7.5" />
+        </svg>
+        {{ lessonLine.text }}
+      </button>
+    }
   </header>
   <main class="home__main" id="main">
     <h1 class="visually-hidden">Choose an activity</h1>

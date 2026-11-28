@@ -253,3 +253,20 @@
     height: var(--size-12);
   }
 }
+
+// A phone upright with little height: smaller nodes, still at least 60 px.
+@media (max-width: 39.99rem) and (orientation: portrait) and (max-height: 51rem) {
+  .path {
+    gap: var(--gap-targets);
+  }
+
+  .path__node {
+    width: var(--target-child);
+    height: var(--target-child);
+  }
+
+  .path__node--now {
+    width: var(--size-11);
+    height: var(--size-11);
+  }
+}
