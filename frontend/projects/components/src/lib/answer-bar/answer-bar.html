@@ -1,4 +1,7 @@
-<footer [class]="'answer-bar answer-bar--' + kind()" [attr.role]="message() ? 'status' : null">
+<footer
+  [class]="'answer-bar answer-bar--' + (kind() === 'none' ? 'check' : kind())"
+  [attr.role]="message() ? 'status' : null"
+>
   @if (message()) {
     <p class="answer-bar__message">
       @if (kind() === 'right') {
@@ -7,28 +10,32 @@
       {{ message() }}
     </p>
   }
-  <button
-    type="button"
-    class="chunky"
-    [class.chunky--success]="kind() === 'right'"
-    [class.chunky--read]="group() === 'read'"
-    [class.chunky--reward]="kind() === 'retry'"
-    [disabled]="!ready()"
-    (pbTap)="action.emit()"
-  >
-    @if (kind() === 'right' || kind() === 'model') {
-      Next
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 12h14M12 5l7 7-7 7" />
-      </svg>
-    } @else if (kind() === 'retry') {
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-        <path d="M3 3v5h5" />
-      </svg>
-      Try again
-    } @else {
-      Check
-    }
-  </button>
+  @if (kind() === 'none') {
+    <span class="answer-bar__spacer" aria-hidden="true"></span>
+  } @else {
+    <button
+      type="button"
+      class="chunky"
+      [class.chunky--success]="kind() === 'right'"
+      [class.chunky--read]="group() === 'read'"
+      [class.chunky--reward]="kind() === 'retry'"
+      [disabled]="!ready()"
+      (pbTap)="action.emit()"
+    >
+      @if (kind() === 'right' || kind() === 'model') {
+        Next
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      } @else if (kind() === 'retry') {
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+        </svg>
+        Try again
+      } @else {
+        Check
+      }
+    </button>
+  }
 </footer>

@@ -57,3 +57,48 @@ export function startCountdownRound(
     wrong: 0,
   };
 }
+
+/** What a choice did: the round after it, and whether it stepped down, reached 0 or missed. */
+export interface CountdownChoice {
+  readonly round: CountdownRound;
+  readonly outcome: 'step' | 'done' | 'retry' | null;
+}
+
+/**
+ * The child chooses a number (L2-006 #2, #3). Only the next number down advances, with new
+ * choices from the random source; 0 ends the round. Any other choice advances nothing and
+ * waits for Try again. Only while counting.
+ */
+export function chooseNext(
+  round: CountdownRound,
+  chosen: number,
+  random: RandomSource,
+): CountdownChoice {
+  if (round.phase !== 'counting' || !round.choices.includes(chosen)) {
+    return { round, outcome: null };
+  }
+  if (chosen !== round.current - 1) {
+    return { round: { ...round, phase: 'retry', wrong: round.wrong + 1 }, outcome: 'retry' };
+  }
+  if (chosen === 0) {
+    return { round: { ...round, phase: 'done', current: 0, choices: [] }, outcome: 'done' };
+  }
+  return {
+    round: { ...round, current: chosen, choices: countdownChoices(random, chosen) },
+    outcome: 'step',
+  };
+}
+
+/** Try again: the child continues from the same number, with the same choices. */
+export function countAgain(round: CountdownRound): CountdownRound {
+  return round.phase === 'retry' ? { ...round, phase: 'counting' } : round;
+}
+
+/**
+ * Where the rocket is (ADR 0011 #5): tenths of the way from the start to 0, or `off` once
+ * the round is done.
+ */
+export function rocketNotch(round: CountdownRound): number | 'off' {
+  if (round.phase === 'done') return 'off';
+  return Math.round((10 * (round.start - round.current)) / round.start);
+}

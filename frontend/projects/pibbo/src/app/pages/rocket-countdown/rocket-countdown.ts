@@ -8,14 +8,19 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AUDIO_PLAYER, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
-import { AnswerBar, Countdown, RoundShell } from '@pibbo/components';
+import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
+import { AnswerBar, Countdown, RoundShell, type AnswerBarKind } from '@pibbo/components';
 import {
+  chooseNext,
   numberRecording,
+  rocketNotch,
   ROCKET_COUNTDOWN,
   startCountdownRound,
   type CountdownRound,
 } from '@pibbo/domain';
+
+/** Praise lasts no more than this (L2-026 #3). */
+const PRAISE_MS = 1500;
 
 /**
  * Rocket countdown (docs/mocks/pages/rocket-countdown): a start from 5 to 20; the child
@@ -31,6 +36,7 @@ import {
 })
 export class RocketCountdown {
   private readonly audio = inject(AUDIO_PLAYER);
+  private readonly clock = inject(CLOCK);
   private readonly random = inject(RANDOM_SOURCE);
   private readonly router = inject(Router);
 
@@ -38,12 +44,24 @@ export class RocketCountdown {
   protected readonly round = signal(startCountdownRound(this.random, ROCKET_COUNTDOWN));
   /** Rounds finished in this play. */
   protected readonly done = signal(0);
+  protected readonly praising = signal(false);
+  private endPraise: (() => void) | null = null;
 
-  protected readonly instruction = computed<Instruction>(() => ({
-    ...ROCKET_COUNTDOWN.ask,
-    text: `We’re at ${this.round().current}. ${ROCKET_COUNTDOWN.ask.text}`,
-  }));
-  protected readonly notch = computed(() => 0);
+  protected readonly instruction = computed<Instruction>(() =>
+    this.round().phase === 'done'
+      ? { ...ROCKET_COUNTDOWN.ask, ...ROCKET_COUNTDOWN.blastOff }
+      : {
+          ...ROCKET_COUNTDOWN.ask,
+          text: `We’re at ${this.round().current}. ${ROCKET_COUNTDOWN.ask.text}`,
+        },
+  );
+  protected readonly notch = computed(() => rocketNotch(this.round()));
+  protected readonly mood = computed(() => (this.praising() ? 'cheer' : 'rest'));
+  protected readonly bar = computed<{ kind: AnswerBarKind; message: string }>(() =>
+    this.round().phase === 'done'
+      ? { kind: 'right', message: '3, 2, 1… blast off!' }
+      : { kind: 'none', message: '' },
+  );
 
   constructor() {
     // It rests: sound stops while the tab is hidden, and nothing resumes until a touch.
@@ -54,6 +72,7 @@ export class RocketCountdown {
     document.addEventListener('visibilitychange', rest);
     inject(DestroyRef).onDestroy(() => {
       document.removeEventListener('visibilitychange', rest);
+      this.endPraise?.();
       this.audio.stop();
     });
     void this.ask(this.round());
@@ -67,8 +86,47 @@ export class RocketCountdown {
     }
   }
 
+  /** Only the next number down moves on, and is spoken (L2-006 #2). */
   protected choose(n: number): void {
-    void n;
+    const { round, outcome } = chooseNext(this.round(), n, this.random);
+    if (outcome === null) return;
+    this.round.set(round);
+    if (outcome === 'step') void this.audio.play(numberRecording(n));
+    else if (outcome === 'done') void this.blastOff(round);
+  }
+
+  /** Next once the round is done. */
+  protected action(): void {
+    if (this.round().phase === 'done') this.next();
+  }
+
+  /** "Zero", then "Blast off!": brief praise that never blocks Next; it ends after 1.5 s. */
+  private async blastOff(round: CountdownRound): Promise<void> {
+    this.praising.set(true);
+    this.endPraise?.();
+    this.endPraise = this.clock.after(PRAISE_MS, () => this.stopPraise());
+    for (const recording of [numberRecording(0), ROCKET_COUNTDOWN.blastOff.recording]) {
+      if (this.round() !== round) return;
+      if ((await this.audio.play(recording)) === 'stopped') return;
+    }
+  }
+
+  private stopPraise(): void {
+    this.endPraise?.();
+    this.endPraise = null;
+    this.praising.set(false);
+  }
+
+  private next(): void {
+    this.stopPraise();
+    const done = this.done() + 1;
+    if (done >= ROCKET_COUNTDOWN.roundsPerPlay) {
+      this.leave();
+      return;
+    }
+    this.done.set(done);
+    this.round.set(startCountdownRound(this.random, ROCKET_COUNTDOWN));
+    void this.ask(this.round());
   }
 
   protected replay(): void {

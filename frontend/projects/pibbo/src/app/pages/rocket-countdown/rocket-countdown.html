@@ -1,6 +1,7 @@
 <pb-round-shell
   title="Rocket countdown"
   [instruction]="instruction()"
+  [mood]="mood()"
   [done]="done()"
   [rounds]="content.roundsPerPlay"
   (replay)="replay()"
@@ -10,7 +11,10 @@
     [start]="round().start"
     [current]="round().current"
     [choices]="round().choices"
+    [done]="round().phase === 'done'"
     [notch]="notch()"
+    [locked]="round().phase !== 'counting'"
     (chose)="choose($event)"
   />
+  <pb-answer-bar answer [kind]="bar().kind" [message]="bar().message" (action)="action()" />
 </pb-round-shell>
