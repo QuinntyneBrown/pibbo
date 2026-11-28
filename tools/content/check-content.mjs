@@ -1,4 +1,4 @@
-// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -190,6 +190,32 @@ else {
     if (typeof spell[line]?.text !== "string" || spell[line].text.length === 0)
       problems.push(`spell ${line}: no text`);
     fileExists(spell[line]?.recording, `spell ${line} recording`);
+  }
+}
+// Words and pictures (ADR 0023): each theme names two to four of Sound it out's words, once each,
+// and its instruction and praise are shown and recorded.
+const wordPictures = content.wordPictures;
+if (!wordPictures) problems.push("wordPictures: missing");
+else {
+  if (!(wordPictures.roundsPerPlay > 0))
+    problems.push("wordPictures: no rounds per play");
+  if (!Array.isArray(wordPictures.themes) || wordPictures.themes.length === 0)
+    problems.push("wordPictures: no theme");
+  for (const theme of wordPictures.themes ?? []) {
+    const name = theme.name ?? "(a theme with no name)";
+    const words = theme.words ?? [];
+    if (words.length < 2 || words.length > 4)
+      problems.push(`theme "${name}": ${words.length} words, not two to four`);
+    if (new Set(words).size !== words.length)
+      problems.push(`theme "${name}": a word is named twice`);
+    for (const word of words)
+      if (!(content.words ?? []).some((w) => w.word === word))
+        problems.push(`theme "${name}": "${word}" is not one of the words`);
+    for (const line of ["instruction", "praise"]) {
+      if (typeof theme[line]?.text !== "string" || theme[line].text.length === 0)
+        problems.push(`theme "${name}" ${line}: no text`);
+      fileExists(theme[line]?.recording, `theme "${name}" ${line} recording`);
+    }
   }
 }
 if ((content.words ?? []).length < 3)

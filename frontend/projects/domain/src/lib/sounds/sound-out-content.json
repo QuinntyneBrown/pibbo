@@ -320,5 +320,23 @@
       "text": "You spelled",
       "recording": "/recordings/read/you-spelled.wav"
     }
+  },
+  "wordPictures": {
+    "roundsPerPlay": 5,
+    "themes": [
+      {
+        "name": "by the sea",
+        "words": ["boat", "ship", "sun"],
+        "instruction": {
+          "text": "By the sea! Read a word, then tap its picture.",
+          "recording": "/recordings/read/by-the-sea-read-a-word.wav",
+          "picture": "tap"
+        },
+        "praise": {
+          "text": "You read all the by the sea words!",
+          "recording": "/recordings/read/you-read-all-the-by-the-sea-words.wav"
+        }
+      }
+    ]
   }
 }

@@ -80,6 +80,11 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
 - **Words and pictures, Spot the word, Build a sentence and What do I know?** are
   frames in the project but are not wired into the prototype's own navigation. Here they
   are linked from Home and the lesson, as `journeys.ts` describes.
+- **Words and pictures aligned (journey 18, ADR 0023).** Home's Read group lists it after
+  Spell by sound. The `held` state (a word pressed while its sounds are spoken) and the `miss`
+  state (both words spoken, the picture shaken and the word let go) are drawn. On a phone on
+  its side the product makes the words and pictures one row, words on the left: at 568 × 320
+  the mock's two rows of 60 px targets do not fit above the answer bar.
 
 - **Home reconciled with `AGENTS.md` (journey 2).** The prototype's Home (the child's
   name and stars, today's lesson card, the check card and 21 game cards) is replaced by what
@@ -212,7 +217,7 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 | Counting dance (`counting-dance`) | [✅](pages/counting-dance/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/counting-dance/start.html) |  |  | [✅](pages/counting-dance/correct.html) |  |  |  |  |  |  |  | [✅](pages/counting-dance/playing.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-009`, `L2-025` |
 | Letter sounds (`letter-sounds`) | [✅](pages/letter-sounds/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/letter-sounds/start.html) |  |  | [✅](pages/letter-sounds/correct.html) |  |  |  |  |  |  |  |  | [✅](pages/letter-sounds/held.html) | [✅](pages/letter-sounds/miss.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-010`, `L2-025`, `L2-026` |
 | Big and small letters (`big-and-small-letters`) | [✅](pages/big-and-small-letters/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/big-and-small-letters/correct.html) |  |  |  |  |  |  |  |  | [✅](pages/big-and-small-letters/held.html) | [✅](pages/big-and-small-letters/miss.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-011`, `L2-025`, `L2-026` |
-| Words and pictures (`words-and-pictures`) | [✅](pages/words-and-pictures/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/words-and-pictures/correct.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Words and pictures (`words-and-pictures`) | [✅](pages/words-and-pictures/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/words-and-pictures/correct.html) |  |  |  |  |  |  |  |  | [✅](pages/words-and-pictures/held.html) | [✅](pages/words-and-pictures/miss.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-018`, `L2-025`, `L2-026` |
 | Sound it out (`sound-it-out`) | [✅](pages/sound-it-out/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/sound-it-out/correct.html) | [✅](pages/sound-it-out/retry.html) | [✅](pages/sound-it-out/modelled.html) |  |  |  |  |  |  |  |  | [✅](pages/sound-it-out/ready.html) | [✅](pages/sound-it-out/pick.html) | [✅](pages/sound-it-out/magic-e.html) | [✅](pages/sound-it-out/magic-e-on.html) | [✅](pages/sound-it-out/syllables.html) | [✅](pages/sound-it-out/groups.html) | [✅](pages/sound-it-out/clusters.html) | [✅](pages/sound-it-out/first-two.html) | [✅](pages/sound-it-out/first-two-retry.html) |  |  |  |  |  | `L2-012`, `L2-014`, `L2-015`, `L2-016`, `L2-025`, `L2-026` |
 | Spell by sound (`spell-by-sound`) | [✅](pages/spell-by-sound/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  | [✅](pages/spell-by-sound/correct.html) | [✅](pages/spell-by-sound/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/spell-by-sound/full.html) |  |  |  |  | `L2-013`, `L2-025`, `L2-026` |
 | Rhyme time (`rhyme-time`) | [✅](pages/rhyme-time/default.html) | ➖ | ➖ | ➖ |  |  |  | [✅](pages/rhyme-time/start.html) |  |  | [✅](pages/rhyme-time/correct.html) | [✅](pages/rhyme-time/retry.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | [✅](pages/rhyme-time/all-chosen.html) |  |  |  |  |

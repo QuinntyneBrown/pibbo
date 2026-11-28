@@ -26,3 +26,5 @@ export * from './lib/counting/counting-dance-content';
 export * from './lib/counting/dance-round';
 export * from './lib/sounds/spell-content';
 export * from './lib/sounds/spell-round';
+export * from './lib/sounds/word-pictures-content';
+export * from './lib/sounds/word-pictures-round';

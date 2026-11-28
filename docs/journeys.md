@@ -17,7 +17,7 @@
 | 15 | Adjacent consonants | `L2-015` | [sound-out/adjacent-consonants](detailed-designs/sound-out/adjacent-consonants/README.md) | It extends Sound it out to longer words. | [prompt](prompts/15-adjacent-consonants.md) | 100% |
 | 16 | Silent-e words | `L2-016` | [sound-out/silent-e](detailed-designs/sound-out/silent-e/README.md) | It extends Sound it out with the `magic-e` state. | [prompt](prompts/16-silent-e.md) | 100% |
 | 17 | Read longer words by syllable | `L2-017` | [sound-out/read-by-syllable](detailed-designs/sound-out/read-by-syllable/README.md) | It is the last Sound it out extension. | [prompt](prompts/17-read-by-syllable.md) | 100% |
-| 18 | Connect words to pictures | `L2-018` | [sound-out/connect-words-to-pictures](detailed-designs/sound-out/connect-words-to-pictures/README.md) | It reuses word data and pictures. | [prompt](prompts/18-connect-words-to-pictures.md) | 0% |
+| 18 | Connect words to pictures | `L2-018` | [sound-out/connect-words-to-pictures](detailed-designs/sound-out/connect-words-to-pictures/README.md) | It reuses word data and pictures. | [prompt](prompts/18-connect-words-to-pictures.md) | 100% |
 | 19 | Recognise common words | `L2-019` | [sound-out/recognise-common-words](detailed-designs/sound-out/recognise-common-words/README.md) | It adds common-word data. | [prompt](prompts/19-recognise-common-words.md) | 0% |
 | 20 | Build a short sentence | `L2-020` | [sound-out/build-a-sentence](detailed-designs/sound-out/build-a-sentence/README.md) | It needs common words (journey 19). | [prompt](prompts/20-build-a-sentence.md) | 0% |
 | 21 | Hear rhymes | `L2-021` | [sound-out/hear-rhymes](detailed-designs/sound-out/hear-rhymes/README.md) | It reuses word recordings. | [prompt](prompts/21-hear-rhymes.md) | 0% |

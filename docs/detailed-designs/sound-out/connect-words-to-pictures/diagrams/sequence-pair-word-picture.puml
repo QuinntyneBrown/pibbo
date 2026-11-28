@@ -7,25 +7,35 @@ skinparam defaultFontName Arial
 skinparam ArrowColor #344054
 actor "Child" as actor
 box "Frontend — pibbo application" #E0F2FE
-  participant "WordPicturePage" as page
+  participant "WordsAndPictures" as page
 end box
 box "Frontend — @pibbo/components library" #E0F2FE
-  participant "PairingBoardComponent" as view
+  participant "WordPictures" as view
 end box
 box "Frontend — @pibbo/domain library" #ECFDF3
-  participant "pairingRules" as rules
+  participant "word-pictures-round" as rules
 end box
-box "Frontend — browser services (audio, storage)" #FFF4E5
+box "Frontend — browser services" #FFF4E5
   participant "AudioPlayer" as audio
 end box
-actor -> view : Touch word, then picture [L2-018 #4]
-page -> rules : selectPicture(round, p)
-alt match
-  page -> audio : play word [L2-018 #1]
-else no match
-  page -> audio : play word, then picture word
+actor -> view : touch a word [L2-018 #2, #4]
+view -> page : word(i)
+page -> rules : holdWord(round, i)
+rules --> page : held; its sounds
+page -> audio : play each sound in turn ("b", "oa", "t")
+actor -> view : touch a picture [L2-018 #4]
+view -> page : picture(j)
+page -> rules : matchPicture(round, j)
+alt its picture
+  rules --> page : matched; the word
+  page -> audio : play the word [L2-018 #1]
+else another picture
+  rules --> page : miss; the word, then the picture's word; word let go
+  page -> view : missed = j (shake, none with reduced motion)
+  page -> audio : play the word, then the picture's word [L2-018 #1]
 end
-opt all joined
-  page -> audio : praise; play theme [L2-018 #3]
+opt every pair joined
+  page -> audio : praise naming the theme [L2-018 #3]
+  page -> view : Next offered
 end
 @enduml

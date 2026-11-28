@@ -59,5 +59,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/spell-by-sound/spell-by-sound').then((m) => m.SpellBySound),
   },
+  {
+    path: 'read/word-pictures',
+    loadComponent: () =>
+      import('./pages/words-and-pictures/words-and-pictures').then((m) => m.WordsAndPictures),
+  },
   { path: '**', redirectTo: '' },
 ];
