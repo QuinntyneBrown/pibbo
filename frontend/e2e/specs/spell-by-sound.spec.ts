@@ -7,6 +7,8 @@ const HOME = ['/recordings/home/read.wav', '/recordings/home/spell-by-sound.wav'
 const LISTEN = '/recordings/read/listen.wav';
 const PICK = '/recordings/read/pick-a-letter-for-each-sound.wav';
 const CHECK_IT = '/recordings/read/check-it.wav';
+const HINT = '/recordings/read/say-it-slowly.wav';
+const PRAISE = '/recordings/read/you-spelled.wav';
 const sound = (s: string) => `/recordings/sounds/${s}.wav`;
 const word = (w: string) => `/recordings/words/${w}.wav`;
 /** The cast of the content: each word's letters. */
@@ -137,5 +139,80 @@ test.describe('Spell by sound: filling the boxes', () => {
     await expect
       .poll(() => spoken.recordings())
       .toEqual([...HOME, LISTEN, word(w), PICK, ...letters.map(sound), CHECK_IT]);
+  });
+});
+
+test.describe('Spell by sound: checking the word', () => {
+  test('Given every box holds the word’s letters, when the child checks, then each sound and "You spelled" and the word are spoken, the boxes show right, the praise is shown, and Next starts the next round with a new word @critical', async ({
+    page,
+    spoken,
+  }) => {
+    const spell = new SpellBySoundPage(page);
+    await spell.openFromHome();
+    const w = await spell.word();
+    const letters = WORDS[w]!;
+    await spell.spell(letters);
+    await expect(spell.action).toBeEnabled();
+    const before = (await spoken.recordings()).length;
+
+    await spell.touch(spell.action);
+
+    await expect(spell.message).toHaveText(`${letters.join(' – ')}. You spelled “${w}”!`);
+    await expect(spell.boxes.nth(0)).toHaveClass(/box--right/);
+    for (const b of await spell.boxes.all()) await expect(b).toBeDisabled();
+    await expect(spell.action).toContainText('Next');
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(before))
+      .toEqual([...letters.map(sound), PRAISE, word(w)]);
+
+    await spell.touch(spell.action);
+    await expect.poll(() => spell.word()).not.toBe(w);
+    await expect(spell.boxes.nth(0)).toHaveClass(/box--next/);
+    await expect(spell.action).toHaveText('Check');
+  });
+
+  test('Given a box holds a letter that does not match, when the child checks, then "Say it slowly. Which sound doesn’t match?" is spoken and shown with Try again; Try again takes out only that letter and the child spells on', async ({
+    page,
+    spoken,
+  }) => {
+    const spell = new SpellBySoundPage(page);
+    await spell.openFromHome();
+    const w = await spell.word();
+    const letters = WORDS[w]!;
+    const wrong = (await spell.bankTexts()).find((l) => !letters.includes(l))!;
+    await spell.spell([letters[0]!, letters[1]!, wrong]);
+    const before = (await spoken.recordings()).length;
+
+    await spell.touch(spell.action);
+
+    await expect(spell.message).toHaveText('Say it slowly. Which sound doesn’t match?');
+    await expect(spell.action).toContainText('Try again');
+    await expect.poll(async () => (await spoken.recordings()).slice(before)).toEqual([HINT]);
+    await spell.touch(spell.action);
+
+    await expect.poll(() => spell.boxTexts()).toEqual([letters[0], letters[1], '']);
+    await expect(spell.boxes.nth(2)).toHaveClass(/box--next/);
+    await expect(spell.message).toHaveCount(0);
+    await spell.touch(spell.letter(letters[2]!));
+    await spell.touch(spell.action);
+    await expect(spell.message).toHaveText(`${letters.join(' – ')}. You spelled “${w}”!`);
+  });
+
+  test('Given five rounds are spelled, when the child touches Next, then Home returns with Read chosen', async ({
+    page,
+  }) => {
+    const spell = new SpellBySoundPage(page);
+    const home = new HomePage(page);
+    await spell.openFromHome();
+
+    for (let i = 0; i < 5; i++) {
+      await expect(spell.action).toHaveText('Check');
+      await spell.spell(WORDS[await spell.word()]!);
+      await spell.touch(spell.action);
+      await expect(spell.action).toContainText('Next');
+      await spell.touch(spell.action);
+    }
+
+    await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
   });
 });
