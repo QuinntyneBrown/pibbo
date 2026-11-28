@@ -403,7 +403,11 @@
       "kind": "page",
       "title": "Spot the word",
       "route": "/read/sight-words",
-      "requirements": [],
+      "requirements": [
+        "L2-019",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "default",
         "miss",
