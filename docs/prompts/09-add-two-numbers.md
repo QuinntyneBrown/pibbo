@@ -1,5 +1,7 @@
 # Feature: Add two numbers together (pass and play)
 
+**Status:** Complete (PR #9)
+
 Journey 9 of 27 in `docs/journeys.md`. Requirements: L2-008.
 
 ## Goal
