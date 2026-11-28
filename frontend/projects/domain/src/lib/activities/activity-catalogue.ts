@@ -74,5 +74,13 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       recording: '/recordings/home/sound-it-out.wav',
       path: '/read/sound-out',
     },
+    {
+      id: 'letter-sounds',
+      group: 'read',
+      name: 'Letter sounds',
+      glyph: 'm s t',
+      recording: '/recordings/home/letter-sounds.wav',
+      path: '/read/letter-sounds',
+    },
   ],
 };

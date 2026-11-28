@@ -1,0 +1,20 @@
+<pb-round-shell
+  title="Letter sounds"
+  group="read"
+  [instruction]="content.instruction"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-pairs
+    [letters]="round().letters"
+    [sounds]="round().sounds"
+    [letterColours]="letterColours()"
+    [soundColours]="soundColours()"
+    [held]="round().held"
+    (letter)="touchLetter($event)"
+    (sound)="touchSound($event)"
+  />
+  <pb-answer-bar answer group="read" kind="none" />
+</pb-round-shell>

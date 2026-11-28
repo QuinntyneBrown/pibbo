@@ -11,6 +11,8 @@ export * from './lib/counting/count-and-write-round';
 export * from './lib/rounds/answer-outcome';
 export * from './lib/sounds/sound-out-content';
 export * from './lib/sounds/sound-out-round';
+export * from './lib/sounds/letter-sounds-content';
+export * from './lib/sounds/letter-sounds-round';
 export * from './lib/counting/compare-content';
 export * from './lib/counting/compare-round';
 export * from './lib/counting/countdown-content';

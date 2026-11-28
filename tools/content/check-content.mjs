@@ -1,4 +1,4 @@
-// Checks the Sound Out content before every build (ADR 0008): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -39,6 +39,27 @@ for (const [key, line] of Object.entries(content.instructions ?? {}))
   fileExists(line.recording, `instruction "${key}" recording`);
 for (const key of ["praise", "hint", "model"])
   fileExists(content[key]?.recording, `${key} recording`);
+// Letter sounds (ADR 0015): each pair names a recorded sound and a picture.
+const letterSounds = content.letterSounds;
+if (!letterSounds) problems.push("letterSounds: missing");
+else {
+  if (!Array.isArray(letterSounds.pairs) || letterSounds.pairs.length < 2)
+    problems.push("letterSounds: fewer than 2 pairs");
+  const seen = new Set();
+  for (const pair of letterSounds.pairs ?? []) {
+    const name = pair.asIn ?? "(a pair with no word)";
+    const entry = content.sounds?.[pair.sound];
+    if (!entry)
+      problems.push(`letter sounds pair "${name}": sound "${pair.sound}" is not in the sounds`);
+    else fileExists(entry.recording, `sound "${pair.sound}" recording`);
+    if (seen.has(pair.sound))
+      problems.push(`letter sounds: sound "${pair.sound}" is paired twice`);
+    seen.add(pair.sound);
+    fileExists(pair.picture, `letter sounds pair "${name}" picture`);
+  }
+  fileExists(letterSounds.instruction?.recording, "letter sounds instruction recording");
+  fileExists(letterSounds.praise?.recording, "letter sounds praise recording");
+}
 if ((content.words ?? []).length < 3)
   problems.push("fewer than 3 words: a round offers 3 pictures");
 

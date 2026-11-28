@@ -43,5 +43,9 @@ export const routes: Routes = [
     path: 'read/sound-out',
     loadComponent: () => import('./pages/sound-it-out/sound-it-out').then((m) => m.SoundItOut),
   },
+  {
+    path: 'read/letter-sounds',
+    loadComponent: () => import('./pages/letter-sounds/letter-sounds').then((m) => m.LetterSounds),
+  },
   { path: '**', redirectTo: '' },
 ];

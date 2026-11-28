@@ -27,7 +27,7 @@
     "s": { "letters": "s", "shown": "/s/", "recording": "/recordings/sounds/s.wav" },
     "u": { "letters": "u", "shown": "/u/", "recording": "/recordings/sounds/u.wav" },
     "n": { "letters": "n", "shown": "/n/", "recording": "/recordings/sounds/n.wav" },
-    "c": { "letters": "c", "shown": "/c/", "recording": "/recordings/sounds/c.wav" },
+    "c": { "letters": "c", "shown": "/k/", "recording": "/recordings/sounds/c.wav" },
     "t": { "letters": "t", "shown": "/t/", "recording": "/recordings/sounds/t.wav" }
   },
   "instructions": {
@@ -52,5 +52,23 @@
     "text": "Read it again, then look closely.",
     "recording": "/recordings/read/read-again.wav"
   },
-  "model": { "recording": "/recordings/read/this-is.wav" }
+  "model": { "recording": "/recordings/read/this-is.wav" },
+  "letterSounds": {
+    "roundsPerPlay": 5,
+    "pairs": [
+      { "sound": "m", "asIn": "map", "picture": "/pictures/words/map.jpg" },
+      { "sound": "s", "asIn": "sun", "picture": "/pictures/words/sun.jpg" },
+      { "sound": "t", "asIn": "teddy", "picture": "/pictures/count/teddy.jpg" },
+      { "sound": "c", "asIn": "cat", "picture": "/pictures/words/cat.jpg" }
+    ],
+    "instruction": {
+      "text": "Tap a letter, then the sound it makes.",
+      "recording": "/recordings/read/tap-a-letter-then-its-sound.wav",
+      "picture": "tap"
+    },
+    "praise": {
+      "text": "You know your letter sounds!",
+      "recording": "/recordings/read/you-know-your-letter-sounds.wav"
+    }
+  }
 }

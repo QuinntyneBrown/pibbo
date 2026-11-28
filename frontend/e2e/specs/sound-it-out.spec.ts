@@ -12,6 +12,8 @@ const THIS_IS = '/recordings/read/this-is.wav';
 const WHICH = '/recordings/read/which-picture.wav';
 const wordRecording = (w: string) => `/recordings/words/${w}.wav`;
 const sound = (s: string) => `/recordings/sounds/${s}.wav`;
+/** How a letter's sound is shown: c makes /k/. */
+const shown = (l: string) => (l === 'c' ? '/k/' : `/${l}/`);
 
 test.describe('Sound it out: a round', () => {
   test('Given the child chooses Sound it out, when the round is shown, then a three-letter word appears with the first letter marked, blend not yet active, and the instruction spoken and shown with a picture', async ({
@@ -58,13 +60,13 @@ test.describe('Sound it out: each letter makes its sound', () => {
 
     await read.touch(read.letter(0));
     await expect(read.letter(0)).toHaveClass(/tile--heard/);
-    await expect(read.shownSounds).toHaveText([`/${word[0]}/`]);
+    await expect(read.shownSounds).toHaveText([shown(word[0]!)]);
     await expect(read.letter(1)).toHaveClass(/tile--next/);
     await read.touch(read.letter(1));
     await read.touch(read.letter(2));
 
     await expect(read.heard).toHaveCount(3);
-    await expect(read.shownSounds).toHaveText([...word].map((l) => `/${l}/`));
+    await expect(read.shownSounds).toHaveText([...word].map(shown));
     await expect(read.blend).toBeEnabled();
     await expect(read.instruction).toHaveText('Now say the sounds fast to read the word.');
     expect(await spoken.recordings()).toEqual([
@@ -236,7 +238,7 @@ test.describe('Sound it out: with the sound off', () => {
     await read.openFromHome();
 
     const word = await read.soundAndBlend();
-    await expect(read.shownSounds).toHaveText([...word].map((l) => `/${l}/`));
+    await expect(read.shownSounds).toHaveText([...word].map(shown));
     await read.answer(word);
 
     await expect(read.message).toHaveText(`You read “${word}”!`);

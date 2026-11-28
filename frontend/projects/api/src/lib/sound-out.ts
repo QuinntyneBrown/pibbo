@@ -35,3 +35,11 @@ export interface AssetPreloader {
 }
 
 export const ASSET_PRELOADER = new InjectionToken<AssetPreloader>('ASSET_PRELOADER');
+
+/** A letter and its sound in Letter sounds, with a picture of a word the sound begins. */
+export interface LetterPair {
+  readonly sound: Sound;
+  /** The word the sound is "as in" ("map"), whose picture is shown with the sound. */
+  readonly asIn: string;
+  readonly picture: string;
+}
