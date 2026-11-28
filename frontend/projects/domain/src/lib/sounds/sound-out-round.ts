@@ -190,7 +190,19 @@ export function touchLetter(round: SoundOutRound, index: number): LetterResult {
   if (round.phase !== 'sounding' || index !== nextLetter(round)) return { round, spoken: null };
   const heard = round.heard.map((h, i) => h || i === index);
   const phase = heard.every(Boolean) ? 'ready' : 'sounding';
-  return { round: { ...round, heard, phase }, spoken: round.word.sounds[index]!.recording };
+  return { round: { ...round, heard, phase }, spoken: wordTiles(round.word)[index]!.recording };
+}
+
+/**
+ * What a touch on a tile plays, the tile lit throughout: its one recording, or for a longer
+ * word's syllable (L2-017 #1) each of its sounds and then the syllable, sounded out and blended.
+ */
+export function soundingPlan(word: Word, index: number): PlaybackStep[] {
+  const syllable = word.syllables?.[index];
+  const recordings = syllable
+    ? [...syllable.sounds.map((s) => s.recording), syllable.recording]
+    : [wordTiles(word)[index]!.recording];
+  return recordings.map((recording) => ({ recording, letter: index }));
 }
 
 /**
@@ -293,6 +305,7 @@ export function roundAssets(round: SoundOutRound): string[] {
     ...new Set([
       ...round.pictures.map((w) => w.picture),
       ...round.word.sounds.map((s) => s.recording),
+      ...(round.word.syllables ?? []).map((s) => s.recording),
       round.word.recording,
       ...(round.word.withoutE ? [round.word.withoutE.recording] : []),
     ]),

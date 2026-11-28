@@ -38,6 +38,7 @@ import {
   roundAssets,
   shownSounds,
   SOUND_OUT,
+  soundingPlan,
   startBlend,
   startSoundOutRound,
   syllableAsk,
@@ -217,18 +218,18 @@ export class SoundItOut {
     );
   }
 
-  /** A letter makes its sound (L2-012 #1); a new sound stops the one playing (#4). */
+  /**
+   * A letter makes its sound (L2-012 #1), a syllable is sounded out and blended (L2-017 #1);
+   * a new sound stops the one playing (L2-012 #4).
+   */
   protected async touchLetter(index: number): Promise<void> {
     const { round, spoken } = touchLetter(this.round(), index);
     if (spoken === null) return;
     this.round.set(round);
-    this.sounding.set(index);
-    const outcome = await this.audio.play(spoken);
-    if (this.sounding() === index) this.sounding.set(null);
-    // Once every sound is heard, Pibbo asks for the blend, never over the last sound.
-    if (round.phase === 'ready' && outcome !== 'stopped' && this.round() === round) {
-      void this.audio.play(SOUND_OUT.instructions.ready.recording);
-    }
+    const outcome = await this.playSteps(round, soundingPlan(round.word, index));
+    if (outcome === 'stopped') return;
+    // Only after the last sound, never over it, Pibbo asks for the next syllable or the blend.
+    if (round.phase === 'ready' || round.word.syllables) void this.sayInstruction(round);
   }
 
   /** The quiet e (L2-016): adding or taking it away speaks the word it makes. */
