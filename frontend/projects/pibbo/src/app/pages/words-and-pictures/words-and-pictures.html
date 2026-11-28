@@ -3,7 +3,7 @@
   group="read"
   [fit]="true"
   [instruction]="instruction()"
-  mood="rest"
+  [mood]="mood()"
   [done]="done()"
   [rounds]="content.roundsPerPlay"
   (replay)="replay()"
@@ -20,5 +20,11 @@
     (word)="touchWord($event)"
     (picture)="touchPicture($event)"
   />
-  <pb-answer-bar answer group="read" kind="none" message="" />
+  <pb-answer-bar
+    answer
+    group="read"
+    [kind]="right() ? 'right' : 'none'"
+    [message]="right() ? round().theme.praise.text : ''"
+    (action)="next()"
+  />
 </pb-round-shell>

@@ -142,3 +142,82 @@ test.describe('Words and pictures: connecting', () => {
     await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(said('ship'));
   });
 });
+
+const PRAISE = '/recordings/read/you-read-all-the-by-the-sea-words.wav';
+
+test.describe('Words and pictures: praise and the next round', () => {
+  test('Given a round, when every word is joined to its picture, then brief praise naming the theme is spoken and shown, and Next starts the next round @critical', async ({
+    page,
+    spoken,
+  }) => {
+    const round = new WordsAndPicturesPage(page);
+    await round.openFromHome();
+
+    for (const word of WORDS) await round.connect(word, word);
+
+    await expect(round.matched).toHaveCount(6);
+    await expect(round.message).toHaveText('You read all the by the sea words!');
+    await expect(round.pibbo).toHaveClass(/pibbo--cheer/);
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(-2))
+      .toEqual([said('sun'), PRAISE]);
+    await page.clock.runFor(1600);
+    await expect(round.pibbo).not.toHaveClass(/pibbo--cheer/);
+
+    await round.touch(round.action);
+
+    await expect(round.progress).toHaveAttribute('aria-valuenow', '1');
+    await expect(round.matched).toHaveCount(0);
+    await expect(round.message).toHaveCount(0);
+    expect(await round.wordTexts()).toEqual(WORDS);
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(ASK);
+  });
+
+  test('Given the fifth round is joined, when the child touches Next, then Home returns with Read chosen', async ({
+    page,
+  }) => {
+    const round = new WordsAndPicturesPage(page);
+    const home = new HomePage(page);
+    await round.openFromHome();
+
+    for (let played = 0; played < 5; played++) {
+      for (const word of WORDS) await round.connect(word, word);
+      await round.touch(round.action);
+    }
+
+    await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
+  });
+});
+
+test.describe('Words and pictures: with the sound off', () => {
+  test.use({ sound: 'off' });
+
+  test('Given the device is muted, when the child joins every pair, then the round completes and its praise is shown', async ({
+    page,
+  }) => {
+    const round = new WordsAndPicturesPage(page);
+    await round.openFromHome();
+
+    for (const word of WORDS) await round.connect(word, word);
+
+    await expect(round.message).toHaveText('You read all the by the sea words!');
+    await expect(round.action).toBeEnabled();
+  });
+});
+
+test.describe('Words and pictures: reduced motion', () => {
+  test.use({ reducedMotion: 'reduce' });
+
+  test('Given reduced motion, when a picture is missed, then it does not move and is ringed, and the word is let go', async ({
+    page,
+  }) => {
+    const round = new WordsAndPicturesPage(page);
+    await round.openFromHome();
+
+    await round.connect('ship', 'sun');
+
+    await expect(round.picture('sun')).toHaveClass(/pair--miss/);
+    await expect(round.picture('sun')).toHaveCSS('animation-name', 'none');
+    await expect(round.word('ship')).toHaveAttribute('aria-pressed', 'false');
+  });
+});

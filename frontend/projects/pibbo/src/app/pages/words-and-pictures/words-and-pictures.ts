@@ -21,6 +21,8 @@ import {
   type WordPicturesRound,
 } from '@pibbo/domain';
 
+/** Praise lasts no more than this (L2-026 #3). */
+const PRAISE_MS = 1500;
 /** A missed picture shakes once, for `--duration-slow`; the class goes after this. */
 const MISS_MS = 400;
 
@@ -57,6 +59,10 @@ export class WordsAndPictures {
   private endMiss: (() => void) | null = null;
   /** What a screen reader hears after a picture is touched with a word held. */
   protected readonly status = signal('');
+  protected readonly praising = signal(false);
+  private endPraise: (() => void) | null = null;
+  protected readonly mood = computed(() => (this.praising() ? 'cheer' : 'rest'));
+  protected readonly right = computed(() => this.round().phase === 'right');
 
   protected readonly wordColours = computed(() => {
     const round = this.round();
@@ -79,6 +85,7 @@ export class WordsAndPictures {
     inject(DestroyRef).onDestroy(() => {
       document.removeEventListener('visibilitychange', rest);
       this.endMiss?.();
+      this.endPraise?.();
       this.audio.stop();
     });
     void this.audio.play(this.instruction().recording);
@@ -96,9 +103,9 @@ export class WordsAndPictures {
   /**
    * A picture says its word with no word held (L2-018 #2). With a word held, its own picture
    * joins them and the word is spoken; another picture speaks both, shakes and lets the word go
-   * (#1).
+   * (#1). The last pair brings praise naming the theme once the word is said (#3).
    */
-  protected touchPicture(index: number): void {
+  protected async touchPicture(index: number): Promise<void> {
     const before = this.round();
     const { round, spoken, touch } = matchPicture(before, index);
     if (touch === null) return;
@@ -112,7 +119,13 @@ export class WordsAndPictures {
       const pairs = `${round.found.length} of ${round.words.length} pairs.`;
       this.status.set(`${held!.word} and ${picture} matched. ${pairs}`);
     }
-    void this.say(round, spoken);
+    if (round.phase !== 'right') {
+      void this.say(round, spoken);
+      return;
+    }
+    // Praise follows the word, even when it could not play (a muted device), but not after a
+    // hidden tab stopped it: nothing plays on return until a touch.
+    if (await this.say(round, spoken)) this.praise();
   }
 
   /**
@@ -134,6 +147,36 @@ export class WordsAndPictures {
       this.endMiss = null;
       this.missed.set(null);
     });
+  }
+
+  /** Brief praise that never blocks Next: it ends itself after at most 1.5 s. */
+  private praise(): void {
+    this.praising.set(true);
+    void this.audio.play(this.round().theme.praise.recording);
+    this.endPraise?.();
+    this.endPraise = this.clock.after(PRAISE_MS, () => this.stopPraise());
+  }
+
+  private stopPraise(): void {
+    this.endPraise?.();
+    this.endPraise = null;
+    this.praising.set(false);
+  }
+
+  /** Next, once every pair is joined; after the last round, Home with Read chosen. */
+  protected next(): void {
+    if (this.round().phase !== 'right') return;
+    this.stopPraise();
+    const done = this.done() + 1;
+    if (done >= WORD_PICTURES.roundsPerPlay) {
+      this.leave();
+      return;
+    }
+    this.done.set(done);
+    this.status.set('');
+    this.round.set(this.upcoming);
+    this.upcoming = this.prepareNext();
+    void this.audio.play(this.instruction().recording);
   }
 
   /** Chooses the next round and fetches its assets while this one is played. */
