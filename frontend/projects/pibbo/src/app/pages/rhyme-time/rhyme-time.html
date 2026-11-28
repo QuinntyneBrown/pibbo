@@ -1,0 +1,13 @@
+<pb-round-shell
+  title="Rhyme time"
+  group="read"
+  [fit]="true"
+  [instruction]="instruction()"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-rhyme-cards [target]="round().set.target" [end]="round().set.end" [cards]="round().cards" />
+  <pb-answer-bar answer group="read" kind="check" [ready]="false" />
+</pb-round-shell>

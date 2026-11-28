@@ -114,5 +114,13 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       recording: '/recordings/home/spot-the-word.wav',
       path: '/read/sight-words',
     },
+    {
+      id: 'rhyme-time',
+      group: 'read',
+      name: 'Rhyme time',
+      glyph: 'cat hat',
+      recording: '/recordings/home/rhyme-time.wav',
+      path: '/read/rhymes',
+    },
   ],
 };

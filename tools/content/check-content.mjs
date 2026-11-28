@@ -250,6 +250,37 @@ for (const line of ["find", "inStory", "praise", "times"]) {
     problems.push(`spot ${line}: no text`);
   fileExists(spot[line]?.recording, `spot ${line} recording`);
 }
+// Rhyme time (ADR 0025): its own data file. Every word has a picture and a recording, every
+// line a recording, and each set has a rhyme, another word and a target ending in its ending.
+const rhymes = JSON.parse(
+  readFileSync(
+    `${frontend}projects/domain/src/lib/sounds/rhymes-content.json`,
+    "utf8",
+  ),
+);
+for (const [name, word] of Object.entries(rhymes.words ?? {})) {
+  fileExists(word.picture, `rhyme word "${name}" picture`);
+  fileExists(word.recording, `rhyme word "${name}" recording`);
+}
+for (const line of [rhymes.ask?.before, rhymes.ask?.after, rhymes.listen])
+  fileExists(line?.recording, "rhymes line recording");
+if (!(rhymes.roundsPerPlay > 0)) problems.push("rhymes: no rounds per play");
+if (!rhymes.sets?.length) problems.push("rhymes: no sets");
+for (const set of rhymes.sets ?? []) {
+  const label = `rhyme set "${set.target}"`;
+  if (!set.rhymes?.length) problems.push(`${label}: no rhyme`);
+  if (!set.others?.length) problems.push(`${label}: no other word`);
+  for (const word of [set.target, ...(set.rhymes ?? []), ...(set.others ?? [])])
+    if (!rhymes.words?.[word])
+      problems.push(`${label}: "${word}" is not in the words`);
+  for (const word of [set.target, ...(set.rhymes ?? [])])
+    if (!word.endsWith(set.end))
+      problems.push(`${label}: "${word}" does not end in "${set.end}"`);
+  for (const line of ["hint", "allEnd"]) {
+    if (!set[line]?.text) problems.push(`${label} ${line}: no text`);
+    fileExists(set[line]?.recording, `${label} ${line} recording`);
+  }
+}
 if ((content.words ?? []).length < 3)
   problems.push("fewer than 3 words: a round offers 3 pictures");
 
