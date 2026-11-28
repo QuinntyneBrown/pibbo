@@ -1,5 +1,6 @@
 // Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0025, 0026): every word has a picture and a
 // Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0026): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0027): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -305,6 +306,7 @@ for (const line of ["upNext", "done", "picture"]) {
   );
 }
 // The check game (ADR 0026): 5 to 8 questions, a first lesson of 3 to 6 activities, and every
+// The check game (ADR 0027): 5 to 8 questions, a first lesson of 3 to 6 activities, and every
 // line shown and recorded.
 const checkPath = `${frontend}projects/domain/src/lib/rounds/check-game-content.json`;
 const check = JSON.parse(readFileSync(checkPath, "utf8"));

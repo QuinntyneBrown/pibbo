@@ -1,4 +1,4 @@
-# 0026: The check game: one question for each activity, and what the device keeps
+# 0027: The check game: one question for each activity, and what the device keeps
 
 **Status:** Accepted (journey 23); what the device keeps is open for the repository owner
 

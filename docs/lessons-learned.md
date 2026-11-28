@@ -894,7 +894,10 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 
 - Journey 22, which this one depends on, was not built: there was no lesson content, practice
   history or storage. The smallest store `L2-023` needs and a stand-in first lesson went into
-  ADR 0026, with remembering practice left for the repository owner to confirm.
+  ADR 0027, with remembering practice left for the repository owner to confirm.
+- Journey 22's pull request (#262) opened while this one was being built, with ADR 0026 and a
+  `ProgressStore` of the same shape. This ADR became 0027; the shared files are for whichever
+  merges second.
 - The results mock named a child and drew stars, unearned rows and a recommendation, and its
   `retry` contradicted itself. All four breaks with the purpose were redrawn before code.
 - Long Bash heredocs with quotes failed again; so did patch scripts whose anchors Prettier had

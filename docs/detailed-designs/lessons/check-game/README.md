@@ -2,7 +2,7 @@
 
 ## Overview
 
-The *check game* presents 5 to 8 mixed *check questions* from what the child has practised and ends with *earned pictures* of what they can do. It shows no score, percentage, red mark, count of misses or name (ADR 0026).
+The *check game* presents 5 to 8 mixed *check questions* from what the child has practised and ends with *earned pictures* of what they can do. It shows no score, percentage, red mark, count of misses or name (ADR 0027).
 
 - **check question** — one instruction, something shown, three choices and Check
 - **practised** — an activity the child has opened from Home
@@ -98,6 +98,6 @@ Selection falls back to the first lesson; results show earned pictures and are s
 
 ## Open questions
 
-- Whether Pibbo remembers what a child has practised is for the repository owner to confirm (ADR 0026 #5).
-- The first lesson's activities are a stand-in until journey 22 (ADR 0026 #4).
+- Whether Pibbo remembers what a child has practised is for the repository owner to confirm (ADR 0027 #5).
+- The first lesson's activities are a stand-in until journey 22 (ADR 0027 #4).
 - "Clear progress" has no screen until journey 24; `ProgressStore.clearAll` is ready for it.

@@ -96,7 +96,7 @@ export class Home {
     this.open(this.checkGame);
   }
 
-  /** An activity opened from Home is practised: its id, and nothing else, is kept (ADR 0026). */
+  /** An activity opened from Home is practised: its id, and nothing else, is kept (ADR 0027). */
   private practise(activity: string): void {
     const known = this.catalogue.activities.map((a) => a.id);
     const kept = this.progress.read(PRACTISED_KEY);

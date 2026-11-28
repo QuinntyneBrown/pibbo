@@ -49,7 +49,7 @@ const PRAISE_MS = 1500;
 
 /**
  * The check game (docs/mocks/pages/progress-check): a few mixed questions, then what the
- * child can do. Orchestrates recordings; every rule is in `@pibbo/domain` (ADR 0026).
+ * child can do. Orchestrates recordings; every rule is in `@pibbo/domain` (ADR 0027).
  */
 @Component({
   selector: 'pb-check-game',

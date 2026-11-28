@@ -8,7 +8,7 @@ export interface CheckChoice {
   readonly label: string;
   /** Shown instead of the label. */
   readonly picture?: string;
-  /** Spoken when touched; a reading choice has none, since saying it would answer (ADR 0026). */
+  /** Spoken when touched; a reading choice has none, since saying it would answer (ADR 0027). */
   readonly recording?: string;
 }
 
@@ -26,7 +26,7 @@ export type CheckShow =
     }
   | { readonly kind: 'text'; readonly label: string; readonly text: string };
 
-/** One question of the check game: one thing asked, three choices (L2-023, ADR 0026). */
+/** One question of the check game: one thing asked, three choices (L2-023, ADR 0027). */
 export interface CheckQuestion {
   /** The activity it asks about; a right answer earns that activity's picture. */
   readonly activity: string;

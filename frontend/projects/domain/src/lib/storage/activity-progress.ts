@@ -1,4 +1,4 @@
-/** Where the activities the child has practised are kept (ADR 0026 #5). */
+/** Where the activities the child has practised are kept (ADR 0027 #5). */
 export const PRACTISED_KEY = 'practised';
 
 /** Where the activities answered right in a check game are kept. */
@@ -23,7 +23,7 @@ export function readActivities(value: unknown, known: readonly string[]): string
   return known.filter((id) => activities.includes(id));
 }
 
-/** What to keep once `more` are added to what is already kept: it only grows (ADR 0026 #5). */
+/** What to keep once `more` are added to what is already kept: it only grows (ADR 0027 #5). */
 export function addActivities(
   value: unknown,
   more: readonly string[],

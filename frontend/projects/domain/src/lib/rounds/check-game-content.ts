@@ -10,7 +10,7 @@ export interface CheckLine {
  * The content of the check game: data, not rules, checked before every build by
  * `tools/content/check-content.mjs`. A question's words, letters and numbers come from its
  * activity's own content. `firstLesson` stands in for the guided lesson's content until
- * journey 22; which lesson comes first is not decided (ADR 0026 #4).
+ * journey 22; which lesson comes first is not decided (ADR 0027 #4).
  */
 export interface CheckGameContent {
   readonly rounds: { readonly fewest: number; readonly most: number };

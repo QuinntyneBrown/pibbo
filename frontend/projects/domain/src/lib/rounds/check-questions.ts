@@ -36,7 +36,7 @@ const numeral = (n: number): CheckChoice => ({
   recording: numberRecording(n),
 });
 
-/** A word to read: shown, and never said when touched (ADR 0026 #8). */
+/** A word to read: shown, and never said when touched (ADR 0027 #8). */
 const written = (word: string): CheckChoice => ({ id: word, label: word });
 
 const pictured = (w: RhymeWord): CheckChoice => ({
