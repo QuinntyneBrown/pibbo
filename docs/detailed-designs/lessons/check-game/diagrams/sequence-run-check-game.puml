@@ -18,12 +18,16 @@ end box
 box "Frontend — browser services (audio, storage)" #FFF4E5
   participant "ProgressStore" as store
 end box
-page -> store : read("practised", readActivities) [L2-023 #4]
-page -> rules : planCheck(rnd, practised, content) [L2-023 #5]
+page -> store : read("practised") [L2-023 #4]
+page -> rules : readActivities(value, askable)
+page -> rules : planCheck(rnd, content, practised, askable) [L2-023 #5]
+page -> rules : makeQuestion(rnd, activity)
 loop 5-8 questions
   actor -> page : Choose and Check (retry rule on wrong) [L2-023 #2]
 end
-page -> rules : earnedActivities(rounds)
+page -> rules : checkResults(right, activities, content)
 page --> res : earned pictures only [L2-023 #1]
+page -> store : read("earned")
+page -> rules : addActivities(value, right, askable)
 page -> store : write("earned", ids) [L2-023 #3]
 @enduml

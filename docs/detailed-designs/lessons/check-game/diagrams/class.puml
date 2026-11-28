@@ -13,24 +13,30 @@ title Class structure — Play the check game
 
 class CheckQuestion {
   +activity: string
+  +group: count | read
   +show: CheckShow
-  +options: CheckOption[]
-  +answer: number
+  +choices: CheckChoice[]
+  +answer: string
 }
 class CheckRound {
   +phase: choosing | retry | right | modelled
-  +chosen: number
+  +chosen: string | null
   +wrong: number
+}
+class CheckResults {
+  +title: string
+  +sections: CheckResultSection[]
+  +spoken: string[]
 }
 class StoredActivities {
   +version: 1
   +activities: string[]
 }
 class checkRules <<pure>> {
-  +planCheck(rnd, practised, content): string[]
-  +makeQuestion(rnd, activity, previous): CheckQuestion
-  +checkChoice(round): CheckRound
-  +earnedActivities(rounds): string[]
+  +planCheck(rnd, content, practised, askable): string[]
+  +makeQuestion(rnd, activity): CheckQuestion
+  +checkQuestionRound(round, question): CheckRound
+  +checkResults(right, activities, content): CheckResults
 }
 class progressRules <<pure>> {
   +readActivities(value: unknown): string[]
@@ -43,6 +49,7 @@ interface ProgressStore {
 }
 checkRules ..> CheckQuestion
 checkRules ..> CheckRound
+checkRules ..> CheckResults
 CheckRound o--> CheckQuestion
 progressRules ..> StoredActivities
 ProgressStore ..> StoredActivities

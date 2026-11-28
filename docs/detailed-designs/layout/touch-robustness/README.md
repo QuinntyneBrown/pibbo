@@ -9,7 +9,7 @@ A small child pinches, double-taps, long-presses and rests a palm on the screen.
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
 - **`Global touch styles`** — `touch-action: manipulation`, `user-select: none` and `-webkit-touch-callout: none` on activity screens; viewport meta prevents pinch zoom inside activities.
-- **`TapDirective`** — directive `pbTap` turning a primary-pointer short press into one `tap` event; it judges each pointer on its own and ignores contacts larger than a palm threshold, contacts that move and long presses (thresholds in ADR 0006), and suppresses `contextmenu`.
+- **`TapDirective`** — directive `pbTap` turning a primary-pointer short press into one `tap` event; it judges each pointer on its own and ignores contacts larger than a palm threshold, contacts that move and long presses (thresholds in ADR 0006), and suppresses `contextmenu`. It cancels each touch's end with a listener the element itself keeps, not a host binding, so the browser's synthetic click is stopped even when the tap has already destroyed the view: a tap that leaves a page never also activates what appears under the finger.
 
 ## Requirements
 

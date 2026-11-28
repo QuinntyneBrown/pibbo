@@ -20,8 +20,8 @@ The feature is a vertical slice through the Angular workspace: the page in the `
 - **`CheckCard`** (`pb-check-card`) — the check game's picture on Home (`.check-card--home`).
 - **`ProgressBar`** (`pb-progress-bar`) — the shell's progress bar, also for 6 to 8 rounds.
 - **`planCheck`**, **`makeQuestion`** — pure functions in `@pibbo/domain/rounds`: which activities are asked, and one question for each, from the activities' own content and the injected random source.
-- **`CheckRound`** — pure state machine: `choosing`, `retry`, `right`, `modelled`, using `answerOutcome` (`L2-026`).
-- **`earnedActivities`** — the activities answered right, once each, in Home's order.
+- **`CheckRound`** — pure state machine: `choosing`, `retry`, `right`, `modelled`, using `answerOutcome` (`L2-026`). `checkQuestionRound` checks the choice. After a right answer the choice stays pressed; after the third miss the right one is ticked and outlined.
+- **`checkResults`** — what the child sees and hears at the end: the activities answered right (`earnedActivities`: once each, in Home's order), grouped as Reading then Counting, with the title and the recordings to say. It is given no score, count or miss.
 - **Practice and results** (`@pibbo/domain/storage`) — `readActivities` checks a stored value (version 1, known ids, no repeats); `addActivities` adds without duplicates.
 - **`ProgressStore`** — contract `PROGRESS_STORE` in `@pibbo/api`; `BrowserProgressStore` keeps JSON in `localStorage` under `pibbo:`, never throws, and `clearAll` removes every `pibbo:` key. Home records `pibbo:practised` when an activity is opened; the check game writes `pibbo:earned` when its results are shown.
 - **`CHECK_GAME`** — content in `check-game-content.json`: the number of rounds, the first lesson's activities (a stand-in until journey 22), each question's instruction and hint, and the result lines. The content check fails the build when a recording is missing.
@@ -41,6 +41,8 @@ The feature is a vertical slice through the Angular workspace: the page in the `
 | Words and pictures | a picture | words | say each word slowly |
 | Spot the word | — (the word is spoken) | common words | listen again |
 | Rhyme time | — | pictures | the rhyme's own hint |
+
+On the narrowest phones the results header is shorter, and on a phone on its side each subject's heading sits beside its pictures, so eight earned pictures never scroll. In that orientation sequences stay on one line and 14 things are drawn small beside the choices.
 
 Reading choices are silent, a numeral says its number and a picture its word. Spell by sound shows the picture and speaks its word, so the spelling is not given away; Spot the word shows the word in its instruction, as the activity does.
 
