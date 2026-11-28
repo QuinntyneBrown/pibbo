@@ -1,12 +1,15 @@
 using Microsoft.Extensions.FileProviders;
 using Pibbo.Api.Observability;
-using Pibbo.Application.Content;
+using Pibbo.Application;
+using Pibbo.Infrastructure;
 using Pibbo.Infrastructure.Content;
 
 namespace Pibbo.Api;
 
 public static class ContentServices
 {
+    public const string ConnectionStringName = "Content";
+
     public static IServiceCollection AddContent(
         this IServiceCollection services,
         IConfiguration configuration,
@@ -20,10 +23,9 @@ public static class ContentServices
         options.AssetsRoot = Path.GetFullPath(
             options.AssetsRoot ?? Path.Combine(options.Root, "assets"),
             environment.ContentRootPath);
-        services.AddSingleton(options);
-        services.AddSingleton<JsonFileContentStore>();
-        services.AddSingleton<IContentStore>(provider => provider.GetRequiredService<JsonFileContentStore>());
-        services.AddSingleton<ContentQueries>();
+
+        services.AddApplication();
+        services.AddInfrastructure(options, ConnectionString(configuration, environment));
         return services;
     }
 
@@ -49,5 +51,18 @@ public static class ContentServices
         }
 
         return app;
+    }
+
+    /// <summary>The configured connection string, or a SQLite file in the application's data folder.</summary>
+    private static string ConnectionString(IConfiguration configuration, IHostEnvironment environment)
+    {
+        if (configuration.GetConnectionString(ConnectionStringName) is { Length: > 0 } configured)
+        {
+            return configured;
+        }
+
+        var folder = Path.Combine(environment.ContentRootPath, "data");
+        Directory.CreateDirectory(folder);
+        return $"Data Source={Path.Combine(folder, "pibbo-content.db")}";
     }
 }

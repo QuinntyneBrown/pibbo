@@ -3,7 +3,6 @@ namespace Pibbo.Application.Content;
 public enum ContentOutcome
 {
     Found,
-    InvalidId,
     NotFound,
     Unavailable,
 }
@@ -14,5 +13,7 @@ public sealed record ContentResult<T>(ContentOutcome Outcome, T? Value = null, s
 {
     public static ContentResult<T> Found(T value, string eTag) => new(ContentOutcome.Found, value, eTag);
 
-    public static ContentResult<T> Failed(ContentOutcome outcome) => new(outcome);
+    public static ContentResult<T> NotFound() => new(ContentOutcome.NotFound);
+
+    public static ContentResult<T> Unavailable() => new(ContentOutcome.Unavailable);
 }

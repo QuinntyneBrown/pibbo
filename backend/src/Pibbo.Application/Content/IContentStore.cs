@@ -5,10 +5,13 @@ namespace Pibbo.Application.Content;
 /// <summary>Where the content is kept. It holds content only: nothing about a child or a device.</summary>
 public interface IContentStore
 {
-    /// <summary>The content version now served, or null while the store cannot be reached
-    /// or its content does not pass the check.</summary>
-    ContentSnapshot? Read();
+    /// <summary>The version now served, or null while the store cannot be reached or holds
+    /// no version that passed the check.</summary>
+    Task<PublishedVersion?> CurrentVersionAsync(CancellationToken cancellationToken);
 
-    /// <summary>Why nothing is served, for the operator. Null while content is served.</summary>
-    string? Problem { get; }
+    Task<ContentSet> ContentAsync(PublishedVersion version, CancellationToken cancellationToken);
+
+    Task<Activity?> ActivityAsync(PublishedVersion version, string id, CancellationToken cancellationToken);
+
+    Task<Lesson?> LessonAsync(PublishedVersion version, string id, CancellationToken cancellationToken);
 }

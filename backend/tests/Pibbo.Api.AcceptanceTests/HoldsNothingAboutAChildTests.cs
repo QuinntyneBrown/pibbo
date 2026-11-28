@@ -85,6 +85,12 @@ public sealed class HoldsNothingAboutAChildTests : IDisposable
         Assert.All(_factory.Logs.Entries, entry =>
             Assert.All(secrets, secret => Assert.DoesNotContain(secret, entry.Everything)));
         Assert.Equal(LogLevel.Information, logged.Level);
+        Assert.All(_factory.Logs.Entries, entry =>
+        {
+            Assert.DoesNotContain("RequestPath", entry.State.Keys);
+            Assert.DoesNotContain("RequestId", entry.State.Keys);
+            Assert.DoesNotContain("ConnectionId", entry.State.Keys);
+        });
     }
 
     // #3 Given any public response, when inspected, then it has no Set-Cookie header.

@@ -1,8 +1,9 @@
 namespace Pibbo.Infrastructure.Content;
 
 /// <summary>
-/// Where the content lives on disk: <c>{Root}/content.json</c>, with pictures and recordings
-/// under <c>{AssetsRoot}/pictures</c> and <c>{AssetsRoot}/recordings</c>.
+/// Where reviewed content is picked up from: <c>{Root}/content.json</c>, with pictures and
+/// recordings under <c>{AssetsRoot}/pictures</c> and <c>{AssetsRoot}/recordings</c>. Both are
+/// absolute paths by the time they are used.
 /// </summary>
 public sealed class ContentStoreOptions
 {
@@ -13,7 +14,7 @@ public sealed class ContentStoreOptions
     /// <summary>Defaults to <c>{Root}/assets</c>.</summary>
     public string? AssetsRoot { get; set; }
 
-    public string ContentFile => Path.Combine(Path.GetFullPath(Root), "content.json");
+    public string ContentFile => Path.Combine(Root, "content.json");
 
-    public string AssetsDirectory => Path.GetFullPath(AssetsRoot ?? Path.Combine(Root, "assets"));
+    public string AssetsDirectory => AssetsRoot ?? Path.Combine(Root, "assets");
 }

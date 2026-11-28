@@ -12,8 +12,10 @@ DistributedContextPropagator.Current = new NoInboundTraceContext();
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(kestrel => kestrel.AddServerHeader = false);
 
+builder.Services.AddPibboLogging(builder.Configuration);
 builder.Services.AddProblemDetails(problems => problems.CustomizeProblemDetails = problem =>
     problem.ProblemDetails.Extensions["traceId"] = TraceIds.Of(problem.HttpContext));
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<UnhandledExceptionHandler>();
 builder.Services.AddPibboOpenApi();
 builder.Services.AddContent(builder.Configuration, builder.Environment);

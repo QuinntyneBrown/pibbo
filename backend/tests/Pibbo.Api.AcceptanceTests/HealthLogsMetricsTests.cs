@@ -2,10 +2,10 @@
 using System.Collections.Concurrent;
 using System.Diagnostics.Metrics;
 using System.Net;
+using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Options;
+using Serilog.Formatting;
 using Pibbo.Api.AcceptanceTests.Support;
 using Pibbo.Application.Content;
 using Pibbo.Domain.Content;
@@ -102,14 +102,22 @@ public sealed class HealthLogsMetricsTests : IDisposable
     }
 
     [Fact]
-    public void Given_the_backend_When_it_writes_its_log_Then_each_entry_is_JSON_with_a_UTC_timestamp()
+    public async Task Given_a_request_When_its_entry_is_written_Then_it_is_one_line_of_JSON_with_a_UTC_timestamp()
     {
-        var console = _factory.Services.GetRequiredService<IOptions<ConsoleLoggerOptions>>().Value;
-        var json = _factory.Services.GetRequiredService<IOptions<JsonConsoleFormatterOptions>>().Value;
+        await _factory.CreateHttpsClient().GetAsync("/api/v1/activities/count-the-toys");
 
-        Assert.Equal(ConsoleFormatterNames.Json, console.FormatterName);
-        Assert.False(string.IsNullOrEmpty(json.TimestampFormat));
-        Assert.True(json.UseUtcTimestamp);
+        var formatter = _factory.Services.GetRequiredService<ITextFormatter>();
+        var line = Assert.Single(_factory.Logs.Requests).Written(formatter);
+
+        Assert.Equal(line.TrimEnd().Length, line.TrimEnd().ReplaceLineEndings(string.Empty).Length);
+        var entry = JsonDocument.Parse(line).RootElement;
+        var timestamp = entry.GetProperty("@t").GetDateTimeOffset();
+        Assert.Equal(TimeSpan.Zero, timestamp.Offset);
+        Assert.Equal("/api/v1/activities/{id}", entry.GetProperty("Route").GetString());
+        Assert.Equal(200, entry.GetProperty("Status").GetInt32());
+        Assert.True(entry.GetProperty("DurationMs").GetDouble() >= 0);
+        Assert.Matches("^[0-9a-f]{32}$", entry.GetProperty("TraceId").GetString());
+        Assert.Equal("Pibbo.Api.Requests", entry.GetProperty("SourceContext").GetString());
     }
 
     // #3 Given the backend running, when scraped, then OpenTelemetry metrics show request
@@ -159,7 +167,7 @@ public sealed class HealthLogsMetricsTests : IDisposable
     [Fact]
     public async Task Given_an_unhandled_exception_When_it_occurs_Then_500_problem_details_without_a_stack_trace()
     {
-        _factory.WithServices(services => services.AddSingleton<IContentStore, BrokenContentStore>());
+        _factory.WithServices(services => services.AddScoped<IContentStore, BrokenContentStore>());
 
         var response = await _factory.CreateHttpsClient().GetAsync("/api/v1/activities/count-the-toys");
 
@@ -175,7 +183,9 @@ public sealed class HealthLogsMetricsTests : IDisposable
         Assert.Equal(LogLevel.Error, logged.Level);
         Assert.IsType<InvalidOperationException>(logged.Exception);
         Assert.Equal(traceId, logged.State["TraceId"]);
-        Assert.Equal(500, Assert.Single(_factory.Logs.Requests).State["Status"]);
+        var request = Assert.Single(_factory.Logs.Requests);
+        Assert.Equal(500, request.State["Status"]);
+        Assert.Equal("/api/v1/activities/{id}", request.State["Route"]);
     }
 
     private static void CopyDirectory(string from, string to)
@@ -190,8 +200,16 @@ public sealed class HealthLogsMetricsTests : IDisposable
 
     private sealed class BrokenContentStore : IContentStore
     {
-        public string? Problem => null;
+        public Task<PublishedVersion?> CurrentVersionAsync(CancellationToken cancellationToken) =>
+            throw new InvalidOperationException("the shelf fell over");
 
-        public ContentSnapshot? Read() => throw new InvalidOperationException("the shelf fell over");
+        public Task<ContentSet> ContentAsync(PublishedVersion version, CancellationToken cancellationToken) =>
+            throw new InvalidOperationException("the shelf fell over");
+
+        public Task<Activity?> ActivityAsync(PublishedVersion version, string id, CancellationToken cancellationToken) =>
+            throw new InvalidOperationException("the shelf fell over");
+
+        public Task<Lesson?> LessonAsync(PublishedVersion version, string id, CancellationToken cancellationToken) =>
+            throw new InvalidOperationException("the shelf fell over");
     }
 }

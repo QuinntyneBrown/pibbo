@@ -76,9 +76,9 @@ public sealed class ContentApiTests : IDisposable
     [InlineData("a-very-long-id-a-very-long-id-a-very-long-id-a-very-long-id-a-very-65")]
     public async Task Given_an_id_that_is_not_well_formed_When_it_is_asked_for_Then_400_and_no_lookup(string id)
     {
-        CountingContentStore? store = null;
-        _factory.WithServices(services => services.AddSingleton<IContentStore>(provider =>
-            store = new CountingContentStore(provider.GetRequiredService<JsonFileContentStore>())));
+        var counter = new CountingContentStore.Counter();
+        _factory.WithServices(services => services.AddScoped<IContentStore>(provider =>
+            new CountingContentStore(provider.GetRequiredService<EfContentStore>(), counter)));
         var client = _factory.CreateHttpsClient();
 
         var activity = await client.GetAsync($"/api/v1/activities/{id}");
@@ -86,7 +86,14 @@ public sealed class ContentApiTests : IDisposable
 
         await ProblemAssert.IsProblemAsync(activity, HttpStatusCode.BadRequest);
         await ProblemAssert.IsProblemAsync(lesson, HttpStatusCode.BadRequest);
-        Assert.Equal(0, store?.Lookups ?? 0);
+        var problem = await ProblemAssert.IsProblemAsync(lesson, HttpStatusCode.BadRequest);
+        Assert.Contains("^[a-z0-9-]{1,64}$", problem.GetProperty("errors").GetProperty("id")[0].GetString());
+        Assert.DoesNotContain(Uri.UnescapeDataString(id), problem.GetRawText());
+        Assert.Equal(0, counter.Lookups);
+
+        // The counter does count: a well-formed id is looked up.
+        await client.GetAsync("/api/v1/activities/count-the-toys");
+        Assert.True(counter.Lookups > 0);
     }
 
     // #4 Given the manifest, when returned, then it carries a content version and an ETag;

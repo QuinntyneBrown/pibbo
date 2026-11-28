@@ -1,16 +1,11 @@
 using System.Security.Cryptography;
 using System.Text.Json;
-using Pibbo.Application.Content;
 using Pibbo.Domain.Content;
 
 namespace Pibbo.Infrastructure.Content;
 
-/// <summary>
-/// Content kept as one reviewed JSON file beside its pictures and recordings. The file is read
-/// again only when it changes, so publishing a version is replacing the file. A version that
-/// does not pass the check is never served.
-/// </summary>
-public sealed class JsonFileContentStore(ContentStoreOptions options) : IContentStore
+/// <summary>Reads the reviewed content file and checks it, with the files it names.</summary>
+public static class ContentFile
 {
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web)
     {
@@ -18,40 +13,13 @@ public sealed class JsonFileContentStore(ContentStoreOptions options) : IContent
         AllowTrailingCommas = true,
     };
 
-    private readonly Lock _gate = new();
-    private (DateTime Written, long Length)? _stamp;
-    private ContentSnapshot? _snapshot;
+    public sealed record Loaded(ContentSet? Content, string? ETag, IReadOnlyList<string> Problems);
 
-    public string? Problem { get; private set; }
-
-    public ContentSnapshot? Read()
-    {
-        lock (_gate)
-        {
-            var file = new FileInfo(options.ContentFile);
-            if (!file.Exists)
-            {
-                _stamp = null;
-                Problem = $"The content file was not found: {file.FullName}";
-                return _snapshot = null;
-            }
-
-            var stamp = (file.LastWriteTimeUtc, file.Length);
-            if (_stamp == stamp)
-            {
-                return _snapshot;
-            }
-
-            _stamp = stamp;
-            return _snapshot = Load(file);
-        }
-    }
-
-    private ContentSnapshot? Load(FileInfo file)
+    public static async Task<Loaded> LoadAsync(ContentStoreOptions options, CancellationToken cancellationToken)
     {
         try
         {
-            var bytes = File.ReadAllBytes(file.FullName);
+            var bytes = await File.ReadAllBytesAsync(options.ContentFile, cancellationToken);
             var document = JsonSerializer.Deserialize<ContentDocument>(bytes, Json);
             var content = new ContentSet(
                 document?.Version ?? string.Empty,
@@ -78,19 +46,13 @@ public sealed class JsonFileContentStore(ContentStoreOptions options) : IContent
                     .ToArray();
             }
 
-            if (problems.Count > 0)
-            {
-                Problem = "The content did not pass the check: " + string.Join(' ', problems);
-                return null;
-            }
-
-            Problem = null;
-            return new ContentSnapshot(content, $"\"{Convert.ToHexStringLower(SHA256.HashData(bytes))[..32]}\"");
+            return problems.Count > 0
+                ? new Loaded(null, null, problems)
+                : new Loaded(content, $"\"{Convert.ToHexStringLower(SHA256.HashData(bytes))[..32]}\"", []);
         }
         catch (Exception exception) when (exception is JsonException or IOException or UnauthorizedAccessException)
         {
-            Problem = $"The content file could not be read: {exception.Message}";
-            return null;
+            return new Loaded(null, null, [$"The content file could not be read: {exception.Message}"]);
         }
     }
 

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace Pibbo.Api.Observability;
 
@@ -44,6 +45,9 @@ public sealed partial class RequestLogMiddleware(RequestDelegate next, ILoggerFa
     private static string RouteOf(HttpContext context) =>
         context.Items[RouteItem] as string
         ?? (context.GetEndpoint() as RouteEndpoint)?.RoutePattern.RawText
+
+        // The exception handler clears the endpoint; it keeps the one that threw.
+        ?? (context.Features.Get<IExceptionHandlerFeature>()?.Endpoint as RouteEndpoint)?.RoutePattern.RawText
         ?? NoRoute;
 
     [LoggerMessage(
