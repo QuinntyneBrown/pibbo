@@ -14,6 +14,11 @@ export class SoundItOutPage {
   readonly next: Locator;
   readonly sounding: Locator;
   readonly shownSounds: Locator;
+  readonly silentE: Locator;
+  readonly changed: Locator;
+  readonly beforePicture: Locator;
+  readonly beforeWord: Locator;
+  readonly rule: Locator;
   readonly blend: Locator;
   readonly blendFill: Locator;
   readonly choices: Locator;
@@ -29,7 +34,13 @@ export class SoundItOutPage {
     this.replay = page.locator('.hear');
     this.leave = page.locator('.shell__top .chunky--icon');
     this.progress = page.locator('.progress');
-    this.letters = page.locator('.tile');
+    // The letters that make a sound; a quiet e (L2-016) is `silentE`.
+    this.letters = page.locator('.tiles .tile:not(.tile--silent)');
+    this.silentE = page.locator('.tile--silent');
+    this.changed = page.locator('.tile--changed');
+    this.beforePicture = page.locator('.before .picture');
+    this.beforeWord = page.locator('.before__word');
+    this.rule = page.locator('.rule');
     this.heard = page.locator('.tile--heard');
     this.next = page.locator('.tile--next');
     this.sounding = page.locator('.tile--sounding');
@@ -92,8 +103,15 @@ export class SoundItOutPage {
     );
   }
 
-  /** Touches every tile in order. */
+  /** Touches every tile in order, first adding a quiet e when a silent-e word waits for it. */
   async soundAll(): Promise<string> {
+    if (
+      (await this.silentE.count()) > 0 &&
+      (await this.silentE.getAttribute('aria-pressed')) === 'false'
+    ) {
+      await this.touch(this.silentE);
+      await expect(this.silentE).toHaveAttribute('aria-pressed', 'true');
+    }
     const word = await this.word();
     const tiles = await this.letters.count();
     for (let i = 0; i < tiles; i++) await this.touch(this.letter(i));
