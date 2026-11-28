@@ -34,3 +34,4 @@
 | [0030](0030-performance-accessibility-and-privacy-checks.md) | Performance, accessibility and privacy: behaviour specs over every activity, and sweeps on request | Accepted |
 | [0031](0031-explainer-films-from-the-running-app.md) | Explainer films: one a journey, pictured from the running app | Accepted |
 | [0032](0032-offline-after-first-use.md) | Offline after first use: a small service worker of Pibbo's own, bounded to Pibbo's files | Accepted |
+| [0033](0033-publish-to-azure-static-web-apps-from-main.md) | Every commit to main is published to Azure Static Web Apps | Accepted |
