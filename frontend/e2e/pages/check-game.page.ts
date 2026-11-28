@@ -98,7 +98,7 @@ export class CheckGamePage {
   async answerRightAndGoOn(): Promise<void> {
     await this.answerWith(await this.answer());
     await expect(this.action).toHaveText(/Next/);
-    await this.touch(this.action);
+    await this.goOn();
   }
 
   /** Answers the question shown wrongly three times, so Pibbo models it, then touches Next. */
@@ -106,7 +106,16 @@ export class CheckGamePage {
     const wrong = await this.wrongChoice();
     for (let i = 0; i < 3; i++) await this.answerWith(wrong);
     await expect(this.modelled).toHaveCount(1);
+    await this.goOn();
+  }
+
+  /** Touches Next and waits for the next question, or the results, to show. */
+  async goOn(): Promise<void> {
+    const at = Number(await this.progress.getAttribute('aria-valuenow'));
+    const rounds = await this.rounds();
     await this.touch(this.action);
+    if (at + 1 >= rounds) await expect(this.results).toBeVisible();
+    else await expect(this.progress).toHaveAttribute('aria-valuenow', String(at + 1));
   }
 
   /** How many questions the game has, from its progress bar. */
