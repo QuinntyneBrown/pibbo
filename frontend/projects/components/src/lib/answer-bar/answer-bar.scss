@@ -8,10 +8,15 @@
   gap: var(--space-3);
   padding: var(--space-4) var(--layout-margin);
 
-  @media (min-width: 40rem) {
+  // A wide screen, or a phone on its side, has room for the message beside the way on.
+  @media (min-width: 40rem), (orientation: landscape) and (max-height: 30rem) {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+  }
+
+  @media (max-height: 22rem) {
+    padding-block: var(--space-1);
   }
 }
 

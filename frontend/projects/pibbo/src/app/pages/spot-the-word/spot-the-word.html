@@ -1,0 +1,21 @@
+<pb-round-shell
+  title="Spot the word"
+  layout="story"
+  group="read"
+  [instruction]="instruction()"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-spot
+    [word]="round().word.word"
+    [story]="round().story"
+    [found]="round().found"
+    [total]="total()"
+    [miss]="round().miss"
+    [done]="round().phase === 'right'"
+    (touched)="touchWord($event)"
+  />
+  <pb-answer-bar answer group="read" kind="none" (action)="action()" />
+</pb-round-shell>

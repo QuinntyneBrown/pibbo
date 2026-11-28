@@ -213,6 +213,39 @@
 
     .shell__game {
       padding: var(--space-2);
+// A story layout (Spot the word, ADR 0022), as the mock draws it. Upright on a small phone the
+// word to find sits beside the progress bar; on its side the story spans the width between the
+// top row and the row it shares with the answer bar. The game's own parts name their areas.
+@media (max-width: 24rem) and (max-height: 42rem) {
+  .shell--story {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      'top find'
+      'ask ask'
+      'story story'
+      'answer answer';
+  }
+}
+
+@media (min-width: 32rem) and (orientation: landscape) and (max-height: 38rem) {
+  .shell--story {
+    display: grid;
+    grid-template-columns: minmax(8rem, 1fr) minmax(0, 3fr);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'top ask'
+      'story story'
+      'find answer';
+
+    .shell__ask {
+      padding-block: 0;
+    }
+
+    .bubble {
+      margin-block: var(--space-1);
+      padding-block: 0;
     }
   }
 }
@@ -247,6 +280,28 @@
 
     .shell__answer {
       grid-column: 1 / -1;
+@media (max-width: 24rem) and (max-height: 42rem),
+  (min-width: 32rem) and (orientation: landscape) and (max-height: 38rem) {
+  .shell--story {
+    .shell__top {
+      grid-area: top;
+    }
+
+    .shell__ask {
+      grid-area: ask;
+    }
+
+    .shell__game {
+      display: contents;
+    }
+
+    // The instruction needs the width more than Pibbo does; the word is shown large anyway.
+    pb-pibbo {
+      display: none;
+    }
+
+    .shell__answer {
+      grid-area: answer;
     }
   }
 }

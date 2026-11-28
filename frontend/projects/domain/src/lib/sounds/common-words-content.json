@@ -1,0 +1,36 @@
+{
+  "roundsPerPlay": 5,
+  "story": [
+    "The",
+    "cat",
+    "is",
+    "on",
+    "the",
+    "mat.",
+    "A",
+    "ship",
+    "is",
+    "on",
+    "the",
+    "sea.",
+    "The",
+    "sun",
+    "is",
+    "up",
+    "and",
+    "the",
+    "cat",
+    "has",
+    "a",
+    "nap."
+  ],
+  "words": [
+    { "word": "the", "recording": "/recordings/common-words/the.wav" },
+    { "word": "is", "recording": "/recordings/common-words/is.wav" },
+    { "word": "a", "recording": "/recordings/common-words/a.wav" }
+  ],
+  "find": { "text": "Find every", "recording": "/recordings/read/find-every.wav" },
+  "inStory": { "text": "in the story.", "recording": "/recordings/read/in-the-story.wav" },
+  "praise": { "text": "You found", "recording": "/recordings/read/you-found.wav" },
+  "times": { "text": "times", "recording": "/recordings/read/times.wav" }
+}
