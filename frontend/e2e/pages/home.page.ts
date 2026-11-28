@@ -19,6 +19,8 @@ export class HomePage {
   readonly activityGroupTitle: Locator;
   /** More: the next screen of a group with more than 6 activities. */
   readonly more: Locator;
+  /** The check game's picture (L2-024 #4). */
+  readonly checkCard: Locator;
 
   constructor(private readonly page: Page) {
     this.root = page.locator('.home');
@@ -28,6 +30,7 @@ export class HomePage {
     this.activities = page.locator('.home__games .game-card:not(.game-card--more)');
     this.activityGroupTitle = page.locator('.home__games .game-group__title');
     this.more = page.locator('.home__games .game-card--more');
+    this.checkCard = page.locator('.home__check .check-card');
   }
 
   group(name: GroupName): Locator {

@@ -556,8 +556,10 @@ img { display: block; max-width: 100%; }
 .skills__title { min-width: 0; flex: 1; font-size: var(--font-size-lg); font-weight: var(--font-weight-medium); line-height: var(--line-height-tight); }
 button.skills__row { width: 100%; min-height: var(--target-child); border: 0; border-radius: var(--radius-lg); background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .skills__tick { width: var(--size-6); height: var(--size-6); flex: none; fill: none; stroke: var(--color-success-strong); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-.home__check .check-card { flex-direction: row; align-items: center; min-height: var(--target-child); padding: var(--space-3) var(--space-5); }
-.home__check .check-card__title { font-size: var(--font-size-xl); }
+.home__check { display: flex; flex: 1 1 5.5rem; max-width: 16rem; }
+.home__check .check-card { flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-1); min-height: var(--target-child); padding: var(--space-2); text-align: center; }
+.home__check .check-card .pibbo { width: 2.5rem; height: 2.5rem; }
+.home__check .check-card__title { font-size: var(--font-size-md); }
 .show { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-1); }
 .show .picture { width: var(--size-11); height: var(--size-11); }
 .show--one .picture { width: var(--size-15); height: var(--size-15); }

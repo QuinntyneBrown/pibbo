@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import type { GroupId, Instruction, PibboMood } from '@pibbo/api';
 import { Pibbo } from '../pibbo/pibbo';
+import { Progress } from '../progress/progress';
 import { Tap } from '../tap/tap';
 
 /**
@@ -11,7 +12,7 @@ import { Tap } from '../tap/tap';
  */
 @Component({
   selector: 'pb-round-shell',
-  imports: [Pibbo, Tap],
+  imports: [Pibbo, Progress, Tap],
   templateUrl: './round-shell.html',
   styleUrl: './round-shell.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -91,8 +91,9 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   to try next; `results` now shows only the skills answered correctly, each an earned picture
   (`button.skills__row` with `skills__tick`) spoken when touched, with no name, stars, score or
   count of misses, and Home. The new `results-empty` praises playing when nothing was answered
-  correctly. Home gained the check card (`.home__check`, `.check-card`), always shown under the
-  group pictures (`L2-024` #4).
+  correctly. Home gained the check card (`.home__row`, `.home__check`, `.check-card`), always shown
+  beside the group pictures and as tall as they are, wrapping under them on the narrowest
+  phones, so Home grows no taller (`L2-024` #4).
 - **Words and pictures aligned (journey 18, ADR 0023).** Home's Read group lists it after
   Spell by sound. The `held` state (a word pressed while its sounds are spoken) and the `miss`
   state (both words spoken, the picture shaken and the word let go) are drawn. On a phone on

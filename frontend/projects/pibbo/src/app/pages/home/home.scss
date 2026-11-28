@@ -17,8 +17,19 @@
   flex: 1;
 }
 
-.home__subjects {
+.home__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-targets);
   padding: var(--space-8) var(--layout-margin) 0;
+}
+
+// The check game's picture sits beside the group pictures, as tall as they are; on the
+// narrowest phones it wraps under them (L2-024 #4).
+.home__check {
+  display: flex;
+  flex: 1 1 5.5rem;
+  max-width: 16rem;
 }
 
 .home__games {

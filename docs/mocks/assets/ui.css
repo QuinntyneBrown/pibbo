@@ -181,10 +181,14 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
 .check-card__text { display: block; margin-top: var(--space-1); font-size: var(--font-size-md); opacity: 0.8; }
 
 .home__subjects { padding: var(--space-8) var(--layout-margin) 0; }
-/* The check game's picture on Home (L2-024 #4, journey 23): one row, always shown. */
-.home__check { padding: var(--space-4) var(--layout-margin) 0; }
-.home__check .check-card { flex-direction: row; align-items: center; min-height: var(--target-child); padding: var(--space-3) var(--space-5); }
-.home__check .check-card__title { font-size: var(--font-size-xl); }
+/* The check game's picture on Home (L2-024 #4, journey 23): beside the group pictures, as tall
+   as they are; on the narrowest phones it wraps under them. */
+.home__row { display: flex; flex-wrap: wrap; gap: var(--gap-targets); padding: var(--space-8) var(--layout-margin) 0; }
+.home__row .home__subjects { padding: 0; }
+.home__check { display: flex; flex: 1 1 5.5rem; max-width: 16rem; }
+.home__check .check-card { flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-1); min-height: var(--target-child); padding: var(--space-2); text-align: center; }
+.home__check .check-card .pibbo { width: 2.5rem; height: 2.5rem; }
+.home__check .check-card__title { font-size: var(--font-size-md); }
 .switch { display: inline-flex; gap: var(--space-1); padding: var(--space-1-5); border-radius: var(--radius-lg); background: var(--color-bg-sunken); }
 .switch__option {
   height: var(--control-height-md); padding: 0 var(--space-6); border: 0; border-radius: var(--radius-md); background: transparent;

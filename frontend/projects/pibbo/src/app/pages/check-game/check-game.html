@@ -1,0 +1,39 @@
+@if (round(); as round) {
+  <pb-round-shell
+    title="What do I know?"
+    [group]="round.group"
+    [instruction]="round.ask"
+    [mood]="mood()"
+    [done]="game().at"
+    [rounds]="game().rounds.length"
+    (replay)="replay()"
+    (leave)="leave()"
+  >
+    <pb-check-question
+      [group]="round.group"
+      [shown]="round.shown"
+      [choices]="round.choices"
+      [chosen]="round.phase === 'choosing' || round.phase === 'right' ? round.chosen : null"
+      [modelled]="round.phase === 'modelled' ? round.answer : null"
+      [locked]="round.phase !== 'choosing'"
+      (chose)="choose($event)"
+    />
+    <pb-answer-bar
+      answer
+      [group]="round.group"
+      [kind]="bar().kind"
+      [message]="bar().message"
+      [ready]="bar().ready"
+      (action)="action()"
+    />
+  </pb-round-shell>
+} @else {
+  <pb-earned-pictures
+    [title]="results().title.text"
+    [next]="results().next.text"
+    [earned]="earned()"
+    [headings]="content.headings"
+    (touched)="touchEarned($event)"
+    (home)="leave()"
+  />
+}

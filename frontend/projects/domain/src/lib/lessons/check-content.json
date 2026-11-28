@@ -1,0 +1,96 @@
+{
+  "minRounds": 5,
+  "maxRounds": 8,
+  "name": {
+    "text": "What do I know?",
+    "recording": "/recordings/home/what-do-i-know.wav"
+  },
+  "count": {
+    "numbers": [3, 4, 5, 6, 7, 8],
+    "things": [
+      {
+        "name": "duck",
+        "plural": "ducks",
+        "picture": "/pictures/count/duck.jpg",
+        "ask": {
+          "text": "How many ducks?",
+          "recording": "/recordings/check/how-many-ducks.wav",
+          "picture": "ask"
+        }
+      },
+      {
+        "name": "teddy",
+        "plural": "teddies",
+        "picture": "/pictures/count/teddy.jpg",
+        "ask": {
+          "text": "How many teddies?",
+          "recording": "/recordings/check/how-many-teddies.wav",
+          "picture": "ask"
+        }
+      },
+      {
+        "name": "ball",
+        "plural": "balls",
+        "picture": "/pictures/count/ball.jpg",
+        "ask": {
+          "text": "How many balls?",
+          "recording": "/recordings/check/how-many-balls.wav",
+          "picture": "ask"
+        }
+      }
+    ],
+    "hint": {
+      "text": "Let’s count them together.",
+      "recording": "/recordings/count/count-together.wav"
+    },
+    "model": {
+      "text": "There are",
+      "recording": "/recordings/count/there-are.wav"
+    }
+  },
+  "word": {
+    "ask": {
+      "text": "Which word goes with the picture?",
+      "recording": "/recordings/check/which-word.wav",
+      "picture": "ask"
+    },
+    "hint": {
+      "text": "Listen to the sounds and look again.",
+      "recording": "/recordings/check/listen-to-the-sounds.wav"
+    },
+    "model": {
+      "text": "This is",
+      "recording": "/recordings/read/this-is.wav"
+    }
+  },
+  "praise": {
+    "text": "Yes!",
+    "recording": "/recordings/check/yes.wav"
+  },
+  "results": {
+    "earned": {
+      "title": {
+        "text": "Look what you can do!",
+        "recording": "/recordings/check/look-what-you-can-do.wav"
+      },
+      "next": {
+        "text": "Touch a picture to hear it.",
+        "recording": "/recordings/check/touch-a-picture.wav"
+      }
+    },
+    "none": {
+      "title": {
+        "text": "Well played!",
+        "recording": "/recordings/check/well-played.wav"
+      },
+      "next": {
+        "text": "Let’s practise together, then play again.",
+        "recording": "/recordings/check/practise-together.wav"
+      }
+    }
+  },
+  "headings": {
+    "read": "Reading",
+    "count": "Counting"
+  }
+}

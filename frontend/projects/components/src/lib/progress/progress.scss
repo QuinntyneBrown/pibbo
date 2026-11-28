@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  flex: 1;
+}
+
+.progress {
+  height: var(--progress-height);
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-sunken);
+}
+
+.progress__fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--subject);
+  transition: width var(--duration-slow) var(--ease-out-quint);
+}
+
+@for $i from 0 through 20 {
+  .progress__fill--#{$i} {
+    width: $i * 5%;
+  }
+}

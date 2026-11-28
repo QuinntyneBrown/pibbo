@@ -10,7 +10,10 @@ import type { PibboMood } from '@pibbo/api';
 })
 export class Pibbo {
   readonly mood = input<PibboMood>('rest');
-  /** `md` beside the instruction; `xl` as the figure of Counting dance. */
-  readonly size = input<'md' | 'xl'>('md');
+  /**
+   * `xs` on Home's check card, `sm` on a larger card, `md` beside the instruction, `lg` on the check game's results, `xl`
+   * as the figure of Counting dance.
+   */
+  readonly size = input<'xs' | 'sm' | 'md' | 'lg' | 'xl'>('md');
   readonly label = input('Pibbo');
 }

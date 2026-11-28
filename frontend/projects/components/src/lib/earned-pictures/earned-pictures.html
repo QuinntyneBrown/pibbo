@@ -1,0 +1,42 @@
+<main class="results" id="main" aria-labelledby="screen-title">
+  <header class="results__hero">
+    <pb-pibbo size="lg" mood="cheer" label="Pibbo cheering" />
+    <div class="results__copy">
+      <h1 id="screen-title" class="results__title">{{ title() }}</h1>
+      @if (next()) {
+        <p class="results__next">{{ next() }}</p>
+      }
+    </div>
+    <div class="results__actions">
+      <button type="button" class="chunky chunky--white" (pbTap)="home.emit()">Home</button>
+    </div>
+  </header>
+  @if (sections().length > 0) {
+    <div class="results__lists">
+      @for (section of sections(); track section.group) {
+        <section [attr.aria-labelledby]="'s-' + section.group">
+          <h2
+            class="results__subject"
+            [class]="'results__subject results__subject--' + section.group"
+            [id]="'s-' + section.group"
+          >
+            {{ section.heading }}
+          </h2>
+          <ul class="skills">
+            @for (skill of section.skills; track skill.id) {
+              <li>
+                <button type="button" class="skills__row" (pbTap)="touched.emit(skill)">
+                  <span class="skills__glyph" aria-hidden="true">{{ skill.glyph }}</span>
+                  <span class="skills__title">{{ skill.name }}</span>
+                  <svg class="skills__tick" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                </button>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    </div>
+  }
+</main>

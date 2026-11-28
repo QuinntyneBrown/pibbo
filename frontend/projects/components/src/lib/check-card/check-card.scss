@@ -1,0 +1,38 @@
+:host {
+  display: flex;
+  flex: 1;
+}
+
+.check-card {
+  --depth: var(--color-reward-depth);
+  display: flex;
+  width: 100%;
+  min-height: var(--target-child);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-2xl);
+  background: var(--color-reward);
+  color: var(--color-on-reward);
+  text-align: center;
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
+  transition:
+    transform var(--duration-instant) var(--ease-out-quint),
+    box-shadow var(--duration-instant) var(--ease-out-quint);
+
+  &:active {
+    transform: translateY(var(--press-travel));
+    box-shadow: 0 var(--press-depth-down) 0 var(--depth);
+  }
+}
+
+.check-card__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}

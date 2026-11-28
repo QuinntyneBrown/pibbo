@@ -1,9 +1,10 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE } from '@pibbo/api';
+import { AUDIO_PLAYER, CLOCK, PROGRESS_STORE, RANDOM_SOURCE } from '@pibbo/api';
 import { routes } from './app.routes';
 import { BrowserAudioPlayer } from './browser/browser-audio-player';
 import { BrowserClock } from './browser/browser-clock';
+import { BrowserProgressStore } from './browser/browser-progress-store';
 import { BrowserRandomSource } from './browser/browser-random-source';
 
 /** The composition root: binds every token the whole app shares. */
@@ -14,5 +15,6 @@ export const appConfig: ApplicationConfig = {
     { provide: CLOCK, useClass: BrowserClock },
     { provide: RANDOM_SOURCE, useClass: BrowserRandomSource },
     { provide: AUDIO_PLAYER, useClass: BrowserAudioPlayer },
+    { provide: PROGRESS_STORE, useClass: BrowserProgressStore },
   ],
 };

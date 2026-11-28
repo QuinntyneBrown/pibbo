@@ -1,4 +1,4 @@
-// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024): every word has a picture and a
+// Checks the content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0026): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -283,6 +283,41 @@ for (const set of rhymes.sets ?? []) {
 }
 if ((content.words ?? []).length < 3)
   problems.push("fewer than 3 words: a round offers 3 pictures");
+
+// What do I know? (ADR 0026): every line has text and a recording, every thing a picture and its
+// question, and the rounds and numbers make sense. Its words are Sound it out's, checked above.
+const checkPath = `${frontend}projects/domain/src/lib/lessons/check-content.json`;
+const check = JSON.parse(readFileSync(checkPath, "utf8"));
+const line = (l, what) => {
+  if (typeof l?.text !== "string" || l.text.length === 0)
+    problems.push(`${what}: no text`);
+  fileExists(l?.recording, `${what} recording`);
+};
+if (!(check.minRounds >= 5 && check.maxRounds <= 8 && check.minRounds <= check.maxRounds))
+  problems.push("check: rounds must be between 5 and 8 (L2-023)");
+line(check.name, "check name");
+line(check.praise, "check praise");
+for (const kind of ["count", "word"]) {
+  line(check[kind]?.hint, `check ${kind} hint`);
+  line(check[kind]?.model, `check ${kind} model`);
+}
+line(check.word?.ask, "check word question");
+for (const r of ["earned", "none"]) {
+  line(check.results?.[r]?.title, `check results ${r} title`);
+  line(check.results?.[r]?.next, `check results ${r} line`);
+}
+if (!Array.isArray(check.count?.things) || check.count.things.length === 0)
+  problems.push("check: no things to count");
+for (const t of check.count?.things ?? []) {
+  fileExists(t.picture, `check thing "${t.name}" picture`);
+  line(t.ask, `check thing "${t.name}" question`);
+}
+for (const n of check.count?.numbers ?? []) {
+  if (!Number.isInteger(n) || n < 2 || n > 19)
+    problems.push(`check number ${n}: a question offers n - 1, n and n + 1`);
+  for (const k of [n - 1, n, n + 1])
+    fileExists(`/recordings/numbers/${k}.wav`, `check number ${k}`);
+}
 
 if (problems.length) {
   console.error(

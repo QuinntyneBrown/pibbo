@@ -1,0 +1,32 @@
+<div class="stage stage--question">
+  <div
+    class="show"
+    [class.show--one]="shown().count === 1"
+    role="img"
+    [attr.aria-label]="shown().label"
+  >
+    @for (i of copies(); track i) {
+      <img class="picture" [src]="shown().picture" alt="" draggable="false" />
+    }
+  </div>
+  <div class="pick" role="group" aria-labelledby="prompt">
+    @for (choice of choices(); track $index) {
+      <button
+        type="button"
+        class="pick__option pick__option--text"
+        [class.pick__option--count]="group() === 'count'"
+        [class.pick__option--right]="modelled() === $index"
+        [attr.aria-pressed]="chosen() === $index"
+        [disabled]="locked()"
+        (pbTap)="chose.emit($index)"
+      >
+        {{ choice.text }}
+        @if (modelled() === $index) {
+          <svg class="pick__tick" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        }
+      </button>
+    }
+  </div>
+</div>
