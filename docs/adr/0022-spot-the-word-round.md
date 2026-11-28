@@ -38,7 +38,13 @@ child has practised.
    has no recording. Which words and stories Pibbo covers, and in what order, is not decided.
 7. **The rules are pure functions** in `@pibbo/domain/sounds` (`SpotRound`: `finding`, `right`):
    `startSpotRound`, `touchStoryWord`, `endMiss`, `nextSpotWord`, `spotAssets`, with unit tests.
-8. **The presentation is `SpotTheWord`** (`pb-spot`) in `@pibbo/components`, keeping the mock's
+8. **The shell gains a story layout** (`pb-round-shell` `layout="story"`), as the mock's
+   `.shell:has(.spot)` rules draw it: upright on a small phone the word to find sits beside the
+   progress bar; on its side the story spans the width and the word shares the bottom row with
+   the answer bar. The shell names grid areas (`top`, `ask`, `find`, `story`, `answer`); the
+   game places its own parts in them. Pibbo is hidden there so the instruction keeps its width,
+   and the answer bar of a phone on its side is one row.
+9. **The presentation is `SpotTheWord`** (`pb-spot`) in `@pibbo/components`, keeping the mock's
    `.spot`, `.spot__find`, `.target-word`, `.found`, `.story` and `.story__word` classes. Spot
    the word is listed in Read after Spell by sound (`/read/sight-words`), with "the" as its
    picture; the Home mock gained the card first.
@@ -47,4 +53,7 @@ child has practised.
 
 Spaced repetition across visits waits for the decision on remembering practice. The recordings
 are placeholders, as for every activity (ADR 0008). The story's words are touch targets of
-their own, so a long story would need its own layout check.
+their own, so a long story would need its own layout check. Measured with nothing scrolling and
+every word at least 60 × 60 px on 320 × 568, 320 × 640, 360 × 640, 640 × 360, 568 × 320 and
+larger screens; on 568 × 320 the praise state's word-to-find tile runs 10 px below the screen,
+left to journey 26 with the other short-screen fixes.

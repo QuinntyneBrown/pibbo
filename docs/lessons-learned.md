@@ -729,3 +729,43 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - A spec that passes before its slice is a guard (J3 #5, J12 #3): reduced motion, said so.
 - Tag the critical path in the same change (J11 #4): praise and Next is `@critical`.
 - Build before proving a failure (J8 #1): each slice failed for the expected reason first.
+
+## Journey 19: Recognise common words
+
+**What slowed it**
+
+- `L2-019` described three word choices and saved repetition state; the mock is a short story in
+  which the child finds every "the", with no sound for a miss. The mock won: `L2-019`, the
+  design and ADR 0022 were rewritten first, and the repetition stays in memory at route scope,
+  since whether Pibbo remembers practice is not decided.
+- Twenty-two 60 px words did not fit under the answer bar on any phone. The mock fits only by
+  turning the whole shell into a grid (`.shell:has(.spot)`), which encapsulated components
+  cannot copy. The shell gained a `layout="story"` input with named grid areas; the game's own
+  parts take `find` and `story`, and the answer bar falls into the empty `answer` cell. It took
+  five measure-and-adjust rounds, each fighting the 4 kB stylesheet budget.
+- The project's Playwright wanted Chromium 1255 and the container had 1243. A scratch
+  `PLAYWRIGHT_BROWSERS_PATH` with symlinks to the installed build worked without touching the
+  repo; the variable must be set in every shell.
+- The repetition spec passed with the rule broken: the seeded random order asked the missed
+  word again anyway. A seed found offline (seed 7) makes only the rule bring it back.
+
+**New lessons**
+
+1. When a mock lays out the shell itself (`.shell:has(...)`), give `pb-round-shell` a layout
+   with named grid areas; the game places its own parts, and nothing styles another block.
+2. A rule about what comes back later needs a seed under which the random order alone would
+   not bring it back; prove it by breaking the rule once.
+3. Measure every state, not just the first: the praise bar is taller than the empty one.
+4. Commit before a break-the-rule check, so restoring the code is a plain edit.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1 and on): the Home card and the requirement tags went into the mocks
+  before code; the requirement and the design followed.
+- Measure on 320 × 640, 360 × 640 and 640 × 360 (J9 #1, J11 #1): a throwaway spec found the
+  overflow before the first code commit.
+- Seed search offline with mulberry32 (J6 #3, J14 #2): seed 7, found in one command.
+- Grep the flat domain API before naming (J6 #2): `numberRecording` already existed and was
+  reused rather than redefined.
+- Build before proving a failure (J8 #1) and tag the critical path (J11 #4): both slices failed
+  first for the expected reason; the praise-and-Next path is `@critical`.
