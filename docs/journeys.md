@@ -1,23 +1,3 @@
-# Journeys
-
-These are the user journeys to implement, in the order to build them. Each one is a thin vertical slice with its own implementation prompt in [`docs/prompts/`](prompts/). Each prompt is run as one session and ends with a PR.
-
-**% complete:** 56% (15 of 27 journeys done)
-
-## Order
-
-The order follows what makes sense to build first:
-
-1. **Scaffold.** The workspace, its boundaries, checks and test fixtures, which everything stands on.
-2. **Home and the two core activities.** Count a set and Sound out and blend come straight from the purpose in `AGENTS.md`. They build the shared round behaviour, audio and content data that later journeys reuse.
-3. **The other counting activities,** from simplest to most complex. Count to music comes last because it needs timed audio.
-4. **The other reading activities,** each building on the data before it. The Sound it out extensions come in increasing difficulty.
-5. **Lessons, the check game and the grown-up area.** They need the activities, and they bring the first thing kept on the device.
-6. **Offline and the cross-cutting hardening.**
-7. **The backend.** It is blocked: `AGENTS.md` says there is no backend until an ADR, agreed with the repository owner, adds one.
-
-## Journeys
-
 | # | Journey | L2 | Detailed designs | Why here | Prompt | % complete |
 |---|---------|----|------------------|----------|--------|--------|
 | 1 | Scaffold the workspace | `L2-034`, `L2-039` | [layout/responsive-breakpoints](detailed-designs/layout/responsive-breakpoints/README.md)<br>[operations/build-and-deploy](detailed-designs/operations/build-and-deploy/README.md)<br>[privacy/device-only-data](detailed-designs/privacy/device-only-data/README.md)<br>[security/transport-and-headers](detailed-designs/security/transport-and-headers/README.md)<br>[performance/fast-load-and-response](detailed-designs/performance/fast-load-and-response/README.md) | Nothing else can be built until the workspace, its boundaries, its checks and its test fixtures exist. | [prompt](prompts/01-scaffold-the-workspace.md) | 100% |
@@ -47,9 +27,3 @@ The order follows what makes sense to build first:
 | 25 | Offline after first use | `L2-033` | [performance/offline-after-first-use](detailed-designs/performance/offline-after-first-use/README.md) | It comes once the content is settled. | [prompt](prompts/25-offline-after-first-use.md) | 0% |
 | 26 | Performance, accessibility and privacy hardening | `L2-029`, `L2-032`, `L2-036` | [privacy/device-only-data](detailed-designs/privacy/device-only-data/README.md)<br>[performance/fast-load-and-response](detailed-designs/performance/fast-load-and-response/README.md)<br>[accessibility/wcag-and-keyboard](detailed-designs/accessibility/wcag-and-keyboard/README.md) | It closes the cross-cutting criteria across every built activity. | [prompt](prompts/26-performance-and-accessibility-hardening.md) | 0% |
 | 27 | Content backend (blocked on an ADR) | `L2-027`, `L2-028`, `L2-030`, `L2-031`, `L2-038`, `L2-039` | [content-service/serve-content](detailed-designs/content-service/serve-content/README.md)<br>[content-service/hold-nothing-about-a-child](detailed-designs/content-service/hold-nothing-about-a-child/README.md)<br>[security/transport-and-headers](detailed-designs/security/transport-and-headers/README.md)<br>[security/admin-content-security](detailed-designs/security/admin-content-security/README.md)<br>[operations/health-logs-metrics](detailed-designs/operations/health-logs-metrics/README.md)<br>[operations/build-and-deploy](detailed-designs/operations/build-and-deploy/README.md) | Last, and blocked. `AGENTS.md` says Pibbo has no backend until an ADR adds one, with the repository owner's agreement. | [prompt](prompts/27-content-backend.md) | 0% |
-
-## Notes
-
-- Cross-cutting requirements are built inside the first journey that needs them and checked in every later one: `L2-025` and `L2-026` (journey 3), `L2-034` (journey 1) and `L2-035` (journey 2). Journey 26 closes `L2-029`, `L2-032` and `L2-036` across the whole app.
-- Journey 24 has no mock state yet. Its prompt draws the mock first.
-- Journeys 22 and 23 keep data on the device, so they need an ADR first.
