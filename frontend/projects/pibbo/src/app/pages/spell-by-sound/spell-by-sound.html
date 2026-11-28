@@ -1,0 +1,20 @@
+<pb-round-shell
+  title="Spell by sound"
+  group="read"
+  [instruction]="instruction()"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-spell-boxes
+    [picture]="round().word.picture"
+    [word]="round().word.word"
+    [boxes]="round().boxes"
+    [bank]="round().bank"
+    [next]="next()"
+    (speaker)="speak($event)"
+    (box)="touchBox($event)"
+  />
+  <pb-answer-bar answer group="read" kind="check" [ready]="false" />
+</pb-round-shell>

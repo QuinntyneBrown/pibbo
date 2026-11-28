@@ -54,5 +54,10 @@ export const routes: Routes = [
         (m) => m.BigAndSmallLetters,
       ),
   },
+  {
+    path: 'read/spell',
+    loadComponent: () =>
+      import('./pages/spell-by-sound/spell-by-sound').then((m) => m.SpellBySound),
+  },
   { path: '**', redirectTo: '' },
 ];

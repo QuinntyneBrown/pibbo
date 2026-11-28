@@ -90,5 +90,13 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       recording: '/recordings/home/big-and-small-letters.wav',
       path: '/read/letter-forms',
     },
+    {
+      id: 'spell-by-sound',
+      group: 'read',
+      name: 'Spell by sound',
+      glyph: 's u _',
+      recording: '/recordings/home/spell-by-sound.wav',
+      path: '/read/spell',
+    },
   ],
 };

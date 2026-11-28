@@ -19,7 +19,7 @@ export class SpellBySoundPage {
     this.instruction = page.locator('.bubble__text');
     this.replay = page.locator('.hear');
     this.leave = page.locator('.shell__top .chunky--icon');
-    this.picture = page.locator('.spell-round .picture');
+    this.picture = page.locator('.frame-picture .picture');
     this.boxes = page.locator('.boxes .box');
     this.speakers = page.locator('.boxes .speaker');
     this.bank = page.locator('.bank .bank__letter');
@@ -29,7 +29,7 @@ export class SpellBySoundPage {
 
   /** The bank letter `letter`. */
   letter(letter: string): Locator {
-    return this.bank.filter({ hasText: new RegExp(`^\s*${letter}\s*$`) });
+    return this.bank.filter({ hasText: new RegExp(`^${letter}$`) });
   }
 
   /** Opens Spell by sound the way a child does: Read, then the activity on Home. */

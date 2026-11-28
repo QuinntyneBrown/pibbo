@@ -19,7 +19,11 @@ child's target needs.
 1. **The mock wins.** `L2-013` now describes the boxes, the bank, the speakers, removal, Check,
    `correct` and `retry`. Any letter fills the next box; the child checks the whole word.
 2. **A box's speaker is 60 × 60 px** (`--target-child`), redrawn in the mock CSS first: AGENTS.md
-   sets the smallest target, and the mock is brought in line rather than the rule broken.
+   sets the smallest target, and the mock is brought in line rather than the rule broken. **An
+   empty box says its own sound too**, so a phone, which has no room for the speakers, still
+   offers it: upright the picture sits beside 60 px boxes with the letters under them; on its
+   side the boxes and the letters make one row and the picture is hidden, the word being shown
+   in the bubble and spoken. Measured on 360 × 640 and 640 × 360, nothing scrolls.
 3. **Try again takes out only the letters that do not match**; the right ones stay, so nothing
    the child got right is lost, and the first empty box is next. The mocks draw no modelled
    state, so after any number of wrong checks the child tries again; with the right letters

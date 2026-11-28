@@ -21,17 +21,61 @@
     }
   ],
   "sounds": {
-    "m": { "letters": "m", "shown": "/m/", "recording": "/recordings/sounds/m.wav" },
-    "a": { "letters": "a", "shown": "/a/", "recording": "/recordings/sounds/a.wav" },
-    "p": { "letters": "p", "shown": "/p/", "recording": "/recordings/sounds/p.wav" },
-    "s": { "letters": "s", "shown": "/s/", "recording": "/recordings/sounds/s.wav" },
-    "u": { "letters": "u", "shown": "/u/", "recording": "/recordings/sounds/u.wav" },
-    "n": { "letters": "n", "shown": "/n/", "recording": "/recordings/sounds/n.wav" },
-    "b": { "letters": "b", "shown": "/b/", "recording": "/recordings/sounds/b.wav" },
-    "d": { "letters": "d", "shown": "/d/", "recording": "/recordings/sounds/d.wav" },
-    "g": { "letters": "g", "shown": "/g/", "recording": "/recordings/sounds/g.wav" },
-    "c": { "letters": "c", "shown": "/k/", "recording": "/recordings/sounds/c.wav" },
-    "t": { "letters": "t", "shown": "/t/", "recording": "/recordings/sounds/t.wav" }
+    "m": {
+      "letters": "m",
+      "shown": "/m/",
+      "recording": "/recordings/sounds/m.wav"
+    },
+    "a": {
+      "letters": "a",
+      "shown": "/a/",
+      "recording": "/recordings/sounds/a.wav"
+    },
+    "p": {
+      "letters": "p",
+      "shown": "/p/",
+      "recording": "/recordings/sounds/p.wav"
+    },
+    "s": {
+      "letters": "s",
+      "shown": "/s/",
+      "recording": "/recordings/sounds/s.wav"
+    },
+    "u": {
+      "letters": "u",
+      "shown": "/u/",
+      "recording": "/recordings/sounds/u.wav"
+    },
+    "n": {
+      "letters": "n",
+      "shown": "/n/",
+      "recording": "/recordings/sounds/n.wav"
+    },
+    "b": {
+      "letters": "b",
+      "shown": "/b/",
+      "recording": "/recordings/sounds/b.wav"
+    },
+    "d": {
+      "letters": "d",
+      "shown": "/d/",
+      "recording": "/recordings/sounds/d.wav"
+    },
+    "g": {
+      "letters": "g",
+      "shown": "/g/",
+      "recording": "/recordings/sounds/g.wav"
+    },
+    "c": {
+      "letters": "c",
+      "shown": "/k/",
+      "recording": "/recordings/sounds/c.wav"
+    },
+    "t": {
+      "letters": "t",
+      "shown": "/t/",
+      "recording": "/recordings/sounds/t.wav"
+    }
   },
   "instructions": {
     "sounding": {
@@ -50,19 +94,39 @@
       "picture": "ask"
     }
   },
-  "praise": { "recording": "/recordings/read/you-read.wav" },
+  "praise": {
+    "recording": "/recordings/read/you-read.wav"
+  },
   "hint": {
     "text": "Read it again, then look closely.",
     "recording": "/recordings/read/read-again.wav"
   },
-  "model": { "recording": "/recordings/read/this-is.wav" },
+  "model": {
+    "recording": "/recordings/read/this-is.wav"
+  },
   "letterSounds": {
     "roundsPerPlay": 5,
     "pairs": [
-      { "sound": "m", "asIn": "map", "picture": "/pictures/words/map.jpg" },
-      { "sound": "s", "asIn": "sun", "picture": "/pictures/words/sun.jpg" },
-      { "sound": "t", "asIn": "teddy", "picture": "/pictures/count/teddy.jpg" },
-      { "sound": "c", "asIn": "cat", "picture": "/pictures/words/cat.jpg" }
+      {
+        "sound": "m",
+        "asIn": "map",
+        "picture": "/pictures/words/map.jpg"
+      },
+      {
+        "sound": "s",
+        "asIn": "sun",
+        "picture": "/pictures/words/sun.jpg"
+      },
+      {
+        "sound": "t",
+        "asIn": "teddy",
+        "picture": "/pictures/count/teddy.jpg"
+      },
+      {
+        "sound": "c",
+        "asIn": "cat",
+        "picture": "/pictures/words/cat.jpg"
+      }
     ],
     "instruction": {
       "text": "Tap a letter, then the sound it makes.",
@@ -77,10 +141,22 @@
   "letterForms": {
     "roundsPerPlay": 5,
     "pairs": [
-      { "big": "A", "sound": "a" },
-      { "big": "B", "sound": "b" },
-      { "big": "D", "sound": "d" },
-      { "big": "G", "sound": "g" }
+      {
+        "big": "A",
+        "sound": "a"
+      },
+      {
+        "big": "B",
+        "sound": "b"
+      },
+      {
+        "big": "D",
+        "sound": "d"
+      },
+      {
+        "big": "G",
+        "sound": "g"
+      }
     ],
     "instruction": {
       "text": "Find each big letter’s small letter.",
@@ -90,6 +166,29 @@
     "praise": {
       "text": "Every letter found its partner!",
       "recording": "/recordings/read/every-letter-found-its-partner.wav"
+    }
+  },
+  "spell": {
+    "roundsPerPlay": 5,
+    "listen": {
+      "text": "Listen:",
+      "recording": "/recordings/read/listen.wav"
+    },
+    "pick": {
+      "text": "Pick a letter for each sound.",
+      "recording": "/recordings/read/pick-a-letter-for-each-sound.wav"
+    },
+    "full": {
+      "text": "Does it say the word? Check it!",
+      "recording": "/recordings/read/check-it.wav"
+    },
+    "hint": {
+      "text": "Say it slowly. Which sound doesn’t match?",
+      "recording": "/recordings/read/say-it-slowly.wav"
+    },
+    "praise": {
+      "text": "You spelled",
+      "recording": "/recordings/read/you-spelled.wav"
     }
   }
 }

@@ -23,3 +23,4 @@ export * from './lib/number-line/number-line';
 export * from './lib/turn-sets/turn-sets';
 export * from './lib/dance/dance';
 export * from './lib/pairs/pairs';
+export * from './lib/spell-boxes/spell-boxes';

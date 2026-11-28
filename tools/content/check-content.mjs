@@ -92,6 +92,17 @@ else {
   );
   fileExists(letterForms.praise?.recording, "letter forms praise recording");
 }
+// Spell by sound (ADR 0018): Sound it out's words, and its own lines, each shown and recorded.
+const spell = content.spell;
+if (!spell) problems.push("spell: missing");
+else {
+  if (!(spell.roundsPerPlay > 0)) problems.push("spell: no rounds per play");
+  for (const line of ["listen", "pick", "full", "hint", "praise"]) {
+    if (typeof spell[line]?.text !== "string" || spell[line].text.length === 0)
+      problems.push(`spell ${line}: no text`);
+    fileExists(spell[line]?.recording, `spell ${line} recording`);
+  }
+}
 if ((content.words ?? []).length < 3)
   problems.push("fewer than 3 words: a round offers 3 pictures");
 

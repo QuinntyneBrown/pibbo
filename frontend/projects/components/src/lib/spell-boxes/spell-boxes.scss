@@ -1,0 +1,212 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.stage {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+
+  @media (min-width: 48rem) {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--space-10);
+  }
+
+  // Upright on a phone: the picture beside the boxes, the letters under them.
+  @media (max-width: 40rem) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  // On its side a phone has one row: the boxes, then the letters; the word is in the bubble.
+  @media (max-height: 30rem) {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+}
+
+.frame-picture {
+  display: flex;
+  width: var(--size-11);
+  height: var(--size-11);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  border-radius: var(--radius-2xl);
+  background: var(--color-surface);
+
+  @media (min-width: 40rem) and (min-height: 40rem) {
+    width: 13rem;
+    height: 13rem;
+    padding: var(--space-4);
+  }
+
+  @media (max-height: 30rem) {
+    display: none;
+  }
+}
+
+.picture {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.spell {
+  display: contents;
+
+  @media (min-width: 40rem) and (min-height: 30rem) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 40rem) and (min-height: 40rem) {
+    gap: var(--space-8);
+  }
+}
+
+.boxes {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.boxes__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.box {
+  display: flex;
+  width: var(--target-child);
+  height: var(--size-11);
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 3px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+  background: transparent;
+  color: var(--color-fg);
+  font-family: var(--font-read);
+  font-size: var(--font-size-6xl);
+  font-weight: var(--font-weight-bold);
+  touch-action: manipulation;
+
+  @media (min-width: 40rem) and (min-height: 30rem) {
+    width: var(--size-11);
+    height: var(--size-12);
+  }
+
+  @media (min-width: 40rem) and (min-height: 40rem) {
+    width: var(--size-12);
+    height: var(--size-13);
+  }
+
+  @media (max-height: 30rem) {
+    height: var(--target-child);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.box--filled {
+  border: 0;
+  background: var(--color-surface);
+}
+
+.box--next {
+  border-color: var(--color-read);
+  background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+}
+
+.box--right {
+  border: 0;
+  background: var(--color-success-soft);
+  color: var(--color-success-strong);
+}
+
+// A child's target: 60 x 60 px at least (ADR 0018).
+.speaker {
+  display: inline-flex;
+  width: var(--target-child);
+  height: var(--target-child);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-read-soft);
+  color: var(--color-read-strong);
+  touch-action: manipulation;
+
+  // A phone has no room for them: an empty box says its own sound instead (ADR 0018).
+  @media (max-width: 40rem), (max-height: 30rem) {
+    display: none;
+  }
+}
+
+.icon {
+  width: var(--size-4);
+  height: var(--size-4);
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.25;
+}
+
+.bank {
+  display: grid;
+  grid-template-columns: repeat(3, var(--size-10));
+  gap: var(--space-3);
+
+  @media (min-width: 40rem) {
+    grid-template-columns: repeat(6, var(--size-10));
+  }
+
+  // On its side a phone has one row: the boxes, then the letters.
+  @media (max-height: 30rem) {
+    grid-template-columns: repeat(6, var(--target-child));
+    gap: var(--space-2);
+  }
+}
+
+.bank__letter {
+  width: 100%;
+  height: var(--size-10);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-family: var(--font-read);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  box-shadow:
+    inset 0 0 0 2px var(--color-border),
+    0 var(--press-depth) 0 var(--color-depth);
+  touch-action: manipulation;
+
+  @media (max-height: 30rem) {
+    height: var(--target-child);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+  }
+}

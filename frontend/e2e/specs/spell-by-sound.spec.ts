@@ -36,7 +36,10 @@ test.describe('Spell by sound: a round', () => {
     expect(new Set(bank).size).toBe(bank.length);
     for (const l of letters) expect(bank).toContain(l);
     await expect(page.locator('[role="timer"]')).toHaveCount(0);
-    for (const target of [...(await spell.bank.all()), ...(await spell.speakers.all())]) {
+    const targets = [...(await spell.bank.all()), ...(await spell.boxes.all())];
+    for (const speaker of await spell.speakers.all())
+      if (await speaker.isVisible()) targets.push(speaker);
+    for (const target of targets) {
       const box = (await target.boundingBox())!;
       expect(box.width).toBeGreaterThanOrEqual(60);
       expect(box.height).toBeGreaterThanOrEqual(60);
@@ -45,20 +48,25 @@ test.describe('Spell by sound: a round', () => {
     await expect.poll(() => spoken.recordings()).toEqual([...HOME, LISTEN, word(w), PICK]);
   });
 
-  test('Given a round, when the child touches the speaker under box 2, then the sound that belongs in box 2 is spoken', async ({
+  test('Given a round, when the child touches empty box 2, or its speaker where one is shown, then the sound that belongs in box 2 is spoken and the box stays empty', async ({
     page,
     spoken,
   }) => {
     const spell = new SpellBySoundPage(page);
     await spell.openFromHome();
     const w = await spell.word();
+    const second = sound(WORDS[w]![1]!);
     await expect.poll(() => spoken.recordings()).toEqual([...HOME, LISTEN, word(w), PICK]);
 
-    await spell.touch(spell.speakers.nth(1));
-
-    await expect
-      .poll(() => spoken.recordings())
-      .toEqual([...HOME, LISTEN, word(w), PICK, sound(WORDS[w]![1]!)]);
+    await spell.touch(spell.boxes.nth(1));
+    await expect.poll(() => spoken.recordings()).toEqual([...HOME, LISTEN, word(w), PICK, second]);
+    expect(await spell.boxTexts()).toEqual(['', '', '']);
+    if (await spell.speakers.nth(1).isVisible()) {
+      await spell.touch(spell.speakers.nth(1));
+      await expect
+        .poll(() => spoken.recordings())
+        .toEqual([...HOME, LISTEN, word(w), PICK, second, second]);
+    }
   });
 
   test('Given a round, when the child touches replay, then the word and the instruction are spoken again; when the grown-up touches leave, then Home returns with Read chosen', async ({
