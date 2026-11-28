@@ -132,7 +132,7 @@
       "kind": "page",
       "title": "Rocket countdown",
       "route": "/count/countdown",
-      "requirements": [],
+      "requirements": ["L2-006", "L2-025"],
       "states": [
         "start",
         "default",

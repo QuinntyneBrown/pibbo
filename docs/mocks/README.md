@@ -100,6 +100,10 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   is drawn as two `.ten-frame`s in its card; on a short screen the numeral shrinks, and on a phone on
   its side it sits beside its ten-frames, so a card of 20 and the answer bar fit with no scrolling. Choosing a card and then Check stays as drawn, and
   `L2-005` was brought in line (ADR 0010).
+- **Rocket countdown reconciled with `L2-006` (journey 7).** The rocket rises in tenths of the
+  way from the start to 0 (`launch__rocket--0` to `--10`, 15 px each), so any start from 5 to 20
+  draws; the mock's `--4` at 6 of 10 is one of them. The three choices, the track that is not
+  touched and the retry line stay as drawn, and `L2-006` was brought in line (ADR 0011).
 
 ## Open questions
 

@@ -65,6 +65,7 @@ a transcription of `docs/mocks/assets/tokens.css`.
 | Added `.tile--sounding`, `.pick__tick` and `.shell--read .bubble__picture` | `L2-012` #1 lights each letter as it sounds; the right picture carries a tick, so colour is not its only carrier; the read bubble carries a picture as Count's does. Added to the mocks first (journey 4). |
 | Added `.tenframes` and `.digit-pad`; 6 px between ten-frame and digit targets | The prototype traced the numeral (a drag) and had no ten-frames (`L2-003`, `L2-004`). Five 60 px targets fit a 360 px phone only with a 6 px gap. Added to the mocks first (journey 5, ADR 0009). |
 | Added `.ten-frame__dot--extra`; a card holds two `.ten-frame`s above 10 | `L2-005` #2 highlights the extra things after a wrong choice, by shape as well as colour; `L2-005` covers 0 to 20. Added to the mocks first (journey 6, ADR 0010). |
+| Added `.launch__rocket--1` to `--9` | `L2-006` starts anywhere from 5 to 20; the rocket rises in tenths of the way to 0, 15 px each. Added to the mocks first (journey 7, ADR 0011). |
 
 ## Open questions
 
