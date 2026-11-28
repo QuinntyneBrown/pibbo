@@ -18,3 +18,4 @@ export * from './lib/answer-bar/answer-bar';
 export * from './lib/word-tiles/word-tiles';
 export * from './lib/picture-pick/picture-pick';
 export * from './lib/compare/compare';
+export * from './lib/countdown/countdown';

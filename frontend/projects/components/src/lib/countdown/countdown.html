@@ -1,0 +1,58 @@
+<div class="countdown">
+  <div class="countdown__left">
+    <ol class="track-row" [attr.aria-label]="'Counting down from ' + start()">
+      @for (cell of cells(); track cell.number) {
+        <li
+          class="track-row__cell"
+          [class.track-row__cell--said]="cell.state === 'said'"
+          [class.track-row__cell--now]="cell.state === 'now'"
+          [attr.aria-current]="cell.state === 'now' ? 'step' : null"
+        >
+          @if (cell.state === 'yet') {
+            <span aria-hidden="true">·</span><span class="visually-hidden">not yet</span>
+          } @else {
+            {{ cell.number }}
+          }
+        </li>
+      }
+    </ol>
+    @if (!done()) {
+      <div class="choices" role="group" aria-label="What comes next?">
+        @for (n of choices(); track n) {
+          <button
+            type="button"
+            class="numeral numeral--lg"
+            [disabled]="locked()"
+            (pbTap)="chose.emit(n)"
+          >
+            {{ n }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+  <div
+    class="launch"
+    role="img"
+    [attr.aria-label]="
+      notch() === 'off'
+        ? 'The rocket blasts off'
+        : 'The rocket rises one notch for each number, ' + steps() + ' so far'
+    "
+  >
+    <div
+      [class]="'launch__rocket launch__rocket--' + notch()"
+      [class.launch__rocket--still]="steps() === 0"
+    >
+      <svg class="rocket" viewBox="0 0 64 110" aria-hidden="true">
+        <path class="rocket__flame" d="M22 84 Q32 112 42 84 Z" />
+        <path class="rocket__fin" d="M14 62 L2 84 L18 80 Z" />
+        <path class="rocket__fin" d="M50 62 L62 84 L46 80 Z" />
+        <path class="rocket__body" d="M32 2 C50 18 52 50 46 84 L18 84 C12 50 14 18 32 2 Z" />
+        <circle class="rocket__window" cx="32" cy="40" r="9" />
+        <path class="rocket__fin" d="M22 14 Q32 4 42 14" />
+      </svg>
+    </div>
+    <div class="launch__ground"></div>
+  </div>
+</div>

@@ -35,6 +35,14 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       path: '/count/compare',
     },
     {
+      id: 'rocket-countdown',
+      group: 'count',
+      name: 'Rocket countdown',
+      glyph: '3 2 1',
+      recording: '/recordings/home/rocket-countdown.wav',
+      path: '/count/countdown',
+    },
+    {
       id: 'sound-it-out',
       group: 'read',
       name: 'Sound it out',

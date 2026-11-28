@@ -1,0 +1,199 @@
+:host {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.countdown {
+  display: flex;
+  width: 100%;
+  max-width: var(--content-max);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+
+  @media (min-width: 48rem) {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  @media (max-height: 40rem) {
+    gap: var(--space-4);
+  }
+}
+
+.countdown__left {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-6);
+
+  @media (max-height: 40rem) {
+    gap: var(--space-3);
+  }
+}
+
+.track-row,
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (min-width: 48rem) {
+    justify-content: flex-start;
+  }
+}
+
+.track-row {
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.track-row__cell {
+  display: flex;
+  width: var(--size-9);
+  height: var(--size-9);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-border);
+  font-family: var(--font-read);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+
+  @media (min-width: 40rem) and (min-height: 40rem) {
+    width: var(--size-10);
+    height: var(--size-10);
+    font-size: var(--font-size-3xl);
+  }
+}
+
+.track-row__cell--said {
+  background: var(--color-count);
+  color: var(--color-fg-on-strong);
+}
+
+.track-row__cell--now {
+  background: var(--color-count-strong);
+  color: var(--color-fg-on-strong);
+  box-shadow: 0 0 0 4px var(--color-count-soft);
+}
+
+.choices {
+  gap: var(--gap-targets);
+}
+
+.numeral {
+  --depth: var(--color-depth);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-family: var(--font-read);
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-bold);
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.numeral--lg {
+  width: var(--size-12);
+  height: var(--size-12);
+
+  @media (min-width: 40rem) and (min-height: 40rem) {
+    width: var(--size-13);
+    height: var(--size-13);
+  }
+}
+
+.launch {
+  position: relative;
+  width: 10rem;
+  height: 16rem;
+  flex: none;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  background: var(--color-count-soft);
+
+  @media (min-width: 40rem) and (min-height: 48rem) {
+    height: 20rem;
+  }
+
+  @media (max-height: 40rem) {
+    height: 10rem;
+  }
+}
+
+.launch__ground {
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--space-3);
+  background: var(--color-success);
+}
+
+.launch__rocket {
+  position: absolute;
+  bottom: var(--space-3);
+  left: 50%;
+  margin-left: calc(-1 * var(--size-10) / 2);
+  transition: translate var(--duration-slow) var(--ease-out-quint);
+}
+
+@for $notch from 1 through 10 {
+  .launch__rocket--#{$notch} {
+    translate: 0 calc(-15px * #{$notch});
+  }
+}
+
+.launch__rocket--off {
+  translate: 0 -260px;
+}
+
+// Reduced motion: the rocket stays on the pad; the track and the words carry the count.
+@media (prefers-reduced-motion: reduce) {
+  .launch__rocket {
+    translate: none !important;
+    transition: none;
+  }
+}
+
+.rocket {
+  display: block;
+  width: var(--size-10);
+  height: 6.875rem;
+}
+
+.rocket__flame {
+  fill: var(--color-reward);
+}
+
+.launch__rocket--still .rocket__flame {
+  display: none;
+}
+
+.rocket__fin {
+  fill: var(--color-read);
+}
+
+.rocket__body {
+  fill: var(--color-pibbo-eye);
+  stroke: var(--color-pibbo-ink);
+  stroke-width: 3;
+}
+
+.rocket__window {
+  fill: var(--color-count);
+  stroke: var(--color-pibbo-ink);
+  stroke-width: 3;
+}

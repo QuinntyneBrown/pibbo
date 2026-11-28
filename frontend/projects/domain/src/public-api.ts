@@ -13,3 +13,5 @@ export * from './lib/sounds/sound-out-content';
 export * from './lib/sounds/sound-out-round';
 export * from './lib/counting/compare-content';
 export * from './lib/counting/compare-round';
+export * from './lib/counting/countdown-content';
+export * from './lib/counting/countdown-round';

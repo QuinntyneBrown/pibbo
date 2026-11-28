@@ -22,6 +22,11 @@ export const routes: Routes = [
       import('./pages/which-is-bigger/which-is-bigger').then((m) => m.WhichIsBigger),
   },
   {
+    path: 'count/countdown',
+    loadComponent: () =>
+      import('./pages/rocket-countdown/rocket-countdown').then((m) => m.RocketCountdown),
+  },
+  {
     path: 'read/sound-out',
     loadComponent: () => import('./pages/sound-it-out/sound-it-out').then((m) => m.SoundItOut),
   },

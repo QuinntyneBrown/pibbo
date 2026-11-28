@@ -1,0 +1,16 @@
+<pb-round-shell
+  title="Rocket countdown"
+  [instruction]="instruction()"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-countdown
+    [start]="round().start"
+    [current]="round().current"
+    [choices]="round().choices"
+    [notch]="notch()"
+    (chose)="choose($event)"
+  />
+</pb-round-shell>
