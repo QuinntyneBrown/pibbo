@@ -1,4 +1,4 @@
-// Checks the Sound Out content before every build (ADR 0008, 0015, 0017): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -27,7 +27,15 @@ for (const word of content.words ?? []) {
     const entry = content.sounds?.[sound];
     if (!entry)
       problems.push(`word "${name}": sound "${sound}" is not in the sounds`);
-    else fileExists(entry.recording, `sound "${sound}" recording`);
+    else {
+      fileExists(entry.recording, `sound "${sound}" recording`);
+      // A letter group (L2-014, ADR 0019) is two or three letters with one recording of its own.
+      const letters = entry.letters ?? "";
+      if (letters.length < 1 || letters.length > 3)
+        problems.push(
+          `sound "${sound}": a tile holds one to three letters, not "${letters}"`,
+        );
+    }
   }
   const spelled = (word.sounds ?? [])
     .map((s) => content.sounds?.[s]?.letters ?? "")

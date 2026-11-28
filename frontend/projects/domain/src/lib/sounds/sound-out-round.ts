@@ -1,5 +1,13 @@
-import type { PlaybackStep, RandomSource, Word } from '@pibbo/api';
+import type { PlaybackStep, RandomSource, Sound, Word } from '@pibbo/api';
 import { answerOutcome, type AnswerOutcome } from '../rounds/answer-outcome';
+
+/**
+ * A letter group (L2-014): two or three letters that make one sound ("sh", "igh", "oa"), shown
+ * as one tile and played as one recording.
+ */
+export function isLetterGroup(sound: Sound): boolean {
+  return sound.letters.length > 1;
+}
 
 /** How many pictures a round offers once the word is blended. */
 export const PICTURES_OFFERED = 3;
