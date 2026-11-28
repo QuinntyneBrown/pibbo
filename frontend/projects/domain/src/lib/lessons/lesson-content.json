@@ -28,11 +28,24 @@
     }
   ],
   "lines": {
-    "upNext": { "text": "Up next:", "recording": "/recordings/lessons/up-next.wav" },
+    "upNext": {
+      "text": "Up next:",
+      "recording": "/recordings/lessons/up-next.wav"
+    },
     "done": {
       "text": "Lesson done! You played every game.",
       "recording": "/recordings/lessons/done.wav"
     },
-    "picture": { "text": "Lesson", "recording": "/recordings/home/lesson.wav" }
+    "today": {
+      "text": "Today’s lesson"
+    },
+    "start": {
+      "text": "Start",
+      "recording": "/recordings/home/start.wav"
+    },
+    "keepGoing": {
+      "text": "Keep going",
+      "recording": "/recordings/home/keep-going.wav"
+    }
   }
 }

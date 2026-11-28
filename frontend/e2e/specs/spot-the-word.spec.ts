@@ -3,11 +3,7 @@ import { test, expect } from '../fixtures/test';
 import { HomePage } from '../pages/home.page';
 import { SpotTheWordPage } from '../pages/spot-the-word.page';
 
-const HOME = [
-  '/recordings/home/read.wav',
-  '/recordings/home/more.wav',
-  '/recordings/home/spot-the-word.wav',
-];
+const HOME = ['/recordings/home/read.wav', '/recordings/home/spot-the-word.wav'];
 const FIND = '/recordings/read/find-every.wav';
 const IN_STORY = '/recordings/read/in-the-story.wav';
 const word = (w: string) => `/recordings/common-words/${w}.wav`;
@@ -61,7 +57,7 @@ test.describe('Spot the word: a round', () => {
     await spot.touch(spot.leave);
 
     await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
-    await expect(home.more).toBeVisible();
+    await expect(home.activity('Spot the word')).toBeVisible();
   });
 });
 

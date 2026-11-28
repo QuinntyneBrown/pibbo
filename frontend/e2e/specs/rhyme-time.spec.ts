@@ -3,11 +3,7 @@ import { test, expect } from '../fixtures/test';
 import { HomePage } from '../pages/home.page';
 import { RhymeTimePage } from '../pages/rhyme-time.page';
 
-const HOME = [
-  '/recordings/home/read.wav',
-  '/recordings/home/more.wav',
-  '/recordings/home/rhyme-time.wav',
-];
+const HOME = ['/recordings/home/read.wav', '/recordings/home/rhyme-time.wav'];
 const WHICH = '/recordings/read/which-words-rhyme-with.wav';
 const ALL = '/recordings/read/find-them-all.wav';
 const word = (w: string) => `/recordings/words/${w}.wav`;
@@ -65,7 +61,7 @@ test.describe('Rhyme time: a round', () => {
     await rhyme.touch(rhyme.leave);
 
     await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
-    await expect(home.more).toBeVisible();
+    await expect(home.activity('Rhyme time')).toBeVisible();
   });
 });
 

@@ -4,7 +4,7 @@ export type GroupId = 'count' | 'read';
 /** A group as Home shows it: a picture, a name and the recording that speaks it. */
 export interface ActivityGroup {
   readonly id: GroupId;
-  /** The name shown and spoken, e.g. "Count". */
+  /** The name shown and spoken, e.g. "Counting". */
   readonly name: string;
   /** The picture: a short glyph drawn in the reading face. */
   readonly glyph: string;
@@ -16,6 +16,8 @@ export interface ActivityGroup {
 export interface Activity {
   readonly id: string;
   readonly group: GroupId;
+  /** The section of its group Home lists it under, e.g. "Letters" (ADR 0035). */
+  readonly section: string;
   readonly name: string;
   readonly glyph: string;
   readonly recording: string;

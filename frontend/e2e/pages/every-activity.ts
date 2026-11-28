@@ -5,31 +5,22 @@ import { HomePage, type GroupName } from './home.page';
 export interface Listed {
   readonly group: GroupName;
   readonly name: string;
-  /** How many times More is touched before it shows. */
-  readonly screen: number;
 }
 
-/** Every activity Home lists, screen by screen, read from Home itself (L2-024). */
+/** Every activity Home lists, subject by subject, read from Home itself (L2-024). */
 export async function everyActivity(page: Page): Promise<Listed[]> {
   const home = new HomePage(page);
   const listed: Listed[] = [];
   for (const group of ['Count', 'Read'] as const) {
     await home.open();
     await home.touch(home.group(group));
-    await expect(home.activityGroupTitle).toHaveText(group);
-    for (let screen = 0; screen < 5; screen++) {
-      await expect(home.activities.first()).toBeVisible();
-      const names = (await home.activities.locator('.game-card__title').allTextContents()).map(
-        (n) => n.trim(),
-      );
-      if (names.some((name) => listed.some((l) => l.group === group && l.name === name))) break;
-      for (const name of names) listed.push({ group, name, screen });
-      if ((await home.more.count()) === 0) break;
-      await home.touch(home.more);
-      // Wait for the next screen before reading it. The title, not the whole card: the card's
-      // text is more than its name, so the card never matches it and the wait would not wait.
-      await expect(home.activities.first().locator('.game-card__title')).not.toHaveText(names[0]!);
-    }
+    await expect(home.group(group)).toHaveAttribute('aria-pressed', 'true');
+    // Home lists every activity of a subject on one page, in sections (ADR 0035).
+    await expect(home.activities.first()).toBeVisible();
+    const names = (await home.activities.locator('.game-card__title').allTextContents()).map((n) =>
+      n.trim(),
+    );
+    for (const name of names) listed.push({ group, name });
   }
   return listed;
 }
@@ -39,7 +30,6 @@ export async function openFromHome(page: Page, activity: Listed): Promise<void> 
   const home = new HomePage(page);
   await home.open();
   await home.touch(home.group(activity.group));
-  for (let i = 0; i < activity.screen; i++) await home.touch(home.more);
   await home.touch(home.activity(activity.name));
   await expect(home.root).toHaveCount(0);
 }

@@ -1,10 +1,11 @@
 import type { Activity, ActivityCatalogue } from '@pibbo/api';
-import { ACTIVITIES_PER_SCREEN, activitiesFor, activityScreen, groupById } from './activities-for';
+import { activitiesFor, activitySections, groupById } from './activities-for';
 import { ACTIVITY_CATALOGUE } from './activity-catalogue';
 
-const activity = (id: string, group: 'count' | 'read'): Activity => ({
+const activity = (id: string, group: 'count' | 'read', section = 'S'): Activity => ({
   id,
   group,
+  section,
   name: id,
   glyph: id,
   recording: `/recordings/home/${id}.wav`,
@@ -27,39 +28,42 @@ describe('activitiesFor', () => {
   });
 });
 
-describe('activityScreen', () => {
-  const of = (n: number): ActivityCatalogue => ({
+describe('activitySections', () => {
+  const catalogue: ActivityCatalogue = {
     groups: ACTIVITY_CATALOGUE.groups,
-    activities: Array.from({ length: n }, (_, i) => activity(`c${i}`, 'count')),
-  });
-  const ids = (c: ActivityCatalogue, screen: number) =>
-    activityScreen(c, 'count', screen).activities.map((a) => a.id);
+    activities: [
+      activity('r1', 'read', 'Letters'),
+      activity('c1', 'count', 'Numbers'),
+      activity('r2', 'read', 'Words'),
+      activity('r3', 'read', 'Letters'),
+    ],
+  };
+  const named = (group: 'count' | 'read' | null) =>
+    activitySections(catalogue, group).map((s) => [s.name, s.activities.map((a) => a.id)]);
 
-  it('shows a group of up to 6 on one screen with no More', () => {
-    expect(ACTIVITIES_PER_SCREEN).toBe(6);
-    expect(activityScreen(of(6), 'count', 0)).toEqual({
-      activities: of(6).activities,
-      more: false,
-    });
-    expect(activityScreen(of(6), 'count', 1).more).toBe(false);
-  });
-
-  it('shows a group of more than 6 five a screen with More, wrapping to the first', () => {
-    expect(ids(of(7), 0)).toEqual(['c0', 'c1', 'c2', 'c3', 'c4']);
-    expect(activityScreen(of(7), 'count', 0).more).toBe(true);
-    expect(ids(of(7), 1)).toEqual(['c5', 'c6']);
-    expect(ids(of(7), 2)).toEqual(ids(of(7), 0));
-    expect(ids(of(11), 2)).toEqual(['c10']);
+  it('lists a subject by section, in the order each section first appears', () => {
+    expect(named('read')).toEqual([
+      ['Letters', ['r1', 'r3']],
+      ['Words', ['r2']],
+    ]);
+    expect(named('count')).toEqual([['Numbers', ['c1']]]);
   });
 
-  it('shows nothing when no group is chosen', () => {
-    expect(activityScreen(of(7), null, 0)).toEqual({ activities: [], more: false });
+  it('lists nothing when no subject is chosen', () => {
+    expect(named(null)).toEqual([]);
+  });
+
+  it("gives the catalogue the prototype's sections", () => {
+    const sections = (g: 'count' | 'read') =>
+      activitySections(ACTIVITY_CATALOGUE, g).map((s) => s.name);
+    expect(sections('read')).toEqual(['Letters', 'Sounds into words', 'Words and sentences']);
+    expect(sections('count')).toEqual(['Counting', 'Numbers']);
   });
 });
 
 describe('groupById', () => {
   it('finds a group by its id', () => {
-    expect(groupById(ACTIVITY_CATALOGUE, 'read')?.name).toBe('Read');
+    expect(groupById(ACTIVITY_CATALOGUE, 'read')?.name).toBe('Reading');
   });
 
   it('treats anything else as no group', () => {
@@ -70,8 +74,8 @@ describe('groupById', () => {
 });
 
 describe('ACTIVITY_CATALOGUE', () => {
-  it('has Count and Read, each with an activity, and every recording and path on our origin', () => {
-    expect(ACTIVITY_CATALOGUE.groups.map((g) => g.name)).toEqual(['Count', 'Read']);
+  it('has Reading and Counting, each with an activity, and every recording and path on our origin', () => {
+    expect(ACTIVITY_CATALOGUE.groups.map((g) => g.name)).toEqual(['Reading', 'Counting']);
     for (const g of ACTIVITY_CATALOGUE.groups) {
       expect(activitiesFor(ACTIVITY_CATALOGUE, g.id).length).toBeGreaterThan(0);
     }

@@ -96,7 +96,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   journey 2's reconciliation and the Lesson picture, check picture, More screens
   (`reading-more`, `counting-more`) and `first-visit` recorded below, which are kept as history.
   The mocks keep three things the prototype lacks: the grown-up padlock beside the child's name
-  (ADR 0029), every target at least 60 px (the switch is 60 px tall, not 48), and nothing spoken
+  (ADR 0029), 48 px clear of every child target (the cards start 48 px under the top bar, not 24), every target at least 60 px and 16 px from the next (the switch is 60 px tall, not 48, and its two choices 16 px apart, not 4), and nothing spoken
   until the first touch. Home opens with Reading chosen (`lesson-start`); only activities that
   exist are listed, so the prototype's six Sound it out variants are one card. The page stops
   growing at 1280 px (`--layout-container-max`).

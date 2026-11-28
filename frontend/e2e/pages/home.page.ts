@@ -16,25 +16,43 @@ export class HomePage {
   readonly main: Locator;
   readonly groups: Locator;
   readonly activities: Locator;
-  readonly activityGroupTitle: Locator;
-  /** More: the next screen of a group with more than 6 activities. */
-  readonly more: Locator;
-  /** The chosen group's guided lesson (L2-024 #4). */
+  /** The section headings over the chosen subject's activities, in order. */
+  readonly sectionTitles: Locator;
+  /** Today's lesson card, its title, its dots and its Start / Keep going button (L2-024 #4). */
+  readonly lessonCard: Locator;
+  readonly lessonTitle: Locator;
+  readonly lessonDots: Locator;
   readonly lesson: Locator;
+  /** The "What do I know?" card. */
+  readonly checkCard: Locator;
+  /** The sample child's stars and name in the top bar (L2-024 #7). */
+  readonly starsTotal: Locator;
+  readonly childName: Locator;
 
   constructor(private readonly page: Page) {
     this.root = page.locator('.home');
     this.wordmark = page.locator('.home__top .wordmark');
     this.main = page.locator('main#main');
-    this.groups = page.locator('.switch--groups .switch__option');
-    this.activities = page.locator('.home__games .game-card:not(.game-card--more)');
-    this.activityGroupTitle = page.locator('.home__games .game-group__title');
-    this.more = page.locator('.home__games .game-card--more');
-    this.lesson = page.locator('.home__lesson');
+    this.groups = page.locator('.switch--subjects .switch__option');
+    this.activities = page.locator('.home__games .game-card');
+    this.sectionTitles = page.locator('.home__games .game-group__title');
+    this.lessonCard = page.locator('.lesson-card');
+    this.lessonTitle = this.lessonCard.locator('.lesson-card__title');
+    this.lessonDots = this.lessonCard.locator('.lesson-card__dots');
+    this.lesson = this.lessonCard.locator('.lesson-card__action .chunky');
+    this.checkCard = page.locator('.home .check-card');
+    this.starsTotal = page.locator('.home__top .pill--stars');
+    this.childName = page.locator('.home__top .pill--child');
   }
 
+  /** Count is shown as "Counting", Read as "Reading" (ADR 0035). */
   group(name: GroupName): Locator {
-    return this.groups.filter({ hasText: name });
+    return this.groups.filter({ hasText: name === 'Count' ? 'Counting' : 'Reading' });
+  }
+
+  /** The stars an activity card shows, one image named "2 of 3 stars". */
+  stars(name: string): Locator {
+    return this.activity(name).locator('.stars');
   }
 
   activity(name: string): Locator {
@@ -68,7 +86,7 @@ export class HomePage {
   async switchSurfaces(): Promise<{ tray: string; options: string[] }> {
     const background = (el: Element) => getComputedStyle(el).backgroundColor;
     return {
-      tray: await this.page.locator('.switch--groups').evaluate(background),
+      tray: await this.page.locator('.switch--subjects').evaluate(background),
       options: await this.groups.evaluateAll((all) =>
         all.map((el) => getComputedStyle(el).backgroundColor),
       ),
@@ -106,6 +124,7 @@ export class HomePage {
    * through Chromium's touch input. The palm lifts only after the tap.
    */
   async tapWithPalmResting(target: Locator): Promise<void> {
+    await target.scrollIntoViewIfNeeded();
     const box = await target.boundingBox();
     if (!box) throw new Error('target not shown');
     const viewport = this.page.viewportSize() ?? { width: 400, height: 800 };
@@ -127,6 +146,7 @@ export class HomePage {
 
   /** Holds one finger on `target` for `ms` on the page's clock, then lifts it. */
   async longPress(target: Locator, ms: number): Promise<void> {
+    await target.scrollIntoViewIfNeeded();
     const box = await target.boundingBox();
     if (!box) throw new Error('target not shown');
     const point = { x: box.x + box.width / 2, y: box.y + box.height / 2, id: 1 };
@@ -141,6 +161,8 @@ export class HomePage {
   async touchActivityThenReadAtOnce(name: string): Promise<void> {
     const read = this.group('Read');
     const activity = this.activity(name);
+    await activity.scrollIntoViewIfNeeded();
+    await read.scrollIntoViewIfNeeded();
     const [a, r] = [await activity.boundingBox(), await read.boundingBox()];
     if (!a || !r) throw new Error('target not shown');
     const at = (b: Box, id: number) => ({ x: b.x + b.width / 2, y: b.y + b.height / 2, id });
@@ -156,12 +178,20 @@ export class HomePage {
   async targetBoxes(): Promise<Box[]> {
     const boxes: Box[] = [];
     for (const t of await this.page
-      .locator('.switch__option, .game-card, .home__lesson, .check-card')
+      .locator('.switch__option, .game-card, .lesson-card__action .chunky, .check-card')
       .all()) {
       const b = await t.boundingBox();
       if (b) boxes.push(b);
     }
     return boxes;
+  }
+
+  /** Whether the page can scroll sideways: Home scrolls down, never across (L2-024 #3). */
+  async scrollsSideways(): Promise<boolean> {
+    return this.page.evaluate(() => {
+      const el = document.scrollingElement ?? document.documentElement;
+      return el.scrollWidth > el.clientWidth;
+    });
   }
 
   /** Whether the page can scroll in either direction. */

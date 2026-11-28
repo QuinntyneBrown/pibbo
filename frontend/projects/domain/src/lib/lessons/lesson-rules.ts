@@ -75,3 +75,11 @@ export function finishStep(
   const n = typeof finished === 'string' ? Number(finished) : finished;
   return n === current && current <= steps.length ? current + 1 : current;
 }
+
+/**
+ * How many of a lesson's games are done, for Home's lesson card (ADR 0035): the steps before the
+ * kept one. Nothing kept, or anything damaged, is none done.
+ */
+export function lessonDone(stored: unknown, steps: readonly LessonStep[]): number {
+  return (readLessonPlace(stored, steps) ?? 1) - 1;
+}

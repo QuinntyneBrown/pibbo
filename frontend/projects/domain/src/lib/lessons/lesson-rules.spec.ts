@@ -4,6 +4,7 @@ import { LESSONS } from './lesson-content';
 import {
   finishStep,
   lessonById,
+  lessonDone,
   lessonKey,
   lessonPlace,
   lessonSteps,
@@ -13,6 +14,7 @@ import {
 const activity = (id: string): Activity => ({
   id,
   group: 'count',
+  section: 'Counting',
   name: id,
   glyph: id,
   recording: `/recordings/home/${id}.wav`,
@@ -100,5 +102,19 @@ describe('finishStep', () => {
     expect(finishStep(3, undefined, steps)).toBe(3);
     expect(finishStep(3, 'x', steps)).toBe(3);
     expect(finishStep(4, 4, steps)).toBe(4);
+  });
+});
+
+describe('lessonDone', () => {
+  it('counts the games before the kept step', () => {
+    expect(lessonDone(lessonPlace(1, steps), steps)).toBe(0);
+    expect(lessonDone(lessonPlace(3, steps), steps)).toBe(2);
+    expect(lessonDone(lessonPlace(4, steps), steps)).toBe(3);
+  });
+
+  it('counts nothing kept, or anything damaged, as none done', () => {
+    expect(lessonDone(null, steps)).toBe(0);
+    expect(lessonDone({ v: 1, step: 2, at: 'c' }, steps)).toBe(0);
+    expect(lessonDone('2', steps)).toBe(0);
   });
 });

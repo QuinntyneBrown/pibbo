@@ -1,0 +1,124 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.lesson-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: var(--space-6);
+  border-radius: var(--radius-2xl);
+  background: var(--color-count-strong);
+  color: var(--color-fg-on-strong);
+
+  @media (min-width: 40rem) {
+    padding: var(--space-7);
+  }
+}
+
+.lesson-card--read {
+  background: var(--color-read-strong);
+}
+
+.lesson-card__hello {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  opacity: 0.85;
+}
+
+.lesson-card__title {
+  max-width: 16ch;
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+
+  @media (min-width: 40rem) {
+    font-size: var(--font-size-4xl);
+  }
+}
+
+.lesson-card__dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.dot {
+  width: var(--size-1);
+  height: var(--size-1);
+  flex: none;
+  border-radius: var(--radius-full);
+  background: var(--color-on-strong-dim);
+}
+
+.dot--done {
+  width: var(--size-6);
+  background: var(--color-reward);
+}
+
+.dot--now {
+  width: var(--size-6);
+  background: var(--color-fg-on-strong);
+}
+
+.lesson-card__action {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--space-6);
+}
+
+.chunky {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-width: var(--target-child);
+  min-height: var(--target-child);
+  height: var(--control-height);
+  padding: 0 var(--space-8);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-reward);
+  color: var(--color-on-reward);
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  box-shadow: 0 var(--press-depth) 0 var(--color-reward-depth);
+  touch-action: manipulation;
+
+  &:active {
+    transform: translateY(var(--press-travel));
+    box-shadow: 0 var(--press-depth-down) 0 var(--color-reward-depth);
+  }
+}
+
+.chunky__icon {
+  width: var(--size-4);
+  height: var(--size-4);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+// Pibbo stands at the card's foot from 640 px; on a phone the words have the room.
+.lesson-card__pibbo {
+  --pibbo-size: 9.375rem;
+  position: absolute;
+  right: var(--space-4);
+  bottom: calc(-1 * var(--space-4));
+  display: none;
+  pointer-events: none;
+
+  @media (min-width: 40rem) {
+    display: block;
+  }
+}

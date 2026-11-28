@@ -1,23 +1,21 @@
-// The button fills the place Home gives it, beside the group pictures.
 :host {
   display: grid;
   min-width: 0;
 }
 
+// A row on a phone; a column beside today's lesson from 768 px.
 .check-card {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  min-width: var(--target-child);
+  gap: var(--space-4);
   min-height: var(--target-child);
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-6);
   border: 0;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-2xl);
   background: var(--color-reward);
   color: var(--color-on-reward);
-  text-align: center;
+  font-family: var(--font-display);
+  text-align: left;
   box-shadow: 0 var(--press-depth) 0 var(--color-reward-depth);
   touch-action: manipulation;
 
@@ -25,24 +23,28 @@
     transform: translateY(var(--press-travel));
     box-shadow: 0 var(--press-depth-down) 0 var(--color-reward-depth);
   }
+
+  @media (min-width: 48rem) {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
 }
 
-.check-card__glyph {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: var(--radius-full);
-  background: var(--color-surface);
-  color: var(--color-fg);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
+.check-card__words {
+  min-width: 0;
 }
 
 .check-card__title {
-  font-size: var(--font-size-md);
+  display: block;
+  font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
+}
+
+.check-card__text {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--font-size-md);
+  opacity: 0.8;
 }

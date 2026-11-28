@@ -7,9 +7,10 @@ const recording = (id: string) => `/recordings/home/${id}.wav`;
 
 describe('earnedActivities', () => {
   it('gives each activity answered right once, in Home’s order', () => {
-    const earned = earnedActivities(['rhyme-time', 'count-the-toys', 'rhyme-time'], activities);
+    const earned = earnedActivities(['count-the-toys', 'rhyme-time', 'count-the-toys'], activities);
 
-    expect(earned.map((a) => a.id)).toEqual(['count-the-toys', 'rhyme-time']);
+    // Home lists Reading first (ADR 0035).
+    expect(earned.map((a) => a.id)).toEqual(['rhyme-time', 'count-the-toys']);
   });
 });
 

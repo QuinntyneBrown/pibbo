@@ -1,13 +1,12 @@
-<div class="switch switch--groups">
+<div class="switch switch--subjects">
   @for (group of groups(); track group.id) {
     <button
       type="button"
-      class="switch__option switch__option--group press"
+      class="switch__option"
       [class.switch__option--read]="group.id === 'read'"
       [attr.aria-pressed]="group.id === chosen()"
       (pbTap)="touched.emit(group)"
     >
-      <span class="switch__glyph" aria-hidden="true">{{ group.glyph }}</span>
       {{ group.name }}
     </button>
   }

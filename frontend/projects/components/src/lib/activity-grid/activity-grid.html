@@ -1,17 +1,15 @@
-<section class="game-group" aria-labelledby="activity-grid-title">
-  <h2 class="game-group__title" id="activity-grid-title">{{ title() }}</h2>
+<section class="game-group" [attr.aria-label]="title()">
+  <h2 class="game-group__title">{{ title() }}</h2>
   <ul class="game-group__grid">
     @for (activity of activities(); track activity.id) {
       <li>
         <pb-activity-picture
           [activity]="activity"
+          [stars]="stars()[activity.id] ?? 0"
           [offline]="offline().has(activity.id)"
           (touched)="touched.emit($event)"
         />
       </li>
-    }
-    @if (more(); as more) {
-      <li><pb-activity-picture [activity]="more" [more]="true" (touched)="next.emit()" /></li>
     }
   </ul>
 </section>

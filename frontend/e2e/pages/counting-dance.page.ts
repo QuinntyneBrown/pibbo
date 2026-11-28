@@ -51,7 +51,6 @@ export class CountingDancePage {
     const home = new HomePage(this.page);
     await home.open();
     await home.touch(home.group('Count'));
-    await home.touch(home.more);
     await home.touch(home.activity('Counting dance'));
     await expect(this.root).toBeVisible();
   }

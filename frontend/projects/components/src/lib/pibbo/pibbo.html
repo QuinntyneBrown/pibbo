@@ -5,8 +5,9 @@
   [class.pibbo--xl]="size() === 'xl'"
   [class.pibbo--sm]="size() === 'sm'"
   viewBox="0 0 120 120"
-  role="img"
-  [attr.aria-label]="label()"
+  [attr.role]="decorative() ? null : 'img'"
+  [attr.aria-label]="decorative() ? null : label()"
+  [attr.aria-hidden]="decorative() || null"
 >
   <path class="pibbo__stem" d="M60 30 C60 22 60 18 61 13" />
   <path class="pibbo__leaf" d="M60 18 C52 18 44 13 43 5 C51 4 59 9 60 18 Z" />

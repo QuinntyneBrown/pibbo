@@ -33,9 +33,11 @@ sample data wherever it shows something about a child.
 5. **The subjects are named Reading and Counting**, as the prototype names them, and Reading is
    chosen when Home opens. Their recordings say the same words.
 6. **Kept from the rules the prototype predates:** the grown-up padlock sits in the top bar after
-   the child's name (ADR 0029); every target is at least 60 × 60 px with 16 px between (the
-   switch is 60 px tall, not the prototype's 48); nothing is spoken until the first touch; only
-   activities that exist are listed, so the prototype's six Sound it out cards are one.
+   the child's name, 48 px from every child target, so the cards start 48 px under the top bar,
+   not 24 (ADR 0029, `L2-037` #1); every target is at least 60 × 60 px with 16 px between (the
+   switch is 60 px tall, not 48, and its choices 16 px apart, not 4); nothing is spoken until
+   the first touch; only activities that exist are listed, so the prototype's six Sound it out
+   cards are one.
 
 ## Consequences
 

@@ -336,7 +336,9 @@ for (const lesson of lessonContent.lessons ?? []) {
   if (!lesson.title) problems.push(`lesson "${lesson.id}": no title`);
   fileExists(lesson.recording, `lesson "${lesson.id}" recording`);
 }
-for (const line of ["upNext", "done", "picture"]) {
+// Home's lesson card says "Today's lesson" and Start or Keep going (ADR 0035).
+if (!lessonContent.lines?.today?.text) problems.push("lesson today: no text");
+for (const line of ["upNext", "done", "start", "keepGoing"]) {
   if (!lessonContent.lines?.[line]?.text)
     problems.push(`lesson ${line}: no text`);
   fileExists(

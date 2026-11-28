@@ -23,11 +23,16 @@ export interface LessonStep {
   readonly activity: Activity;
 }
 
-/** What the path says: "Up next", the lesson done, and the Home picture's name. */
+/**
+ * What the path says ("Up next", the lesson done), and what Home's lesson card says: its
+ * greeting and its button, "Start" before the first game and "Keep going" after (ADR 0035).
+ */
 export interface LessonLines {
   readonly upNext: { readonly text: string; readonly recording: string };
   readonly done: { readonly text: string; readonly recording: string };
-  readonly picture: { readonly text: string; readonly recording: string };
+  readonly today: { readonly text: string };
+  readonly start: { readonly text: string; readonly recording: string };
+  readonly keepGoing: { readonly text: string; readonly recording: string };
 }
 
 /**

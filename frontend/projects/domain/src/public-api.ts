@@ -36,6 +36,7 @@ export * from './lib/sounds/common-words-content';
 export * from './lib/sounds/spot-round';
 export * from './lib/lessons/lesson-content';
 export * from './lib/lessons/lesson-rules';
+export * from './lib/child/sample-child';
 export * from './lib/rounds/check-game-content';
 export * from './lib/rounds/check-plan';
 export * from './lib/rounds/check-questions';

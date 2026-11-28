@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+
+.stars {
+  display: flex;
+  gap: var(--space-0-5);
+}
+
+.star {
+  width: var(--size-2);
+  height: var(--size-2);
+  flex: none;
+  fill: var(--color-bg-sunken);
+  stroke: var(--color-border);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.star--on {
+  fill: var(--color-reward);
+  stroke: var(--color-reward-strong);
+}

@@ -54,7 +54,6 @@ async function openWithKeyboard(page: Page, activity: Listed): Promise<void> {
   const home = new HomePage(page);
   await home.open();
   await tabTo(page, home.group(activity.group));
-  for (let i = 0; i < activity.screen; i++) await tabTo(page, home.more);
   await tabTo(page, home.activity(activity.name), 'Space');
   await expect(home.root).toHaveCount(0);
 }

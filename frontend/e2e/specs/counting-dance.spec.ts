@@ -2,11 +2,7 @@
 import { test, expect } from '../fixtures/test';
 import { CountingDancePage } from '../pages/counting-dance.page';
 
-const HOME = [
-  '/recordings/home/count.wav',
-  '/recordings/home/more.wav',
-  '/recordings/home/counting-dance.wav',
-];
+const HOME = ['/recordings/home/count.wav', '/recordings/home/counting-dance.wav'];
 const ASK = '/recordings/count/dance-and-say-each-number.wav';
 const ALL_THE_WAY = '/recordings/count/you-danced-all-the-way-to.wav';
 const beat = (n: number) => `/recordings/dance/${n}.wav`;

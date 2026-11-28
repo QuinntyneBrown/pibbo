@@ -1,46 +1,42 @@
 <div class="home">
   <header class="home__top">
     <pb-wordmark size="md" />
-    @if (lesson(); as lesson) {
-      <button
-        type="button"
-        class="chunky home__lesson"
-        [class.chunky--read]="lesson.id === 'read'"
-        (pbTap)="openLesson(lesson)"
-      >
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="5" cy="18" r="2.5" />
-          <circle cx="19" cy="6" r="2.5" />
-          <path d="M7.5 18H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h7.5" />
-        </svg>
-        {{ lessonLine.text }}
-      </button>
-    }
-    <pb-grown-up-entry (touched)="openGate()" />
+    <div class="home__me">
+      <pb-child-badge [name]="child.name" [stars]="totalStars" />
+      <pb-grown-up-entry (touched)="openGate()" />
+    </div>
   </header>
   <main class="home__main" id="main">
     <h1 class="visually-hidden">Choose an activity</h1>
-    <div class="home__row">
-      <nav class="home__subjects" aria-label="Groups">
-        <pb-group-switch
-          [groups]="catalogue.groups"
-          [chosen]="chosen()?.id ?? null"
-          (touched)="chooseGroup($event)"
+    <section class="home__hero" aria-label="Today">
+      @if (lesson(); as today) {
+        <pb-lesson-card
+          [subject]="chosen().id"
+          [hello]="hello"
+          [title]="today.lesson.title"
+          [games]="today.games"
+          [done]="today.done"
+          [action]="today.line.text"
+          (touched)="openLesson(today.lesson, today.line.recording)"
         />
-      </nav>
-      <div class="home__check">
-        <pb-check-card [name]="checkGame.name" (touched)="openCheckGame()" />
-      </div>
-    </div>
+      }
+      <pb-check-card [name]="checkGame.name" [text]="checkGame.text" (touched)="openCheckGame()" />
+    </section>
+    <nav class="home__subjects" aria-label="Subjects">
+      <pb-group-switch
+        [groups]="catalogue.groups"
+        [chosen]="chosen().id"
+        (touched)="chooseGroup($event)"
+      />
+    </nav>
     <div class="home__games">
-      @if (chosen(); as group) {
+      @for (section of sections(); track section.name) {
         <pb-activity-grid
-          [title]="group.name"
-          [activities]="screen().activities"
-          [more]="more()"
+          [title]="section.name"
+          [activities]="section.activities"
+          [stars]="stars"
           [offline]="unavailable()"
           (touched)="openActivity($event)"
-          (next)="showMore()"
         />
       }
     </div>

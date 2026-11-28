@@ -1,70 +1,40 @@
+// Reading and Counting on one tray; the chosen subject is filled in its colour (ADR 0035). The
+// two are 16 px apart, clear of each other, where the prototype had 4 px.
 .switch {
   display: inline-flex;
-  flex-wrap: wrap;
   gap: var(--gap-targets);
+  max-width: 100%;
   padding: var(--space-1-5);
   border-radius: var(--radius-lg);
   background: var(--color-bg-sunken);
 }
 
 .switch__option {
-  --depth: var(--color-depth);
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-1);
-  min-width: var(--size-12);
-  min-height: var(--size-12);
-  padding: var(--space-3) var(--space-6);
+  min-width: var(--target-child);
+  height: var(--target-child);
+  padding: 0 var(--space-6);
   border: 0;
-  border-radius: var(--radius-xl);
-  background: var(--color-surface);
-  color: var(--color-fg);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-fg-muted);
+  font-family: var(--font-display);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
-  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
   transition:
-    transform var(--duration-instant) var(--ease-out-quint),
-    box-shadow var(--duration-instant) var(--ease-out-quint),
     background-color var(--duration-fast) var(--ease-standard),
     color var(--duration-fast) var(--ease-standard);
 
-  &:active {
-    transform: translateY(var(--press-travel));
-    box-shadow: 0 var(--press-depth-down) 0 var(--depth);
-  }
-
   &[aria-pressed='true'] {
-    --depth: var(--color-count-depth);
     background: var(--color-count-strong);
     color: var(--color-fg-on-strong);
-
-    // A tick shows the chosen group as well as its colour.
-    &::after {
-      content: '\2713';
-      font-size: var(--font-size-lg);
-      line-height: 1;
-    }
   }
-}
-
-// Once a group is chosen, the other lies flat on the tray.
-.switch:has([aria-pressed='true']) .switch__option[aria-pressed='false'] {
-  background: transparent;
-  color: var(--color-fg-muted);
-  box-shadow: none;
 }
 
 .switch__option--read[aria-pressed='true'] {
-  --depth: var(--color-read-depth);
   background: var(--color-read-strong);
-}
-
-.switch__glyph {
-  font-family: var(--font-read);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  line-height: 1;
 }

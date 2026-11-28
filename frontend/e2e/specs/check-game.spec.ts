@@ -10,7 +10,7 @@ const FIRST_LESSON =
   /^(Which word goes with the picture\?|How many (teddies|ducks|balls)\?|Which one rhymes with “\w+”\?|Which number is bigger\?)$/;
 
 test.describe('Check game: opening it', () => {
-  test('Given Home, when nothing has been chosen, then the check game has its own picture, at least 60 x 60 px, and nothing scrolls', async ({
+  test('Given Home, when nothing has been chosen, then the check game has its own card, at least 60 x 60 px, and nothing scrolls sideways', async ({
     page,
   }) => {
     const check = new CheckGamePage(page);
@@ -21,7 +21,7 @@ test.describe('Check game: opening it', () => {
     const box = (await check.card().boundingBox())!;
     expect(box.width).toBeGreaterThanOrEqual(60);
     expect(box.height).toBeGreaterThanOrEqual(60);
-    expect(await home.scrolls()).toBe(false);
+    expect(await home.scrollsSideways()).toBe(false);
   });
 
   test('Given nothing has been practised, when the child touches the picture, then its name is spoken and a question of the first lesson is spoken and shown with three choices, out of five, and Check takes no touch', async ({

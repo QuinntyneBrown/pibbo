@@ -1,4 +1,4 @@
-// Traces to: L2-024, L2-009
+// Traces to: L2-024, L2-009 (ADR 0035)
 import { test, expect } from '../fixtures/test';
 import { HomePage } from '../pages/home.page';
 import { SoundItOutPage } from '../pages/sound-it-out.page';
@@ -29,26 +29,29 @@ async function expectTargetsSizedAndApart(home: HomePage): Promise<void> {
       expect(gapBetween(boxes[i]!, boxes[j]!)).toBeGreaterThanOrEqual(16);
     }
   }
-  expect(await home.scrolls()).toBe(false);
+  expect(await home.scrollsSideways()).toBe(false);
 }
 
+const READING = ['Letters', 'Sounds into words', 'Words and sentences'];
+const COUNTING = ['Counting', 'Numbers'];
+
 test.describe('Home: choose an activity', () => {
-  test('Given Home has just opened, when shown, then Count and Read show, nothing is chosen or spoken, nothing scrolls and targets are 60 px with 16 px between', async ({
+  test('Given Home has just opened, when nothing has been touched, then Reading is chosen with its sections, nothing is spoken, nothing scrolls sideways and targets are 60 px with 16 px between', async ({
     page,
     spoken,
   }) => {
     const home = new HomePage(page);
     await home.open();
 
-    await expect(home.groups).toHaveCount(2);
+    await expect(home.groups).toHaveText(['Reading', 'Counting']);
+    await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
     await expect(home.group('Count')).toHaveAttribute('aria-pressed', 'false');
-    await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'false');
-    await expect(home.activities).toHaveCount(0);
+    await expect(home.sectionTitles).toHaveText(READING);
     await expectTargetsSizedAndApart(home);
     expect(await spoken.recordings()).toEqual([]);
   });
 
-  test('Given Home, when the child touches the Count picture, then "Count" is spoken and the counting activities are shown', async ({
+  test('Given Home, when the child touches Counting, then "Counting" is spoken and the counting activities are shown in their sections', async ({
     page,
     spoken,
   }) => {
@@ -58,78 +61,119 @@ test.describe('Home: choose an activity', () => {
     await home.touch(home.group('Count'));
 
     await expect(home.group('Count')).toHaveAttribute('aria-pressed', 'true');
-    await expect(home.activityGroupTitle).toHaveText('Count');
-    await expect(home.activity('Count the toys')).toBeVisible();
-    await expect(home.activity('Sound it out')).toHaveCount(0);
+    await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'false');
+    await expect(home.sectionTitles).toHaveText(COUNTING);
+    await expect(home.activities).toHaveText([
+      /Count the toys/,
+      /Count and write/,
+      /Rocket countdown/,
+      /Skip-count/,
+      /Counting dance/,
+      /Which is bigger\?/,
+      /Add together/,
+    ]);
     expect(await spoken.recordings()).toEqual(['/recordings/home/count.wav']);
     await expectTargetsSizedAndApart(home);
   });
 
-  test('Given Count has more than 6 activities, when it is chosen, then 5 show with More, and More speaks "More" and shows the next screen, whose More shows the first again', async ({
+  test('Given Counting is chosen, when the child touches Reading, then "Reading" is spoken and every reading activity is shown in its section', async ({
     page,
     spoken,
   }) => {
     const home = new HomePage(page);
-    await home.open();
-    await home.touch(home.group('Count'));
-
-    await expect(home.activities).toHaveCount(5);
-    await expect(home.activity('Counting dance')).toHaveCount(0);
-    await expect(home.more).toHaveText(/More/);
-
-    await home.touch(home.more);
-
-    await expect(home.activities).toHaveText([/Add together/, /Counting dance/]);
-    await expectTargetsSizedAndApart(home);
-    await expect
-      .poll(() => spoken.recordings())
-      .toEqual(['/recordings/home/count.wav', '/recordings/home/more.wav']);
-
-    await home.touch(home.more);
-
-    await expect(home.activities).toHaveCount(5);
-    await expect(home.activity('Count the toys')).toBeVisible();
-  });
-
-  test('Given Read has more than 6 activities, when it is chosen, then 5 show with More, and More shows Spot the word, Rhyme time and Build a sentence', async ({
-    page,
-    spoken,
-  }) => {
-    const home = new HomePage(page);
-    await home.open();
-    await home.touch(home.group('Read'));
-
-    await expect(home.activities).toHaveCount(5);
-    await expect(home.activity('Rhyme time')).toHaveCount(0);
-    await expect(home.more).toHaveText(/More/);
-
-    await home.touch(home.more);
-
-    await expect(home.activities).toHaveText([/Spot the word/, /Rhyme time/, /Build a sentence/]);
-    await expectTargetsSizedAndApart(home);
-    await expect
-      .poll(() => spoken.recordings())
-      .toEqual(['/recordings/home/read.wav', '/recordings/home/more.wav']);
-  });
-
-  test('Given Home, when the child touches the Read picture, then "Read" is spoken and the reading activities are shown', async ({
-    page,
-    spoken,
-  }) => {
-    const home = new HomePage(page);
-    await home.open();
+    await home.open('/?group=count');
 
     await home.touch(home.group('Read'));
 
     await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
-    await expect(home.group('Count')).toHaveAttribute('aria-pressed', 'false');
-    await expect(home.activity('Sound it out')).toBeVisible();
-    await expect(home.activity('Count the toys')).toHaveCount(0);
+    await expect(home.sectionTitles).toHaveText(READING);
+    await expect(home.activities).toHaveText([
+      /Big and small letters/,
+      /Letter sounds/,
+      /Sound it out/,
+      /Spell by sound/,
+      /Rhyme time/,
+      /Words and pictures/,
+      /Spot the word/,
+      /Build a sentence/,
+    ]);
     expect(await spoken.recordings()).toEqual(['/recordings/home/read.wav']);
-    await expectTargetsSizedAndApart(home);
   });
 
-  test('Given the counting activities, when the child touches an activity picture once, then its name is spoken and it opens @critical', async ({
+  test("Given Home, when shown, then the sample child's name and 26 stars are in the top bar and each card names its stars out of three", async ({
+    page,
+  }) => {
+    const home = new HomePage(page);
+    await home.open();
+
+    await expect(home.childName).toHaveText(/Maya/);
+    await expect(home.starsTotal).toHaveAccessibleName('26 stars');
+    await expect(home.stars('Big and small letters')).toHaveAccessibleName('3 of 3 stars');
+    await expect(home.stars('Words and pictures')).toHaveAccessibleName('1 of 3 stars');
+  });
+
+  test("Given no lesson game is done, when Home is shown, then today's lesson is named with no dot done, and Start is spoken and opens the lesson", async ({
+    page,
+    spoken,
+  }) => {
+    const home = new HomePage(page);
+    await home.open();
+
+    await expect(home.lessonTitle).toHaveText('Sounds that team up');
+    await expect(home.lessonDots).toHaveAccessibleName('0 of 5 games done');
+    await expect(home.lesson).toHaveText(/Start/);
+
+    await home.touch(home.lesson);
+
+    await expect(page).toHaveURL(/\/lesson\/read$/);
+    expect((await spoken.recordings())[0]).toBe('/recordings/home/start.wav');
+  });
+
+  test('Given two games of the reading lesson are done, when Home is shown, then two dots are done and Keep going is spoken', async ({
+    page,
+    spoken,
+  }) => {
+    await page.addInitScript(() =>
+      localStorage.setItem(
+        'pibbo:lesson:read',
+        JSON.stringify({ v: 1, step: 3, at: 'spell-by-sound' }),
+      ),
+    );
+    const home = new HomePage(page);
+    await home.open();
+
+    await expect(home.lessonDots).toHaveAccessibleName('2 of 5 games done');
+    await expect(home.lesson).toHaveText(/Keep going/);
+
+    await home.touch(home.lesson);
+
+    await expect(page).toHaveURL(/\/lesson\/read$/);
+    expect((await spoken.recordings())[0]).toBe('/recordings/home/keep-going.wav');
+  });
+
+  test("Given Counting is chosen, when Home is shown, then today's lesson is the counting lesson", async ({
+    page,
+  }) => {
+    const home = new HomePage(page);
+    await home.open('/?group=count');
+
+    await expect(home.lessonTitle).toHaveText('Numbers up and down');
+  });
+
+  for (const width of [320, 768, 1024, 1920]) {
+    test(`Given a ${width} px wide screen, when Home is shown, then nothing scrolls sideways and targets are 60 px with 16 px between`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 800 });
+      const home = new HomePage(page);
+      await home.open();
+
+      await expect(home.activities.first()).toBeVisible();
+      await expectTargetsSizedAndApart(home);
+    });
+  }
+
+  test('Given the counting activities, when the child touches an activity card once, then its name is spoken and it opens @critical', async ({
     page,
     spoken,
   }) => {
@@ -173,11 +217,13 @@ test.describe('Home: choose an activity', () => {
     const activity = new SoundItOutPage(page);
     await home.open();
 
+    await home.activateWithKeyboard(home.group('Count'));
     await home.activateWithKeyboard(home.group('Read'));
     await home.activateWithKeyboard(home.activity('Sound it out'));
 
     await expect(activity.root).toBeVisible();
-    expect((await spoken.recordings()).slice(0, 2)).toEqual([
+    expect((await spoken.recordings()).slice(0, 3)).toEqual([
+      '/recordings/home/count.wav',
       '/recordings/home/read.wav',
       '/recordings/home/sound-it-out.wav',
     ]);
@@ -185,7 +231,7 @@ test.describe('Home: choose an activity', () => {
 });
 
 test.describe('Home: the group switch as its mock draws it', () => {
-  test('Given a group is chosen, when the switch is shown, then both sit on one tray, the chosen one filled and the other flat', async ({
+  test('Given a group is chosen, when the switch is shown, then Reading and Counting sit on one tray, the chosen one filled and the other flat', async ({
     page,
   }) => {
     await page.emulateMedia({ colorScheme: 'light' });
@@ -196,6 +242,6 @@ test.describe('Home: the group switch as its mock draws it', () => {
 
     await expect
       .poll(() => home.switchSurfaces())
-      .toEqual({ tray: 'rgb(237, 225, 248)', options: ['rgb(80, 25, 192)', 'rgba(0, 0, 0, 0)'] });
+      .toEqual({ tray: 'rgb(237, 225, 248)', options: ['rgba(0, 0, 0, 0)', 'rgb(80, 25, 192)'] });
   });
 });

@@ -39,8 +39,6 @@ export class BuildASentencePage {
     const home = new HomePage(this.page);
     await home.open();
     await home.touch(home.group('Read'));
-    // Read has more than 6 activities: Build a sentence is on the second screen (L2-024 #7).
-    await home.touch(home.more);
     await home.touch(home.activity('Build a sentence'));
     await expect(this.root).toBeVisible();
     await expect(this.tiles.first()).toBeVisible();

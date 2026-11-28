@@ -12,6 +12,7 @@ import {
 import { Router } from '@angular/router';
 import {
   AUDIO_PLAYER,
+  CHILD_PROFILE,
   PROGRESS_STORE,
   type Activity,
   type ActivityGroup,
@@ -20,34 +21,45 @@ import {
 import {
   ActivityGrid,
   CheckCard,
+  ChildBadge,
   GroupSwitch,
   GrownUpEntry,
-  Tap,
+  LessonCard,
   Wordmark,
 } from '@pibbo/components';
 import {
   ACTIVITY_CATALOGUE,
-  activityScreen,
+  activitySections,
   addActivities,
   CHECK_GAME_CARD,
   groupById,
   LESSON_LINES,
   LESSONS,
   lessonById,
-  moreFor,
+  lessonDone,
+  lessonKey,
+  lessonSteps,
   PRACTISED_KEY,
+  SAMPLE_CHILD,
+  starsFor,
+  totalStars,
 } from '@pibbo/domain';
 
 /**
- * Home (docs/mocks/pages/home): the child chooses a group, Count or Read, then an activity.
- * Each touch speaks its choice; the first touch is what unlocks sound in the browser.
- * The chosen group is kept in the URL (`?group=`) so coming back from an activity finds it.
+ * Home (docs/mocks/pages/home, ADR 0035): the prototype's landing page. The child chooses
+ * Reading or Counting, then an activity; today's lesson and the check game each have a card.
+ * Each touch speaks its choice; the first touch is what unlocks sound in the browser. The chosen
+ * subject is kept in the URL (`?group=`) so coming back from an activity finds it; with none,
+ * Reading is chosen.
  */
 @Component({
   selector: 'pb-home',
-  imports: [Wordmark, CheckCard, GroupSwitch, ActivityGrid, Tap, GrownUpEntry],
+  imports: [Wordmark, ChildBadge, LessonCard, CheckCard, GroupSwitch, ActivityGrid, GrownUpEntry],
   templateUrl: './home.html',
   styleUrl: './home.scss',
+  // Bound here, in the lazy route, so the initial bundle does not carry it: the child is sample
+  // data, never asked for or kept (ADR 0035).
+  providers: [{ provide: CHILD_PROFILE, useValue: SAMPLE_CHILD }],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Home {
@@ -55,23 +67,32 @@ export class Home {
   private readonly router = inject(Router);
   private readonly progress = inject(PROGRESS_STORE);
 
-  /** The `group` query parameter; anything that is not a group means none is chosen. */
+  /** The `group` query parameter; anything that is not a group means Reading. */
   readonly group = input<unknown>();
 
   protected readonly catalogue = ACTIVITY_CATALOGUE;
   protected readonly checkGame = CHECK_GAME_CARD;
-  /** The chosen group's guided lesson, shown as its own picture (L2-024 #4, ADR 0026). */
-  protected readonly lesson = computed(() => lessonById(LESSONS, this.chosen()?.id));
-  protected readonly lessonLine = LESSON_LINES.picture;
-  protected readonly chosen = linkedSignal(() => groupById(this.catalogue, this.group()));
-  /** Which screen of the chosen group's activities is shown; a new group starts at the first. */
-  protected readonly at = linkedSignal({ source: this.chosen, computation: () => 0 });
-  protected readonly screen = computed(() =>
-    activityScreen(this.catalogue, this.chosen()?.id ?? null, this.at()),
+  /** The sample child: a name and stars to draw, never asked for or kept (ADR 0035). */
+  protected readonly child = inject(CHILD_PROFILE);
+  protected readonly totalStars = totalStars(this.child, this.catalogue);
+  protected readonly stars = Object.fromEntries(
+    this.catalogue.activities.map((a) => [a.id, starsFor(this.child, a.id)]),
   );
-  protected readonly more = computed(() => {
-    const group = this.chosen();
-    return group && this.screen().more ? moreFor(group.id) : null;
+  protected readonly hello = `Hi ${this.child.name}! ${LESSON_LINES.today.text}`;
+
+  protected readonly chosen = linkedSignal<ActivityGroup>(
+    () => groupById(this.catalogue, this.group()) ?? this.catalogue.groups[0],
+  );
+  protected readonly sections = computed(() => activitySections(this.catalogue, this.chosen().id));
+
+  /** The chosen subject's guided lesson, how many of its games exist and how many are done. */
+  protected readonly lesson = computed(() => {
+    const lesson = lessonById(LESSONS, this.chosen().id);
+    if (!lesson) return null;
+    const { steps } = lessonSteps(lesson, this.catalogue);
+    const done = lessonDone(this.progress.read(lessonKey(lesson)), steps);
+    const line = done === 0 ? LESSON_LINES.start : LESSON_LINES.keepGoing;
+    return { lesson, games: steps.length, done, line };
   });
 
   /**
@@ -97,26 +118,17 @@ export class Home {
     void this.router.navigate([], { queryParams: { group: group.id }, replaceUrl: true });
   }
 
-  /** More: "More" is spoken and the next screen shown; the last one's leads to the first. */
-  protected showMore(): void {
-    if (this.opening) return;
-    const more = this.more();
-    if (!more) return;
-    void this.audio.play(more.recording);
-    this.at.update((at) => at + 1);
-  }
-
   protected openActivity(activity: Activity): void {
     if (this.opening || this.unavailable().has(activity.id)) return;
     this.practise(activity.id);
     this.open(activity, () => this.unavailable.update((ids) => new Set([...ids, activity.id])));
   }
 
-  /** The Lesson picture: "Lesson" is spoken and the lesson opens where the child left off. */
-  protected openLesson(lesson: Lesson): void {
+  /** Start or Keep going: spoken, and the lesson opens where the child left off. */
+  protected openLesson(lesson: Lesson, recording: string): void {
     if (this.opening) return;
     this.opening = true;
-    void this.audio.play(LESSON_LINES.picture.recording);
+    void this.audio.play(recording);
     void this.router.navigate(['/lesson', lesson.id]).then(
       (opened) => (this.opening = opened),
       () => (this.opening = false),

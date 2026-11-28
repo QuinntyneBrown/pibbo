@@ -4,11 +4,7 @@ import { BuildASentencePage } from '../pages/build-a-sentence.page';
 import { HomePage } from '../pages/home.page';
 import { LessonPage } from '../pages/lesson.page';
 
-const HOME = [
-  '/recordings/home/read.wav',
-  '/recordings/home/more.wav',
-  '/recordings/home/build-a-sentence.wav',
-];
+const HOME = ['/recordings/home/read.wav', '/recordings/home/build-a-sentence.wav'];
 const ASK = '/recordings/read/put-the-words-in-order.wav';
 const ASK_TEXT = 'Look at the picture. Put the words in order to tell about it.';
 
@@ -81,7 +77,7 @@ test.describe('Build a sentence: a round', () => {
     await sentence.touch(sentence.leave);
 
     await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
-    await expect(home.more).toBeVisible();
+    await expect(home.activity('Build a sentence')).toBeVisible();
   });
 });
 

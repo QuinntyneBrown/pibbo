@@ -16,4 +16,6 @@ export class Pibbo {
    */
   readonly size = input<'sm' | 'md' | 'lg' | 'xl'>('md');
   readonly label = input('Pibbo');
+  /** Drawn beside words that say it all, as on Home's cards: hidden from a screen reader. */
+  readonly decorative = input(false);
 }

@@ -1,0 +1,22 @@
+<div class="lesson-card" [class.lesson-card--read]="subject() === 'read'">
+  <p class="lesson-card__hello">{{ hello() }}</p>
+  <h2 class="lesson-card__title">{{ title() }}</h2>
+  <div
+    class="lesson-card__dots"
+    role="img"
+    [attr.aria-label]="done() + ' of ' + games() + ' games done'"
+  >
+    @for (dot of dots(); track $index) {
+      <span class="dot" [class.dot--done]="dot === 'done'" [class.dot--now]="dot === 'now'"></span>
+    }
+  </div>
+  <div class="lesson-card__action">
+    <button type="button" class="chunky" (pbTap)="touched.emit()">
+      {{ action() }}
+      <svg class="chunky__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+  <pb-pibbo class="lesson-card__pibbo" [decorative]="true" />
+</div>

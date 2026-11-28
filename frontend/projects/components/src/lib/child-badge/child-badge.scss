@@ -1,0 +1,64 @@
+:host {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.pill--stars {
+  padding: var(--space-1-5) var(--space-3);
+  background: var(--color-reward-soft);
+}
+
+.pill__star {
+  width: var(--size-3);
+  height: var(--size-3);
+  flex: none;
+  fill: var(--color-reward);
+  stroke: var(--color-reward-strong);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.pill--child {
+  padding: var(--space-1) var(--space-4) var(--space-1) var(--space-1);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+}
+
+.pill__initial {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-full);
+  background: var(--color-success-soft);
+  color: var(--color-success-strong);
+}
+
+// On the narrowest phones the pill keeps the initial; the name is still read out.
+@media (max-width: 23.99rem) {
+  .pill--child {
+    padding-right: var(--space-1);
+  }
+
+  .pill__name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}

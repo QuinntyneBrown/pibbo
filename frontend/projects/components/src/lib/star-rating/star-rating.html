@@ -1,0 +1,7 @@
+<span class="stars" role="img" [attr.aria-label]="value() + ' of ' + max() + ' stars'">
+  @for (on of stars(); track $index) {
+    <svg class="star" [class.star--on]="on" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m12 2 3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z" />
+    </svg>
+  }
+</span>

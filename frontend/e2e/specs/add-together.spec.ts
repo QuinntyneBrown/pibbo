@@ -2,11 +2,7 @@
 import { test, expect } from '../fixtures/test';
 import { AddTogetherPage } from '../pages/add-together.page';
 
-const HOME = [
-  '/recordings/home/count.wav',
-  '/recordings/home/more.wav',
-  '/recordings/home/add-together.wav',
-];
+const HOME = ['/recordings/home/count.wav', '/recordings/home/add-together.wav'];
 const rec = (name: string) => `/recordings/count/${name}.wav`;
 const number = (n: number) => `/recordings/numbers/${n}.wav`;
 const upTo = (n: number) => Array.from({ length: n }, (_, i) => number(i + 1));

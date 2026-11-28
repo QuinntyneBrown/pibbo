@@ -3,7 +3,7 @@ import { test, expect } from '../fixtures/test';
 import { HomePage } from '../pages/home.page';
 
 test.describe('Home shell', () => {
-  test('Given a child opens Pibbo, when Home loads, then the shell shows with nothing to scroll and nothing leaving localhost @critical', async ({
+  test('Given a child opens Pibbo, when Home loads, then the shell shows with nothing to scroll sideways and nothing leaving localhost @critical', async ({
     page,
     spoken,
   }) => {
@@ -14,7 +14,7 @@ test.describe('Home shell', () => {
     await expect(home.wordmark).toHaveAccessibleName('Pibbo');
     await expect(home.main).toBeAttached();
     expect(await home.wordmarkFontLoaded()).toBe(true);
-    expect(await home.scrolls()).toBe(false);
+    expect(await home.scrollsSideways()).toBe(false);
     // Nothing is spoken before the child touches the screen.
     expect(await spoken.recordings()).toEqual([]);
   });
