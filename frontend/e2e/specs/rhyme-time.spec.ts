@@ -243,11 +243,12 @@ for (const size of [
   { width: 320, height: 640 },
   { width: 360, height: 640 },
   { width: 640, height: 360 },
+  { width: 568, height: 320 },
 ]) {
   test.describe(`Rhyme time: fits ${size.width} x ${size.height}`, () => {
     test.use({ viewport: size });
 
-    test('Given a round on a small phone, when it is chosen, hinted and modelled, then every card stays 60 x 60 px and clear of the answer bar, the word asked stays clear of the instruction, with nothing to scroll', async ({
+    test('Given a round on a small phone, when it is chosen, hinted and modelled, and the next word is praised, then every card stays 60 x 60 px and clear of the answer bar, the word asked stays clear of the instruction, with nothing to scroll', async ({
       page,
     }) => {
       const rhyme = new RhymeTimePage(page);
@@ -274,6 +275,16 @@ for (const size of [
         await fits();
         if (miss < 3) await rhyme.touch(rhyme.action);
       }
+
+      // The other word of the cast: its instruction is longer, and praise has the tallest bar.
+      const first = await rhyme.word();
+      await rhyme.touch(rhyme.action);
+      await expect.poll(() => rhyme.word()).not.toBe(first);
+      await fits();
+      await rhyme.choose(SETS[await rhyme.word()]!.rhymes);
+      await rhyme.touch(rhyme.action);
+      await expect(rhyme.action).toContainText('Next');
+      await fits();
     });
   });
 }
