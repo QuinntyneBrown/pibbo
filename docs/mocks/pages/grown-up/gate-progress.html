@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>For grown-ups · gate-progress — Pibbo mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="grown-up">
+<meta name="mock:requirements" content="L2-029, L2-037">
+<meta name="mock:state" content="gate-progress">
+<meta name="description" content="Seven and three touched; nine opens the area. A wrong number goes back to Home as it was.">
+<script src="../../assets/appearance.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the gate</a>
+<main class="grown-up grown-up--gate" id="main" tabindex="-1" aria-labelledby="gate-title">
+  <section class="gate" aria-describedby="gate-task">
+    <a class="gate__close" href="../home/default.html" aria-label="Back to Pibbo"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
+    <h1 class="gate__title" id="gate-title">For grown-ups</h1>
+    <p class="gate__task" id="gate-task">Touch seven, three, nine in order.</p>
+    <div class="gate__dots" role="status" aria-label="2 of 3 touched"><span class="gate__dot gate__dot--done" aria-hidden="true"></span><span class="gate__dot gate__dot--done" aria-hidden="true"></span><span class="gate__dot" aria-hidden="true"></span></div>
+    <div class="gate__keys" role="group" aria-label="Numbers"><button class="gate__key press" type="button" data-mock-href="../home/default.html">1</button><button class="gate__key press" type="button" data-mock-href="../home/default.html">2</button><button class="gate__key press" type="button" data-mock-href="../home/default.html">3</button><button class="gate__key press" type="button" data-mock-href="../home/default.html">4</button><button class="gate__key press" type="button" data-mock-href="../home/default.html">5</button><button class="gate__key press" type="button" data-mock-href="../home/default.html">6</button><button class="gate__key press" type="button" data-mock-href="../home/default.html">7</button><button class="gate__key press" type="button" data-mock-href="../home/default.html">8</button><button class="gate__key press" type="button" data-mock-href="default.html">9</button></div>
+    <p class="gate__note">A wrong number goes back to Pibbo.</p>
+  </section>
+</main>
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html#state-grown-up-gate-progress" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">For grown-ups</span>
+  <ul class="mock-bar__states"><li><a href="gate.html"><span class="mock-bar__label--descenders">gate</span></a></li><li><a href="gate-progress.html" aria-current="page"><span class="mock-bar__label--descenders">gate-progress</span></a></li><li><a href="default.html">default</a></li><li><a href="confirm.html">confirm</a></li><li><a href="cleared.html">cleared</a></li></ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

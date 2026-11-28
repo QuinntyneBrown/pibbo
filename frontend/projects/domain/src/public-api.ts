@@ -36,3 +36,4 @@ export * from './lib/storage/stored-values';
 export * from './lib/lessons/lessons-content';
 export * from './lib/lessons/check-content';
 export * from './lib/lessons/check-round';
+export * from './lib/grown-up/gate';

@@ -31,7 +31,7 @@
 <p>No dialogs, drawers, toasts or popovers appear during an activity: they would ask two things at once and can trap a child.</p>
     </section>
     <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
-<ul><li>Never during a round.</li><li>Only for a grown-up (journey 24): the gate (<code>.dialog.gate</code>) and the Clear progress confirmation (<code>.dialog.confirm</code>), each a CDK Dialog: a bottom sheet on a phone, a centred card from 640 px, focus held inside and returned on close, Escape and a touch outside close it. The confirmation starts on its safe choice, Keep it.</li><li>The gate is text only and speaks nothing, so a child who cannot read cannot pass it by chance; a wrong number closes it.</li></ul>
+<ul><li>Never during a round.</li><li>Not for a grown-up either (journey 24): the gate and the Clear progress confirmation are steps of the grown-up screen (<code>.gate</code>, <code>.confirm</code>), not dialogs, so nothing traps focus and Back always works. The confirmation starts on its safe choice, Keep it.</li><li>The gate is text only and speaks nothing, so a child who cannot read cannot pass it by chance; a wrong number goes back to Home as it was.</li></ul>
     </section>
     <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
 <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><p>Feedback lives in the answer bar instead of a toast or dialog.</p><div class="answer-bar answer-bar--correct ds-flush" role="status"><p class="answer-bar__message"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Yes!</p></div></div></div>

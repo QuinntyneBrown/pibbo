@@ -44,3 +44,89 @@ test.describe('The grown-up entry on Home', () => {
     });
   }
 });
+
+test.describe('The gate', () => {
+  test('Given the grown-up entry is touched, when the gate opens, then it asks in words only for three different numbers in order, and nothing is spoken', async ({
+    page,
+    spoken,
+  }) => {
+    const grownUp = new GrownUpPage(page);
+    await grownUp.openGate();
+
+    await expect(grownUp.gate).toHaveAttribute('role', 'dialog');
+    await expect(grownUp.gateTask).toHaveText(
+      /^Touch (one|two|three|four|five|six|seven|eight|nine), [a-z]+, [a-z]+ in order\.$/,
+    );
+    const asked = await grownUp.asked();
+    expect(asked).toHaveLength(3);
+    expect(new Set(asked).size).toBe(3);
+    await expect(grownUp.gateKeys).toHaveText(['1', '2', '3', '4', '5', '6', '7', '8', '9']);
+    expect(await spoken.recordings()).toEqual([]);
+  });
+
+  test('@critical Given the gate, when the three numbers are touched in order, then the grown-up area opens', async ({
+    page,
+  }) => {
+    const grownUp = new GrownUpPage(page);
+    await grownUp.openGate();
+    const [a, b, c] = await grownUp.asked();
+
+    await grownUp.touch(grownUp.key(a!));
+    await grownUp.touch(grownUp.key(b!));
+    await expect(grownUp.gateDots).toHaveCount(2);
+    await grownUp.touch(grownUp.key(c!));
+
+    await expect(grownUp.area).toBeVisible();
+    await expect(page).toHaveURL(/\/grown-up$/);
+    await expect(grownUp.gate).toHaveCount(0);
+  });
+
+  test('Given the gate, when a wrong number is touched, then it closes and Home is unchanged', async ({
+    page,
+    spoken,
+  }) => {
+    const home = new HomePage(page);
+    const grownUp = new GrownUpPage(page);
+    await home.open('/?group=count');
+    await grownUp.touch(grownUp.entry);
+    const [a] = await grownUp.asked();
+    const wrong = [1, 2, 3, 4, 5, 6, 7, 8, 9].find((n) => n !== a)!;
+
+    await grownUp.touch(grownUp.key(wrong));
+
+    await expect(grownUp.gate).toHaveCount(0);
+    await expect(home.group('Count')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page).toHaveURL(/\/\?group=count$/);
+    expect(await spoken.recordings()).toEqual([]);
+  });
+
+  test('Given the gate, when it is closed or Escape is pressed, then Home is unchanged', async ({
+    page,
+  }) => {
+    const home = new HomePage(page);
+    const grownUp = new GrownUpPage(page);
+    await home.open('/?group=read');
+    await grownUp.touch(grownUp.entry);
+
+    await grownUp.touch(grownUp.gateClose);
+    await expect(grownUp.gate).toHaveCount(0);
+
+    await grownUp.touch(grownUp.entry);
+    await expect(grownUp.gate).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(grownUp.gate).toHaveCount(0);
+    await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page).toHaveURL(/\/\?group=read$/);
+  });
+
+  test('Given the grown-up area, when it is opened without passing the gate, then Home shows instead', async ({
+    page,
+  }) => {
+    const home = new HomePage(page);
+    const grownUp = new GrownUpPage(page);
+    await page.goto('/grown-up');
+
+    await expect(home.root).toBeVisible();
+    await expect(grownUp.area).toHaveCount(0);
+  });
+});

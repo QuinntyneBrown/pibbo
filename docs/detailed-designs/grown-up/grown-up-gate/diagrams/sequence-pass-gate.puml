@@ -7,20 +7,25 @@ skinparam defaultFontName Arial
 skinparam ArrowColor #344054
 actor "Grown-up" as actor
 box "Frontend — pibbo application" #E0F2FE
-  participant "HomePage" as home
-  participant "GateDialog" as gate
+  participant "Home" as home
+  participant "GrownUpScreen" as screen
 end box
 box "Frontend — @pibbo/domain library" #ECFDF3
   participant "gateRules" as rules
 end box
-actor -> home : Touch corner control [L2-037 #1]
-home -> gate : open
-gate -> rules : newChallenge(rnd)
-gate --> actor : "touch seven, three, nine" (text only) [L2-037 #2]
-actor -> gate : Touch numerals
+box "Frontend — browser services (audio, storage)" #FFF4E5
+  participant "ProgressStore" as store
+end box
+actor -> home : Touch the corner padlock [L2-037 #1]
+home -> screen : navigate /grown-up, state { from: Home's address }
+screen -> rules : newGate(rnd)
+screen --> actor : "Touch seven, three, nine in order." (text only) [L2-037 #2]
+actor -> screen : Touch numerals
 alt passed
-  gate -> home : navigate /grown-up (volume, clear progress, about) [L2-037 #4]
-else failed or dismissed
-  gate --> home : close; Home unchanged [L2-037 #3]
+  screen --> actor : the area: volume, clear progress, about [L2-037 #4]
+  actor -> screen : Clear progress, then confirm [L2-037 #5]
+  screen -> store : clearProgress() [L2-029 #4]
+else a wrong number, or Back to Pibbo
+  screen -> home : navigate back to Home's address; Home unchanged [L2-037 #3]
 end
 @enduml
