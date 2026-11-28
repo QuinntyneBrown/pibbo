@@ -388,7 +388,7 @@ img { display: block; max-width: 100%; }
 .pair--tall .picture { width: 100%; height: 100%; padding: var(--space-2); background: transparent; }
 .speaker { border: 0; display: inline-flex; width: var(--size-6); height: var(--size-6); flex: none; align-items: center; justify-content: center; border-radius: var(--radius-full); background: var(--color-read-soft); color: var(--color-read-strong); }
 
-/* Words and pictures (journey 18, ADR 0022): each word beside a column of pictures, sized to the game area. */
+/* Words and pictures (journey 18, ADR 0023): each word beside a column of pictures, sized to the game area. */
 .pairs--pictures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .pairs--pictures .pairs__column { flex-direction: column; }
 .pairs--pictures .pair { flex: none; height: clamp(var(--target-child), calc((100cqh - 3 * var(--space-3)) / 4), var(--size-15)); }

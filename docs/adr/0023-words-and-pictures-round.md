@@ -1,4 +1,4 @@
-# 0022: Words and pictures: a pair match of words and their pictures
+# 0023: Words and pictures: a pair match of words and their pictures
 
 **Status:** Accepted (journey 18)
 

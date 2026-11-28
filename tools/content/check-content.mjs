@@ -1,4 +1,4 @@
-// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -192,7 +192,7 @@ else {
     fileExists(spell[line]?.recording, `spell ${line} recording`);
   }
 }
-// Words and pictures (ADR 0022): each theme names two to four of Sound it out's words, once each,
+// Words and pictures (ADR 0023): each theme names two to four of Sound it out's words, once each,
 // and its instruction and praise are shown and recorded.
 const wordPictures = content.wordPictures;
 if (!wordPictures) problems.push("wordPictures: missing");

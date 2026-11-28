@@ -4,7 +4,7 @@ import type { RandomSource, Word, WordTheme } from '@pibbo/api';
 export type WordPicturesPhase = 'matching' | 'right';
 
 /**
- * One Words and pictures round (L2-018, ADR 0022): a theme's words in one column and the same
+ * One Words and pictures round (L2-018, ADR 0023): a theme's words in one column and the same
  * words' pictures in another. Immutable: every rule returns a new value.
  */
 export interface WordPicturesRound {

@@ -3,7 +3,7 @@ import type { Word } from '@pibbo/api';
 import { Tap } from '../tap/tap';
 
 /**
- * Words and pictures (`.pairs.pairs--pictures`, ADR 0022): a theme's words in one column and
+ * Words and pictures (`.pairs.pairs--pictures`, ADR 0023): a theme's words in one column and
  * their pictures in the other, sized to the game area. The held word is pressed; a joined pair
  * takes the same colour and corner shape, says "matched" and no longer takes a touch, so colour
  * is never the only sign. A missed picture shakes once (`.pair--miss`), unless motion is reduced.

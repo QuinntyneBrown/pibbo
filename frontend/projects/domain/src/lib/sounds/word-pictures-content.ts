@@ -5,7 +5,7 @@ import { SOUND_OUT } from './sound-out-content';
 /**
  * The content of Words and pictures: data, not rules, in the same file as Sound it out and
  * naming its words, checked before every build by `tools/content/check-content.mjs`. The theme
- * is the cast of the mock; which themes and words the activity covers is not decided (ADR 0022).
+ * is the cast of the mock; which themes and words the activity covers is not decided (ADR 0023).
  */
 export interface WordPicturesContent {
   readonly roundsPerPlay: number;

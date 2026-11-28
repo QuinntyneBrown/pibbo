@@ -29,7 +29,7 @@ const MISS_MS = 400;
 /**
  * Words and pictures (docs/mocks/pages/words-and-pictures): the child touches a word, which
  * sounds out, then its picture. Orchestrates recordings and timers; every rule is in
- * `@pibbo/domain` (ADR 0022).
+ * `@pibbo/domain` (ADR 0023).
  */
 @Component({
   selector: 'pb-words-and-pictures',

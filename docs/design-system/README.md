@@ -154,7 +154,7 @@ Core components from the generic catalog that Pibbo does not have (text field, s
 | Added `.turn--star`, `.turn--moon` and `.player[aria-current="step"]`; `.turn-controls`; `.round-btn` 64 px, 16 px apart | The prototype named the players and its + and − were 44 px, 8 px apart, on both players; only the player whose turn it is has them now. A turn is shown by a symbol and colour, never a name (`L2-008`). Added to the mocks first (journey 9, ADR 0013).        |
 | Added `.switch--speed`; `.game-card--more`                                                                               | The prototype's speed switch was 44 px, 4 px apart, colour only; it is 64 px, 16 px apart, with a tick, as `.switch--step`. Home shows at most 6 activities a screen, so a group with more has a More picture. Added to the mocks first (journey 10, ADR 0014). |
 | Added `.pair--miss`                                                                                                      | A wrong partner shows a dashed inset ring. Reduced motion removes the shake and retains the ring. Matched partners share a corner shape and a fill colour. Added to the mocks first (journey 11, ADR 0015).                                                                                                           |
-| Added `.pairs--pictures` | Words and pictures (`L2-018`, ADR 0022): words beside their pictures, sized to the game area; one row each on a phone on its side. Taken from the mock unchanged. |
+| Added `.pairs--pictures` | Words and pictures (`L2-018`, ADR 0023): words beside their pictures, sized to the game area; one row each on a phone on its side. Taken from the mock unchanged. |
 
 ## Open questions
 

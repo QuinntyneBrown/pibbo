@@ -1,4 +1,4 @@
-// The mock's `.pairs--pictures` (ADR 0022): the board fills the game area, which is its size
+// The mock's `.pairs--pictures` (ADR 0023): the board fills the game area, which is its size
 // container, so up to four rows of words and pictures fit with no scrolling.
 :host {
   --pair-gap: var(--space-3);
@@ -184,7 +184,7 @@
 
 // A phone on its side: the app's shell keeps the ask above the game, which leaves room for one
 // row of 60 px targets only, so the words take the left half of the row and their pictures the
-// right (ADR 0022), as Letter sounds does (ADR 0015). A word shrinks with its target.
+// right (ADR 0023), as Letter sounds does (ADR 0015). A word shrinks with its target.
 @media (max-height: 30rem) {
   .pairs {
     column-gap: var(--space-6);

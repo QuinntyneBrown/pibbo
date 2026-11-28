@@ -74,7 +74,7 @@ export interface FormPair extends MatchPair {
 }
 
 /**
- * A theme of Words and pictures (L2-018, ADR 0022): related words and what is shown and spoken
+ * A theme of Words and pictures (L2-018, ADR 0023): related words and what is shown and spoken
  * around them, both naming the theme ("By the sea! …", "You read all the by the sea words!").
  */
 export interface WordTheme {

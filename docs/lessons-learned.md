@@ -696,7 +696,7 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - `L2-018` asked for three words, a wrong pair that "speaks both", and a word's letters that
   sound out when touched; the mock draws four words as whole targets, lets the word go after a
   miss (`data-release-on-miss`) and drew only default and correct. The mock won: `L2-018`, the
-  design and ADR 0022 were rewritten, and `held`, `miss` and the Home card drawn, before code.
+  design and ADR 0023 were rewritten, and `held`, `miss` and the Home card drawn, before code.
   The mock's fourth word, sunset, needs journey 17's syllables, so the theme has three.
 - At 320 px wide the shell's bubble left the instruction a 48 px column, 270 px tall, and the
   board fell under the answer bar. The app's `RoundShell` had not taken the mock's responsive

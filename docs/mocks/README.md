@@ -80,7 +80,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
 - **Words and pictures, Spot the word, Build a sentence and What do I know?** are
   frames in the project but are not wired into the prototype's own navigation. Here they
   are linked from Home and the lesson, as `journeys.ts` describes.
-- **Words and pictures aligned (journey 18, ADR 0022).** Home's Read group lists it after
+- **Words and pictures aligned (journey 18, ADR 0023).** Home's Read group lists it after
   Spell by sound. The `held` state (a word pressed while its sounds are spoken) and the `miss`
   state (both words spoken, the picture shaken and the word let go) are drawn. The product's
   shell still keeps the ask above the game on a phone on its side, so there the words and
