@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home · Choose an activity · counting-more — Pibbo mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="home">
+<meta name="mock:state" content="counting-more">
+<meta name="mock:requirements" content="L2-024, L2-035">
+<meta name="description" content="More touched: “More” is spoken and the next screen of counting activities is shown, with More to go back to the first.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the game</a>
+<div class="home">
+  <header class="home__top">
+    <span class="wordmark wordmark--md" role="img" aria-label="Pibbo"><span aria-hidden="true">p</span><span class="wordmark__stem" aria-hidden="true"><span class="wordmark__seed"></span><span class="wordmark__leaf"></span></span><span aria-hidden="true">bbo</span></span>
+  </header>
+  <main class="home__main" id="main">
+    <h1 class="visually-hidden">Choose an activity</h1>
+    <nav class="home__subjects" aria-label="Groups"><div class="switch switch--groups"><button type="button" class="switch__option switch__option--group press" aria-pressed="true"><span class="switch__glyph" aria-hidden="true">1 2 3</span>Count</button><button type="button" class="switch__option switch__option--group switch__option--read press" aria-pressed="false"><span class="switch__glyph" aria-hidden="true">a b c</span>Read</button></div></nav>
+    <div class="home__games">
+    <section class="game-group" aria-labelledby="g-count"><h2 class="game-group__title" id="g-count">Count</h2><ul class="game-group__grid"><li><a class="game-card game-card--count press" href="../add-together/start.html"><span class="game-card__glyph" aria-hidden="true">3+4</span><span class="game-card__body"><span class="game-card__title">Add together</span></span></a></li><li><a class="game-card game-card--count press" href="../counting-dance/start.html"><span class="game-card__glyph" aria-hidden="true">♪ 1 2</span><span class="game-card__body"><span class="game-card__title">Counting dance</span></span></a></li><li><a class="game-card game-card--count game-card--more press" href="counting.html"><span class="game-card__glyph" aria-hidden="true"><svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span><span class="game-card__body"><span class="game-card__title">More</span></span></a></li></ul></section></div>
+  </main>
+</div>
+<p class="mock-note" style="top: 6rem; right: 1rem;">Touching a group picture speaks its name (a recording) and shows its activities, at most 6 per screen: when a group has more than 6, a screen shows 5 and More, which speaks “More” and shows the next screen (the last one’s More goes back to the first). Touching an activity picture once speaks its name and opens it. Only activities that exist are shown. Every target is at least 60 × 60 px with 16 px between targets.</p>
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Home · Choose an activity</span>
+  <ul class="mock-bar__states"><li><a href="default.html">default</a></li><li><a href="counting.html">counting</a></li><li><a href="counting-more.html" aria-current="page">counting-more</a></li><li><a href="first-visit.html">first-visit</a></li></ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

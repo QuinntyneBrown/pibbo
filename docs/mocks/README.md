@@ -124,6 +124,14 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   5 + 5 fits a 360 × 640 phone either way up. The turns are taken one after the other: `start` is the star's
   turn, the new `moon-turn` the moon's, each ended by Done, and the three choices appear only
   when both sets are shown (`default`). Home's Count group lists Add together (ADR 0013).
+- **Counting dance reconciled with `AGENTS.md` and `L2-009` (journey 10).** The prototype's
+  speed switch (`switch__option--sm`, `.switch--quiet`) was 44 px tall, 4 px apart, and showed
+  the chosen speed by colour alone; it is now `.switch--speed`, 64 px targets 16 px apart with
+  a tick, as `.switch--step`. The figure, the numeral, the row of numbers and the one control
+  stay as drawn (ADR 0014). Home's Count group now has seven activities, more than the 6 a
+  screen `L2-024` allows: `home/counting` shows five and a More picture
+  (`.game-card--more`), and the new `home/counting-more` shows Add together, Counting dance
+  and More, which goes back to the first screen.
 
 ## Open questions
 

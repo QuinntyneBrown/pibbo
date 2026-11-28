@@ -22,6 +22,7 @@
       "states": [
         "default",
         "counting",
+        "counting-more",
         "first-visit"
       ],
       "prototype_frame": "qWbazJPhFtQFND16jvAWTf",
@@ -195,7 +196,7 @@
       "kind": "page",
       "title": "Counting dance",
       "route": "/count/dance",
-      "requirements": [],
+      "requirements": ["L2-009", "L2-025"],
       "states": [
         "start",
         "default",

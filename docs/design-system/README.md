@@ -68,6 +68,7 @@ a transcription of `docs/mocks/assets/tokens.css`.
 | Added `.launch__rocket--1` to `--9` | `L2-006` starts anywhere from 5 to 20; the rocket rises in tenths of the way to 0, 15 px each. Added to the mocks first (journey 7, ADR 0011). |
 | Added `.switch--step`; `.number-line__label` 44 units | The prototype's step switch was 44 px, 4 px apart, colour only; it is 64 px, 16 px apart, with a tick. Labels grew so a phone can read them. Added to the mocks first (journey 8, ADR 0012). |
 | Added `.turn--star`, `.turn--moon` and `.player[aria-current="step"]`; `.turn-controls`; `.round-btn` 64 px, 16 px apart | The prototype named the players and its + and − were 44 px, 8 px apart, on both players; only the player whose turn it is has them now. A turn is shown by a symbol and colour, never a name (`L2-008`). Added to the mocks first (journey 9, ADR 0013). |
+| Added `.switch--speed`; `.game-card--more` | The prototype's speed switch was 44 px, 4 px apart, colour only; it is 64 px, 16 px apart, with a tick, as `.switch--step`. Home shows at most 6 activities a screen, so a group with more has a More picture. Added to the mocks first (journey 10, ADR 0014). |
 
 ## Open questions
 

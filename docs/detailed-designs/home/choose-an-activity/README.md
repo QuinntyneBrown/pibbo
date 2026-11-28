@@ -37,6 +37,7 @@ Acceptance criteria of `L2-024` (Home screen):
 2. Given any activity picture, when touched once, then its name is spoken and it opens.
 3. Given Home on any viewport, when shown, then nothing scrolls and every target is at least 60 x 60 px with at least 16 px between targets.
 4. Given Home, when shown, then guided lessons and the check game each have their own picture.
+7. Given a group with more than 6 activities, when it is chosen, then 5 are shown with More; touching More speaks "More" and shows the next screen, and the last screen's More shows the first again (ADR 0014; `activityScreen` in `@pibbo/domain`, `ActivityGrid` emits `more`).
 
 ## Diagrams
 

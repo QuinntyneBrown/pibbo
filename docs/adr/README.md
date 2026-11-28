@@ -15,3 +15,4 @@
 | [0011](0011-rocket-countdown-round.md) | Rocket countdown: three choices, the track and the rocket | Accepted |
 | [0012](0012-skip-count-round.md) | Skip-count: the number line, three choices and the step switch | Accepted |
 | [0013](0013-add-together-round.md) | Add together: a star and a moon, turns ended by Done, and Check | Accepted |
+| [0014](0014-counting-dance-round.md) | Counting dance: one recording a beat, pause, speed and a second screen on Home | Accepted |

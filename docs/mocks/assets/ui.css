@@ -716,10 +716,10 @@ img { display: block; max-width: 100%; }
 
 /* Skip-count (journey 8, ADR 0012): the step switch's targets are 64 px, 16 px apart, and the
    chosen step carries a tick, so colour is not its only carrier. */
-.switch--step { flex-wrap: wrap; justify-content: center; gap: var(--gap-targets); padding: 0; background: none; }
-.switch--step .switch__option { height: var(--size-10); padding: 0 var(--space-4); background: var(--color-surface); color: var(--color-fg); font-size: var(--font-size-lg); }
-.switch--step .switch__option[aria-checked="true"] { background: var(--color-count-strong); color: var(--color-fg-on-strong); }
-.switch--step .switch__option[aria-checked="true"]::after { content: "\2713"; margin-left: var(--space-1); }
+.switch--step, .switch--speed { flex-wrap: wrap; justify-content: center; gap: var(--gap-targets); padding: 0; background: none; }
+.switch--step .switch__option, .switch--speed .switch__option { height: var(--size-10); padding: 0 var(--space-4); background: var(--color-surface); color: var(--color-fg); font-size: var(--font-size-lg); }
+.switch--step .switch__option[aria-checked="true"], .switch--speed .switch__option[aria-checked="true"] { background: var(--color-count-strong); color: var(--color-fg-on-strong); }
+.switch--step .switch__option[aria-checked="true"]::after, .switch--speed .switch__option[aria-checked="true"]::after { content: "\2713"; margin-left: var(--space-1); }
 
 /* A short screen (a phone on its side), journey 8 (ADR 0012): the shell gives up its spare
    space and the instruction stays on one line; Skip-count puts the switch and the choices in
