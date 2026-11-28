@@ -13,3 +13,4 @@
 | [0009](0009-count-and-write-round.md) | Count and write: ten-frames, the digit pad and the round | Accepted |
 | [0010](0010-which-is-bigger-round.md) | Which is bigger: two cards, Check and the lined-up retry | Accepted |
 | [0011](0011-rocket-countdown-round.md) | Rocket countdown: three choices, the track and the rocket | Accepted |
+| [0012](0012-skip-count-round.md) | Skip-count: the number line, three choices and the step switch | Accepted |

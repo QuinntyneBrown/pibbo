@@ -108,6 +108,12 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   (shown, never touched) with smaller cells on a phone, and on a phone on its side puts the track
   and the choices side by side. The three choices, the track that is not
   touched and the retry line stay as drawn, and `L2-006` was brought in line (ADR 0011).
+- **Skip-count reconciled with `AGENTS.md` and `L2-007` (journey 8).** The prototype's step
+  switch (`switch__option--sm`) was 44 px tall, 4 px apart, and showed the chosen step by colour
+  alone; it is now `.switch--step`, 64 px targets 16 px apart with a tick on the chosen step.
+  The number line's labels are 44 units (were 34) so they stay readable on a phone. The number
+  line, the three choices and the retry line stay as drawn, and `L2-007` was brought in line
+  (ADR 0012). Home's Count group lists Skip-count.
 
 ## Open questions
 

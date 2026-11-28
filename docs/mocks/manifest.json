@@ -152,7 +152,7 @@
       "kind": "page",
       "title": "Skip-count",
       "route": "/count/skip",
-      "requirements": [],
+      "requirements": ["L2-007", "L2-025"],
       "states": [
         "start",
         "default",
