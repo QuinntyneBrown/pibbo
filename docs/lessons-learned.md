@@ -1050,3 +1050,43 @@ One entry per journey, newest last. Before a journey, read these and apply the o
    before reading what was played.
 3. Copying every design token into the app broke the initial bundle budget. The app declares only
    the tokens its styles use.
+
+## Journey 25: Offline after first use
+
+**What slowed it**
+
+- The design named `@angular/service-worker`; it would have grown an initial bundle already over
+  its warning. A hundred-line worker of Pibbo's own, written after the build (ADR 0032), did
+  the job for 0.15 kB.
+- Playwright's fake clock replaces `performance`, so `getEntriesByType('resource')` is empty in
+  specs: a first attempt to tell the worker what the page had loaded passed nowhere. Home's code
+  is now found from the build itself and cached on install.
+- The update spec passed alone and failed when repeated: the e2e server's "next version" was a
+  flag, so the second ask served the same bytes. Every ask now serves a new version.
+- A reload after an activity stayed on the activity's route; the spec meant Home.
+- The worker caches a folder in the background; going offline straight after left it half kept.
+
+**New lessons**
+
+1. A test-only switch on the shared e2e server must change state on every call, never once:
+   specs run in parallel and repeat against one server.
+2. Under the fake clock, `performance` is not the browser's; never build behaviour a spec must
+   observe on resource timing.
+3. Block service workers in the shared config and allow them only in the specs about them, so
+   no other spec is served from a cache it did not ask for.
+4. Before a spec goes offline, wait for what the worker fetches in the background, not only for
+   what the page asked for.
+5. Allow a failure while offline only by naming it (`network.offline(expected)`); the guard
+   keeps catching every other one.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1 and on): `home/offline`, the design-system card state, ADR and design
+  went in before code.
+- Compare the initial bundle with `main` (J22 #1): 243.09 kB before, 243.24 kB after.
+- Wait for fonts before reloading (J22 #3): `OfflineDevice.reload`.
+- Format first, then patch, or use the Edit tool (J23 #6): two Bash heredocs failed again
+  (an escaped newline written as a real one, a stray `cat` waiting on input); scripts in the
+  scratchpad worked.
+- Tag the critical path in the same change (J11 #4): playing offline after first use is
+  `@critical`.

@@ -205,6 +205,10 @@ img { display: block; max-width: 100%; }
 .game-card__body { display: flex; flex: 1; flex-direction: column; padding: var(--space-3) var(--space-4) var(--space-4); }
 .game-card__title { font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); line-height: var(--line-height-tight); }
 .game-card__stars { margin-top: auto; padding-top: var(--space-2); }
+/* Offline and never opened (L2-033): greyed, with the no-network symbol; grey is never the only sign. */
+.game-card[aria-disabled="true"] .game-card__glyph { position: relative; background: var(--color-bg-sunken); color: var(--color-fg-muted); filter: grayscale(1); }
+.game-card__offline { position: absolute; inset-block-start: var(--space-2); inset-inline-end: var(--space-2); width: var(--size-7); height: var(--size-7); fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
+.game-card__offline circle { fill: currentColor; stroke: none; }
 
 /* ---------- Guided lesson ---------- */
 .lesson { display: flex; flex-direction: column; min-height: 100vh; }

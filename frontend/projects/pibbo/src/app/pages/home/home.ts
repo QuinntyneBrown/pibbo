@@ -2,9 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
+  DOCUMENT,
   inject,
   input,
   linkedSignal,
+  signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -71,8 +74,21 @@ export class Home {
     return group && this.screen().more ? moreFor(group.id) : null;
   });
 
+  /**
+   * Activities whose code could not load (offline, never opened): greyed until the device is
+   * online again (L2-033, ADR 0032). Nothing about them is kept.
+   */
+  protected readonly unavailable = signal<ReadonlySet<string>>(new Set());
+
   /** Once an activity is opening, every further touch is ignored (L2-035). */
   private opening = false;
+
+  constructor() {
+    const window = inject(DOCUMENT).defaultView;
+    const online = () => this.unavailable.set(new Set());
+    window?.addEventListener('online', online);
+    inject(DestroyRef).onDestroy(() => window?.removeEventListener('online', online));
+  }
 
   protected chooseGroup(group: ActivityGroup): void {
     if (this.opening) return;
@@ -91,9 +107,9 @@ export class Home {
   }
 
   protected openActivity(activity: Activity): void {
-    if (this.opening) return;
+    if (this.opening || this.unavailable().has(activity.id)) return;
     this.practise(activity.id);
-    this.open(activity);
+    this.open(activity, () => this.unavailable.update((ids) => new Set([...ids, activity.id])));
   }
 
   /** The Lesson picture: "Lesson" is spoken and the lesson opens where the child left off. */
@@ -124,13 +140,20 @@ export class Home {
     this.progress.write(PRACTISED_KEY, addActivities(kept, [activity], known));
   }
 
-  private open({ recording, path }: Pick<Activity, 'recording' | 'path'>): void {
+  /** `failed` runs when the activity's code cannot load, as when offline and never opened. */
+  private open(
+    { recording, path }: Pick<Activity, 'recording' | 'path'>,
+    failed: () => void = () => undefined,
+  ): void {
     if (this.opening) return;
     this.opening = true;
     void this.audio.play(recording);
     void this.router.navigateByUrl(path).then(
       (opened) => (this.opening = opened),
-      () => (this.opening = false),
+      () => {
+        this.opening = false;
+        failed();
+      },
     );
   }
 }

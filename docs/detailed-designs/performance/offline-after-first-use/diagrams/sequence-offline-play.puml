@@ -7,19 +7,20 @@ skinparam defaultFontName Arial
 skinparam ArrowColor #344054
 actor "Child" as actor
 box "Frontend — pibbo application" #E0F2FE
-  participant "HomePage" as home
+  participant "Home" as home
 end box
-box "Frontend — browser services (audio, storage)" #FFF4E5
-  participant "ActivityAvailability" as av
+box "Browser" #FFF4E5
   participant "Service worker" as sw
 end box
-home -> av : isAvailable(each)
-av -> sw : cache match
-alt offline and uncached
+actor -> home : touches an activity
+home -> sw : GET the activity's code
+alt cached
+  sw --> home : cached code
+  home --> actor : opens and plays fully, recordings from the cache [L2-033 #1]
+else offline and uncached
+  sw --> home : network error
   home --> actor : greyed picture + no-network symbol; does not open [L2-033 #2]
-else cached
-  home --> actor : opens and plays fully [L2-033 #1]
 end
-sw -> sw : new version downloaded in background
-sw --> home : activate between rounds [L2-033 #3]
+sw -> sw : new sw.js installs in the background and waits
+sw --> home : takes over when Pibbo is next opened [L2-033 #3]
 @enduml
