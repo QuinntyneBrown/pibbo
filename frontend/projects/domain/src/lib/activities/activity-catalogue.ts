@@ -19,6 +19,14 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       path: '/count/toys',
     },
     {
+      id: 'count-and-write',
+      group: 'count',
+      name: 'Count and write',
+      glyph: '14',
+      recording: '/recordings/home/count-and-write.wav',
+      path: '/count/write',
+    },
+    {
       id: 'sound-it-out',
       group: 'read',
       name: 'Sound it out',

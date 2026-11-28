@@ -26,6 +26,8 @@ export type Sound = 'on' | 'off';
 
 interface Fixtures {
   sound: Sound;
+  /** The seed of the random source; a spec that needs a particular round sets it (ADR 0009). */
+  seed: number;
   spoken: Spoken;
   guard: void;
 }
@@ -103,9 +105,10 @@ async function guardNetwork(page: Page, use: () => Promise<void>): Promise<void>
 
 export const test = base.extend<Fixtures>({
   sound: ['on', { option: true }],
-  page: async ({ page, sound }, use) => {
+  seed: [RANDOM_SEED, { option: true }],
+  page: async ({ page, sound, seed }, use) => {
     await page.clock.install({ time: FIXED_TIME });
-    await page.addInitScript(installFakes, { seed: RANDOM_SEED, sound });
+    await page.addInitScript(installFakes, { seed, sound });
     await use(page);
   },
   guard: [async ({ page }, use) => guardNetwork(page, use), { auto: true }],

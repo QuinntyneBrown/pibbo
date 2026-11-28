@@ -1,0 +1,39 @@
+<div class="digit-pad">
+  <p class="visually-hidden" id="write">Write how many</p>
+  <div class="digit-pad__slots" role="status" [attr.aria-label]="label()">
+    @for (digit of boxes(); track $index) {
+      <span
+        class="digit-pad__slot"
+        [class.digit-pad__slot--filled]="digit !== undefined"
+        [class.digit-pad__slot--answer]="digit !== undefined && answer()"
+        aria-hidden="true"
+        >{{ digit }}</span
+      >
+    }
+    <button
+      type="button"
+      class="digit-pad__clear"
+      aria-label="Clear"
+      [disabled]="locked() || written().length === 0"
+      (pbTap)="cleared.emit()"
+    >
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
+        <path d="m18 9-6 6M12 9l6 6" />
+      </svg>
+    </button>
+  </div>
+  <div class="digit-pad__keys" role="group" aria-labelledby="write">
+    @for (d of digits; track d) {
+      <button
+        type="button"
+        class="digit-pad__key"
+        [class.digit-pad__key--lit]="lit() === d"
+        [disabled]="locked()"
+        (pbTap)="wrote.emit(d)"
+      >
+        {{ d }}
+      </button>
+    }
+  </div>
+</div>

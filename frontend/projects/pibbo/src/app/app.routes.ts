@@ -12,6 +12,11 @@ export const routes: Routes = [
       import('./pages/count-the-toys/count-the-toys').then((m) => m.CountTheToys),
   },
   {
+    path: 'count/write',
+    loadComponent: () =>
+      import('./pages/count-and-write/count-and-write').then((m) => m.CountAndWrite),
+  },
+  {
     path: 'read/sound-out',
     loadComponent: () => import('./pages/sound-it-out/sound-it-out').then((m) => m.SoundItOut),
   },

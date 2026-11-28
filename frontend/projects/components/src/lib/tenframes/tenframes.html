@@ -1,0 +1,33 @@
+<div
+  class="tenframes"
+  [class.tenframes--small]="small()"
+  role="group"
+  [attr.aria-label]="'The ten-frames, ' + things().length + ' toys'"
+>
+  @for (frame of frames(); track $index) {
+    <div class="tenframe">
+      @for (i of frame; track i) {
+        @let thing = things()[i]!;
+        @let counted = countedAs()[i] ?? null;
+        <button
+          type="button"
+          class="tenframe__thing"
+          [class.tenframe__thing--counted]="counted !== null"
+          [disabled]="counted !== null || small()"
+          [attr.aria-label]="
+            counted !== null ? 'Toy counted as ' + counted : 'Count this ' + thing.name
+          "
+          (pbTap)="touched.emit(i)"
+        >
+          <img class="picture" [src]="thing.picture" alt="" draggable="false" />
+          @if (counted !== null) {
+            <span class="tenframe__badge" aria-hidden="true">{{ counted }}</span>
+          }
+        </button>
+      }
+      @for (cell of empty(frame); track cell) {
+        <span class="tenframe__cell" aria-hidden="true"></span>
+      }
+    </div>
+  }
+</div>
