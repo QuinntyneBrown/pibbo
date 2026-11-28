@@ -25,3 +25,4 @@
 | [0021](0021-silent-e-in-sound-it-out.md) | Silent e in Sound it out: a quiet e the child adds and takes away | Accepted |
 | [0022](0022-syllables-in-sound-it-out.md) | Longer words by syllable in Sound it out | Accepted |
 | [0023](0023-words-and-pictures-round.md) | Words and pictures: a pair match of words and their pictures | Accepted |
+| [0022](0022-spot-the-word-round.md) | Spot the word: every common word in a short story, and misses that come back | Accepted |
