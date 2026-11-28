@@ -60,6 +60,18 @@
   padding: 0 var(--space-5);
 }
 
+// A word of four sounds keeps one row on a phone: each tile narrows to 64 px (L2-015).
+@media (max-width: 39.99rem) {
+  .tiles--long .tile {
+    width: var(--size-10);
+  }
+
+  .tiles--long .tile--wide {
+    width: auto;
+    padding: 0 var(--space-3);
+  }
+}
+
 .tile--heard {
   --depth: var(--color-read-depth);
   background: var(--color-read-strong);
@@ -123,6 +135,15 @@
 
 .blend__fill--0 {
   width: 0;
+}
+.blend__fill--25 {
+  width: 25%;
+}
+.blend__fill--50 {
+  width: 50%;
+}
+.blend__fill--75 {
+  width: 75%;
 }
 .blend__fill--33 {
   width: 33.3%;

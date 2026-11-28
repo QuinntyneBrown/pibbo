@@ -5,7 +5,8 @@ import { Tap } from '../tap/tap';
 /**
  * The letters of a word and the blend control (`.tiles`, `.blend`). Only the next letter
  * takes a touch; a heard letter shows its sound beneath it; the letter sounding is lit.
- * Blend is shown, but takes a touch only once every sound is heard (L2-012 #3).
+ * Blend is shown, but takes a touch only once every sound is heard (L2-012 #3). A word of
+ * four sounds (L2-015) is `tiles--long`: on a phone its tiles narrow so they keep one row.
  */
 @Component({
   selector: 'pb-word-tiles',
@@ -33,6 +34,8 @@ export class WordTiles {
   protected fill(): number {
     const heard = this.heard().filter(Boolean).length;
     const all = this.heard().length;
-    return [0, 33, 66, 100][Math.round((heard / all) * 3)] ?? 100;
+    // The steps the mocks draw: thirds for three sounds, quarters for four.
+    const steps = all > 3 ? [0, 25, 50, 75, 100] : [0, 33, 66, 100];
+    return steps[Math.round((heard / all) * (steps.length - 1))] ?? 100;
   }
 }
