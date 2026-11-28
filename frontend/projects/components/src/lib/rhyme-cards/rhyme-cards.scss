@@ -203,3 +203,15 @@
     line-height: 2rem;
   }
 }
+
+// A short upright phone (320 x 568): smaller pictures and tighter words leave room for an
+// instruction of four lines above two rows of cards.
+@media (max-height: 36rem) and (orientation: portrait) {
+  .word-card .picture {
+    width: var(--size-8);
+  }
+
+  .word-card__word {
+    line-height: 1.75rem;
+  }
+}
