@@ -1,6 +1,7 @@
 // Traces to: L2-022
 import { test, expect } from '../fixtures/test';
 import { CountTheToysPage } from '../pages/count-the-toys.page';
+import { HomePage } from '../pages/home.page';
 import { LessonPage } from '../pages/lesson.page';
 
 const COUNT_TITLE = '/recordings/lessons/count.wav';
@@ -90,5 +91,37 @@ test.describe('Guided lesson: moving on', () => {
 
     await expect(lesson.node(2)).toHaveAttribute('aria-current', 'step');
     await expect(lesson.done).toHaveCount(1);
+  });
+});
+
+test.describe('Guided lesson: pausing', () => {
+  test('Given a lesson in progress, when the child touches Home on the path, then Home shows with the lesson group chosen and no confirmation dialog', async ({
+    page,
+  }) => {
+    const lesson = new LessonPage(page);
+    const home = new HomePage(page);
+    await lesson.open('count');
+
+    await lesson.touch(lesson.home);
+
+    await expect(home.root).toBeVisible();
+    await expect(home.group('Count')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+  });
+
+  test('Given an activity opened from the lesson, when the child touches Leave, then the path returns at the same step', async ({
+    page,
+  }) => {
+    const lesson = new LessonPage(page);
+    const count = new CountTheToysPage(page);
+    await lesson.open('count');
+    await lesson.touch(lesson.play);
+    await expect(count.root).toBeVisible();
+
+    await count.touch(count.leave);
+
+    await expect(lesson.root).toBeVisible();
+    await expect(lesson.node(1)).toHaveAttribute('aria-current', 'step');
+    await expect(lesson.done).toHaveCount(0);
   });
 });
