@@ -35,7 +35,7 @@ const PRAISE_MS = 1500;
 /**
  * Build a sentence (docs/mocks/pages/build-a-sentence): the child puts the words of a short
  * sentence in order on a strip, then checks it. Orchestrates recordings; every rule is in
- * `@pibbo/domain` (ADR 0031).
+ * `@pibbo/domain` (ADR 0032).
  */
 @Component({
   selector: 'pb-build-a-sentence',

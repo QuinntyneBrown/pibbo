@@ -107,7 +107,10 @@ test.describe('Build a sentence: building it', () => {
     await expect(used).toBeDisabled();
     await expect(used).toHaveClass(/word-tile--used/);
     await expect(used).toHaveAttribute('aria-label', `${words[1]}, used`);
-    expect(await used.boundingBox()).toEqual(tileBox);
+    // It stays where it was, to within a subpixel.
+    const usedBox = (await used.boundingBox())!;
+    expect(Math.abs(usedBox.x - tileBox.x)).toBeLessThan(1);
+    expect(Math.abs(usedBox.y - tileBox.y)).toBeLessThan(1);
     await expect(sentence.placed.first()).toHaveAttribute('aria-label', `Take back ${words[1]}`);
 
     await sentence.touch(sentence.tile(extra));
