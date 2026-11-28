@@ -148,7 +148,7 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
 .answer-bar__spacer { height: var(--control-height); }
 
 /* ---------- Home ---------- */
-.home { min-height: 100vh; padding-bottom: var(--space-12); }
+.home { min-height: 100vh; padding-bottom: var(--space-6); }
 /* Home's top bar: the wordmark, the chosen group's Lesson picture and, alone in the far corner,
    the grown-up entry. It is as tall as the Lesson picture even before one shows, so nothing moves
    when it does, and the row below starts 48 px under the entry (L2-037 #1). */
