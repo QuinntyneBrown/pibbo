@@ -168,12 +168,14 @@ test.describe('The grown-up area', () => {
     await grownUp.touch(grownUp.confirmClear);
 
     await expect(grownUp.status).toHaveText('Progress cleared.');
-    const left = await page.evaluate(async () => ({
-      keys: Object.keys(localStorage).filter((k) => k.startsWith('pibbo:')),
-      dbs: (await indexedDB.databases()).map((d) => d.name),
-    }));
-    expect(left.keys).toEqual(['pibbo:volume']);
-    expect(left.dbs).not.toContain('pibbo-content');
+    const keys = await page.evaluate(() =>
+      Object.keys(localStorage).filter((k) => k.startsWith('pibbo:')),
+    );
+    expect(keys).toEqual(['pibbo:volume']);
+    // Deleting an IndexedDB database finishes after the status is said, so wait for it to go.
+    await expect
+      .poll(() => page.evaluate(async () => (await indexedDB.databases()).map((d) => d.name)))
+      .not.toContain('pibbo-content');
     await expect(grownUp.volume.nth(2)).toHaveAttribute('aria-checked', 'true');
   });
 
