@@ -527,7 +527,11 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Spell by sound reads the same words and offers only single letters; a group word would have
   been unspellable. It now leaves out words with a letter group (ADR 0019).
 - The night spec failed once with the network guard on the phone project and passed in 208
-  further runs; the problem text was not captured. Noted so the next journey watches it.
+  further runs; the problem text was not captured. Under verify's full load, two other
+  specs (letter sounds and Sound it out, sound off) each failed once with the guard reporting
+  a recording "unanswered" (`/recordings/words/cat.wav`); both pass alone (100 of 100) and the
+  third verify run was green. The guard keys pending requests by URL, and a recording is fetched
+  twice (preloaded, then played); that is the likely cause and is left for a fixture fix.
 
 **New lessons**
 
