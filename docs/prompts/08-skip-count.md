@@ -1,5 +1,7 @@
 # Feature: Skip-count by twos, fives and tens
 
+**Status:** Complete (PR #8)
+
 Journey 8 of 27 in `docs/journeys.md`. Requirements: L2-007.
 
 ## Goal
