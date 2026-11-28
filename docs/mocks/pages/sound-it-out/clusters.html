@@ -30,7 +30,7 @@
   </div>
   <main class="shell__game" id="main" aria-labelledby="prompt">
     <h1 class="visually-hidden">Sound it out</h1>
-    <div class="stage"><div class="tiles tiles--long" role="group" aria-label="The sounds in the word"><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="s, says /s/">s</button><span class="tiles__say" aria-hidden="true">/s/</span></div><div class="tiles__unit"><button class="tile tile--next press" type="button" aria-label="t, tap to hear it">t</button><span class="tiles__say tiles__say--hidden" aria-hidden="true">/t/</span></div><div class="tiles__unit"><button class="tile press" type="button" disabled aria-label="o">o</button><span class="tiles__say tiles__say--hidden" aria-hidden="true">/o/</span></div><div class="tiles__unit"><button class="tile press" type="button" disabled aria-label="p">p</button><span class="tiles__say tiles__say--hidden" aria-hidden="true">/p/</span></div></div><div class="blend"><div class="blend__bar" aria-hidden="true"><div class="blend__fill blend__fill--25"></div></div><button class="chunky chunky--read press" type="button" disabled>Read it fast</button></div></div>
+    <div class="stage"><p class="rule"><span class="rule__glyph">s + t</span> Say both sounds, quickly</p><div class="tiles tiles--long" role="group" aria-label="The sounds in the word"><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="s, says /s/">s</button><span class="tiles__say" aria-hidden="true">/s/</span></div><div class="tiles__unit"><button class="tile tile--next press" type="button" aria-label="t, tap to hear it">t</button><span class="tiles__say tiles__say--hidden" aria-hidden="true">/t/</span></div><div class="tiles__unit"><button class="tile press" type="button" disabled aria-label="o">o</button><span class="tiles__say tiles__say--hidden" aria-hidden="true">/o/</span></div><div class="tiles__unit"><button class="tile press" type="button" disabled aria-label="p">p</button><span class="tiles__say tiles__say--hidden" aria-hidden="true">/p/</span></div></div><div class="blend"><div class="blend__bar" aria-hidden="true"><div class="blend__fill blend__fill--25"></div></div><button class="chunky chunky--read press" type="button" disabled>Read it fast</button></div></div>
   </main>
   <footer class="answer-bar answer-bar--check"><span class="answer-bar__spacer" aria-hidden="true"></span></footer>
 </div>
@@ -43,5 +43,6 @@
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>
 <script src="../../assets/mock.js"></script>
+<script src="../../assets/sound-it-out.js"></script>
 </body>
 </html>

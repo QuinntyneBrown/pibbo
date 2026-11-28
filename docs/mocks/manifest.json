@@ -332,6 +332,7 @@
       "route": "/read/sound-out",
       "requirements": ["L2-012", "L2-014", "L2-015", "L2-025", "L2-026"],
       "states": [
+        "start",
         "default",
         "ready",
         "pick",
