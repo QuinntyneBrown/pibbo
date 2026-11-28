@@ -1,4 +1,4 @@
-// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -23,6 +23,11 @@ for (const word of content.words ?? []) {
   fileExists(word.recording, `word "${name}" recording`);
   if (!Array.isArray(word.sounds) || word.sounds.length === 0)
     problems.push(`word "${name}": no sounds`);
+  // The mocks draw a word of up to four tiles in one row (L2-015, ADR 0020).
+  else if (word.sounds.length > 4)
+    problems.push(
+      `word "${name}": ${word.sounds.length} sounds, more than four tiles`,
+    );
   for (const sound of word.sounds ?? []) {
     const entry = content.sounds?.[sound];
     if (!entry)

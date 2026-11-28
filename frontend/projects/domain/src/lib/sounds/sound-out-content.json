@@ -36,6 +36,12 @@
       "sounds": ["b", "oa", "t"],
       "picture": "/pictures/words/boat.jpg",
       "recording": "/recordings/words/boat.wav"
+    },
+    {
+      "word": "stop",
+      "sounds": ["s", "t", "o", "p"],
+      "picture": "/pictures/words/stop.jpg",
+      "recording": "/recordings/words/stop.wav"
     }
   ],
   "sounds": {
@@ -93,6 +99,11 @@
       "letters": "t",
       "shown": "/t/",
       "recording": "/recordings/sounds/t.wav"
+    },
+    "o": {
+      "letters": "o",
+      "shown": "/o/",
+      "recording": "/recordings/sounds/o.wav"
     },
     "i": {
       "letters": "i",

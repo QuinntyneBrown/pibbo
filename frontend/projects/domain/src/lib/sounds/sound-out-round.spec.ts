@@ -90,6 +90,25 @@ describe('letter groups (L2-014)', () => {
   });
 });
 
+describe('adjacent consonants (L2-015)', () => {
+  const stop = () => SOUND_OUT.words.find((w) => w.word === 'stop')!;
+
+  it('shows each consonant of "stop" as its own tile', () => {
+    expect(stop().sounds.map((s) => s.letters)).toEqual(['s', 't', 'o', 'p']);
+  });
+
+  it('speaks s then t separately (#1)', () => {
+    const round = startSoundOutRound(sequence(0), [stop(), word('sun'), word('cat')]);
+    const first = touchLetter(round, 0);
+    const second = touchLetter(first.round, 1);
+    expect([first.spoken, second.spoken]).toEqual([
+      '/recordings/sounds/s.wav',
+      '/recordings/sounds/t.wav',
+    ]);
+    expect(nextLetter(second.round)).toBe(2);
+  });
+});
+
 describe('startSoundOutRound', () => {
   it('picks the word by the random source and offers its picture among three', () => {
     const round = startSoundOutRound(sequence(0), words);
