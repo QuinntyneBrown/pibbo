@@ -1,0 +1,61 @@
+<ol class="path" [class]="'path path--' + group()" [attr.aria-label]="label()">
+  @for (s of shown(); track s.step.number; let first = $first, last = $last) {
+    <li class="path__step">
+      <div class="path__rail">
+        <span
+          class="path__line"
+          [class.path__line--none]="first"
+          [class.path__line--done]="!first && s.before"
+        ></span>
+        @switch (s.state) {
+          @case ('done') {
+            <button
+              type="button"
+              class="path__node path__node--done"
+              [attr.aria-label]="s.label"
+              (pbTap)="chose.emit(s.step)"
+            >
+              <svg class="icon icon--xl" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            </button>
+          }
+          @case ('now') {
+            <button
+              type="button"
+              class="path__node path__node--now"
+              aria-current="step"
+              [attr.aria-label]="s.label"
+              (pbTap)="chose.emit(s.step)"
+            >
+              <svg class="icon icon--fill icon--xl" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"
+                />
+              </svg>
+            </button>
+          }
+          @default {
+            <button type="button" class="path__node" disabled [attr.aria-label]="s.label">
+              <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </button>
+          }
+        }
+        <span
+          class="path__line"
+          [class.path__line--none]="last"
+          [class.path__line--done]="!last && s.after"
+        ></span>
+      </div>
+      <div class="path__label">
+        <p class="path__number">Game {{ s.step.number }}</p>
+        <p class="path__name" [class.path__name--later]="s.state === 'later'">
+          {{ s.step.activity.name }}
+        </p>
+      </div>
+    </li>
+  }
+</ol>

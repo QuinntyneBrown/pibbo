@@ -1,0 +1,52 @@
+@if (lesson(); as lesson) {
+  <div class="lesson" [class]="'lesson lesson--' + lesson.id">
+    <header class="lesson__top">
+      <button
+        type="button"
+        class="chunky chunky--white chunky--icon"
+        aria-label="Back home"
+        (pbTap)="home()"
+      >
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <div>
+        <p class="lesson__kicker">{{ lesson.kicker }}</p>
+        <h1 class="lesson__title">{{ lesson.title }}</h1>
+      </div>
+    </header>
+    <main class="lesson__main" id="main">
+      <pb-lesson-path
+        [steps]="steps()"
+        [current]="current()"
+        [group]="lesson.id"
+        (chose)="play($event)"
+      />
+    </main>
+    <footer class="lesson__foot" role="status">
+      <div class="lesson__next">
+        <pb-pibbo [mood]="next() ? 'rest' : 'cheer'" />
+        @if (next(); as next) {
+          <p>{{ lines.upNext.text }} {{ next.activity.name }}</p>
+        } @else {
+          <p>{{ lines.done.text }}</p>
+        }
+      </div>
+      @if (next(); as next) {
+        <button
+          type="button"
+          class="chunky chunky--wide"
+          [class.chunky--read]="lesson.id === 'read'"
+          (pbTap)="play(next)"
+        >
+          Play game {{ next.number }}
+        </button>
+      } @else {
+        <button type="button" class="chunky chunky--success chunky--wide" (pbTap)="home()">
+          Back home
+        </button>
+      }
+    </footer>
+  </div>
+}

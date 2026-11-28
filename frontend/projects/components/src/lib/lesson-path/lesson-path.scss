@@ -1,0 +1,255 @@
+// The lesson path, as docs/mocks/assets/ui.css draws `.path` (ADR 0025).
+.path {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 48rem) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  // A larger current step still shares one label column with its neighbours.
+  @media (orientation: portrait) and (max-width: 47.99rem) {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+  }
+}
+
+.path__step {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-4);
+
+  @media (min-width: 48rem) {
+    flex-direction: column;
+    gap: 0;
+
+    &:nth-child(even) {
+      padding-top: var(--space-20);
+    }
+  }
+
+  @media (orientation: portrait) and (max-width: 47.99rem) {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
+}
+
+.path__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (min-width: 48rem) {
+    width: 100%;
+    flex-direction: row;
+  }
+}
+
+.path__line {
+  display: none;
+  flex: 1;
+  height: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--palette-white);
+
+  @media (min-width: 48rem) {
+    display: block;
+  }
+}
+
+.path__line--done {
+  background: var(--color-success);
+}
+
+.path__line--none {
+  visibility: hidden;
+}
+
+.path__node {
+  --depth: var(--color-depth);
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-11);
+  height: var(--size-11);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--palette-white);
+  color: var(--color-fg-muted);
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
+
+  &:active:not(:disabled) {
+    transform: translateY(var(--press-travel));
+    box-shadow: 0 var(--press-depth-down) 0 var(--depth);
+  }
+
+  &:disabled {
+    background: var(--color-surface);
+    box-shadow: none;
+  }
+
+  &:disabled .icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    stroke-width: 2.5;
+  }
+}
+
+.path__node--done {
+  --depth: var(--color-success-depth);
+  background: var(--color-success-strong);
+  color: var(--color-fg-on-strong);
+
+  .icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    stroke-width: 3.5;
+  }
+}
+
+.path__node--now {
+  width: var(--size-13);
+  height: var(--size-13);
+  color: var(--color-fg-on-strong);
+
+  .icon {
+    margin-left: var(--space-1);
+  }
+}
+
+.path--read .path__node--now {
+  --depth: var(--color-read-depth);
+  background: var(--color-read-strong);
+}
+
+.path--count .path__node--now {
+  --depth: var(--color-count-depth);
+  background: var(--color-count-strong);
+}
+
+.path__label {
+  min-width: 0;
+
+  @media (min-width: 48rem) {
+    margin-top: var(--space-3);
+    padding: 0 var(--space-2);
+    text-align: center;
+  }
+}
+
+.path__number {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.25rem;
+  color: var(--color-fg-muted);
+}
+
+.path__name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.path__name--later {
+  color: var(--color-fg-muted);
+}
+
+.icon {
+  width: var(--size-4);
+  height: var(--size-4);
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon--lg {
+  width: var(--size-7);
+  height: var(--size-7);
+}
+
+.icon--xl {
+  width: var(--size-8);
+  height: var(--size-8);
+}
+
+.icon--fill {
+  fill: currentColor;
+  stroke: none;
+}
+
+// A phone on its side, or a short window: the path is one row of smaller nodes.
+@media (min-width: 32rem) and (max-height: 30rem),
+  (orientation: landscape) and (min-width: 32rem) and (max-width: 47.99rem) {
+  .path {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .path__step {
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+
+    &:nth-child(even) {
+      padding-top: var(--space-3);
+    }
+  }
+
+  .path__rail {
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .path__line {
+    display: block;
+  }
+
+  .path__node {
+    width: var(--target-child);
+    height: var(--target-child);
+  }
+
+  .path__node--now {
+    width: var(--size-11);
+    height: var(--size-11);
+  }
+
+  .path__label {
+    margin: 0;
+    padding-inline: var(--space-1);
+    text-align: center;
+  }
+}
+
+// A narrow tablet still shows the games in a column.
+@media (orientation: portrait) and (min-width: 40rem) and (max-width: 47.99rem) and (max-height: 47rem) {
+  .path {
+    gap: var(--space-2);
+  }
+
+  .path__node {
+    width: var(--size-10);
+    height: var(--size-10);
+  }
+
+  .path__node--now {
+    width: var(--size-12);
+    height: var(--size-12);
+  }
+}
