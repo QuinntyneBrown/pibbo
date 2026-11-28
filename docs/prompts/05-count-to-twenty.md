@@ -1,4 +1,5 @@
 # Feature: Count and write to twenty
+n**Status:** Complete (PR #5)
 
 Journey 5 of 27 in `docs/journeys.md`. Requirements: L2-003, L2-004.
 
