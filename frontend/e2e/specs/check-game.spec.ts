@@ -176,3 +176,130 @@ test.describe('What do I know?: with the sound off', () => {
     await expect(check.results).toBeVisible();
   });
 });
+
+const LOOK = '/recordings/check/look-what-you-can-do.wav';
+const TOUCH_A_PICTURE = '/recordings/check/touch-a-picture.wav';
+const WELL_PLAYED = '/recordings/check/well-played.wav';
+
+test.describe('What do I know?: what the child can do', () => {
+  test('@critical Given the game ends, when results are shown, then only the skills answered correctly are shown, as earned pictures, with no score, stars, percentage or count of misses', async ({
+    page,
+    spoken,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openFromHome();
+    // The first lesson's two skills alternate: Sound it out or Letter sounds first.
+    const first = (await check.rounds()) && (await page.title());
+    expect(first).toBeTruthy();
+    await check.answerRightAndGoOn();
+    for (let i = 1; i < 5; i++) await check.answerWrongUntilModelledAndGoOn();
+
+    await expect(check.results).toBeVisible();
+    await expect(check.resultsTitle).toHaveText('Look what you can do!');
+    await expect(check.earned).toHaveCount(1);
+    await expect(check.subjects).toHaveText(['Reading']);
+    await expect(check.earned.locator('.skills__tick')).toHaveCount(1);
+    await expect(page.getByText(/score|star|%|missed|wrong|out of|\d+ of \d+/i)).toHaveCount(0);
+    await expect(page.locator('[role="progressbar"]')).toHaveCount(0);
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(-2))
+      .toEqual([LOOK, TOUCH_A_PICTURE]);
+  });
+
+  test('Given results, when an earned picture is touched, then its name is spoken; Home returns to Home', async ({
+    page,
+    spoken,
+  }) => {
+    const check = new CheckGamePage(page);
+    const home = new HomePage(page);
+    await check.openFromHome();
+    for (let i = 0; i < 5; i++) await check.answerRightAndGoOn();
+    await expect(check.earnedTitles).toHaveText(['Sound it out', 'Letter sounds']);
+
+    await check.touch(check.earned.filter({ hasText: 'Letter sounds' }));
+
+    await expect
+      .poll(async () => (await spoken.recordings()).at(-1))
+      .toBe('/recordings/home/letter-sounds.wav');
+    await check.touch(check.home);
+    await expect(home.checkCard).toBeVisible();
+  });
+
+  test('Given nothing was answered correctly, when results are shown, then the child is praised for playing and nothing is marked', async ({
+    page,
+    spoken,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openFromHome();
+    for (let i = 0; i < 5; i++) await check.answerWrongUntilModelledAndGoOn();
+
+    await expect(check.resultsTitle).toHaveText('Well played!');
+    await expect(check.earned).toHaveCount(0);
+    await expect(page.getByText(/score|star|%|missed|wrong/i)).toHaveCount(0);
+    await expect.poll(async () => (await spoken.recordings()).at(-2)).toBe(WELL_PLAYED);
+  });
+});
+
+test.describe('What do I know?: kept on this device only', () => {
+  test('Given the child has opened Count the toys and Skip-count, when the check game starts, then its questions come from them and ask how many', async ({
+    page,
+  }) => {
+    const home = new HomePage(page);
+    const check = new CheckGamePage(page);
+    await home.open();
+    await home.touch(home.group('Count'));
+    await home.touch(home.activity('Count the toys'));
+    await expect(page).toHaveURL(/count\/toys/);
+    await home.open();
+    await home.touch(home.group('Count'));
+    await home.touch(home.activity('Skip-count'));
+    await expect(page).toHaveURL(/count\/skip/);
+    await home.open();
+
+    await home.touch(home.checkCard);
+
+    await expect(check.question).toBeVisible();
+    expect(await check.rounds()).toBe(5);
+    for (let i = 0; i < 5; i++) {
+      await expect(check.instruction).toHaveText(/^How many (ducks|teddies|balls)\?$/);
+      await check.answerRightAndGoOn();
+    }
+    await expect(check.subjects).toHaveText(['Counting']);
+    await expect(check.earnedTitles).toHaveText(['Count the toys', 'Skip-count']);
+  });
+
+  test('Given results, when saved, then only the earned skills are kept, on this device, and no request carries them', async ({
+    page,
+  }) => {
+    const sent: string[] = [];
+    page.on('request', (r) => {
+      if (r.method() !== 'GET' || r.postData()) sent.push(`${r.method()} ${r.url()}`);
+    });
+    const check = new CheckGamePage(page);
+    await check.openFromHome();
+    await check.answerRightAndGoOn();
+    for (let i = 1; i < 5; i++) await check.answerWrongUntilModelledAndGoOn();
+    await expect(check.results).toBeVisible();
+
+    const stored = await check.stored();
+    expect(Object.keys(stored).sort()).toEqual(['pibbo:check']);
+    const kept = JSON.parse(stored['pibbo:check']!);
+    expect(kept.version).toBe(1);
+    expect(kept.earned).toHaveLength(1);
+    expect(Object.keys(kept).sort()).toEqual(['earned', 'version']);
+    expect(sent).toEqual([]);
+  });
+
+  test('Given a damaged practice history on the device, when the check game starts, then it counts as none and the first lesson is used', async ({
+    page,
+  }) => {
+    await page.addInitScript(() =>
+      localStorage.setItem('pibbo:practice', '{"version":1,"practised":"<b>'),
+    );
+    const check = new CheckGamePage(page);
+    await check.openFromHome();
+
+    await expect(check.instruction).toHaveText('Which word goes with the picture?');
+    await expect(page.getByText('<b>')).toHaveCount(0);
+  });
+});
