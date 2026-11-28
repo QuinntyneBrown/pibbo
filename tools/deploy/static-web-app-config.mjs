@@ -1,7 +1,8 @@
 // Writes staticwebapp.config.json into the production build, so Azure Static Web Apps does what
-// docs/deploy.md asks of the host (ADR 0032): every response carries the headers in
+// docs/deploy.md asks of the host (ADR 0033): every response carries the headers in
 // frontend/deploy/security-headers.json, a path without a file extension answers with index.html,
-// and a missing file is a 404. Azure serves HTTPS only and redirects HTTP itself.
+// a missing file is a 404, and sw.js is sent with Cache-Control: no-cache. Azure serves HTTPS only
+// and redirects HTTP itself.
 // Run after `npm run build`, from anywhere: node tools/deploy/static-web-app-config.mjs
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { extname, join } from "node:path";
@@ -34,6 +35,9 @@ const collect = (dir) => {
 collect(browser);
 
 const config = {
+  // The service worker is never cached long, so a new version is found on the next visit
+  // (ADR 0032, docs/deploy.md).
+  routes: [{ route: "/sw.js", headers: { "Cache-Control": "no-cache" } }],
   navigationFallback: {
     rewrite: "/index.html",
     exclude: [`/*.{${[...extensions].sort().join(",")}}`],
