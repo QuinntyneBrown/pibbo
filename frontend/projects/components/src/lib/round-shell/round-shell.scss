@@ -213,7 +213,11 @@
 
     .shell__game {
       padding: var(--space-2);
-// A story layout (Spot the word, ADR 0022), as the mock draws it. Upright on a small phone the
+    }
+  }
+}
+
+// A story layout (Spot the word, ADR 0023), as the mock draws it. Upright on a small phone the
 // word to find sits beside the progress bar; on its side the story spans the width between the
 // top row and the row it shares with the answer bar. The game's own parts name their areas.
 @media (max-width: 24rem) and (max-height: 42rem) {
@@ -280,6 +284,10 @@
 
     .shell__answer {
       grid-column: 1 / -1;
+    }
+  }
+}
+
 @media (max-width: 24rem) and (max-height: 42rem),
   (min-width: 32rem) and (orientation: landscape) and (max-height: 38rem) {
   .shell--story {

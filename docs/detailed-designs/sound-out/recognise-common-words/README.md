@@ -2,7 +2,7 @@
 
 ## Overview
 
-Common words ("the", "is", "a") are high-frequency words a child finds by sight. In *Spot the word* the child hears a common word, sees it shown large, and touches every one of it in a short *story* (ADR 0022). A word missed in a round comes back in a later round while the activity is open.
+Common words ("the", "is", "a") are high-frequency words a child finds by sight. In *Spot the word* the child hears a common word, sees it shown large, and touches every one of it in a short *story* (ADR 0023). A word missed in a round comes back in a later round while the activity is open.
 
 - **story** — a few short sentences, every word of which is a touch target
 - **due** — the common words missed in this play, asked again before any other; held at route scope and never stored
@@ -69,6 +69,6 @@ A found word is spoken and stays found; a miss greys the word with no sound and 
 
 ## Open questions
 
-- Whether Pibbo remembers what a child has practised across visits, and so whether repetition outlives the activity (`AGENTS.md`, ADR 0022).
+- Whether Pibbo remembers what a child has practised across visits, and so whether repetition outlives the activity (`AGENTS.md`, ADR 0023).
 - Which common words and stories Pibbo covers, and in what order.
 - The PNG renderings of the class, component and sequence diagrams predate journey 19; their `.puml` sources describe the feature as built and are re-rendered when PlantUML is to hand.

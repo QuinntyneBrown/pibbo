@@ -1,4 +1,4 @@
-# 0022: Spot the word: every common word in a short story, and misses that come back
+# 0023: Spot the word: every common word in a short story, and misses that come back
 
 **Status:** Accepted (journey 19)
 
@@ -44,6 +44,10 @@ child has practised.
    the answer bar. The shell names grid areas (`top`, `ask`, `find`, `story`, `answer`); the
    game places its own parts in them. Pibbo is hidden there so the instruction keeps its width,
    and the answer bar of a phone on its side is one row.
+   With journey 17's `fit` layout beside it, the shell's stylesheet is 4.8 kB, so the
+   per-component style error budget in `angular.json` rises from 4 kB to 5 kB. The shell is
+   one shared stylesheet in the lazy activity chunks, not in the initial bundle; the 2 kB
+   warning stays, so every stylesheet over it is still reported.
 9. **The presentation is `SpotTheWord`** (`pb-spot`) in `@pibbo/components`, keeping the mock's
    `.spot`, `.spot__find`, `.target-word`, `.found`, `.story` and `.story__word` classes. Spot
    the word is listed in Read after Spell by sound (`/read/sight-words`), with "the" as its
