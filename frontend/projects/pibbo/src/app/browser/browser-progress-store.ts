@@ -28,7 +28,7 @@ export const STORE_BACKEND = new InjectionToken<StoreBackend>('STORE_BACKEND', {
 });
 
 /**
- * Keeps a few values in `localStorage` on this device, under `pibbo:` (ADR 0025). Every value is
+ * Keeps a few values in `localStorage` on this device, under `pibbo:` (ADR 0026). Every value is
  * JSON, checked by a guard when read; a missing, damaged or refused value counts as absent, and a
  * storage that cannot be used behaves as empty. Nothing is ever sent anywhere.
  */

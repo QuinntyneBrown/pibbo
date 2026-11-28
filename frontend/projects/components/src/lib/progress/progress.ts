@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 
 /**
  * The progress bar (`.progress`, docs/mocks/pages/count-the-toys): how many rounds are done of
- * how many, filled in twentieths so 5 to 8 rounds all draw (ADR 0026). It counts rounds, never
+ * how many, filled in twentieths so 5 to 8 rounds all draw (ADR 0027). It counts rounds, never
  * a score, and has no time in it (L2-025 #4).
  */
 @Component({

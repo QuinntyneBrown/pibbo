@@ -1,10 +1,10 @@
-# 0027: The grown-up gate and area: a corner padlock, three numbers in words, and Clear progress
+# 0028: The grown-up gate and area: a corner padlock, three numbers in words, and Clear progress
 
 **Status:** Accepted (journey 24)
 
 ## Context
 
-ADR 0025 decided that a grown-up has an area. `L2-037` asks for a small corner control on Home
+ADR 0026 decided that a grown-up has an area. `L2-037` asks for a small corner control on Home
 at least 48 px from any activity picture, a text-only task a pre-reader cannot pass by chance
 ("touch 7, 3, 9 in order"), Home unchanged when the gate is failed or dismissed, and an area
 with volume, clear progress and about Pibbo and no external links. `L2-029` #4 asks that

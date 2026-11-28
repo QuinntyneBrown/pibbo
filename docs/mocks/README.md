@@ -79,7 +79,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
 - **Words and pictures, Spot the word, Build a sentence and What do I know?** are
   frames in the project but are not wired into the prototype's own navigation. Here they
   are linked from Home and the lesson, as `journeys.ts` describes.
-- **The grown-up gate and area drawn (journey 24, ADRs 0025 and 0027).** The prototype has no
+- **The grown-up gate and area drawn (journey 24, ADRs 0026 and 0028).** The prototype has no
   grown-up screen. Home's top bar gained a small corner control (`.grown-up-entry`, an outline
   padlock, 48 × 48 px, labelled "For grown-ups"); the row under it is 48 px lower
   (`.home__row`), so every activity picture stays at least 48 px away (`L2-037` #1). The gate
@@ -90,7 +90,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   progress, and About Pibbo, with no link out; Clear progress asks first
   (`dialogs/clear-progress`, focus on Keep it) and then says "Progress cleared." (`cleared`).
   Dialogs are a bottom sheet on a phone and a centred card from 640 px (`.dialog`).
-- **What do I know? reconciled with `AGENTS.md` and `L2-023` (journey 23, ADRs 0025 and 0026).**
+- **What do I know? reconciled with `AGENTS.md` and `L2-023` (journey 23, ADRs 0026 and 0027).**
   The prototype's four fixed questions became five mixed questions from what the child has
   practised (`Question 1 of 5`, `progress__fill--q1` to `--q5`). Its `retry` moved on to the next
   question ("Good try! On to the next one."); a wrong answer now follows the normal retry rule

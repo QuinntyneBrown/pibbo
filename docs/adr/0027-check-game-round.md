@@ -1,4 +1,4 @@
-# 0026: What do I know?: five or more mixed questions, the normal retry, and earned pictures
+# 0027: What do I know?: five or more mixed questions, the normal retry, and earned pictures
 
 **Status:** Accepted (journey 23)
 
@@ -11,7 +11,7 @@ named the child, gave every game 0 to 3 stars and suggested what to try next. `L
 5 to 8 mixed rounds from what the child has practised, the normal retry rule (`L2-026`), only
 skills answered correctly as earned pictures with no score or count of misses, and results kept
 on the device. The design named `CheckGamePage`, `EarnedPicturesComponent`, `checkRules` and a
-`ProgressStore`; it said each round reuses the activity's own component. ADR 0025 decided that
+`ProgressStore`; it said each round reuses the activity's own component. ADR 0026 decided that
 practice is kept on the device.
 
 ## Decision
@@ -27,7 +27,7 @@ practice is kept on the device.
    each have a picture and a recording. Reusing every activity's component inside the check is
    left out: it would load every activity's code for one game, against *Lazy loading*.
 3. **Which skills, and how many.** The skills are the practised activities that are still in
-   the catalogue; with none, the first lesson's activities that exist (ADR 0025). The game has
+   the catalogue; with none, the first lesson's activities that exist (ADR 0026). The game has
    as many rounds as skills, but at least 5 and at most 8. The skills are shuffled by the
    injected random source and taken in turn, starting again when they run out, so two skills
    alternate. The numbers, things and words come from the content, also by the random source.

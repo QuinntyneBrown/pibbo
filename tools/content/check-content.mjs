@@ -1,4 +1,4 @@
-// Checks the content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0026): every word has a picture and a
+// Checks the content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0027): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -284,7 +284,7 @@ for (const set of rhymes.sets ?? []) {
 if ((content.words ?? []).length < 3)
   problems.push("fewer than 3 words: a round offers 3 pictures");
 
-// What do I know? (ADR 0026): every line has text and a recording, every thing a picture and its
+// What do I know? (ADR 0027): every line has text and a recording, every thing a picture and its
 // question, and the rounds and numbers make sense. Its words are Sound it out's, checked above.
 const checkPath = `${frontend}projects/domain/src/lib/lessons/check-content.json`;
 const check = JSON.parse(readFileSync(checkPath, "utf8"));

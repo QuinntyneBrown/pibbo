@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
 /**
- * What Pibbo keeps on this device, and nothing else (ADR 0025): which activities were opened
+ * What Pibbo keeps on this device, and nothing else (ADR 0026): which activities were opened
  * (`practice`), which skills the last check game earned (`check`) and the volume a grown-up
  * chose (`volume`, a setting, not progress).
  */

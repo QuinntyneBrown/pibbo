@@ -10,7 +10,7 @@ With no practice history on the device the rounds come from the first lesson's a
 
 ## Description
 
-The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api` (ADRs 0025 and 0026).
+The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api` (ADRs 0026 and 0027).
 
 - **`CheckGame`** (`pb-check-game`) — lazy route `/check` that runs the rounds and then the results. It reads the practice history from the store, asks `checkSkills` for the skills, preloads each round's pictures and recordings before it shows and the next round's during it, speaks each choice, the hint, the praise and the modelled answer, and writes the earned skills when results show. Leave goes to Home.
 - **`CheckQuestion`** (`pb-check-question`) — presentation of one question (`.stage--question`): the things or the picture (`.show`) and three choices (`.pick__option--text`), `aria-pressed` on the chosen one and a tick on the modelled one (`.pick__option--right`).

@@ -8,7 +8,7 @@ Settings and information for a grown-up sit behind a *gate*. The gate entry is a
 
 ## Description
 
-The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api` (ADRs 0025 and 0027).
+The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api` (ADRs 0026 and 0028).
 
 - **`GrownUpEntry`** (`pb-grown-up-entry`) — the corner control on Home (`.grown-up-entry`): an outline padlock, 48 × 48 px, "For grown-ups", in the top bar; Home's row under it keeps every activity picture at least 48 px away.
 - **`GateDialog`** — a CDK Dialog in the app, opened by the entry, holding `pb-gate` (`.dialog.gate`): three numbers written as words, a 3 × 3 keypad and dots for progress. Nothing is spoken. The first wrong number, Close, Escape or a touch outside closes it and Home is unchanged; the right three navigate to the area with the gate's pass in the navigation state.

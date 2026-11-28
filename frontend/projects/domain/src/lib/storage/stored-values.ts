@@ -1,12 +1,12 @@
 import type { ActivityCatalogue } from '@pibbo/api';
 
-/** Which activities a child has opened on this device, each once, most recent last (ADR 0025). */
+/** Which activities a child has opened on this device, each once, most recent last (ADR 0026). */
 export interface PracticeHistory {
   readonly version: 1;
   readonly practised: readonly string[];
 }
 
-/** The skills the last check game earned; misses are never kept (ADR 0026). */
+/** The skills the last check game earned; misses are never kept (ADR 0027). */
 export interface StoredCheckResult {
   readonly version: 1;
   readonly earned: readonly string[];

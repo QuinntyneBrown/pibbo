@@ -16,7 +16,7 @@ export interface CheckThing {
   readonly ask: Instruction;
 }
 
-/** Everything the check game shows and says (ADR 0026). */
+/** Everything the check game shows and says (ADR 0027). */
 export interface CheckContent {
   /** At least this many rounds, and at most `maxRounds` (L2-023). */
   readonly minRounds: number;
@@ -59,7 +59,7 @@ type CheckData = Omit<CheckContent, 'word'> & {
 /**
  * The content of What do I know?: data, not rules, checked before every build by
  * `tools/content/check-content.mjs`. Its things, numbers and words are the cast of the mock;
- * which a check asks, and in what order, is not decided (ADR 0026). Its words are Sound it
+ * which a check asks, and in what order, is not decided (ADR 0027). Its words are Sound it
  * out's, so each has a picture, a recording and recorded sounds.
  */
 export const CHECK: CheckContent = {

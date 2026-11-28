@@ -71,7 +71,7 @@ export class Home {
     this.at.update((at) => at + 1);
   }
 
-  /** An activity opened is practised; it is noted on this device only (ADR 0025). */
+  /** An activity opened is practised; it is noted on this device only (ADR 0026). */
   protected openActivity(activity: Activity): void {
     if (this.opening) return;
     const history = this.store.read('practice', isPracticeHistory);

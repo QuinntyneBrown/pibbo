@@ -1,4 +1,4 @@
-# 0025: Practice is kept on the device, and a grown-up has an area
+# 0026: Practice is kept on the device, and a grown-up has an area
 
 **Status:** Accepted (journeys 23 and 24, decided by the repository owner)
 

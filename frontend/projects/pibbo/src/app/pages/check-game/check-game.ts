@@ -50,7 +50,7 @@ const PRAISE_MS = 1500;
 /**
  * What do I know? (docs/mocks/pages/progress-check): five to eight mixed questions about what
  * the child has practised, with the normal retry, then only what they answered correctly, as
- * earned pictures (L2-023, ADR 0026). Orchestrates recordings and the store; every rule is in
+ * earned pictures (L2-023, ADR 0027). Orchestrates recordings and the store; every rule is in
  * `@pibbo/domain`.
  */
 @Component({
