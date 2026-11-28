@@ -14,10 +14,12 @@
       [heard]="round().heard"
       [next]="nextToTouch()"
       [sounding]="sounding()"
-      [showBlend]="!picking()"
+      [showBlend]="!picking() && !choices()"
       [canBlend]="round().phase === 'ready'"
+      [choices]="choices()"
       (touched)="touchLetter($event)"
       (blend)="blend()"
+      (chose)="chooseFirstTwo($event)"
     />
     @if (picking()) {
       <pb-picture-pick

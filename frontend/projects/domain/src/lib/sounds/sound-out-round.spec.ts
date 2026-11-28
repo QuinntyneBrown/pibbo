@@ -2,7 +2,9 @@ import type { RandomSource, Word } from '@pibbo/api';
 import { SOUND_OUT, soundOutContent } from './sound-out-content';
 import {
   blendDone,
+  adjacentConsonants,
   blendPlan,
+  chooseFirstTwo,
   checkPicture,
   choosePicture,
   isLetterGroup,
@@ -106,6 +108,53 @@ describe('adjacent consonants (L2-015)', () => {
       '/recordings/sounds/t.wav',
     ]);
     expect(nextLetter(second.round)).toBe(2);
+  });
+
+  it('finds two single consonants side by side at the start, and nothing else', () => {
+    expect(adjacentConsonants(stop())?.map((s) => s.letters)).toEqual(['s', 't']);
+    for (const w of SOUND_OUT.words.filter((x) => x.word !== 'stop'))
+      expect(adjacentConsonants(w)).toBeNull();
+  });
+
+  const asked = () => {
+    const round = startSoundOutRound(sequence(0), [stop(), word('sun'), word('cat')]);
+    return blendDone(startBlend(soundAll(round))!);
+  };
+
+  it('asks for the first two sounds once blended, offering st, s and t (#2)', () => {
+    const round = asked();
+    expect(round.phase).toBe('first-two');
+    expect([...round.firstTwo!.choices].sort()).toEqual(['s', 'st', 't']);
+  });
+
+  it('speaks both sounds when st is chosen, and the pictures follow (#2)', () => {
+    const result = chooseFirstTwo(asked(), 'st')!;
+    expect(result.right).toBe(true);
+    expect(result.plan.map((p) => p.recording)).toEqual([
+      '/recordings/sounds/s.wav',
+      '/recordings/sounds/t.wav',
+    ]);
+    expect(result.round.phase).toBe('picking');
+  });
+
+  it('models both sounds when another is chosen, and the child chooses again (#2)', () => {
+    const round = asked();
+    const result = chooseFirstTwo(round, 't')!;
+    expect(result.right).toBe(false);
+    expect(result.plan.map((p) => p.letter)).toEqual([0, 1]);
+    expect(result.round).toBe(round);
+    expect(chooseFirstTwo(result.round, 'st')!.right).toBe(true);
+  });
+
+  it('asks only once: after a wrong picture, the word is blended and the pictures return', () => {
+    const picked = choosePicture(chooseFirstTwo(asked(), 'st')!.round, 'sun');
+    const again = tryAgain(checkPicture(picked).round);
+    expect(blendDone(again).phase).toBe('picking');
+  });
+
+  it('refuses a choice outside the question', () => {
+    expect(chooseFirstTwo(asked(), 'x')).toBeNull();
+    expect(chooseFirstTwo(picking(), 'st')).toBeNull();
   });
 });
 

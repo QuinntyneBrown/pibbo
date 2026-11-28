@@ -136,6 +136,19 @@
 .blend__fill--0 {
   width: 0;
 }
+.choose {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.choose__option[aria-pressed='true'] {
+  box-shadow:
+    inset 0 0 0 4px var(--color-read),
+    0 var(--press-depth) 0 var(--depth);
+}
+
 .blend__fill--25 {
   width: 25%;
 }

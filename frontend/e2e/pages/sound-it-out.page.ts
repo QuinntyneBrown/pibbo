@@ -100,10 +100,15 @@ export class SoundItOutPage {
     return word;
   }
 
-  /** Sounds every letter, blends, and waits for the pictures. */
+  /**
+   * Sounds every letter, blends, chooses the first two sounds when a word with adjacent
+   * consonants asks for them, and waits for the pictures.
+   */
   async soundAndBlend(): Promise<string> {
     const word = await this.soundAll();
     await this.touch(this.blend);
+    await expect(this.pictures.or(this.choices).first()).toBeVisible();
+    if ((await this.choices.count()) > 0) await this.touch(this.choice(word.slice(0, 2)));
     await expect(this.pictures).toHaveCount(3);
     return word;
   }

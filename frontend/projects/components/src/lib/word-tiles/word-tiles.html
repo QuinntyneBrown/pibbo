@@ -32,6 +32,22 @@
     </div>
   }
 </div>
+@if (choices(); as offered) {
+  <div class="choose" role="group" aria-label="The first two sounds">
+    @for (choice of offered; track choice) {
+      <button
+        type="button"
+        class="tile choose__option"
+        [class.tile--wide]="choice.length > 1"
+        [attr.aria-pressed]="chosen() === choice"
+        [attr.aria-label]="choice.split('').join(' and ')"
+        (pbTap)="chose.emit(choice)"
+      >
+        {{ choice }}
+      </button>
+    }
+  </div>
+}
 @if (showBlend()) {
   <div class="blend">
     <div class="blend__bar" aria-hidden="true">

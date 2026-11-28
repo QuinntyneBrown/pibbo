@@ -52,6 +52,12 @@ for (const [key, line] of Object.entries(content.instructions ?? {}))
   fileExists(line.recording, `instruction "${key}" recording`);
 for (const key of ["praise", "hint", "model"])
   fileExists(content[key]?.recording, `${key} recording`);
+// The first-two-sounds question (L2-015, ADR 0020): every line it says is recorded.
+for (const key of ["instruction", "praise", "listen", "again"])
+  fileExists(
+    content.firstTwo?.[key]?.recording,
+    `first two sounds ${key} recording`,
+  );
 // Letter sounds (ADR 0015): each pair names a recorded sound and a picture.
 const letterSounds = content.letterSounds;
 if (!letterSounds) problems.push("letterSounds: missing");

@@ -9,16 +9,43 @@ export function isLetterGroup(sound: Sound): boolean {
   return sound.letters.length > 1;
 }
 
+const VOWELS = 'aeiou';
+
+/** A consonant sound shown as one letter: not a vowel and not a letter group. */
+function isSingleConsonant(sound: Sound): boolean {
+  return sound.letters.length === 1 && !VOWELS.includes(sound.letters);
+}
+
+/**
+ * Adjacent consonants (L2-015): the word's first two sounds when both are single consonants
+ * side by side, as s and t in "stop"; otherwise null.
+ */
+export function adjacentConsonants(word: Word): readonly [Sound, Sound] | null {
+  const [a, b] = word.sounds;
+  return a && b && isSingleConsonant(a) && isSingleConsonant(b) ? [a, b] : null;
+}
+
+/** The question a word with adjacent consonants asks once it is blended (L2-015 #2). */
+export interface FirstTwoQuestion {
+  /** The two sounds asked for, in order. */
+  readonly sounds: readonly [Sound, Sound];
+  /** The letters offered, in the order shown: both sounds together, and each alone. */
+  readonly choices: readonly string[];
+  /** Whether the child has chosen both sounds. */
+  readonly answered: boolean;
+}
+
 /** How many pictures a round offers once the word is blended. */
 export const PICTURES_OFFERED = 3;
 
 /**
  * Where a round is: the child sounds each letter in order (`sounding`), then may blend
- * (`ready`); Pibbo blends (`blending`); the child picks the picture (`picking`); a wrong
+ * (`ready`); Pibbo blends (`blending`); a word with adjacent consonants first asks for its
+ * first two sounds (`first-two`); the child picks the picture (`picking`); a wrong
  * picture gives a hint (`retry`); the round ends `right` or, after the third wrong, `modelled`.
  */
 export type SoundOutPhase =
-  'sounding' | 'ready' | 'blending' | 'picking' | 'retry' | 'right' | 'modelled';
+  'sounding' | 'ready' | 'blending' | 'first-two' | 'picking' | 'retry' | 'right' | 'modelled';
 
 /** One Sound it out round. Immutable: every rule returns a new value. */
 export interface SoundOutRound {
@@ -32,6 +59,8 @@ export interface SoundOutRound {
   readonly chosen: string | null;
   /** Wrong pictures so far in this round. */
   readonly wrong: number;
+  /** The first-two-sounds question, for a word with adjacent consonants only. */
+  readonly firstTwo: FirstTwoQuestion | null;
 }
 
 function shuffled<T>(random: RandomSource, items: readonly T[]): T[] {
@@ -60,13 +89,24 @@ export function startSoundOutRound(
     random,
     words.filter((w) => w.word !== word.word),
   ).slice(0, PICTURES_OFFERED - 1);
+  const pictures = shuffled(random, [word, ...others]);
+  const pair = adjacentConsonants(word);
   return {
     phase: 'sounding',
     word,
     heard: word.sounds.map(() => false),
-    pictures: shuffled(random, [word, ...others]),
+    pictures,
     chosen: null,
     wrong: 0,
+    firstTwo: pair && {
+      sounds: pair,
+      choices: shuffled(random, [
+        pair[0].letters + pair[1].letters,
+        pair[0].letters,
+        pair[1].letters,
+      ]),
+      answered: false,
+    },
   };
 }
 
@@ -106,9 +146,39 @@ export function startBlend(round: SoundOutRound): SoundOutRound | null {
   return round.phase === 'ready' ? { ...round, phase: 'blending' } : null;
 }
 
-/** Pibbo has blended the word; the child picks its picture. */
+/**
+ * Pibbo has blended the word; the child picks its picture, or first, for a word with adjacent
+ * consonants not yet answered, chooses its first two sounds.
+ */
 export function blendDone(round: SoundOutRound): SoundOutRound {
-  return round.phase === 'blending' ? { ...round, phase: 'picking' } : round;
+  if (round.phase !== 'blending') return round;
+  const ask = round.firstTwo !== null && !round.firstTwo.answered;
+  return { ...round, phase: ask ? 'first-two' : 'picking' };
+}
+
+/** What choosing the first two sounds did, and what to play: both sounds, either way. */
+export interface FirstTwoResult {
+  readonly round: SoundOutRound;
+  readonly right: boolean;
+  /** The two sounds to speak, each lit on its tile: praise when right, a model when not. */
+  readonly plan: PlaybackStep[];
+}
+
+/**
+ * The child chooses the first two sounds (L2-015 #2): both together is right and the pictures
+ * follow; one alone models both and the child chooses again. Nothing is taken away.
+ */
+export function chooseFirstTwo(round: SoundOutRound, choice: string): FirstTwoResult | null {
+  const question = round.firstTwo;
+  if (round.phase !== 'first-two' || !question || !question.choices.includes(choice)) return null;
+  const plan = question.sounds.map((s, letter) => ({ recording: s.recording, letter }));
+  const right = choice === question.sounds[0].letters + question.sounds[1].letters;
+  if (!right) return { round, right, plan };
+  return {
+    round: { ...round, phase: 'picking', firstTwo: { ...question, answered: true } },
+    right,
+    plan,
+  };
 }
 
 /** The child chooses a picture: only while picking, and only one offered. */
