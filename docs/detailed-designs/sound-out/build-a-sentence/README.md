@@ -2,19 +2,18 @@
 
 ## Overview
 
-A picture and 3–5 shuffled word tiles are shown. The child touches the words in order to build a sentence that matches the picture. Each tile speaks its word when touched.
+A picture, an empty strip and a bank of word tiles are shown: the words of a short sentence and one word that does not belong, in an order the random source chooses. Each tile speaks its word when touched and puts it at the end of the strip; a word on the strip goes back when touched. Once the strip is full, Check judges the sentence (ADR 0032, docs/mocks/pages/build-a-sentence).
 
 ## Description
 
-The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
+The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, a presentation component in `@pibbo/components`, pure rules and content in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
-- **`SentencePage`** — route component in `pibbo`, loaded by `loadComponent` when the child chooses the activity. It is provided with its own `sentenceRules` state at route scope, asks the rules for each round, plays recordings through `AUDIO_PLAYER` and hands state to the presentation component.
-- **`SentenceSlotsComponent`** — presentation component in `@pibbo/components` (selector `pb-sentenceslots`). It takes the round state as signal inputs, emits a `touched` output per target, and injects no service.
-- **`SentenceRound`** — immutable round state in `@pibbo/domain/sounds`; every transition returns a new value.
-- **`sentenceRules`** — pure functions in `@pibbo/domain/sounds` that build a round from the injected `RandomSource` and decide the outcome of each touch, with unit tests.
-- **`AudioPlayer`** — contract in `@pibbo/api` bound to `AUDIO_PLAYER`. Playing a recording stops the one before it; a recording that cannot play resolves as `unavailable` and the screen shows the text instead.
-- **`RoundFeedback`** — shared round behaviour (`retry-and-praise`): brief praise, hints after a wrong answer, and modelling the answer after three wrong answers.
-- **`display`** — the completed sentence starts with a capital letter and ends with a full stop.
+- **`BuildASentence`** — route component in `pibbo` at `/read/sentence`, loaded by `loadComponent` when the child chooses the activity. It provides its own `ASSET_PRELOADER`, holds the round in a signal, plays recordings through `AUDIO_PLAYER`, times praise with `CLOCK` and ends through `ACTIVITY_EXIT`, so a guided lesson returns to its path.
+- **`SentenceBuilder`** — presentation component in `@pibbo/components` (selector `pb-sentence-builder`): the picture, the strip (`.strip`, `.strip__word`, `.strip__hint`) and the word bank (`.word-bank`, `.word-tile`). It takes the round's parts as signal inputs, emits `tile` and `word` outputs, and injects no service. A used tile is `disabled` and named "cat, used"; a word on the strip is named "Take back cat" while it can be taken back.
+- **`SentenceRound`** — immutable round state in `@pibbo/domain/sounds` (`sentence-round.ts`): `building`, `retry`, `right` or `modelled`, the sentence, its tiles in order shown, the tiles placed on the strip, and the wrong checks so far.
+- **sentence rules** — pure functions with unit tests: `startSentenceRound` (never the sentence just played), `placeWord`, `takeBackWord`, `canCheckSentence`, `checkSentence` (the third wrong check models the sentence), `buildSentenceAgain` (empties the strip) and `sentenceAssets`.
+- **`SENTENCES`** — `sentences-content.json` and its typed accessor, checked before every build by `tools/content/check-content.mjs`: each sentence's tiles, extra word, picture, its text alternative and a recording of the whole sentence, and a recording for each word. The tiles carry the capital and full stop ("The", "sit."), so the built sentence starts with a capital letter and ends with a full stop.
+- **`AnswerBar`** — Check, then praise and Next (`right`), the hint and Try again (`retry`), or the modelled sentence and Next (`model`). Praise lasts no more than 1.5 s and never blocks Next (L2-026 #3).
 
 ## Requirements
 
@@ -23,13 +22,22 @@ The feature realises the following level-2 (L2) requirements. Each L2 requiremen
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
 | `L2-020` | `L1-018` | Build a short sentence |
+| `L2-026` | `L1-023` | Retry and praise |
 
 Acceptance criteria of `L2-020` (Build a short sentence):
 
-1. Given a picture and 3-5 shuffled word tiles ("the", "cat", "sat"), when the child touches them in the order "the cat sat", then each word moves to the next slot and the whole sentence is spoken.
-2. Given the next slot expects "cat", when the child touches "sat", then "sat" is spoken, stays where it is, and the next slot is pulsed (outlined under reduced motion).
-3. Given any word tile, when the child touches it before placing, then the word is spoken.
-4. Given the sentence complete, when shown, then it starts with a capital letter and ends with a full stop.
+1. Given a round starts, when it is shown, then a picture, an empty strip and the words of its sentence ("The", "cat", "can", "sit.") with one more word ("hat") in an order the random source chooses are shown; "Look at the picture. Put the words in order to tell about it." is spoken and shown, and Check takes no touch.
+2. Given a word tile, when the child touches it, then its word is spoken and, while the strip has room, it moves to the end of the strip and its tile stays in place, used, taking no touch.
+3. Given a word on the strip, when the child touches it, then it goes back to its tile and the words after it close up; nothing else is lost.
+4. Given the strip holds as many words as the sentence, then Check takes a touch; given fewer, it takes none.
+5. Given the strip holds the sentence in order, when Check is touched, then the strip shows as right, the sentence is spoken, "“The cat can sit.” What a great sentence!" is shown as praise, and Next is offered; the sentence starts with a capital letter and ends with a full stop. After the fifth round Next returns to Home with Read chosen.
+6. Given any other order or word, when Check is touched, then "Read it out loud. Does it sound right?" is spoken and shown with Try again, the words take no touch, and Try again empties the strip so the child builds afresh.
+7. Given the third wrong Check in one round, when it is made, then the strip shows the sentence in order as right, "Listen:" and the sentence are spoken, "Listen: “The cat can sit.”" is shown, and Next completes the round (L2-026 #2).
+
+## Open questions
+
+- Which sentences Pibbo covers, and in what order, is not decided; the three sentences are the mock's cast. The recordings are silent placeholders.
+- No check-game question asks about Build a sentence yet (ADR 0027).
 
 ## Diagrams
 
@@ -47,18 +55,18 @@ The feature runs in the `pibbo` single-page application. Content arrives from `P
 
 ### Components
 
-`SentencePage` composes `SentenceSlotsComponent` for presentation and calls `sentenceRules` for every decision. The page is the only part that injects tokens; the rules hold no Angular dependency.
+`BuildASentence` composes `SentenceBuilder` for presentation and calls the sentence rules for every decision. The page is the only part that injects tokens; the rules hold no Angular dependency.
 
 ![C4 component view for build a short sentence](diagrams/c4-component.png)
 
 ### Class structure
 
-`SentenceRound` is the value the rules transform; `SentencePage` holds it in a signal and passes it to `SentenceSlotsComponent`.
+`SentenceRound` is the value the rules transform; `BuildASentence` holds it in a signal and passes its parts to `SentenceBuilder`.
 
 ![Class diagram for build a short sentence](diagrams/class.png)
 
-### Place words in order
+### Build the sentence and check it
 
-The expected word moves to the next slot; any other word is spoken and stays, and the next slot pulses (an outline under reduced motion).
+Each touched tile is spoken and goes to the end of the strip; a word on the strip goes back when touched. Check praises the sentence in order, gives a hint otherwise, and after the third miss models the sentence.
 
-![Sequence for place words in order](diagrams/sequence-place-words.png)
+![Sequence for building the sentence and checking it](diagrams/sequence-place-words.png)

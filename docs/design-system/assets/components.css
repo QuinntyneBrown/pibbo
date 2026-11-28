@@ -539,13 +539,13 @@ img { display: block; max-width: 100%; }
 
 /* ---------- Build a sentence ---------- */
 .sentence { display: flex; width: 100%; min-width: 0; flex: 1; flex-direction: column; gap: var(--space-8); }
-.strip { display: flex; min-height: var(--size-12); flex-wrap: wrap; align-items: center; gap: var(--space-2); padding: var(--space-4); border-bottom: 6px solid var(--color-read); border-radius: var(--radius-2xl); background: var(--color-surface); }
+.strip { display: flex; min-height: var(--size-12); flex-wrap: wrap; align-items: center; gap: var(--gap-targets); padding: var(--space-4); border-bottom: 6px solid var(--color-read); border-radius: var(--radius-2xl); background: var(--color-surface); }
 .strip--right { border-color: var(--color-success); background: var(--color-success-soft); }
 .strip__hint { padding: 0 var(--space-2); font-size: var(--font-size-xl); color: var(--color-fg-muted); }
-.strip__word { padding: var(--space-2) var(--space-4); border: 0; border-radius: var(--radius-md); background: var(--color-read-soft); color: var(--color-fg); font-family: var(--font-read); font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); }
+.strip__word { min-width: var(--target-child); padding: var(--space-2) var(--space-4); border: 0; border-radius: var(--radius-md); background: var(--color-read-soft); color: var(--color-fg); font-family: var(--font-read); font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); }
 @media (min-width: 40rem) { .strip__word { font-size: var(--font-size-4xl); } }
-.word-bank { display: flex; flex-wrap: wrap; gap: var(--space-3); }
-.word-tile { padding: var(--space-3) var(--space-5); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-fg); font-family: var(--font-read); font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); }
+.word-bank { display: flex; flex-wrap: wrap; gap: var(--gap-targets); }
+.word-tile { min-width: var(--target-child); padding: var(--space-3) var(--space-5); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-fg); font-family: var(--font-read); font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); }
 @media (min-width: 40rem) { .word-tile { font-size: var(--font-size-4xl); } }
 .word-tile--used { background: var(--color-bg-sunken); color: transparent; --depth: transparent; }
 

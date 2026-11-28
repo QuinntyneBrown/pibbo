@@ -50,7 +50,7 @@
     const placed = strip ? Array.from(strip.querySelectorAll('.strip__word')) : boxes;
     selected = placed.filter(item => item.textContent.trim()).map((item, i) => {
       if (!sample) return labels.indexOf(item.textContent.trim());
-      const miss = document.querySelector('.answer-bar--retry') && i === target.length - 1;
+      const miss = document.querySelector('.answer-bar--retry') && !strip?.classList.contains('strip--right') && i === target.length - 1;
       return miss ? labels.findIndex(letter => !target.includes(letter)) : labels.indexOf(target[i]);
     });
   }

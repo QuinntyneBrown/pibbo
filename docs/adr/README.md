@@ -33,3 +33,4 @@
 | [0029](0029-grown-up-gate-and-area.md) | The grown-up gate and area: a corner padlock, three numbers in words, and Clear progress | Accepted |
 | [0030](0030-performance-accessibility-and-privacy-checks.md) | Performance, accessibility and privacy: behaviour specs over every activity, and sweeps on request | Accepted |
 | [0031](0031-explainer-films-from-the-running-app.md) | Explainer films: one a journey, pictured from the running app | Accepted |
+| [0032](0032-build-a-sentence-round.md) | Build a sentence: put the words on a strip, then Check | Accepted |
