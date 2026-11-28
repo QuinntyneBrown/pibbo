@@ -23,3 +23,4 @@
 | [0019](0019-letter-groups-in-sound-it-out.md) | Letter groups in Sound it out: one tile, one recording | Accepted |
 | [0020](0020-adjacent-consonants-in-sound-it-out.md) | Adjacent consonants in Sound it out: four tiles and the first two sounds | Accepted |
 | [0021](0021-silent-e-in-sound-it-out.md) | Silent e in Sound it out: a quiet e the child adds and takes away | Accepted |
+| [0022](0022-syllables-in-sound-it-out.md) | Longer words by syllable in Sound it out | Accepted |

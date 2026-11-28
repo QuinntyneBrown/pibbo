@@ -24,6 +24,7 @@ The [Magic Patterns alignment log](alignment-log.md) records each verified chang
 - Games opened from Home return to the same group. Opening Sound it out, Big and small letters or Count and write from Home starts a fresh round. Opening a state directly shows its illustrated example.
 - In a guided lesson, Leave returns to the current step. Finish the game and choose Next to unlock the following step. The second reading game uses “map” and the third introduces “sh” in “ship”.
 - Sound it out previews map, ship, boat, cape and sunset. Touch the remaining parts, choose Read it fast, and select a picture. On cape, touch the e to add the quiet e or take it away. The quiet e and the syllable captions stay visible when choosing a picture.
+- A longer word is read one clap (syllable) at a time: open [sunset as the round opens](pages/sound-it-out/syllables.html?begin=1), touch sun and set, choose Read it fast, and pick the picture.
 - What do I know? runs through the ship, duck, rhyme and numeral questions. Feedback keeps the selected answer visible and the fourth question leads to Results. Choose Try it to practise the “oa” sound in “boat”.
 - In Count and write, touch the remaining toys, enter the total, and choose Check. Clear empties both boxes. A wrong answer demonstrates the digits in order.
 - Add together lets Star and Moon add or remove ducks in turn. Done passes the pond to the next player, then opens the total choices. A wrong answer highlights each duck before the players choose again.

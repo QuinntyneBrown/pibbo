@@ -1,5 +1,5 @@
 @startuml
-title UML sequence behaviour — Read each chunk, then the word
+title UML sequence behaviour — Read each syllable, then the word
 skinparam backgroundColor #FFFFFF
 skinparam shadowing false
 skinparam roundcorner 12
@@ -7,22 +7,31 @@ skinparam defaultFontName Arial
 skinparam ArrowColor #344054
 actor "Child" as actor
 box "Frontend — pibbo application" #E0F2FE
-  participant "SyllablePage" as page
+  participant "SoundItOut" as page
 end box
 box "Frontend — @pibbo/components library" #E0F2FE
-  participant "ChunkedWordComponent" as view
+  participant "pb-word-tiles" as view
 end box
 box "Frontend — @pibbo/domain library" #ECFDF3
-  participant "blendRules" as rules
+  participant "Sound it out rules" as rules
 end box
 box "Frontend — browser services (audio, storage)" #FFF4E5
   participant "AudioPlayer" as audio
 end box
+page -> audio : "Tap", "sun", "and clap it"
 actor -> view : Touch [sun]
-page -> rules : blendPlan(chunk 1)
-page -> audio : play sounds, then "sun" [L2-017 #1]
+view -> page : touched(0)
+page -> rules : touchLetter, soundingPlan
+page -> audio : s, u, n, then "sun" [L2-017 #1]
+page -> rules : syllableAsk
+page -> audio : "Tap", "set", "and clap it"
 actor -> view : Touch [set]
-page -> audio : play sounds, then "set"
-actor -> view : Touch blend
-page -> audio : play("word-sunset"); highlight picture [L2-017 #2]
+page -> audio : s, e, t, then "set"
+actor -> view : Touch Read it fast
+page -> rules : blendPlan
+page -> audio : "sun", "set", "sunset"
+page -> audio : "Which picture is", "sunset"
+actor -> page : Chooses the picture and touches Check
+page -> rules : checkPicture
+page -> view : The picture is highlighted [L2-017 #2]
 @enduml
