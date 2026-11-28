@@ -16,6 +16,7 @@ export class SoundItOutPage {
   readonly shownSounds: Locator;
   readonly blend: Locator;
   readonly blendFill: Locator;
+  readonly choices: Locator;
   readonly pictures: Locator;
   readonly rightPicture: Locator;
   readonly message: Locator;
@@ -35,6 +36,7 @@ export class SoundItOutPage {
     this.shownSounds = page.locator('.tiles__say:not(.tiles__say--hidden)');
     this.blend = page.locator('.blend .chunky');
     this.blendFill = page.locator('.blend__fill');
+    this.choices = page.locator('.choose__option');
     this.pictures = page.locator('.pick__option');
     this.rightPicture = page.locator('.pick__option--right');
     this.message = page.locator('.answer-bar__message');
@@ -43,6 +45,11 @@ export class SoundItOutPage {
 
   letter(index: number): Locator {
     return this.letters.nth(index);
+  }
+
+  /** A choice of the first two sounds, by its letters ("st"). */
+  choice(letters: string): Locator {
+    return this.choices.filter({ hasText: new RegExp(`^\\s*${letters}\\s*$`) });
   }
 
   picture(word: string): Locator {

@@ -59,3 +59,70 @@ for (const viewport of [
     });
   });
 }
+
+const FIRST_TWO = '/recordings/read/first-two-sounds.wav';
+const HEARD_BOTH = '/recordings/read/you-heard-both.wav';
+const LISTEN = '/recordings/read/listen.wav';
+const CHOOSE_AGAIN = '/recordings/read/choose-again.wav';
+const WHICH = '/recordings/read/which-picture.wav';
+const STOP_WORD = '/recordings/words/stop.wav';
+
+test.describe('Sound it out: the first two sounds', () => {
+  test.use({ seed: STOP });
+
+  test('Given "stop" blended and the question "what are the first two sounds?" with s, st and t, when st is chosen, then both sounds are spoken, praise plays and the pictures follow @critical', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    await read.soundAll();
+    const blended = (await spoken.recordings()).length;
+
+    await read.touch(read.blend);
+
+    await expect(read.instruction).toHaveText('What are the first two sounds?');
+    await expect(read.choices).toHaveText(['s', 'st', 't']);
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(blended))
+      .toEqual([...['s', 't', 'o', 'p'].map(sound), STOP_WORD, FIRST_TWO]);
+    const asked = (await spoken.recordings()).length;
+
+    await read.touch(read.choice('st'));
+
+    await expect(read.message).toHaveText('You heard both sounds!');
+    await expect(read.pictures).toHaveCount(3);
+    await expect(read.instruction).toHaveText('Which picture is “stop”?');
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(asked))
+      .toEqual([sound('s'), sound('t'), HEARD_BOTH, WHICH, STOP_WORD]);
+    await read.answer('stop');
+    await expect(read.message).toHaveText('You read “stop”!');
+  });
+
+  test('Given the question, when t is chosen, then both sounds are modelled and the child chooses again', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    await read.soundAll();
+    await read.touch(read.blend);
+    await expect(read.choices).toHaveCount(3);
+    const asked = (await spoken.recordings()).length;
+
+    await read.touch(read.choice('t'));
+
+    await expect(read.message).toHaveText('Listen: /s/ /t/. Choose again.');
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(asked))
+      .toEqual([LISTEN, sound('s'), sound('t'), CHOOSE_AGAIN]);
+    await expect(read.pictures).toHaveCount(0);
+    await expect(read.heard).toHaveCount(4);
+    for (const c of await read.choices.all()) await expect(c).toBeEnabled();
+
+    await read.touch(read.choice('st'));
+    await expect(read.message).toHaveText('You heard both sounds!');
+    await expect(read.pictures).toHaveCount(3);
+  });
+});
