@@ -1,7 +1,9 @@
 import type { LetterPair, RandomSource } from '@pibbo/api';
 import { LETTER_SOUNDS, letterSoundsContent } from './letter-sounds-content';
 import {
+  holdLetter,
   letterFound,
+  matchSound,
   letterSoundsAssets,
   pairColour,
   soundFound,
@@ -87,5 +89,62 @@ describe('letterSoundsAssets', () => {
     expect(assets).toHaveLength(8);
     expect(assets).toContain('/p/teddy.jpg');
     expect(assets).toContain('/s/c.wav');
+  });
+});
+
+describe('holdLetter', () => {
+  it('holds the letter and speaks its sound', () => {
+    const { round, spoken } = holdLetter(startLetterSoundsRound(sequence(0), pairs), 2);
+    expect(round.held).toBe(2);
+    expect(spoken).toBe('/s/t.wav');
+  });
+
+  it('takes no touch on a matched letter', () => {
+    const start = { ...startLetterSoundsRound(sequence(0), pairs), found: ['m'] };
+    expect(holdLetter(start, 0)).toEqual({ round: start, spoken: null });
+  });
+});
+
+describe('matchSound', () => {
+  // Sounds in order s, t, c, m.
+  const start = () => startLetterSoundsRound(sequence(0), pairs);
+
+  it('speaks a sound with no letter held and matches nothing', () => {
+    const { round, spoken, touch } = matchSound(start(), 2);
+    expect(touch).toBe('heard');
+    expect(spoken).toBe('/s/c.wav');
+    expect(round.found).toEqual([]);
+  });
+
+  it('joins the held letter to its sound and lets go of it', () => {
+    const held = holdLetter(start(), 0).round;
+    const { round, spoken, touch } = matchSound(held, 3);
+    expect(touch).toBe('matched');
+    expect(spoken).toBe('/s/m.wav');
+    expect(round.found).toEqual(['m']);
+    expect(round.held).toBeNull();
+    expect(round.phase).toBe('matching');
+  });
+
+  it('keeps the letter held on a miss and takes nothing away', () => {
+    const held = { ...holdLetter(start(), 2).round, found: ['m'] };
+    const { round, spoken, touch } = matchSound(held, 2);
+    expect(touch).toBe('miss');
+    expect(spoken).toBe('/s/c.wav');
+    expect(round).toBe(held);
+  });
+
+  it('ends the round right when the last pair is matched', () => {
+    let round = start();
+    for (const [letter, sound] of [
+      [0, 3],
+      [1, 0],
+      [2, 1],
+      [3, 2],
+    ] as const)
+      round = matchSound(holdLetter(round, letter).round, sound).round;
+    expect(round.phase).toBe('right');
+    expect(round.found).toEqual(['m', 's', 't', 'c']);
+    expect(matchSound(round, 0).touch).toBeNull();
   });
 });

@@ -5,6 +5,7 @@ import { LetterSoundsPage } from '../pages/letter-sounds.page';
 
 const HOME = ['/recordings/home/read.wav', '/recordings/home/letter-sounds.wav'];
 const TAP = '/recordings/read/tap-a-letter-then-its-sound.wav';
+const sound = (s: string) => `/recordings/sounds/${s}.wav`;
 /** The cast of the mock: each letter and how its sound is shown. */
 const PAIRS: Record<string, string> = { m: '/m/', s: '/s/', t: '/t/', c: '/k/' };
 
@@ -49,5 +50,37 @@ test.describe('Letter sounds: a round', () => {
 
     await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
     await expect(home.activity('Letter sounds')).toBeVisible();
+  });
+});
+
+test.describe('Letter sounds: each letter makes its sound', () => {
+  test('Given a round, when the child touches m, then m is held and its sound is spoken, never its name; when the child touches t, then t is held instead', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new LetterSoundsPage(page);
+    await read.openFromHome();
+
+    await read.touch(read.letter('m'));
+    await expect(read.letter('m')).toHaveAttribute('aria-pressed', 'true');
+    await read.touch(read.letter('t'));
+
+    await expect(read.letter('t')).toHaveAttribute('aria-pressed', 'true');
+    await expect(read.letter('m')).toHaveAttribute('aria-pressed', 'false');
+    await expect.poll(() => spoken.recordings()).toEqual([...HOME, TAP, sound('m'), sound('t')]);
+  });
+
+  test('Given no letter is held, when the child touches the sound /k/, then its recording is spoken and nothing is matched', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new LetterSoundsPage(page);
+    await read.openFromHome();
+
+    await read.touch(read.sound('/k/'));
+
+    await expect.poll(() => spoken.recordings()).toEqual([...HOME, TAP, sound('c')]);
+    await expect(read.matched).toHaveCount(0);
+    await expect(read.missed).toHaveCount(0);
   });
 });

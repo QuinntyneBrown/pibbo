@@ -61,3 +61,51 @@ export function pairColour(round: LetterSoundsRound, letter: string): number {
 export function letterSoundsAssets(round: LetterSoundsRound): string[] {
   return [...new Set(round.letters.flatMap((p) => [p.picture, p.sound.recording]))];
 }
+
+/**
+ * A letter is touched: it is held, and its sound is spoken, never its name (`L2-010` #2). A
+ * matched letter takes no touch (`spoken` is null).
+ */
+export function holdLetter(
+  round: LetterSoundsRound,
+  index: number,
+): { round: LetterSoundsRound; spoken: string | null } {
+  const pair = round.letters[index];
+  if (!pair || round.phase !== 'matching' || letterFound(round, index))
+    return { round, spoken: null };
+  return { round: { ...round, held: index }, spoken: pair.sound.recording };
+}
+
+/**
+ * What touching a sound did: `heard` with no letter held, `matched` when it is the held letter's,
+ * `miss` when it is not (the letter stays held; nothing is taken away).
+ */
+export type SoundTouch = 'heard' | 'matched' | 'miss';
+
+/**
+ * A sound is touched: its recording is spoken (`L2-010` #2). With a letter held, the right sound
+ * joins them (#1) and the last pair ends the round `right`; a wrong one is a miss (#3).
+ */
+export function matchSound(
+  round: LetterSoundsRound,
+  index: number,
+): { round: LetterSoundsRound; spoken: string | null; touch: SoundTouch | null } {
+  const pair = round.sounds[index];
+  if (!pair || round.phase !== 'matching' || soundFound(round, index))
+    return { round, spoken: null, touch: null };
+  const spoken = pair.sound.recording;
+  const held = round.held === null ? undefined : round.letters[round.held];
+  if (!held) return { round, spoken, touch: 'heard' };
+  if (letterOf(held) !== letterOf(pair)) return { round, spoken, touch: 'miss' };
+  const found = [...round.found, letterOf(pair)];
+  return {
+    round: {
+      ...round,
+      held: null,
+      found,
+      phase: found.length === round.letters.length ? 'right' : 'matching',
+    },
+    spoken,
+    touch: 'matched',
+  };
+}

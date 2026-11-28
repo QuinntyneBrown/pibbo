@@ -12,8 +12,10 @@ import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
 import { ASSET_PRELOADER, AUDIO_PLAYER, RANDOM_SOURCE } from '@pibbo/api';
 import { AnswerBar, Pairs, RoundShell } from '@pibbo/components';
 import {
+  holdLetter,
   LETTER_SOUNDS,
   letterSoundsAssets,
+  matchSound,
   pairColour,
   startLetterSoundsRound,
 } from '@pibbo/domain';
@@ -66,12 +68,20 @@ export class LetterSounds {
     void this.audio.play(LETTER_SOUNDS.instruction.recording);
   }
 
+  /** A letter is held and makes its sound, never its name (L2-010 #2). */
   protected touchLetter(index: number): void {
-    void index;
+    const { round, spoken } = holdLetter(this.round(), index);
+    if (spoken === null) return;
+    this.round.set(round);
+    void this.audio.play(spoken);
   }
 
+  /** A sound says its recording (L2-010 #2). */
   protected touchSound(index: number): void {
-    void index;
+    const { round, spoken } = matchSound(this.round(), index);
+    if (spoken === null) return;
+    this.round.set(round);
+    void this.audio.play(spoken);
   }
 
   protected replay(): void {
