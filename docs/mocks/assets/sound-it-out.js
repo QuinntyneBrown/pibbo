@@ -2,15 +2,19 @@
 (function () {
   const samples = {
     map: ['sun', 'map', 'cat'],
+    ship: ['boat', 'sun', 'ship'],
     cape: ['cap', 'hat', 'cape'],
     sunset: ['sunset', 'night', 'sun']
   };
   const params = new URLSearchParams(location.hash.slice(1));
   const prompt = document.querySelector('.bubble__text');
   const blend = document.querySelector('.blend');
-  const word = blend
-    ? Array.from(document.querySelectorAll('.tile'), tile => tile.textContent).join('')
-    : Object.hasOwn(samples, params.get('word')) ? params.get('word') : 'map';
+  const route = new URLSearchParams(location.search);
+  const lessonWord = route.get('lesson') === 'read' && ['2', '3'].includes(route.get('game'))
+    ? (route.get('game') === '3' ? 'ship' : 'map') : null;
+  const illustrated = Array.from(document.querySelectorAll('.tile'), tile => tile.textContent).join('');
+  const word = blend ? (illustrated === 'map' ? lessonWord || 'map' : illustrated)
+    : Object.hasOwn(samples, params.get('word')) ? params.get('word') : lessonWord || 'map';
   const attempts = Number(params.get('misses'));
   const misses = [1, 2].includes(attempts) ? attempts : 0;
 
@@ -23,10 +27,36 @@
     return button;
   }
 
+  if (word === 'ship') {
+    const rule = document.createElement('p');
+    rule.className = 'rule';
+    const glyph = document.createElement('span');
+    glyph.className = 'rule__glyph';
+    glyph.textContent = 'sh';
+    rule.append(glyph, ' Two letters, one sound');
+    document.querySelector('.tiles').before(rule);
+    const letters = ['sh', 'i', 'p'];
+    document.querySelectorAll('.tile').forEach((tile, i) => {
+      tile.textContent = letters[i];
+      tile.classList.toggle('tile--wide', i === 0);
+      tile.nextElementSibling.textContent = '/' + letters[i] + '/';
+      tile.setAttribute('aria-label', letters[i] + ', says /' + letters[i] + '/');
+    });
+  }
   if (blend) {
     const tiles = Array.from(document.querySelectorAll('.tile'));
     const fill = blend.querySelector('.blend__fill');
     const control = blend.querySelector('button') || buttonFrom(blend.querySelector('a'));
+    if (route.get('begin') === '1' && location.pathname.endsWith('/default.html')) {
+      tiles.forEach((tile, i) => {
+        tile.disabled = i !== 0;
+        tile.setAttribute('aria-label', tile.textContent + (i === 0 ? ', tap to hear it' : ''));
+        tile.classList.remove('tile--heard', 'tile--sounding');
+        tile.classList.toggle('tile--next', i === 0);
+        tile.nextElementSibling.classList.add('tiles__say--hidden');
+      });
+      fill.style.width = '0%';
+    }
     let heard = tiles.filter(tile => tile.classList.contains('tile--heard')).length;
     tiles.forEach((tile, index) => tile.addEventListener('click', () => {
       if (index !== heard) return;
@@ -72,8 +102,8 @@
   const options = Array.from(document.querySelectorAll('.pick__option'));
   if (!options.length) return;
   if (word !== 'map') {
-    const variant = document.getElementById('sounds-' + word).content.cloneNode(true);
-    document.querySelector('.tiles').replaceWith(variant);
+    const template = document.getElementById('sounds-' + word);
+    if (template) document.querySelector('.tiles').replaceWith(template.content.cloneNode(true));
     prompt.textContent = 'Which picture is “' + word + '”?';
     const rightMark = document.querySelector('.pick__tick');
     const right = options[samples[word].indexOf(word)];
@@ -93,7 +123,7 @@
   }
   const check = document.querySelector('[data-check-action]');
   if (check) {
-    if (params.has('word')) {
+    if (params.has('word') || word !== 'map') {
       const button = buttonFrom(check);
       button.dataset.checkAction = '';
       button.disabled = true;

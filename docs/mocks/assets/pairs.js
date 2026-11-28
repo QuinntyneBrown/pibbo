@@ -4,6 +4,14 @@
   const [left, right] = Array.from(board.querySelectorAll('.pairs__column'), column =>
     Array.from(column.querySelectorAll('[data-partner]'))
   );
+  if (new URLSearchParams(location.search).get('begin') === '1') {
+    for (const card of [...left, ...right]) {
+      if (!card.disabled) continue;
+      card.classList.remove('pair--found-' + colour(card));
+      card.disabled = false;
+      card.setAttribute('aria-label', card.getAttribute('aria-label').replace(/, matched$/, ''));
+    }
+  }
   const order = left.filter(card => card.disabled)
     .sort((a, b) => colour(a) - colour(b))
     .map(card => card.dataset.partner);

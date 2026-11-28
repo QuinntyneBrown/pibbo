@@ -20,7 +20,9 @@ The [Magic Patterns alignment log](alignment-log.md) records each verified chang
 - `?chrome=0` hides the mock bar and the yellow design notes, leaving only the product.
 - Home’s group pictures switch the visible activities. Count the toys, Which is bigger and Sound it out let a reviewer change the selected answer and check it.
 - Spell by sound, Rhyme time and Build a sentence let you build an answer, change it, and check it. Spot the word highlights each target you find and opens the completion screen after the last one.
-- Sound it out previews map, cape and sunset. Touch the remaining parts, choose Read it fast, and select a picture. The quiet e and the syllable captions stay visible when choosing a picture.
+- Games opened from Home return to the same group. Opening Sound it out, Big and small letters or Count and write from Home starts a fresh round. Opening a state directly shows its illustrated example.
+- In a guided lesson, Leave returns to the current step. Finish the game and choose Next to unlock the following step. The second reading game uses “map” and the third introduces “sh” in “ship”.
+- Sound it out previews map, ship, cape and sunset. Touch the remaining parts, choose Read it fast, and select a picture. The quiet e and the syllable captions stay visible when choosing a picture.
 - What do I know? runs through the ship, duck, rhyme and numeral questions. Feedback keeps the selected answer visible and the fourth question leads to Results.
 - In Count and write, touch the remaining toys, enter the total, and choose Check. Clear empties both boxes. A wrong answer demonstrates the digits in order.
 - Add together lets Star and Moon add or remove ducks in turn. Done passes the pond to the next player, then opens the total choices. A wrong answer highlights each duck before the players choose again.
@@ -59,6 +61,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
 
 ### Where the mocks depart from the prototype
 
+- **Replaying a completed lesson step.** Next returns to the first unfinished game. The prototype advances its step counter after each completion, which can skip an unplayed game during a replay.
 - **Dark theme added.** The prototype is light only. The dark theme is new: Pibbo and
   the brand colours are kept, and pictures sit on a light plate. Counting, reading and success symbols use the light tints of their respective prototype colours against dark surfaces.
 - **Self-hosted fonts and pictures.** The prototype loads Fredoka and Andika from Google

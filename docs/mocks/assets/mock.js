@@ -72,11 +72,52 @@
     bar.addEventListener('animationend', function () { bar.classList.remove('answer-bar--entering'); }, { once: true });
   }
 
+  // A game opened from a lesson returns to its path. A catalogue game returns to its group.
+  var lesson = params.get('lesson');
+  var current = Number(params.get('current'));
+  var game = Number(params.get('game'));
+  var guided = (lesson === 'read' || lesson === 'count') && Number.isInteger(current) && current >= 1 && current <= 6 &&
+    Number.isInteger(game) && game >= 1 && game <= 5;
+  var home = params.get('home');
+  var fromHome = ['default', 'counting', 'counting-more', 'first-visit'].includes(home);
+  var shell = document.querySelector('.shell');
+
+  function pathHref(step) {
+    var file = step === 6 ? 'done' : lesson === 'count' ? 'counting' : 'default';
+    return '../guided-lesson/' + file + '.html?' + new URLSearchParams({ lesson: lesson, current: step });
+  }
+  if (shell && (guided || fromHome)) {
+    var close = shell.querySelector('[aria-label="Leave game"]');
+    var finish = shell.querySelector('.answer-bar--correct a, .answer-bar--right a, .answer-bar--model a, .answer-bar--retry a');
+    var group = '../home/' + home + '.html';
+    if (close) close.href = guided ? pathHref(current) : group;
+    if (finish && finish.textContent.trim() === 'Next') {
+      finish.href = guided ? pathHref(game === current ? Math.min(6, current + 1) : current) : group;
+    }
+    var track = shell.querySelector('.progress');
+    if (guided && track) {
+      track.setAttribute('aria-valuenow', game);
+      track.firstElementChild.className = 'progress__fill progress__fill--' + game;
+    }
+  }
+  document.querySelectorAll('.home a.game-card:not(.game-card--more)').forEach(function (link) {
+    var url = new URL(link.href);
+    url.searchParams.set('begin', '1');
+    url.searchParams.set('home', location.pathname.split('/').pop().replace('.html', ''));
+    link.href = url.href;
+  });
+
   // State files stand in for prototype screens. Keep the review settings across them.
   function destination(href) {
     var url = new URL(href, location.href);
-    if (barState && new URL('.', url).href === new URL('.', location.href).href) {
-      url.searchParams.set('fromBar', barState);
+    if (new URL('.', url).href === new URL('.', location.href).href) {
+      if (barState) url.searchParams.set('fromBar', barState);
+      if (shell && guided) {
+        url.searchParams.set('lesson', lesson);
+        url.searchParams.set('current', current);
+        url.searchParams.set('game', game);
+      }
+      if (shell && fromHome) url.searchParams.set('home', home);
     }
     url.searchParams.set('theme', currentTheme());
     if (root.dataset.chrome === 'off') url.searchParams.set('chrome', '0');

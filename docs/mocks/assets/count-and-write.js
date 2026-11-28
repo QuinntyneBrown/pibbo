@@ -28,6 +28,16 @@
   }
 
   if (!document.querySelector('.digit-pad')) {
+    if (new URLSearchParams(location.search).get('begin') === '1') {
+      toys.forEach(toy => {
+        toy.querySelector('.tenframe__badge')?.remove();
+        toy.classList.remove('tenframe__thing--counted');
+        toy.classList.add('press');
+        toy.disabled = false;
+        const picture = toy.querySelector('img').getAttribute('src').split('/').pop().split('.')[0];
+        toy.setAttribute('aria-label', 'Count this ' + picture);
+      });
+    }
     const order = toys.flatMap((toy, i) => toy.disabled ? [i] : []);
     toys.forEach((toy, i) => toy.addEventListener('click', () => {
       if (toy.disabled) return;

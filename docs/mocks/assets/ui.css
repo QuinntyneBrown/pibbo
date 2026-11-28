@@ -675,12 +675,14 @@ img { display: block; max-width: 100%; }
   --color-bg-canvas: var(--palette-brand-paper);
   --color-fg-muted: var(--palette-brand-muted);
   --color-border-default: var(--palette-brand-line);
+  --color-fg-default: var(--palette-brand-ink);
+}
+.brand {
   --color-art-ink: var(--palette-brand-ink);
   --color-read-depth: var(--palette-mascot-beak);
   --color-count: var(--palette-brand-sky);
-  --color-fg-default: var(--palette-brand-ink);
+  min-height: 100vh; line-height: 1.5;
 }
-.brand { min-height: 100vh; line-height: 1.5; }
 .brand__section { padding: var(--space-12) var(--space-6); border-top: 1px solid var(--color-border); }
 @media (min-width: 40rem) { .brand__section { padding-inline: var(--space-12); } }
 @media (min-width: 64rem) { .brand__section { padding-inline: var(--space-20); } }
@@ -698,16 +700,16 @@ img { display: block; max-width: 100%; }
 @media (min-width: 64rem) { .brand__grid { grid-template-columns: 1.4fr 1fr 1fr; } }
 .brand__tile { display: flex; height: 14rem; align-items: center; justify-content: center; gap: var(--space-4); border-radius: var(--radius-xl); }
 .brand__tile--sun { container-type: inline-size; background: var(--color-pibbo-body); }
-.brand__tile--ink { flex-direction: column; gap: var(--space-2); background: var(--palette-brand-ink); }
-.brand__tile--berry { background: var(--palette-mascot-beak); }
-.brand__tile--sun .wordmark { font-size: clamp(3rem, calc((100cqi - 7.25rem) * 0.4), 4.5rem); color: var(--palette-brand-ink); }
-.brand__ring { padding: var(--space-2); border-radius: var(--radius-full); background: var(--palette-brand-ink); }
+.brand__tile--ink { flex-direction: column; gap: var(--space-2); background: var(--color-art-ink); }
+.brand__tile--berry { background: var(--color-read-depth); }
+.brand__tile--sun .wordmark { font-size: clamp(3rem, calc((100cqi - 7.25rem) * 0.4), 4.5rem); color: var(--color-art-ink); }
+.brand__ring { padding: var(--space-2); border-radius: var(--radius-full); background: var(--color-art-ink); }
 .brand__ring .pibbo { width: 4.75rem; height: 4.75rem; }
 .brand__tile--ink .pibbo { width: 5.5rem; height: 5.5rem; }
 .brand__tile--berry .wordmark { font-size: 4.75rem; }
 .brand__caption { margin-top: var(--space-3); font-size: var(--font-size-sm); color: var(--color-fg-muted); }
 .brand__icons { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-8); margin-top: var(--space-10); }
-.app-icon { display: flex; align-items: center; justify-content: center; background: var(--palette-brand-sky); }
+.app-icon { display: flex; align-items: center; justify-content: center; background: var(--color-count); }
 .app-icon--lg { width: var(--size-15); height: var(--size-15); border-radius: 2.2rem; }
 .app-icon--md { width: var(--size-11); height: var(--size-11); border-radius: 1.3rem; }
 .app-icon--sm { width: var(--size-6); height: var(--size-6); border-radius: var(--radius-sm); }
