@@ -1,0 +1,212 @@
+:host {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.stage {
+  display: flex;
+  width: 100%;
+  max-width: var(--content-max);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+
+  // A short screen (a phone on its side): Pibbo and the numeral on the left, the row of
+  // numbers and the controls on the right (ADR 0014).
+  // A phone upright: everything gives up spare space.
+  @media (max-width: 30rem) {
+    gap: var(--space-4);
+  }
+
+  @media (max-height: 30rem) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    justify-items: center;
+    gap: var(--space-2) var(--space-4);
+
+    .dance {
+      grid-row: span 2;
+      gap: var(--space-2);
+    }
+  }
+}
+
+.dance {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+
+  @media (min-width: 40rem) {
+    gap: var(--space-12);
+  }
+}
+
+// The figure's move on a beat; reduced motion keeps it still (L2-009 #3).
+.dance__pibbo--sway {
+  rotate: 8deg;
+  translate: 0 -10px;
+
+  @media (prefers-reduced-motion: reduce) {
+    rotate: none;
+    translate: none;
+  }
+}
+
+.dance__number {
+  min-width: 2ch;
+  font-family: var(--font-read);
+  font-size: var(--font-size-giant);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  text-align: center;
+  color: var(--color-count-strong);
+
+  @media (min-width: 40rem) and (min-height: 40rem) {
+    font-size: 11rem;
+  }
+
+  @media (max-width: 30rem), (max-height: 30rem) {
+    font-size: var(--font-size-8xl);
+  }
+
+  @media (max-height: 30rem) {
+    font-size: var(--font-size-7xl);
+  }
+}
+
+// The visual beat pulse: each beat's numeral pops in (L2-009 #2).
+.dance__pulse {
+  display: inline-block;
+  animation: dance-pop var(--duration-fast) var(--ease-out-quint);
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes dance-pop {
+  from {
+    scale: 1.25;
+  }
+}
+
+.chant {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (max-height: 30rem) {
+    flex-wrap: nowrap;
+    gap: var(--space-1);
+  }
+}
+
+.chant__beat {
+  display: flex;
+  width: var(--size-8);
+  height: var(--size-8);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-fg-muted);
+  font-family: var(--font-read);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.chant__beat {
+  @media (max-width: 30rem), (max-height: 30rem) {
+    width: var(--size-6);
+    height: var(--size-6);
+    font-size: var(--font-size-lg);
+  }
+
+  @media (max-height: 30rem) {
+    width: var(--size-5);
+    height: var(--size-5);
+  }
+}
+
+.chant__beat--said {
+  background: var(--color-count-soft);
+  color: var(--color-count-strong);
+}
+
+.chant__beat--now {
+  background: var(--color-count-strong);
+  color: var(--color-fg-on-strong);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-targets);
+}
+
+.chunky {
+  --depth: var(--color-count-depth);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--target-child);
+  padding: 0 var(--space-6);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-count-strong);
+  color: var(--color-fg-on-strong);
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
+}
+
+.icon {
+  width: var(--size-4);
+  height: var(--size-4);
+  fill: currentColor;
+}
+
+// The speed switch: 64 px targets 16 px apart; the chosen speed carries a tick (ADR 0014).
+.switch {
+  display: inline-flex;
+  gap: var(--gap-targets);
+}
+
+.switch__option {
+  --depth: var(--color-depth);
+  display: inline-flex;
+  height: var(--size-10);
+  align-items: center;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
+
+  &[aria-checked='true'] {
+    --depth: var(--color-count-depth);
+    background: var(--color-count-strong);
+    color: var(--color-fg-on-strong);
+
+    &::after {
+      content: '\2713' / '';
+      margin-left: var(--space-1);
+    }
+  }
+}

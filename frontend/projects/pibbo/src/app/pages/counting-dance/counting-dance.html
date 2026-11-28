@@ -1,0 +1,21 @@
+<pb-round-shell
+  title="Counting dance"
+  [instruction]="instruction()"
+  [mood]="mood()"
+  [done]="round().phase === 'done' ? 1 : 0"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-dance
+    [phase]="round().phase"
+    [said]="round().said"
+    [last]="round().last"
+    [sway]="sway()"
+    [speeds]="speeds"
+    [speed]="round().speed"
+    (toggled)="toggle()"
+    (paced)="pace($event)"
+  />
+  <pb-answer-bar answer [kind]="bar().kind" [message]="bar().message" (action)="leave()" />
+</pb-round-shell>

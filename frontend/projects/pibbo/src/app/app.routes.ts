@@ -35,6 +35,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/add-together/add-together').then((m) => m.AddTogether),
   },
   {
+    path: 'count/dance',
+    loadComponent: () =>
+      import('./pages/counting-dance/counting-dance').then((m) => m.CountingDance),
+  },
+  {
     path: 'read/sound-out',
     loadComponent: () => import('./pages/sound-it-out/sound-it-out').then((m) => m.SoundItOut),
   },

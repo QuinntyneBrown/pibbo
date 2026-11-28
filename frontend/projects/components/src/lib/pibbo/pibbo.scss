@@ -9,6 +9,21 @@
   height: 4.5rem;
 }
 
+.pibbo--xl {
+  width: 9.375rem;
+  height: 9.375rem;
+
+  @media (max-width: 30rem) {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  @media (max-height: 30rem) {
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
 .pibbo__stem {
   fill: none;
   stroke: var(--color-pibbo-stem);

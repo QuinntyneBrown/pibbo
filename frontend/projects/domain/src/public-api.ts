@@ -19,3 +19,5 @@ export * from './lib/counting/skip-count-content';
 export * from './lib/counting/skip-round';
 export * from './lib/counting/add-together-content';
 export * from './lib/counting/add-round';
+export * from './lib/counting/counting-dance-content';
+export * from './lib/counting/dance-round';

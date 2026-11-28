@@ -1,0 +1,58 @@
+<div class="stage">
+  <div class="dance">
+    <pb-pibbo
+      size="xl"
+      [class.dance__pibbo--sway]="sway()"
+      [mood]="phase() === 'playing' ? 'cheer' : 'rest'"
+      [label]="phase() === 'playing' ? 'Pibbo dancing' : 'Pibbo'"
+    />
+    <p class="dance__number" aria-live="polite">
+      @for (n of beat(); track n) {
+        <span class="dance__pulse">{{ n === 0 ? '♪' : n }}</span>
+      }
+    </p>
+  </div>
+  <ol class="chant" [attr.aria-label]="'Numbers 1 to ' + last()">
+    @for (n of numbers(); track n) {
+      <li
+        class="chant__beat"
+        [class.chant__beat--said]="n < said()"
+        [class.chant__beat--now]="n === said()"
+        [attr.aria-current]="n === said() ? 'step' : null"
+      >
+        {{ n }}
+      </li>
+    }
+  </ol>
+  @if (phase() !== 'done') {
+    <div class="controls">
+      <button type="button" class="chunky" (pbTap)="toggled.emit()">
+        @if (phase() === 'playing') {
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="5" y="3" width="5" height="18" rx="1" />
+            <rect x="14" y="3" width="5" height="18" rx="1" />
+          </svg>
+          Pause
+        } @else {
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 3.5v17a1 1 0 0 0 1.5.86l14-8.5a1 1 0 0 0 0-1.72l-14-8.5A1 1 0 0 0 6 3.5z" />
+          </svg>
+          {{ phase() === 'ready' ? 'Start the music' : 'Keep dancing' }}
+        }
+      </button>
+      <div class="switch switch--speed" role="radiogroup" aria-label="Speed">
+        @for (option of speeds(); track option.id) {
+          <button
+            type="button"
+            class="switch__option"
+            role="radio"
+            [attr.aria-checked]="option.id === speed()"
+            (pbTap)="paced.emit(option.id)"
+          >
+            {{ option.name }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>
