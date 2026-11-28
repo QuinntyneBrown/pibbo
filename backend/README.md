@@ -2,7 +2,7 @@
 
 A small .NET 10 service that serves Pibbo's content: activities, lessons, and the pictures and
 recordings they need. It is read-only and holds nothing about a child
-([ADR 0032](../docs/adr/0032-content-backend.md)). Staff with the `content-editor` role upload
+([ADR 0034](../docs/adr/0034-content-backend.md)). Staff with the `content-editor` role upload
 pictures and recordings and publish content versions. The frontend does not call it yet; its
 types for it are generated from the contract.
 
