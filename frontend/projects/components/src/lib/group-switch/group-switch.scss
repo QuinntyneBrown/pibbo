@@ -2,6 +2,9 @@
   display: inline-flex;
   flex-wrap: wrap;
   gap: var(--gap-targets);
+  padding: var(--space-1-5);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-sunken);
 }
 
 .switch__option {
@@ -45,6 +48,13 @@
       line-height: 1;
     }
   }
+}
+
+// Once a group is chosen, the other lies flat on the tray.
+.switch:has([aria-pressed='true']) .switch__option[aria-pressed='false'] {
+  background: transparent;
+  color: var(--color-fg-muted);
+  box-shadow: none;
 }
 
 .switch__option--read[aria-pressed='true'] {

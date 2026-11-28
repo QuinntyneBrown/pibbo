@@ -216,3 +216,16 @@ test.describe('Spell by sound: checking the word', () => {
     await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
   });
 });
+
+test.describe('Spell by sound: drawn as its mock', () => {
+  test('Given a round, when it is shown, then no letter has an outline inside its edge', async ({
+    page,
+  }) => {
+    const round = new SpellBySoundPage(page);
+
+    await round.openFromHome();
+
+    await expect(round.bank.first()).toBeVisible();
+    expect(await round.outlined()).toBe(false);
+  });
+});

@@ -131,3 +131,18 @@ test.describe('Counting dance', () => {
     });
   });
 });
+
+test.describe('Counting dance: the speed switch as its mock draws it', () => {
+  test('Given the dance is ready, when the switch is shown, then the speeds sit on one tray, the chosen one raised white and the other flat', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    const dance = new CountingDancePage(page);
+
+    await dance.openFromHome();
+
+    await expect
+      .poll(() => dance.switchSurfaces())
+      .toEqual({ tray: 'rgb(237, 225, 248)', options: ['rgb(255, 255, 255)', 'rgba(0, 0, 0, 0)'] });
+  });
+});

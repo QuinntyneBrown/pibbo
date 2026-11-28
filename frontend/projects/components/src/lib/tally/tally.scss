@@ -24,10 +24,14 @@
 
 .tally__number {
   font-family: var(--font-read);
-  font-size: var(--font-size-6xl);
+  font-size: var(--font-size-8xl);
   font-weight: var(--font-weight-bold);
   line-height: 1;
-  color: var(--color-count-fg);
+  color: var(--color-count-strong);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--color-count-fg);
+  }
 }
 
 .choices {

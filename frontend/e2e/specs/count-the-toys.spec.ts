@@ -325,3 +325,62 @@ test.describe('Count the toys: it rests', () => {
     expect((await spoken.recordings()).length).toBe(said);
   });
 });
+
+test.describe('Count the toys: the prompt on a small upright phone', () => {
+  test.use({ viewport: { width: 390, height: 780 } });
+
+  test('Given a small upright phone, when a round is shown, then the prompt is compact as its mock draws it: a 44 px Pibbo and the instruction in two lines', async ({
+    page,
+  }) => {
+    const count = new CountTheToysPage(page);
+
+    await count.openFromHome();
+
+    expect(await count.promptSize()).toEqual({ pibbo: 44, lines: 2 });
+  });
+});
+
+test.describe('Count the toys: drawn as its mock', () => {
+  test('Given a light device, when a round is shown, then each toy lies on the rug with no white plate and the count is deep purple', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    const count = new CountTheToysPage(page);
+
+    await count.openFromHome();
+
+    const colours = await count.rugColours();
+    expect(colours.behindToy).toBe(colours.rug);
+    expect(colours.counted).toBe('rgb(80, 25, 192)');
+  });
+});
+
+test.describe('Count the toys: counted and right, drawn as its mock', () => {
+  test.use({ viewport: { width: 390, height: 780 } });
+
+  test('Given a small upright phone, when a toy is counted, then its number is a small badge at the lower right and the toy stays in view', async ({
+    page,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+
+    await count.touch(count.toy(0));
+
+    await expect(count.badge(0)).toHaveText('1');
+    expect(await count.badgePlace(0)).toEqual({ small: true, lowerRight: true });
+  });
+
+  test('Given a small upright phone in light, when the answer is right, then the praise is deep indigo and Next stands beside it', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+
+    const n = await count.countAll();
+    await count.answer(n);
+
+    await expect(count.message).toHaveText(`Yes! ${n} toys.`);
+    expect(await count.answerLook()).toEqual({ colour: 'rgb(34, 48, 159)', oneRow: true });
+  });
+});

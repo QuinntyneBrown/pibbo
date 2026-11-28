@@ -1,0 +1,122 @@
+/* The stage of a Pibbo film (docs/videos/README.md), used with film-runtime.js and film-kit.js.
+   Colours and faces are the tokens of docs/design-system/tokens/tokens.css, which slides.html links
+   first; its @font-face rules load Fredoka and Andika from docs/mocks/assets/fonts/, the faces the
+   app bundles. The wordmark and the mascot are drawn as the mocks draw them. Sizes are film pixels
+   on a 1920×1080 stage, not the app's rem scale. No rule here animates: no transition, no
+   animation. film.js moves things through S.ref. */
+
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--palette-app-ink); }
+#frame { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden;
+  background: var(--palette-app-ink); color: var(--palette-white); font: 400 36px/1.4 var(--font-read); }
+#stage, .scene, .fill { position: absolute; inset: 0; }
+.scene { overflow: hidden; display: none; }
+.fill { width: 100%; height: 100%; }
+img { display: block; }
+b { font-weight: 700; }
+
+/* Type: a headline of two to six words, some in the accent colour, in Fredoka like the app's own
+   headings. Words to read are in Andika, whose letters are the ones a child writes. */
+.headline { margin: 0; font: 700 140px/1 var(--font-display); letter-spacing: var(--letter-spacing-tight); }
+.headline--md { font-size: 108px; }
+.kicker { margin: 0; font: 600 34px/1.2 var(--font-display); letter-spacing: var(--letter-spacing-wide); text-transform: uppercase; }
+.lede { margin: 0; font: 400 44px/1.35 var(--font-read); }
+.figure { margin: 0; font: 700 300px/0.9 var(--font-display); font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--font-family-mono); }
+.accent { color: var(--palette-mascot-sun); }
+.word { display: inline-block; overflow: hidden; padding-bottom: 0.18em; margin-bottom: -0.18em; vertical-align: top; }
+.word__in { display: inline-block; }
+
+/* The lockup: the mascot beside the wordmark (.wordmark of docs/design-system/assets/components.css).
+   --s is the wordmark's size in film pixels. */
+.lockup { display: inline-flex; align-items: center; gap: calc(var(--s, 150px) * 0.22); }
+.wordmark { display: inline-flex; align-items: baseline; font: 700 var(--s, 150px)/1.2 var(--font-display); letter-spacing: var(--letter-spacing-wordmark); color: var(--palette-white); }
+.wordmark__stem { position: relative; display: inline-block; width: 0.215em; height: 0.5em; margin: 0 0.055em 0 0.045em; background: currentColor; border-radius: 0.11em; }
+.wordmark__seed { position: absolute; left: 50%; top: -0.36em; width: 0.25em; height: 0.25em; translate: -50% 0; border-radius: 50%; background: var(--palette-mascot-sun); }
+.wordmark__leaf { position: absolute; left: 58%; top: -0.44em; width: 0.13em; height: 0.08em; background: var(--palette-mascot-leaf); border-radius: 0.13em 0 0.13em 0; rotate: -20deg; }
+.field--paper .wordmark, .field--sun .wordmark { color: var(--palette-app-ink); }
+.pibbo { display: block; flex: none; }
+.pibbo__stem { fill: none; stroke: var(--color-pibbo-stem); stroke-width: 3.5; stroke-linecap: round; }
+.pibbo__leaf { fill: var(--color-pibbo-leaf); }
+.pibbo__wing { fill: var(--color-pibbo-wing); }
+.pibbo__foot { fill: var(--color-pibbo-foot); }
+.pibbo__body { fill: var(--color-pibbo-body); }
+.pibbo__belly { fill: var(--color-pibbo-belly); }
+.pibbo__line { fill: none; stroke: var(--color-pibbo-ink); stroke-width: 5; stroke-linecap: round; }
+.pibbo__cheek { fill: var(--color-pibbo-cheek); opacity: 0.35; }
+.pibbo__beak-deep { fill: var(--color-pibbo-beak-deep); }
+.bug { position: absolute; right: 40px; top: 36px; width: 76px; height: 76px; display: grid; place-items: center; border-radius: 50%;
+  background: var(--palette-app-paper); box-shadow: 0 0 0 3px var(--palette-app-line); }
+
+/* Fields: the ground of a scene. Acts change colour. */
+.field--ink { background: var(--palette-app-ink); color: var(--palette-white); }
+.field--paper { background: var(--palette-app-paper); color: var(--palette-app-ink); }
+.field--paper .accent { color: var(--palette-app-sky-deep); }
+.field--sky { background: var(--palette-app-sky-deep); color: var(--palette-white); }
+.field--berry { background: var(--palette-app-berry-deep); color: var(--palette-white); }
+.field--leaf { background: var(--palette-app-leaf-deep); color: var(--palette-white); }
+.field--sun { background: var(--palette-mascot-sun); color: var(--palette-app-ink); }
+.field--sun .accent { color: var(--palette-app-sky-deep); }
+
+/* Devices drawn around a screenshot. --w is the frame's width, --ratio the window's width / height. */
+.device { position: relative; flex: none; box-sizing: border-box; width: var(--w); box-shadow: 0 4px 8px rgb(18 12 32 / 0.16), 0 40px 80px -24px rgb(18 12 32 / 0.55); }
+.device__screen { width: 100%; aspect-ratio: var(--ratio); object-fit: cover; object-position: top left; background: var(--palette-app-paper); }
+.device--phone { padding: 14px; border-radius: 60px; background: var(--palette-app-ink-edge); outline: 2px solid var(--palette-app-muted); }
+.device--phone .device__screen { border-radius: 46px; }
+.device--tablet { padding: 24px; border-radius: 44px; background: var(--palette-app-ink-edge); outline: 2px solid var(--palette-app-muted); }
+.device--tablet .device__screen { border-radius: 20px; }
+.device--browser { border-radius: 24px; overflow: hidden; background: var(--palette-white); outline: 2px solid var(--palette-app-line); }
+.device__bar { display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 20px; background: var(--palette-app-well); border-bottom: 2px solid var(--palette-app-line); }
+.device__bar i { width: 14px; height: 14px; border-radius: 50%; background: var(--palette-app-berry); }
+.device__bar i:nth-child(2) { background: var(--palette-mascot-sun); }
+.device__bar i:nth-child(3) { background: var(--palette-app-leaf); }
+.device__url { flex: 0 1 46%; margin: 0 auto; padding: 6px 20px; border-radius: 9999px; background: var(--palette-white); color: var(--palette-app-muted);
+  font: 500 18px/1.2 var(--font-family-mono); text-align: center; }
+.device--grow { width: auto; display: flex; justify-content: center; box-shadow: none; }
+.device__grow { position: relative; height: 100%; box-sizing: border-box; border: 12px solid var(--palette-app-ink-edge); overflow: hidden; background: var(--palette-app-paper);
+  box-shadow: 0 4px 8px rgb(18 12 32 / 0.16), 0 40px 80px -24px rgb(18 12 32 / 0.55); }
+.device__grow img { position: absolute; left: 0; top: 0; width: 100%; height: auto; min-height: 100%; object-fit: cover; object-position: top left; }
+
+/* A close-up: the region a line is about, enlarged, with a ring in Pibbo's yellow. */
+.closeup { border-radius: 24px; background: var(--palette-app-paper); outline: 8px solid var(--palette-mascot-sun); outline-offset: 4px; box-shadow: 0 40px 80px -24px rgb(18 12 32 / 0.55); }
+.field--sun .closeup, .field--paper .closeup { outline-color: var(--palette-app-sky); }
+
+/* A card of the film's own: a short line on a white surface, on any field. */
+.card { box-sizing: border-box; display: flex; align-items: center; gap: 28px; margin-bottom: 26px; padding: 30px 40px; border-radius: 28px;
+  background: var(--palette-white); color: var(--palette-app-ink); outline: 2px solid var(--palette-app-line); font: 600 40px/1.25 var(--font-display);
+  box-shadow: 0 30px 60px -24px rgb(18 12 32 / 0.5); }
+.card__n { flex: none; width: 68px; height: 68px; border-radius: 50%; background: var(--palette-app-sky); color: var(--palette-white);
+  font: 700 38px/68px var(--font-display); text-align: center; }
+
+/* The "Pibbo plays" card: the recordings the running app fetched, by their file names. */
+.plays { box-sizing: border-box; padding: 30px 36px 24px; border-radius: 28px; background: var(--palette-white); color: var(--palette-app-ink);
+  outline: 2px solid var(--palette-app-line); box-shadow: 0 30px 60px -24px rgb(18 12 32 / 0.5); }
+.plays__title { display: flex; align-items: center; gap: 16px; margin: 0 0 20px; font: 600 38px/1.2 var(--font-display); }
+.plays__title svg { fill: var(--palette-app-sky); }
+.plays__title .plays__wave { fill: none; stroke: var(--palette-app-sky); stroke-width: 2; stroke-linecap: round; }
+.plays__files { display: flex; flex-wrap: wrap; gap: 14px; }
+.plays__file { padding: 10px 22px; border-radius: 9999px; background: var(--palette-app-sky-soft); color: var(--palette-app-sky-deep); font: 500 28px/1.3 var(--font-family-mono); }
+.plays__note { margin: 18px 0 0; font: 400 24px/1.3 var(--font-read); color: var(--palette-app-muted); }
+
+/* A terminal of the film's own, for a check that runs where no screen shows it: real output. */
+.terminal { box-sizing: border-box; border-radius: 24px; overflow: hidden; background: var(--palette-app-ink-edge); outline: 2px solid var(--palette-app-muted);
+  box-shadow: 0 40px 80px -24px rgb(18 12 32 / 0.6); font: 500 26px/1.5 var(--font-family-mono); color: var(--palette-white); }
+.terminal__bar { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 20px; background: var(--palette-app-ink); color: var(--palette-app-line); font-size: 18px; }
+.terminal__bar i { width: 14px; height: 14px; border-radius: 50%; background: var(--palette-app-muted); }
+.terminal__body { padding: 28px 36px; white-space: pre; }
+.terminal__prompt { color: var(--palette-app-sun); }
+.terminal__ok { color: var(--palette-mascot-leaf); }
+.terminal__dim { color: var(--palette-app-line); opacity: 0.7; }
+
+.wipe { position: absolute; top: -10%; left: -180px; width: calc(100% + 360px); height: 120%; display: none; }
+
+/* Captions are off: no film burns them in (--captions or the C key shows them to an author). */
+#captions { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; z-index: 2000; }
+#captions[hidden] { display: none; }
+#captions span { max-width: 1500px; padding: 12px 28px; border-radius: 16px; background: rgb(18 12 32 / 0.84); color: var(--palette-white);
+  font: 400 38px/1.3 var(--font-read); text-align: center; }
+
+/* Only when a person opens the page. */
+#play { position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%); padding: 14px 36px; border: 0; border-radius: 9999px;
+  background: var(--palette-mascot-sun); color: var(--palette-app-ink); font: 700 26px/1 var(--font-display); cursor: pointer; }
+#play[hidden] { display: none; }
+#errors { position: fixed; inset: 16px auto auto 16px; margin: 0; padding: 16px; background: var(--palette-app-berry-deep); color: var(--palette-white); font: 16px/1.4 var(--font-family-mono); z-index: 3000; }
