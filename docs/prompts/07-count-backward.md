@@ -1,5 +1,7 @@
 # Feature: Count backward
 
+**Status:** Complete (PR #7)
+
 Journey 7 of 27 in `docs/journeys.md`. Requirements: L2-006.
 
 ## Goal
