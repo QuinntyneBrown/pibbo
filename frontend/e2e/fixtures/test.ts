@@ -100,9 +100,9 @@ async function guardNetwork(page: Page, use: () => Promise<void>): Promise<void>
   page.on('requestfailed', (r) => {
     pending.delete(r);
     // A recording cut short by the next one (one sound at a time) aborts its download, and
-    // leaving an activity aborts the fetches of its next round.
+    // leaving an activity aborts the fetches of its rounds, pictures as well as recordings.
     const stoppedRecording =
-      ['media', 'fetch'].includes(r.resourceType()) &&
+      ['media', 'fetch', 'image'].includes(r.resourceType()) &&
       r.failure()?.errorText === 'net::ERR_ABORTED';
     if (isLocal(r.url()) && !stoppedRecording)
       problems.push(`request failed: ${r.url()} (${r.failure()?.errorText})`);

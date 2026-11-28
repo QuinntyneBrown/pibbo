@@ -16,7 +16,9 @@ export async function everyActivity(page: Page): Promise<Listed[]> {
   for (const group of ['Count', 'Read'] as const) {
     await home.open();
     await home.touch(home.group(group));
+    await expect(home.activityGroupTitle).toHaveText(group);
     for (let screen = 0; screen < 5; screen++) {
+      await expect(home.activities.first()).toBeVisible();
       const names = (await home.activities.locator('.game-card__title').allTextContents()).map(
         (n) => n.trim(),
       );
@@ -24,6 +26,8 @@ export async function everyActivity(page: Page): Promise<Listed[]> {
       for (const name of names) listed.push({ group, name, screen });
       if ((await home.more.count()) === 0) break;
       await home.touch(home.more);
+      // Wait for the next screen before reading it.
+      await expect(home.activities.first()).not.toHaveText(names[0]!);
     }
   }
   return listed;

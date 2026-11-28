@@ -65,6 +65,9 @@ test.describe('Nothing about a child leaves the device', () => {
     page,
     baseURL,
   }) => {
+    // What leaves the device does not depend on the device; one run over every activity is
+    // enough, and it is the slowest spec on an emulated phone.
+    test.skip(test.info().project.name !== 'chromium-desktop', 'the desktop run covers it');
     test.slow();
     await page.addInitScript(watchPermissions);
     const requests: Request[] = [];
