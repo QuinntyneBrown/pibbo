@@ -298,3 +298,45 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - End a spec on what was last spoken (J5 #4): every spec polls for the last recordings.
 - Edit regexes with the Edit tool (J7 #1): the choice locator's `\s` survived.
 - `AnswerBar` kind `none` (J7 #4): nothing jumps when Try again appears.
+
+
+## Journey 9: Add two numbers together (pass and play)
+
+**What slowed it**
+
+- The prototype named the players "Maya" and "Dad". `L2-008` and *Children's privacy and
+  safety* forbid names, so the mocks became a star and a moon before any code (ADR 0013).
+- The mock's layout, + and − on both players and the two sets stacked on a phone, overflowed a
+  360 × 640 phone by about 150 px once both sets held five ducks, and a phone on its side by
+  more. The first fix shrank things and still failed at 360 × 640 and 640 × 360. What worked was
+  to give + and − only to the player whose turn it is, beside the sum, and keep the two sets
+  side by side at every width. The component changed first and the mock was redrawn straight
+  after it, in the same commit: the wrong order, caught before the commit.
+- `chooseAgain` already existed in the flat domain API (`compare-round`), so the build failed on
+  an ambiguous export; the rule became `chooseTotalAgain`.
+- A Python heredoc with a quote in a test name broke the shell; the files were written with the
+  Write tool instead.
+
+**New lessons**
+
+1. Before building a screen, measure the mock at its largest case on 360 × 640 and 640 × 360
+   with a throwaway spec that sets the viewport, and redraw the mock then, not after the
+   component is written.
+2. Controls that only one player may use are better absent than disabled for the other: fewer
+   targets for a child, and the room they free keeps a screen from scrolling.
+3. A `sed` that rewrites `content="..."` in a mock touches every `<meta>`: anchor it to the line
+   or to `name="description"`.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1, J7, J8): names and the 44 px buttons were fixed in the mocks and ADR
+  0013 before code. The layout redraw came late (new lesson 1).
+- A round as a pure state machine (J3 #1): `AddRound` with `turn`, `choosing`, `retry`, `done`.
+- Sequence speech by awaiting `PlayOutcome` (J3 #2): the count from 1 to 7 and the praise.
+- `CLOCK.after` for praise (J3 #3): reused unchanged.
+- Grep the flat domain API before naming (J6 #2): not done first, and it cost a build.
+- Test the layout at the largest case (J6 #1): it found the overflow on both phone shapes.
+- End a spec on what was last spoken (J5 #4): every spec polls for the last recordings.
+- Build before proving a failure (J8 #1): the first run failed for the expected reason, no
+  Add together on Home.
+- `--reporter=line` and timeouts (J8 #3): no hang.
