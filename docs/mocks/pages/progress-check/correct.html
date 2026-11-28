@@ -8,6 +8,7 @@
 <meta name="mock:screen" content="progress-check">
 <meta name="mock:state" content="correct">
 <meta name="description" content="“Yes!” and on to the next question.">
+<script src="../../assets/appearance.js"></script>
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -17,25 +18,25 @@
 <div class="shell shell--read">
   <header class="shell__top">
     <a class="chunky chunky--white chunky--icon press" href="../home/default.html" aria-label="Leave game"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
-    <div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="4" aria-valuenow="1"><div class="progress__fill progress__fill--q1"></div></div>
+    <div class="progress" role="progressbar" aria-label="Question 1 of 4" aria-valuemin="0" aria-valuemax="4" aria-valuenow="1"><div class="progress__fill progress__fill--q1"></div></div>
   </header>
   <div class="shell__ask">
     <svg class="pibbo pibbo--md " viewBox="0 0 120 120" role="img" aria-label="Pibbo"><path class="pibbo__stem" d="M60 30 C60 22 60 18 61 13"/><path class="pibbo__leaf" d="M60 18 C52 18 44 13 43 5 C51 4 59 9 60 18 Z"/><path class="pibbo__leaf" d="M61 15 C66 8 75 5 82 8 C79 16 70 19 61 15 Z"/><ellipse class="pibbo__wing" cx="19" cy="52" rx="9" ry="15" transform="rotate(35 19 52)"/><ellipse class="pibbo__wing" cx="101" cy="52" rx="9" ry="15" transform="rotate(-35 101 52)"/><ellipse class="pibbo__foot" cx="49" cy="108" rx="8" ry="5"/><ellipse class="pibbo__foot" cx="71" cy="108" rx="8" ry="5"/><ellipse class="pibbo__body" cx="60" cy="67" rx="43" ry="41"/><ellipse class="pibbo__belly" cx="60" cy="84" rx="25" ry="18"/><path class="pibbo__line" d="M36 60 Q45 49 54 60"/><path class="pibbo__line" d="M66 60 Q75 49 84 60"/><circle class="pibbo__cheek" cx="30" cy="73" r="6"/><circle class="pibbo__cheek" cx="90" cy="73" r="6"/><path class="pibbo__beak-deep" d="M51 69 Q60 66 69 69 Q66 81 60 81 Q54 81 51 69 Z"/></svg>
     <div class="bubble">
       <p class="bubble__text" id="prompt">Which word goes with the picture?</p>
-      <button class="hear hear--read" type="button" aria-label="Hear it again"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button>
+      <button class="hear hear--read" type="button" aria-label="Hear it again" aria-describedby="prompt"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button>
     </div>
   </div>
-  <main class="shell__game" id="main" aria-labelledby="prompt">
+  <main class="shell__game" id="main" tabindex="-1" aria-labelledby="prompt">
     <h1 class="visually-hidden">What do I know?</h1>
-    <div class="stage stage--question"><div class="show show--one" role="img" aria-label="1 ship"><img class="picture " src="../../assets/pictures/ship.jpg" alt="" draggable="false"></div><div class="pick" role="group" aria-label="Answers"><button class="pick__option press pick__option--text" type="button" aria-pressed="false" disabled>sip</button><button class="pick__option press pick__option--text" type="button" aria-pressed="true" disabled>ship</button><button class="pick__option press pick__option--text" type="button" aria-pressed="false" disabled>hip</button></div></div>
+    <div class="stage stage--question"><div class="show show--one" role="img" aria-label="1 ship"><img class="picture " src="../../assets/pictures/ship.jpg" alt="" draggable="false"></div><div class="pick" role="group" aria-labelledby="prompt"><button class="pick__option press pick__option--text" type="button" aria-pressed="false" disabled>sip</button><button class="pick__option press pick__option--text" type="button" aria-pressed="true" disabled>ship</button><button class="pick__option press pick__option--text" type="button" aria-pressed="false" disabled>hip</button></div></div>
   </main>
   <footer class="answer-bar answer-bar--correct" role="status"><p class="answer-bar__message"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Yes!</p><a class="chunky chunky--success chunky--wide press" href="../progress-check/counting-question.html">Next <svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></footer>
 </div>
 <nav class="mock-bar" aria-label="Mock navigation">
-  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <a class="mock-bar__home" href="../../index.html#state-progress-check-correct" aria-label="All mocks">⌂</a>
   <span class="mock-bar__screen">What do I know?</span>
-  <ul class="mock-bar__states"><li><a href="default.html">default</a></li><li><a href="answered.html">answered</a></li><li><a href="correct.html" aria-current="page">correct</a></li><li><a href="retry.html">retry</a></li><li><a href="counting-question.html">counting-question</a></li><li><a href="results.html">results</a></li></ul>
+  <ul class="mock-bar__states"><li><a href="default.html">default</a></li><li><a href="answered.html">answered</a></li><li><a href="correct.html" aria-current="page">correct</a></li><li><a href="retry.html"><span class="mock-bar__label--descenders">retry</span></a></li><li><a href="counting-question.html"><span class="mock-bar__label--descenders">counting-question</span></a></li><li><a href="results.html">results</a></li></ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>

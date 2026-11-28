@@ -52,10 +52,23 @@
       line.classList.toggle('path__line--done', !line.classList.contains('path__line--none') && (side === 0 ? n <= current : n < current));
     });
   });
+  const returnGame = Number(params.get('focusGame'));
+  if (Number.isInteger(returnGame) && returnGame >= 1 && returnGame <= Math.min(current, games.length)) {
+    steps[returnGame - 1].querySelector('.path__node').focus();
+    const url = new URL(location.href);
+    url.searchParams.delete('focusGame');
+    history.replaceState(history.state, '', url);
+  }
   if (!finished) {
     sheet.querySelector('.lesson__next p').textContent = 'Up next: ' + games[current - 1][0];
     const play = sheet.querySelector('.lesson__foot a');
     play.textContent = 'Play game ' + current;
     play.href = gameHref(current - 1);
+  }
+  if (params.get('focus') === 'lessonAction') {
+    sheet.querySelector('.lesson__foot a').focus();
+    const url = new URL(location.href);
+    url.searchParams.delete('focus');
+    history.replaceState(history.state, '', url);
   }
 })();

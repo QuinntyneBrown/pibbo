@@ -3,24 +3,27 @@
    the theme and can be hidden with ?chrome=0. Everything uses tokens.css. */
 .mock-bar {
   width: fit-content; margin: var(--space-3) auto;
-  display: flex; align-items: center; gap: var(--space-2); max-width: calc(100vw - var(--space-6));
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); max-width: calc(100vw - var(--space-6));
   padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
   background: var(--color-bg-sunken); color: var(--color-fg);
   border-radius: var(--radius-full); box-shadow: var(--shadow-3); font: var(--text-caption);
   border: 1px solid var(--color-border);
 }
-.mock-bar__screen { font-weight: var(--font-weight-semibold); white-space: nowrap; }
-.mock-bar__states { display: flex; gap: var(--space-0-5); list-style: none; margin: 0; padding: 0; overflow-x: auto; scrollbar-width: none; }
-.mock-bar__states a, .mock-bar__states span {
+.mock-bar__screen { font-weight: var(--font-weight-semibold); min-width: 0; overflow-wrap: anywhere; }
+.mock-bar__states { flex: 1 1 12rem; min-width: 0; display: flex; gap: var(--space-0-5); list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+.mock-bar__states li { max-width: 100%; }
+.mock-bar__states a, .mock-bar__states li > span {
   display: inline-flex; align-items: center; min-height: var(--target-min); padding: 0 var(--space-2);
-  border-radius: var(--radius-full); color: var(--color-fg-muted); text-decoration: none; white-space: nowrap;
+  border-radius: var(--radius-full); color: var(--color-fg-muted); text-decoration: none; max-width: 100%; overflow-wrap: anywhere;
 }
+/* Centre the visible strokes of Fredoka labels with descenders beside the checkmark. */
+.mock-bar__label--descenders { position: relative; inset-block-start: -0.105em; }
 .mock-bar__states a:not([aria-current="page"]):hover { background: var(--color-surface); color: var(--color-fg); }
 .mock-bar__states [aria-current="page"] {
   gap: var(--space-1); background: var(--color-count-strong); color: var(--color-fg-on-strong);
   font-weight: var(--font-weight-semibold);
 }
-body:has(.shell--read, .lesson--read, .switch__option--read[aria-pressed="true"]) .mock-bar__states [aria-current="page"] {
+body:has(.shell--read, .lesson--read, .placeholder--read, .switch__option--read[aria-pressed="true"]) .mock-bar__states [aria-current="page"] {
   background: var(--color-read-strong);
 }
 .mock-bar__states [aria-current="page"]::before {
@@ -45,11 +48,8 @@ body:has(.shell--read, .lesson--read, .switch__option--read[aria-pressed="true"]
 [data-chrome="off"] .mock-note { display: none; }
 @media (max-width: 39.99rem) {
   .mock-bar {
-    display: grid; width: calc(100% - var(--space-6)); grid-template-columns: auto 1fr auto auto;
-    padding: var(--space-2); border-radius: var(--radius-lg);
+    width: calc(100% - var(--space-6)); padding: var(--space-2); border-radius: var(--radius-lg);
   }
-  .mock-bar__screen { white-space: normal; }
-  .mock-bar__states { grid-area: 2 / 1 / 3 / -1; flex-wrap: wrap; overflow: visible; }
-  .mock-bar [data-theme-toggle] { grid-area: 1 / 3; }
-  .mock-bar [data-chrome-toggle] { grid-area: 1 / 4; }
+  .mock-bar__screen { flex: 1; }
+  .mock-bar__states { flex-basis: 100%; }
 }

@@ -425,10 +425,10 @@
   --color-count-trace: var(--palette-blue-500);
   --color-count-fg: var(--palette-app-sky-soft);
   --color-reward-strong: var(--palette-purple-200);
-  --color-reward-soft: var(--palette-purple-950);
+  --color-reward-soft: var(--palette-purple-800);
   --color-reward-depth: var(--palette-purple-600);
   --color-on-strong-line: rgb(255 255 255 / 0.2);
-  --color-pair-1: var(--palette-purple-950);
+  --color-pair-1: var(--palette-purple-600);
   --color-pair-2: var(--palette-blue-900);
   --color-pair-3: var(--palette-green-950);
   --color-pair-4: var(--palette-pink-900);
@@ -504,10 +504,10 @@
     --color-count-trace: var(--palette-blue-500);
     --color-count-fg: var(--palette-app-sky-soft);
     --color-reward-strong: var(--palette-purple-200);
-    --color-reward-soft: var(--palette-purple-950);
+    --color-reward-soft: var(--palette-purple-800);
     --color-reward-depth: var(--palette-purple-600);
     --color-on-strong-line: rgb(255 255 255 / 0.2);
-    --color-pair-1: var(--palette-purple-950);
+    --color-pair-1: var(--palette-purple-600);
     --color-pair-2: var(--palette-blue-900);
     --color-pair-3: var(--palette-green-950);
     --color-pair-4: var(--palette-pink-900);
