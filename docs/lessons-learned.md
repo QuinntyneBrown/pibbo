@@ -736,7 +736,7 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 
 - `L2-019` described three word choices and saved repetition state; the mock is a short story in
   which the child finds every "the", with no sound for a miss. The mock won: `L2-019`, the
-  design and ADR 0023 were rewritten first, and the repetition stays in memory at route scope,
+  design and ADR 0024 were rewritten first, and the repetition stays in memory at route scope,
   since whether Pibbo remembers practice is not decided.
 - Twenty-two 60 px words did not fit under the answer bar on any phone. The mock fits only by
   turning the whole shell into a grid (`.shell:has(.spot)`), which encapsulated components
