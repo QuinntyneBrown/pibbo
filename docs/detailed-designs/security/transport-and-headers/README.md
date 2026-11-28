@@ -6,7 +6,7 @@ Every response is served over HTTPS with HSTS, a strict Content-Security-Policy 
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0032](../../../adr/0032-content-backend.md) records.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0034](../../../adr/0034-content-backend.md) records.
 
 - **`UseHttpsRedirection / UseHsts`** — ASP.NET Core middleware; HSTS max-age 31536000 or more.
 - **`SecurityHeadersMiddleware`** — adds CSP (`default-src 'self'`, no `unsafe-inline` script, `frame-ancestors 'none'`), `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`.

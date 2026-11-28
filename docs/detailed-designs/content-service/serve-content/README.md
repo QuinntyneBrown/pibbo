@@ -8,7 +8,7 @@ The content service is the read-only API that gives the frontend its activity co
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0032](../../../adr/0032-content-backend.md) records.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0034](../../../adr/0034-content-backend.md) records.
 
 - **`ContentController`** — ASP.NET Core controller exposing `GET /api/v1/content/manifest`, `GET /api/v1/activities/{id}`, `GET /api/v1/lessons/{id}`. It validates the id route constraint and sends one MediatR request.
 - **`GetManifestQuery / GetActivityQuery / GetLessonQuery`** — MediatR requests with handlers in `Pibbo.Application`.

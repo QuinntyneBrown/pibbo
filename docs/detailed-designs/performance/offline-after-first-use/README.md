@@ -8,9 +8,12 @@ An activity opened once online keeps working when the network drops, recordings 
 
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
-- **`ngsw-config.json`** — Angular service worker: app shell prefetched; content, pictures and recordings cached on first use.
-- **`ActivityAvailability`** — service that reports whether each activity's assets are cached, read by `HomePage`.
-- **`SwUpdate handling`** — checks for a new version and activates it only between rounds.
+- **`sw.js`** — Pibbo's own service worker (ADR 0032), written after the build from `tools/service-worker/sw-template.js` with the build's version, shell and file list. It answers only GET requests for Pibbo's own files: the shell is cached on install; an activity's code, pictures and recordings when first used, and the rest of a recordings or pictures folder with the first file fetched from it. One cache of at most 400 files.
+- **`registerServiceWorker`** (`app/browser/service-worker.ts`) — registers `sw.js` once the app has started, in production builds only.
+- **`Home`** — opens an activity as before; when its code cannot load, it keeps the activity in `unavailable` and passes `offline` to its `ActivityPicture`, which greys it and draws the no-network symbol (`aria-disabled="true"`). The `online` event clears it.
+- **Updates** — a new `sw.js` installs in the background, refreshes what the old cache held, and waits: no `skipWaiting`, no reload. It takes over when Pibbo is next opened.
+
+Nothing about a child is kept or sent: the cache holds copies of Pibbo's files, and Home keeps no list of what was opened. Decisions and what is deferred are in [ADR 0032](../../../adr/0032-offline-after-first-use.md); the mock is [home/offline](../../../mocks/pages/home/offline.html).
 
 ## Requirements
 
@@ -36,24 +39,26 @@ The child uses Pibbo directly; a grown-up is beside or nearby and is not needed 
 
 ### Containers
 
-The feature runs in the `pibbo` single-page application. Content arrives from `Pibbo.Api` through the service worker cache; nothing a child does is sent back.
+The feature runs in the `pibbo` single-page application. Pibbo's files arrive from its own static host through the service worker cache; nothing a child does is sent back.
 
 ![C4 container view for offline after first use](diagrams/c4-container.png)
 
 ### Components
 
-`HomePage` greys activities that `ActivityAvailability` reports as uncached while offline.
+`Home` greys an activity whose code could not load while offline; the service worker answers from its cache.
 
 ![C4 component view for offline after first use](diagrams/c4-component.png)
 
 ### Class structure
 
-Availability is derived from the cache and the online signal.
+Availability is learnt from the touch: an activity whose code did not load is unavailable until the device is online.
 
 ![Class diagram for offline after first use](diagrams/class.png)
 
 ### Play offline and update later
 
-Cached activities play; uncached ones are greyed; updates wait for a round boundary.
+Cached activities play; uncached ones are greyed after a touch; a new version installs in the background and waits until Pibbo is next opened.
+
+The PNGs were drawn for the first design; the `.puml` sources are current and are re-rendered with PlantUML when a person asks.
 
 ![Sequence for play offline and update later](diagrams/sequence-offline-play.png)

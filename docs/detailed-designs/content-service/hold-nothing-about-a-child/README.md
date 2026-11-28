@@ -6,12 +6,12 @@ The backend serves content only. Public endpoints accept GET and HEAD and answer
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0032](../../../adr/0032-content-backend.md) records.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0034](../../../adr/0034-content-backend.md) records.
 
 - **`ReadOnlyPublicPolicy`** — endpoint convention rejecting POST, PUT, PATCH and DELETE outside `/api/v1/admin` with 405.
 - **`PrivacyLogEnricher`** — Serilog / OpenTelemetry enricher that drops query strings, cookies and device identifiers and truncates IPs.
 - **`NoCookieMiddleware`** — removes any `Set-Cookie` header from public responses.
-- **`ADR`** — `docs/adr/` decision record for the content-only backend ([ADR 0032](../../../adr/0032-content-backend.md), proposed; not yet accepted).
+- **`ADR`** — `docs/adr/` decision record for the content-only backend ([ADR 0034](../../../adr/0034-content-backend.md), proposed; not yet accepted).
 
 ## Requirements
 

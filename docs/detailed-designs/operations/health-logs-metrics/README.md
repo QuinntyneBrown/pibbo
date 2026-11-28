@@ -6,7 +6,7 @@ The backend exposes liveness and readiness checks, writes structured JSON logs a
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0032](../../../adr/0032-content-backend.md) records.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0034](../../../adr/0034-content-backend.md) records.
 
 - **`Health checks`** — `/health/live` returns 200 while the process runs; `/health/ready` returns 503 until the content store is reachable.
 - **`Structured logging`** — JSON with timestamp, route template, status, duration and trace id.

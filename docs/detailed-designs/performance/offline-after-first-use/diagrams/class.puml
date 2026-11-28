@@ -11,12 +11,20 @@ skinparam class {
 }
 title Class structure — Offline after first use
 
-class ActivityAvailability {
-  +online: Signal<boolean>
-  +isAvailable(id: string): Signal<boolean>
+class Home {
+  #unavailable: Signal<ReadonlySet<string>>
+  #openActivity(activity: Activity): void
 }
-class ContentUpdater {
-  +onBetweenRounds(): void
+class ActivityPicture {
+  +activity: Input<Activity>
+  +offline: Input<boolean>
 }
-ContentUpdater ..> SwUpdate
+class "sw.js" as Sw {
+  VERSION, SHELL, FILES, MAX_ENTRIES = 400
+  install(): cache shell, refresh old
+  fetch(): cache first, own GETs only
+}
+class registerServiceWorker <<function>>
+Home --> ActivityPicture
+registerServiceWorker ..> Sw : registers
 @enduml

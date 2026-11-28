@@ -1,4 +1,4 @@
-# 0032: A content backend that holds nothing about a child
+# 0034: A content backend that holds nothing about a child
 
 **Status:** Accepted (journey 27). The repository owner agreed on 2026-11-28 ("Create backend,
 no OIDC, keep everything simple and local for MVP, Acceptance test the backend only"), then

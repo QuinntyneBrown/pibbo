@@ -2,7 +2,7 @@
 
 Each folder below is one subsystem of Pibbo; each subfolder inside it is one vertically sliced feature with its own `README.md` and rendered diagrams. The table lists the L2 requirements each feature realises, from `docs/specs/L2.md`.
 
-The .NET content backend of `L2-027`–`L2-031`, `L2-038` and `L2-039` is built in `backend/` ([ADR 0032](../adr/0032-content-backend.md)). Each backend design below ends with what was built and where it differs.
+The .NET content backend of `L2-027`–`L2-031`, `L2-038` and `L2-039` is built in `backend/` ([ADR 0034](../adr/0034-content-backend.md)). Each backend design below ends with what was built and where it differs.
 
 | Subsystem | Feature | L2 requirements |
 |-----------|---------|-----------------|

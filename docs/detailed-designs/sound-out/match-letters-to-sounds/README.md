@@ -44,7 +44,7 @@ The child uses Pibbo directly; a grown-up is beside or nearby and is not needed 
 
 ### Containers
 
-The feature runs in the `pibbo` single-page application. Its content, pictures and recordings are bundled and served from Pibbo's own origin; the frontend does not call the backend (ADR 0032), and nothing a child does is sent anywhere.
+The feature runs in the `pibbo` single-page application. Its content, pictures and recordings are bundled and served from Pibbo's own origin; the frontend does not call the backend (ADR 0034), and nothing a child does is sent anywhere.
 
 ![C4 container view for match letters to sounds](diagrams/c4-container.png)
 

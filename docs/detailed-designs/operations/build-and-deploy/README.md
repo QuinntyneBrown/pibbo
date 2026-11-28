@@ -6,15 +6,15 @@ CI builds the .NET and Angular projects and runs unit tests, acceptance tests, l
 
 `L2-039` #1 asks CI to run unit tests, while `AGENTS.md` states unit tests run locally and never in CI; [ADR 0005](../../../adr/0005-unit-tests-run-locally.md) follows `AGENTS.md` until the repository owner decides.
 
-**Built so far (journey 1):** the frontend half. `.github/workflows/ci.yml` runs format, lint, `npm audit`, the Angular build with its bundle budgets and the behaviour e2e; `node tools/verify/verify.mjs` adds the unit tests locally. The static host settings are in [`docs/deploy.md`](../../../deploy.md). The backend half followed in journey 27; see the end of this design.
+**Built so far (journey 1):** the frontend half. `.github/workflows/ci.yml` runs format, lint, `npm audit`, the Angular build with its bundle budgets and the behaviour e2e; `node tools/verify/verify.mjs` adds the unit tests locally. The static host settings are in [`docs/deploy.md`](../../../deploy.md). Every commit to main that passes CI is published to Azure Static Web Apps by the workflow's `deploy` job ([ADR 0032](../../../adr/0032-publish-to-azure-static-web-apps-from-main.md)). The backend half followed in journey 27; see the end of this design.
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0032](../../../adr/0032-content-backend.md) records.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0034](../../../adr/0034-content-backend.md) records.
 
 - **`GitHub Actions workflow`** — `.github/workflows/ci.yml`: lint, build, one acceptance path per feature, bundle budgets, audits; under 5 minutes.
 - **`Dockerfile`** — multi-stage, base pinned by digest, `USER` non-root.
-- **`Deployment`** — rolling or blue-green with readiness gate and automatic rollback; platform: Docker Swarm (journey 27).
+- **`Deployment`** — rolling or blue-green with readiness gate and automatic rollback; platform Azure Static Web Apps for the static frontend, Docker Swarm for the backend (journey 27).
 
 ## Requirements
 

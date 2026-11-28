@@ -4,6 +4,7 @@
   [class.game-card--count]="activity().group === 'count'"
   [class.game-card--read]="activity().group === 'read'"
   [class.game-card--more]="more()"
+  [attr.aria-disabled]="offline() ? 'true' : null"
   (pbTap)="touched.emit(activity())"
 >
   <span class="game-card__glyph" aria-hidden="true">
@@ -11,9 +12,19 @@
       <svg class="game-card__arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
     } @else {
       {{ activity().glyph }}
+      @if (offline()) {
+        <svg class="game-card__offline" viewBox="0 0 24 24">
+          <path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0" />
+          <circle cx="12" cy="19" r="1.2" />
+          <path d="M3 3l18 18" />
+        </svg>
+      }
     }
   </span>
   <span class="game-card__body">
     <span class="game-card__title">{{ activity().name }}</span>
+    @if (offline()) {
+      <span class="visually-hidden">, needs the internet</span>
+    }
   </span>
 </button>

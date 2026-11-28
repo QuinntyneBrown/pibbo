@@ -6,7 +6,7 @@ Staff edit content through endpoints under `/api/v1/admin`. Each call needs a va
 
 ## Description
 
-The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0032](../../../adr/0032-content-backend.md) records.
+The feature is a vertical slice through the backend: `Pibbo.Api` (controllers and middleware), `Pibbo.Application` (MediatR handlers), `Pibbo.Domain` and `Pibbo.Infrastructure`, with the Angular client generated from its OpenAPI document. The backend is in `backend/`, as [ADR 0034](../../../adr/0034-content-backend.md) records.
 
 - **`AdminContentController`** — controller under `/api/v1/admin` with `[Authorize(Policy = "ContentEditor")]`.
 - **`UploadAssetCommand + validator`** — FluentValidation checks sniffed type (audio/mpeg, audio/ogg, image/webp, sanitised image/svg+xml) and size (audio 1 MB, image 2 MB).
