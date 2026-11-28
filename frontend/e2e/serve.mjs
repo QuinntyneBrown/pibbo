@@ -44,16 +44,30 @@ async function resolveFile(urlPath) {
   return extname(urlPath) ? null : join(root, 'index.html');
 }
 
+// The update spec asks for a second version of the service worker mid-round (ADR 0032): from
+// then on sw.js is served with one more line, a new one on each ask, so the browser sees a new
+// version however many specs ask.
+let versions = 0;
+
 createServer(async (req, res) => {
   const urlPath = new URL(req.url ?? '/', 'http://localhost').pathname;
+  if (req.method === 'POST' && urlPath === '/__e2e/next-version') {
+    versions++;
+    res.writeHead(204, securityHeaders).end();
+    return;
+  }
   const file = await resolveFile(urlPath);
   if (!file) {
     res.writeHead(404, securityHeaders).end();
     return;
   }
+  const isWorker = urlPath === '/sw.js';
   res.writeHead(200, {
     ...securityHeaders,
     'Content-Type': types[extname(file)] ?? 'application/octet-stream',
+    ...(isWorker ? { 'Cache-Control': 'no-cache' } : {}),
   });
-  res.end(await readFile(file));
+  const body = await readFile(file);
+  const next = Buffer.from(`\n// version ${versions + 1}\n`);
+  res.end(isWorker && versions > 0 ? Buffer.concat([body, next]) : body);
 }).listen(port, () => console.log(`Serving ${root} on http://localhost:${port}`));

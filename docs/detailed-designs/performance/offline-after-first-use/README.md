@@ -8,12 +8,12 @@ An activity opened once online keeps working when the network drops, recordings 
 
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
-- **`sw.js`** — Pibbo's own service worker (ADR 0031), written after the build from `tools/service-worker/sw-template.js` with the build's version, shell and file list. It answers only GET requests for Pibbo's own files: the shell is cached on install; an activity's code, pictures and recordings when first used, and the rest of a recordings or pictures folder with the first file fetched from it. One cache of at most 400 files.
+- **`sw.js`** — Pibbo's own service worker (ADR 0032), written after the build from `tools/service-worker/sw-template.js` with the build's version, shell and file list. It answers only GET requests for Pibbo's own files: the shell is cached on install; an activity's code, pictures and recordings when first used, and the rest of a recordings or pictures folder with the first file fetched from it. One cache of at most 400 files.
 - **`registerServiceWorker`** (`app/browser/service-worker.ts`) — registers `sw.js` once the app has started, in production builds only.
 - **`Home`** — opens an activity as before; when its code cannot load, it keeps the activity in `unavailable` and passes `offline` to its `ActivityPicture`, which greys it and draws the no-network symbol (`aria-disabled="true"`). The `online` event clears it.
 - **Updates** — a new `sw.js` installs in the background, refreshes what the old cache held, and waits: no `skipWaiting`, no reload. It takes over when Pibbo is next opened.
 
-Nothing about a child is kept or sent: the cache holds copies of Pibbo's files, and Home keeps no list of what was opened. Decisions and what is deferred are in [ADR 0031](../../../adr/0031-offline-after-first-use.md); the mock is [home/offline](../../../mocks/pages/home/offline.html).
+Nothing about a child is kept or sent: the cache holds copies of Pibbo's files, and Home keeps no list of what was opened. Decisions and what is deferred are in [ADR 0032](../../../adr/0032-offline-after-first-use.md); the mock is [home/offline](../../../mocks/pages/home/offline.html).
 
 ## Requirements
 

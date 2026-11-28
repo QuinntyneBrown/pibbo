@@ -41,6 +41,11 @@ export class HomePage {
     return this.activities.filter({ hasText: name });
   }
 
+  /** The no-network symbol on an activity picture, drawn offline when it cannot open (L2-033). */
+  offlineSymbol(name: string): Locator {
+    return this.activity(name).locator('.game-card__offline');
+  }
+
   async open(path = '/'): Promise<void> {
     await this.page.goto(path);
     await expect(this.root).toBeVisible();

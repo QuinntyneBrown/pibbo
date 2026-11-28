@@ -14,7 +14,8 @@ is an architectural choice. The design named Angular's `@angular/service-worker`
 What bounds the choice:
 
 - *Children's privacy and safety*: no third-party call, nothing about a child kept or sent.
-- *Lazy loading and memory*: the initial bundle is 239 kB against a 240 kB warning (ADR 0030);
+- *Lazy loading and memory*: the initial bundle on `main` is 243.09 kB raw (64.10 kB gzipped),
+  already over its 240 kB warning, under the 245 kB error (ADR 0030);
   an activity's code, pictures and recordings load when it is chosen; caches have a fixed size.
 - The CSP (`frontend/deploy/security-headers.json`) allows scripts, workers and fetches from
   `'self'` only, and must still hold.
@@ -34,12 +35,14 @@ What bounds the choice:
    it holds are copies of Pibbo's own files; nothing about a child, and nothing a child did,
    is cached or sent. The CSP is unchanged: `worker-src` falls back to `script-src 'self'`.
 3. **What is cached, and when.** On install: the shell (`index.html`, the scripts and styles it
-   loads, the fonts the styles name). Everything else when first used: an activity's code when
+   loads, the fonts the styles name, and Home's code and what it imports, found from Home's route
+   in the main script: Home is the first screen, and on a first visit it loads before the worker
+   answers the page). Everything else when first used: an activity's code when
    it is opened, a picture or recording when fetched; the first recording or picture fetched
    from a content folder (`recordings/count/`, `pictures/words/`, …) also caches the rest of
    that folder in the background, so every round of an activity opened once has its recordings
    offline. A page load tries the network first, so a new version is seen, then the cached shell.
-4. **Bounded.** One cache, `pibbo-<version>`, of at most 400 files (Pibbo serves about 260); the
+4. **Bounded.** One cache, `pibbo-<version>`, of at most 400 files (Pibbo serves 253); the
    oldest non-shell files go first. The build fails if Pibbo ever serves more files than that,
    so the bound is raised with a reason, as a budget is.
 5. **Updates never interrupt a round.** A new version installs in the background, refetches the
@@ -60,7 +63,8 @@ What bounds the choice:
 
 ## Consequences
 
-- The initial bundle grows by the registration only (well under 1 kB).
+- The initial bundle grows by the registration only: 243.09 kB to 243.24 kB raw, 64.10 kB to
+  64.15 kB gzipped. No budget changes.
 - An activity's code is cached once it is opened; after an update, its new code is cached the
   next time it is opened online. Until then, offline, it greys as a never-opened one does
   (`L2-033` #2). Precaching every activity's code on update would fetch code a child may never

@@ -38,6 +38,7 @@
           [title]="group.name"
           [activities]="screen().activities"
           [more]="more()"
+          [offline]="unavailable()"
           (touched)="openActivity($event)"
           (next)="showMore()"
         />

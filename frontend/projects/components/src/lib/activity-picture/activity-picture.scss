@@ -72,3 +72,28 @@
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
 }
+
+/* Offline and never opened (L2-033, home/offline mock): grey is never the only sign. */
+.game-card[aria-disabled='true'] .game-card__glyph {
+  position: relative;
+  background: var(--color-bg-sunken);
+  color: var(--color-fg-muted);
+  filter: grayscale(1);
+}
+
+.game-card__offline {
+  position: absolute;
+  inset-block-start: var(--space-2);
+  inset-inline-end: var(--space-2);
+  width: var(--size-7);
+  height: var(--size-7);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+
+  circle {
+    fill: currentColor;
+    stroke: none;
+  }
+}
