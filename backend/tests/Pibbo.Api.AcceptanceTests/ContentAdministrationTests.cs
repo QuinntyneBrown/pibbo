@@ -247,6 +247,7 @@ public sealed class ContentAdministrationTests : IDisposable
     // #4 Given text content (words, sentences), when saved, then it is validated against a
     //    character allow-list and a maximum of 80 characters.
     [Fact]
+    [Trait("Category", "Critical")]
     public async Task Given_reviewed_content_When_an_editor_publishes_it_Then_it_is_served_as_the_new_version()
     {
         var admin = _factory.CreateAdminClient(AdminTokens.Editor());

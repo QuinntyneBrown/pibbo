@@ -18,6 +18,7 @@ public sealed class PublishedContractTests : IDisposable
     [Theory]
     [InlineData("v1")]
     [InlineData("admin")]
+    [Trait("Category", "Critical")]
     public async Task Given_a_published_OpenAPI_document_When_the_API_is_built_Then_it_has_not_drifted(string document)
     {
         var served = JsonNode.Parse(await _factory.CreateHttpsClient().GetStringAsync($"/openapi/{document}.json"))!

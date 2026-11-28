@@ -21,6 +21,7 @@ public sealed class MetricsTests : IDisposable
     // #3 Given the backend running, when scraped, then OpenTelemetry metrics show request
     //    rate, error rate and latency per route.
     [Fact]
+    [Trait("Category", "Critical")]
     public async Task Given_the_backend_running_When_scraped_Then_requests_errors_and_latency_are_shown_per_route()
     {
         var client = _factory.CreateHttpsClient();

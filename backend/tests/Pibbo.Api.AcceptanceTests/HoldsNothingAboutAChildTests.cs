@@ -66,6 +66,7 @@ public sealed class HoldsNothingAboutAChildTests : IDisposable
     [InlineData("/recordings/home/count-the-toys.wav")]
     [InlineData("/api/v1/activities/Not_An_Id")]
     [InlineData("/somewhere/mia-aged-four")]
+    [Trait("Category", "Critical")]
     public async Task Given_a_request_that_carries_who_asked_When_it_is_logged_Then_none_of_it_is_stored(string path)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"{path}?child=mia-rose&device=tablet-7f3a");

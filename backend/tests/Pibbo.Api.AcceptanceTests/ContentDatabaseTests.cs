@@ -27,6 +27,7 @@ public sealed class ContentDatabaseTests : IDisposable
     }
 
     [Fact]
+    [Trait("Category", "Critical")]
     public async Task Given_a_new_database_When_the_service_starts_Then_the_migrations_build_it_and_the_content_is_served()
     {
         var client = _factory.CreateHttpsClient();

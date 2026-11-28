@@ -18,6 +18,7 @@ public sealed class ContentApiTests : IDisposable
     // #1 Given a valid activity id, when GET /api/v1/activities/{id} is called,
     //    then 200 is returned with JSON matching the published OpenAPI schema.
     [Fact]
+    [Trait("Category", "Critical")]
     public async Task Given_a_valid_activity_id_When_it_is_asked_for_Then_200_matches_the_published_schema()
     {
         var client = _factory.CreateHttpsClient();

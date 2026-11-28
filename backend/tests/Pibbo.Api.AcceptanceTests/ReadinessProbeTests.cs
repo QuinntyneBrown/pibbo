@@ -26,6 +26,7 @@ public sealed class ReadinessProbeTests : IDisposable
     }
 
     [Fact]
+    [Trait("Category", "Critical")]
     public async Task Given_a_service_with_no_content_When_probed_Then_the_probe_fails()
     {
         using var factory = new PibboApiFactory().WithSetting("Content:Root", _empty);

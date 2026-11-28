@@ -38,6 +38,7 @@ public sealed class HealthLogsMetricsTests : IDisposable
     }
 
     [Fact]
+    [Trait("Category", "Critical")]
     public async Task Given_the_content_store_is_not_reachable_When_health_is_asked_Then_live_is_200_and_ready_is_503_until_it_is()
     {
         Directory.CreateDirectory(_emptyRoot);

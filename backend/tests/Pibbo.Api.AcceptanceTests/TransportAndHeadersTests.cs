@@ -48,6 +48,7 @@ public sealed class TransportAndHeadersTests : IDisposable
     [InlineData("GET", "/openapi/v1.json")]
     [InlineData("GET", "/nowhere")]
     [InlineData("POST", "/api/v1/content/manifest")]
+    [Trait("Category", "Critical")]
     public async Task Given_any_response_When_inspected_Then_it_carries_the_hardening_headers(string method, string path)
     {
         var response = await _factory.CreateHttpsClient().SendAsync(new HttpRequestMessage(new HttpMethod(method), path));
