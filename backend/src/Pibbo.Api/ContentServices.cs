@@ -7,10 +7,19 @@ namespace Pibbo.Api;
 
 public static class ContentServices
 {
-    public static IServiceCollection AddContent(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddContent(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        IHostEnvironment environment)
     {
         var options = configuration.GetSection(ContentStoreOptions.Section).Get<ContentStoreOptions>()
             ?? new ContentStoreOptions();
+
+        // A relative path is relative to the application, not to wherever it was started from.
+        options.Root = Path.GetFullPath(options.Root, environment.ContentRootPath);
+        options.AssetsRoot = Path.GetFullPath(
+            options.AssetsRoot ?? Path.Combine(options.Root, "assets"),
+            environment.ContentRootPath);
         services.AddSingleton(options);
         services.AddSingleton<JsonFileContentStore>();
         services.AddSingleton<IContentStore>(provider => provider.GetRequiredService<JsonFileContentStore>());

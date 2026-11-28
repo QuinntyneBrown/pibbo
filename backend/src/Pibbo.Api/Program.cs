@@ -10,12 +10,13 @@ using Pibbo.Api.Security;
 DistributedContextPropagator.Current = new NoInboundTraceContext();
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(kestrel => kestrel.AddServerHeader = false);
 
 builder.Services.AddProblemDetails(problems => problems.CustomizeProblemDetails = problem =>
     problem.ProblemDetails.Extensions["traceId"] = TraceIds.Of(problem.HttpContext));
 builder.Services.AddExceptionHandler<UnhandledExceptionHandler>();
-builder.Services.AddOpenApi("v1");
-builder.Services.AddContent(builder.Configuration);
+builder.Services.AddPibboOpenApi();
+builder.Services.AddContent(builder.Configuration, builder.Environment);
 builder.Services.AddHardening(builder.Configuration);
 builder.Services.AddHealth();
 
