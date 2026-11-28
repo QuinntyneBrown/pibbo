@@ -14,6 +14,7 @@ import {
   roundAssets,
   startBlend,
   startSoundOutRound,
+  toggleSilentE,
   touchLetter,
   tryAgain,
   type SoundOutRound,
@@ -306,6 +307,32 @@ describe('a silent-e word (L2-016)', () => {
     expect(roundAssets(capeFirst())).toEqual(
       expect.arrayContaining(['/p/cap.jpg', '/w/cap.wav', '/s/a_e.wav', '/w/cape.wav']),
     );
+  });
+
+  it('adds the e: the word with it, its sounds to hear, and the word spoken (#1)', () => {
+    const { round, spoken } = toggleSilentE(capeFirst());
+    expect(spoken).toBe('/w/cape.wav');
+    expect(round.eAdded).toBe(true);
+    expect(round.phase).toBe('sounding');
+    expect(shownSounds(round)[1]!.recording).toBe('/s/a_e.wav');
+    expect(nextLetter(round)).toBe(0);
+  });
+
+  it('takes the e away again: the word without it is spoken and its sounds heard afresh (#2)', () => {
+    const added = touchLetter(toggleSilentE(capeFirst()).round, 0).round;
+    const { round, spoken } = toggleSilentE(added);
+    expect(spoken).toBe('/w/cap.wav');
+    expect(round.eAdded).toBe(false);
+    expect(round.phase).toBe('magic-e');
+    expect(round.heard).toEqual([false, false, false]);
+  });
+
+  it('keeps the e once blending starts, and ignores it for any other word', () => {
+    const added = toggleSilentE(capeFirst()).round;
+    const blending = startBlend(soundAll(added))!;
+    expect(toggleSilentE(blending)).toEqual({ round: blending, spoken: null });
+    const map = startSoundOutRound(sequence(0), words);
+    expect(toggleSilentE(map).spoken).toBeNull();
   });
 
   it('is not a silent-e round for any other word', () => {

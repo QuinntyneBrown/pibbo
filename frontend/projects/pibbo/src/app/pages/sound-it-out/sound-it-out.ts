@@ -39,6 +39,7 @@ import {
   SOUND_OUT,
   startBlend,
   startSoundOutRound,
+  toggleSilentE,
   touchLetter,
   tryAgain,
   type SoundOutRound,
@@ -198,6 +199,15 @@ export class SoundItOut {
     if (round.phase === 'ready' && outcome !== 'stopped' && this.round() === round) {
       void this.audio.play(SOUND_OUT.instructions.ready.recording);
     }
+  }
+
+  /** The quiet e (L2-016): adding or taking it away speaks the word it makes. */
+  protected toggleE(): void {
+    const { round, spoken } = toggleSilentE(this.round());
+    if (spoken === null) return;
+    this.round.set(round);
+    this.sounding.set(null);
+    void this.audio.play(spoken);
   }
 
   protected blend(): void {

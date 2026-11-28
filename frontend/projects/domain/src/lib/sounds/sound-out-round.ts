@@ -163,6 +163,23 @@ export function touchLetter(round: SoundOutRound, index: number): LetterResult {
   return { round: { ...round, heard, phase }, spoken: round.word.sounds[index]!.recording };
 }
 
+/**
+ * The child touches the quiet e (L2-016 #1, #2): adding it makes the word ("cape") and its
+ * sounds, and taking it away makes the word without it ("cap"); either way the word made is
+ * spoken and the sounds are heard afresh. Only before blending.
+ */
+export function toggleSilentE(round: SoundOutRound): LetterResult {
+  const without = round.word.withoutE;
+  const open = round.phase === 'magic-e' || round.phase === 'sounding' || round.phase === 'ready';
+  if (!without || round.eAdded === null || !open) return { round, spoken: null };
+  const eAdded = !round.eAdded;
+  const heard = round.word.sounds.map(() => false);
+  return {
+    round: { ...round, eAdded, heard, phase: eAdded ? 'sounding' : 'magic-e' },
+    spoken: eAdded ? round.word.recording : without.recording,
+  };
+}
+
 /** Blending (L2-012 #2): each sound again, back to back, each letter lit, then the word. */
 export function blendPlan(word: Word): PlaybackStep[] {
   return [
