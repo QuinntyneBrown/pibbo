@@ -84,9 +84,38 @@ export interface SoundOutRound {
   readonly eAdded: boolean | null;
 }
 
-/** The sounds a round shows: the word without its e until the e is added (L2-016). */
+/** A word's tiles in order: a longer word's syllables (L2-017), otherwise its sounds. */
+export function wordTiles(word: Word): readonly Sound[] {
+  return word.syllables ?? word.sounds;
+}
+
+/** The tiles a round shows: the word without its e until the e is added (L2-016). */
 export function shownSounds(round: SoundOutRound): readonly Sound[] {
-  return round.eAdded === false ? round.word.withoutE!.sounds : round.word.sounds;
+  return round.eAdded === false ? round.word.withoutE!.sounds : wordTiles(round.word);
+}
+
+/** An instruction of several recordings: its text as shown, and what to play in order. */
+export interface SpokenInstruction {
+  readonly text: string;
+  readonly recordings: readonly string[];
+}
+
+/**
+ * What a longer word asks while it is read (L2-017 #1): "Tap", the next syllable and "and
+ * clap it", as text and as recordings; null for any other word or once every syllable is read.
+ */
+export function syllableAsk(
+  round: SoundOutRound,
+  before: { readonly text: string; readonly recording: string },
+  after: { readonly text: string; readonly recording: string },
+): SpokenInstruction | null {
+  const next = nextLetter(round);
+  const syllable = next === null ? undefined : round.word.syllables?.[next];
+  if (round.phase !== 'sounding' || !syllable) return null;
+  return {
+    text: `${before.text} “${syllable.letters}” ${after.text}`,
+    recordings: [before.recording, syllable.recording, after.recording],
+  };
 }
 
 function shuffled<T>(random: RandomSource, items: readonly T[]): T[] {
@@ -118,11 +147,12 @@ export function startSoundOutRound(
   // A silent-e word offers the picture of the word without its e among its pictures (#3).
   const offered = word.withoutE ? [word.withoutE, others[0]!] : others;
   const pictures = shuffled(random, [word, ...offered]);
-  const pair = adjacentConsonants(word);
+  // A longer word is read by syllable, so it asks no first-two-sounds question.
+  const pair = word.syllables ? null : adjacentConsonants(word);
   return {
     phase: word.withoutE ? 'magic-e' : 'sounding',
     word,
-    heard: word.sounds.map(() => false),
+    heard: wordTiles(word).map(() => false),
     pictures,
     chosen: null,
     wrong: 0,

@@ -19,6 +19,9 @@
         [note]="e.note"
       />
     }
+    @if (syllableRule(); as glyph) {
+      <pb-rule [glyph]="glyph" [text]="content.syllables.rule" />
+    }
     <pb-word-tiles
       [sounds]="sounds()"
       [heard]="round().heard"

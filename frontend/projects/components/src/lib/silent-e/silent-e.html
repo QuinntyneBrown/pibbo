@@ -1,7 +1,4 @@
-<p class="rule">
-  <span class="rule__glyph">{{ vowel() }}_e</span> {{ ruleBefore() }} {{ vowel() }}
-  {{ ruleAfter() }}
-</p>
+<pb-rule [glyph]="vowel() + '_e'" [text]="ruleBefore() + ' ' + vowel() + ' ' + ruleAfter()" />
 @if (picture(); as src) {
   <div class="before">
     <img class="picture" [src]="src" [alt]="word()" draggable="false" />

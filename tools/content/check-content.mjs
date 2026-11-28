@@ -1,4 +1,4 @@
-// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -21,6 +21,32 @@ for (const word of content.words ?? []) {
   const name = word.word ?? "(a word with no name)";
   fileExists(word.picture, `word "${name}" picture`);
   fileExists(word.recording, `word "${name}" recording`);
+  // A longer word (L2-017, ADR 0022) names its sounds in its syllables, one tile each.
+  if (word.syllables) {
+    const parts = word.syllables;
+    if (parts.length < 2 || parts.length > 4)
+      problems.push(
+        `word "${name}": ${parts.length} syllables, not two to four`,
+      );
+    if (parts.map((p) => p.letters).join("") !== name)
+      problems.push(`word "${name}": its syllables do not spell it`);
+    for (const part of parts) {
+      const label = `syllable "${part.letters}"`;
+      fileExists(part.recording, `${label} recording`);
+      if (!part.shown) problems.push(`${label}: no caption`);
+      let letters = "";
+      for (const sound of part.sounds ?? []) {
+        const entry = content.sounds?.[sound];
+        if (!entry)
+          problems.push(`${label}: sound "${sound}" is not in the sounds`);
+        else fileExists(entry.recording, `sound "${sound}" recording`);
+        letters += entry?.letters ?? "";
+      }
+      if (letters !== part.letters)
+        problems.push(`${label}: its sounds spell "${letters}"`);
+    }
+    continue;
+  }
   if (!Array.isArray(word.sounds) || word.sounds.length === 0)
     problems.push(`word "${name}": no sounds`);
   // The mocks draw a word of up to four tiles in one row (L2-015, ADR 0020).
@@ -76,6 +102,15 @@ for (const word of content.words ?? []) {
       else fileExists(entry.recording, `sound "${sound}" recording`);
     }
   }
+}
+// The syllable lines (L2-017, ADR 0022).
+if (content.words?.some((w) => w.syllables)) {
+  for (const side of ["before", "after"])
+    fileExists(
+      content.syllables?.ask?.[side]?.recording,
+      `syllables ${side} recording`,
+    );
+  if (!content.syllables?.rule) problems.push("syllables: no rule");
 }
 // The silent-e lines (L2-016, ADR 0021).
 if (content.words?.some((w) => w.withoutE))

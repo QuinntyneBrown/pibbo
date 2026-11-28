@@ -5,20 +5,6 @@
   gap: var(--space-3);
 }
 
-.rule {
-  margin: 0;
-  color: var(--color-read-strong);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  text-align: center;
-}
-
-.rule__glyph {
-  font-family: var(--font-read);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-}
-
 .before {
   display: flex;
   align-items: center;

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Rule } from '../rule/rule';
 
 /**
  * The rule and the word a silent-e round is about (`.rule`, `.before`): the rule spelled
@@ -7,6 +8,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
  */
 @Component({
   selector: 'pb-silent-e',
+  imports: [Rule],
   templateUrl: './silent-e.html',
   styleUrl: './silent-e.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

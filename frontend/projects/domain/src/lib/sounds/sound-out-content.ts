@@ -1,4 +1,4 @@
-import type { Instruction, Sound, Word } from '@pibbo/api';
+import type { Instruction, Sound, Syllable, Word } from '@pibbo/api';
 import data from './sound-out-content.json';
 
 /**
@@ -22,6 +22,20 @@ export interface SoundOutContent {
   readonly firstTwo: FirstTwoContent;
   /** What a silent-e word (L2-016) shows and says. */
   readonly silentE: SilentEContent;
+  /** What a longer word read by syllable (L2-017) shows and says. */
+  readonly syllables: SyllablesContent;
+}
+
+/** What a longer-word round shows and says around its tiles. */
+export interface SyllablesContent {
+  /** The instruction, either side of the syllable to touch: "Tap" “sun” "and clap it." */
+  readonly ask: {
+    readonly before: { readonly text: string; readonly recording: string };
+    readonly after: { readonly text: string; readonly recording: string };
+    readonly picture: Instruction['picture'];
+  };
+  /** The rule, after the syllables: "sun · set" "Read one beat at a time". */
+  readonly rule: string;
 }
 
 /** What a silent-e round shows and says around its tiles. */
@@ -57,14 +71,24 @@ interface SoundOutData {
   readonly model: SoundOutContent['model'];
   readonly firstTwo: FirstTwoContent;
   readonly silentE: SilentEContent;
+  readonly syllables: SyllablesContent;
 }
 
 interface WordData {
   readonly word: string;
-  readonly sounds: readonly string[];
+  /** A longer word names its sounds in its syllables instead. */
+  readonly sounds?: readonly string[];
+  readonly syllables?: readonly SyllableData[];
   readonly picture: string;
   readonly recording: string;
   readonly withoutE?: WordData;
+}
+
+interface SyllableData {
+  readonly letters: string;
+  readonly sounds: readonly string[];
+  readonly shown: string;
+  readonly recording: string;
 }
 
 /** Resolves each word's sound keys into its sounds. Throws on a sound that is not in the data. */
@@ -76,14 +100,21 @@ export function soundOutContent(raw: SoundOutData): SoundOutContent {
 }
 
 function resolveWord(w: WordData, sounds: Readonly<Record<string, Sound>>): Word {
-  const { withoutE, ...rest } = w;
-  return {
-    ...rest,
-    sounds: w.sounds.map((key) => {
+  const { withoutE, syllables, ...rest } = w;
+  const resolve = (keys: readonly string[]) =>
+    keys.map((key) => {
       const sound = sounds[key];
       if (!sound) throw new Error(`word "${w.word}" uses sound "${key}", which is not recorded`);
       return sound;
-    }),
+    });
+  const parts: Syllable[] | undefined = syllables?.map((p) => ({
+    ...p,
+    sounds: resolve(p.sounds),
+  }));
+  return {
+    ...rest,
+    sounds: parts ? parts.flatMap((p) => p.sounds) : resolve(w.sounds ?? []),
+    ...(parts ? { syllables: parts } : {}),
     ...(withoutE ? { withoutE: resolveWord(withoutE, sounds) } : {}),
   };
 }

@@ -22,6 +22,7 @@ import {
   AnswerBar,
   PicturePick,
   RoundShell,
+  Rule,
   SilentE,
   WordTiles,
   type AnswerBarKind,
@@ -39,6 +40,7 @@ import {
   SOUND_OUT,
   startBlend,
   startSoundOutRound,
+  syllableAsk,
   toggleSilentE,
   touchLetter,
   tryAgain,
@@ -55,7 +57,7 @@ const PRAISE_MS = 1500;
  */
 @Component({
   selector: 'pb-sound-it-out',
-  imports: [RoundShell, SilentE, WordTiles, PicturePick, AnswerBar],
+  imports: [RoundShell, Rule, SilentE, WordTiles, PicturePick, AnswerBar],
   templateUrl: './sound-it-out.html',
   styleUrl: './sound-it-out.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,8 +85,17 @@ export class SoundItOut {
   private endPraise: (() => void) | null = null;
   /** The letter whose sound is playing. */
   protected readonly sounding = signal<number | null>(null);
+  /** What a longer word asks while its syllables are read (L2-017). */
+  private readonly ask = computed(() =>
+    syllableAsk(this.round(), SOUND_OUT.syllables.ask.before, SOUND_OUT.syllables.ask.after),
+  );
   protected readonly instruction = computed<Instruction>(() => {
     const round = this.round();
+    const ask = this.ask();
+    if (ask) {
+      const { picture } = SOUND_OUT.syllables.ask;
+      return { text: ask.text, recording: ask.recordings[0]!, picture };
+    }
     switch (round.phase) {
       case 'magic-e':
         return SOUND_OUT.silentE.instruction;
@@ -167,6 +178,13 @@ export class SoundItOut {
       note: round.eAdded ? SOUND_OUT.silentE.added : SOUND_OUT.silentE.waiting,
     };
   });
+  /** The rule above a longer word's tiles: its syllables, "sun · set". */
+  protected readonly syllableRule = computed(
+    () =>
+      this.round()
+        .word.syllables?.map((s) => s.letters)
+        .join(' · ') ?? null,
+  );
   /** The first two sounds to choose from, while they are asked (L2-015 #2). */
   protected readonly choices = computed(() => {
     const round = this.round();
@@ -187,7 +205,16 @@ export class SoundItOut {
       this.endPraise?.();
       this.audio.stop();
     });
-    void this.audio.play(this.instruction().recording);
+    void this.sayInstruction(this.round());
+  }
+
+  /** Says the instruction: one recording, or a longer word's three in turn. */
+  private async sayInstruction(round: SoundOutRound): Promise<void> {
+    const recordings = this.ask()?.recordings ?? [this.instruction().recording];
+    await this.playSteps(
+      round,
+      recordings.map((recording) => ({ recording, letter: null })),
+    );
   }
 
   /** A letter makes its sound (L2-012 #1); a new sound stops the one playing (#4). */
@@ -353,9 +380,10 @@ export class SoundItOut {
     }
     this.done.set(done);
     this.firstTwoMessage.set('');
-    this.round.set(this.upcoming);
-    this.upcoming = this.prepareNext(this.upcoming);
-    void this.audio.play(SOUND_OUT.instructions.sounding.recording);
+    const round = this.upcoming;
+    this.round.set(round);
+    this.upcoming = this.prepareNext(round);
+    void this.sayInstruction(round);
   }
 
   /** Chooses the round after `current` and fetches its assets while this one is played. */
@@ -367,7 +395,7 @@ export class SoundItOut {
 
   protected replay(): void {
     if (this.picking()) void this.askWhichPicture(this.round());
-    else void this.audio.play(this.instruction().recording);
+    else void this.sayInstruction(this.round());
   }
 
   protected leave(): void {
