@@ -1,7 +1,9 @@
 import type { RandomSource, Word, WordTheme } from '@pibbo/api';
 import { WORD_PICTURES, wordPicturesContent } from './word-pictures-content';
 import {
+  holdWord,
   joinColour,
+  matchPicture,
   pictureJoined,
   startWordPicturesRound,
   wordJoined,
@@ -99,5 +101,88 @@ describe('a new round', () => {
     expect(assets).toContain('/r/sea.wav');
     expect(assets).toContain('/r/all-sea.wav');
     expect(new Set(assets).size).toBe(assets.length);
+  });
+});
+
+describe('holdWord', () => {
+  // Pictures: sun ship boat.
+  const round = startWordPicturesRound(sequence(0, 0, 0.9), [sea]);
+
+  it('holds the word and speaks its sounds in turn, not the word', () => {
+    const { round: next, spoken } = holdWord(round, 0);
+    expect(next.held).toBe(0);
+    expect(spoken).toEqual(['/s/b.wav', '/s/oa.wav', '/s/t.wav']);
+  });
+
+  it('holds another word instead', () => {
+    const { round: next, spoken } = holdWord(holdWord(round, 0).round, 1);
+    expect(next.held).toBe(1);
+    expect(spoken).toEqual(['/s/sh.wav', '/s/i.wav', '/s/p.wav']);
+  });
+
+  it('takes no touch on a joined word, outside the round or once the round is right', () => {
+    const joined = matchPicture(holdWord(round, 0).round, 2).round;
+    expect(holdWord(joined, 0)).toEqual({ round: joined, spoken: [] });
+    expect(holdWord(round, 7)).toEqual({ round, spoken: [] });
+    const right = { ...round, phase: 'right' as const };
+    expect(holdWord(right, 1)).toEqual({ round: right, spoken: [] });
+  });
+});
+
+describe('matchPicture', () => {
+  // Words: boat ship sun. Pictures: sun ship boat.
+  const round = startWordPicturesRound(sequence(0, 0, 0.9), [sea]);
+
+  it('with no word held, speaks the picture and joins nothing', () => {
+    expect(matchPicture(round, 0)).toEqual({ round, spoken: ['/w/sun.wav'], touch: 'heard' });
+  });
+
+  it('joins the held word to its picture and speaks the word', () => {
+    const { round: next, spoken, touch } = matchPicture(holdWord(round, 0).round, 2);
+    expect(touch).toBe('matched');
+    expect(spoken).toEqual(['/w/boat.wav']);
+    expect(next.held).toBeNull();
+    expect(next.found).toEqual(['boat']);
+    expect(next.phase).toBe('matching');
+    expect(wordJoined(next, 0)).toBe(true);
+    expect(pictureJoined(next, 2)).toBe(true);
+    expect(joinColour(next, 'boat')).toBe(1);
+  });
+
+  it("speaks the word, then the picture's word, on another picture, and lets the word go", () => {
+    const held = holdWord(round, 1).round;
+    const { round: next, spoken, touch } = matchPicture(held, 0);
+    expect(touch).toBe('miss');
+    expect(spoken).toEqual(['/w/ship.wav', '/w/sun.wav']);
+    expect(next.held).toBeNull();
+    expect(next.found).toEqual([]);
+  });
+
+  it('keeps what is joined after a miss', () => {
+    const one = matchPicture(holdWord(round, 0).round, 2).round;
+    const missed = matchPicture(holdWord(one, 1).round, 0).round;
+    expect(missed.found).toEqual(['boat']);
+    expect(missed.phase).toBe('matching');
+  });
+
+  it('ends the round right on the last pair, colours in the order joined', () => {
+    let r = round;
+    for (const [w, p] of [
+      [2, 0],
+      [0, 2],
+      [1, 1],
+    ] as const)
+      r = matchPicture(holdWord(r, w).round, p).round;
+    expect(r.phase).toBe('right');
+    expect(r.found).toEqual(['sun', 'boat', 'ship']);
+    expect(joinColour(r, 'ship')).toBe(3);
+  });
+
+  it('takes no touch on a joined picture, outside the round or once the round is right', () => {
+    const joined = matchPicture(holdWord(round, 0).round, 2).round;
+    expect(matchPicture(joined, 2)).toEqual({ round: joined, spoken: [], touch: null });
+    expect(matchPicture(round, 9)).toEqual({ round, spoken: [], touch: null });
+    const right = { ...round, phase: 'right' as const };
+    expect(matchPicture(right, 0)).toEqual({ round: right, spoken: [], touch: null });
   });
 });

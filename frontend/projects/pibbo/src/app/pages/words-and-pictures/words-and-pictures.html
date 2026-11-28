@@ -15,6 +15,10 @@
     [wordColours]="wordColours()"
     [pictureColours]="pictureColours()"
     [held]="round().held"
+    [missed]="missed()"
+    [status]="status()"
+    (word)="touchWord($event)"
+    (picture)="touchPicture($event)"
   />
   <pb-answer-bar answer group="read" kind="none" message="" />
 </pb-round-shell>

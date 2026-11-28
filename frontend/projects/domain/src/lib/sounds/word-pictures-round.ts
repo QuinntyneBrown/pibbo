@@ -72,3 +72,55 @@ export function wordPicturesAssets(round: WordPicturesRound): string[] {
     ]),
   ];
 }
+
+/**
+ * A word is touched (L2-018 #2): it is held, and its sounds are spoken in turn, never the
+ * letters' names, for the child to blend. A joined word takes no touch (nothing is spoken).
+ */
+export function holdWord(
+  round: WordPicturesRound,
+  index: number,
+): { round: WordPicturesRound; spoken: readonly string[] } {
+  const word = round.words[index];
+  if (!word || round.phase !== 'matching' || wordJoined(round, index)) return { round, spoken: [] };
+  return { round: { ...round, held: index }, spoken: word.sounds.map((s) => s.recording) };
+}
+
+/**
+ * What touching a picture did: `heard` with no word held, `matched` when it is the held word's,
+ * `miss` when it is not (the word is let go; nothing is taken away).
+ */
+export type PictureTouch = 'heard' | 'matched' | 'miss';
+
+/**
+ * A picture is touched. With no word held, its word is spoken (L2-018 #2). With a word held,
+ * its own picture joins them and speaks the word, and the last pair ends the round `right` (#1,
+ * #3); another picture speaks the word, then the picture's word, and lets the word go (#1).
+ */
+export function matchPicture(
+  round: WordPicturesRound,
+  index: number,
+): { round: WordPicturesRound; spoken: readonly string[]; touch: PictureTouch | null } {
+  const picture = round.pictures[index];
+  if (!picture || round.phase !== 'matching' || pictureJoined(round, index))
+    return { round, spoken: [], touch: null };
+  const held = round.held === null ? undefined : round.words[round.held];
+  if (!held) return { round, spoken: [picture.recording], touch: 'heard' };
+  if (held.word !== picture.word)
+    return {
+      round: { ...round, held: null },
+      spoken: [held.recording, picture.recording],
+      touch: 'miss',
+    };
+  const found = [...round.found, held.word];
+  return {
+    round: {
+      ...round,
+      held: null,
+      found,
+      phase: found.length === round.words.length ? 'right' : 'matching',
+    },
+    spoken: [held.recording],
+    touch: 'matched',
+  };
+}

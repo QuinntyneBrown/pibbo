@@ -51,3 +51,94 @@ test.describe('Words and pictures: a round', () => {
     await expect(home.activity('Words and pictures')).toBeVisible();
   });
 });
+
+const sound = (s: string) => `/recordings/sounds/${s}.wav`;
+const said = (w: string) => `/recordings/words/${w}.wav`;
+
+test.describe('Words and pictures: a word sounds out', () => {
+  test('Given a round, when the child touches boat, then boat is held and its sounds are spoken in turn, never the letter names; when the child touches ship, then ship is held instead', async ({
+    page,
+    spoken,
+  }) => {
+    const round = new WordsAndPicturesPage(page);
+    await round.openFromHome();
+
+    await round.touch(round.word('boat'));
+    await expect(round.word('boat')).toHaveAttribute('aria-pressed', 'true');
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([...HOME, ASK, sound('b'), sound('oa'), sound('t')]);
+    await round.touch(round.word('ship'));
+
+    await expect(round.word('ship')).toHaveAttribute('aria-pressed', 'true');
+    await expect(round.word('boat')).toHaveAttribute('aria-pressed', 'false');
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([...HOME, ASK, ...['b', 'oa', 't', 'sh', 'i', 'p'].map(sound)]);
+  });
+
+  test('Given no word is held, when the child touches the picture of a sun, then "sun" is spoken and nothing is joined: a pair needs two touches', async ({
+    page,
+    spoken,
+  }) => {
+    const round = new WordsAndPicturesPage(page);
+    await round.openFromHome();
+
+    await round.touch(round.picture('sun'));
+
+    await expect.poll(() => spoken.recordings()).toEqual([...HOME, ASK, said('sun')]);
+    await expect(round.matched).toHaveCount(0);
+    await expect(round.missed).toHaveCount(0);
+  });
+});
+
+test.describe('Words and pictures: connecting', () => {
+  test('Given boat is held, when the child touches the picture of a boat, then "boat" is spoken and the two are joined in the same colour, marked matched and take no more touches', async ({
+    page,
+    spoken,
+  }) => {
+    const round = new WordsAndPicturesPage(page);
+    await round.openFromHome();
+
+    await round.connect('boat', 'boat');
+
+    await expect(round.word('boat')).toHaveClass(/pair--found-1/);
+    await expect(round.picture('boat')).toHaveClass(/pair--found-1/);
+    await expect(round.word('boat')).toHaveAttribute('aria-label', 'boat, matched');
+    await expect(round.picture('boat')).toHaveAttribute('aria-label', 'Picture of a boat, matched');
+    await expect(round.word('boat')).toBeDisabled();
+    await expect(round.picture('boat')).toBeDisabled();
+    await expect(round.status).toHaveText('boat and Picture of a boat matched. 1 of 3 pairs.');
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([...HOME, ASK, sound('b'), sound('oa'), sound('t'), said('boat')]);
+  });
+
+  test('Given ship is held, when the child touches the picture of a sun, then "ship" and "sun" are spoken, the picture shakes, ship is let go and nothing is taken away; then ship and its picture join', async ({
+    page,
+    spoken,
+  }) => {
+    const round = new WordsAndPicturesPage(page);
+    await round.openFromHome();
+    await round.connect('boat', 'boat');
+
+    await round.connect('ship', 'sun');
+
+    await expect(round.picture('sun')).toHaveClass(/pair--miss/);
+    await expect(round.word('ship')).toHaveAttribute('aria-pressed', 'false');
+    await expect(round.matched).toHaveCount(2);
+    await expect(round.status).toHaveText('ship and Picture of a sun. Try again.');
+    await expect(round.message).toHaveCount(0);
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(-2))
+      .toEqual([said('ship'), said('sun')]);
+    await page.clock.runFor(1000);
+    await expect(round.missed).toHaveCount(0);
+
+    await round.connect('ship', 'ship');
+
+    await expect(round.word('ship')).toHaveClass(/pair--found-2/);
+    await expect(round.picture('ship')).toHaveClass(/pair--found-2/);
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(said('ship'));
+  });
+});
