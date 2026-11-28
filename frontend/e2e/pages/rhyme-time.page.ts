@@ -85,4 +85,11 @@ export class RhymeTimePage {
     }
     return false;
   }
+
+  /** Whether the word asked reaches up under Pibbo's instruction, which would cover it. */
+  async wordUnderInstruction(): Promise<boolean> {
+    const ask = (await this.page.locator('.shell__ask').boundingBox())!;
+    const word = (await this.page.locator('.rhyme-target').boundingBox())!;
+    return word.y < ask.y + ask.height - 0.5;
+  }
 }

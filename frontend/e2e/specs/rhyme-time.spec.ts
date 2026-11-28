@@ -239,6 +239,7 @@ test.describe('Rhyme time: muted', () => {
 });
 
 for (const size of [
+  { width: 320, height: 568 },
   { width: 320, height: 640 },
   { width: 360, height: 640 },
   { width: 640, height: 360 },
@@ -246,7 +247,7 @@ for (const size of [
   test.describe(`Rhyme time: fits ${size.width} x ${size.height}`, () => {
     test.use({ viewport: size });
 
-    test('Given a round on a small phone, when it is chosen, hinted and modelled, then every card stays 60 x 60 px and clear of the answer bar, with nothing to scroll', async ({
+    test('Given a round on a small phone, when it is chosen, hinted and modelled, then every card stays 60 x 60 px and clear of the answer bar, the word asked stays clear of the instruction, with nothing to scroll', async ({
       page,
     }) => {
       const rhyme = new RhymeTimePage(page);
@@ -255,6 +256,7 @@ for (const size of [
       const fits = async () => {
         expect(await rhyme.scrolls()).toBe(false);
         expect(await rhyme.hiddenUnderAnswerBar()).toBe(false);
+        expect(await rhyme.wordUnderInstruction()).toBe(false);
         for (const card of await rhyme.cards.all()) {
           const box = (await card.boundingBox())!;
           expect(box.width).toBeGreaterThanOrEqual(60);
