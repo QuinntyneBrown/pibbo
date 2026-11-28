@@ -76,6 +76,8 @@ export const routes: Routes = [
   {
     path: 'lesson/:subject',
     loadChildren: () => import('./pages/guided-lesson/guided-lesson.routes').then((m) => m.routes),
+  },
+  {
     path: 'check',
     loadComponent: () => import('./pages/check-game/check-game').then((m) => m.CheckGame),
   },

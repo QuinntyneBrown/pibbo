@@ -13,4 +13,3 @@ export * from './lib/rhymes';
 export * from './lib/lesson';
 export * from './lib/progress-store';
 export * from './lib/check';
-export * from './lib/progress-store';

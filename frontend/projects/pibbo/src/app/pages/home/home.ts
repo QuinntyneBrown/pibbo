@@ -7,24 +7,23 @@ import {
   linkedSignal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AUDIO_PLAYER, type Activity, type ActivityGroup, type Lesson } from '@pibbo/api';
-import { ActivityGrid, GroupSwitch, Tap, Wordmark } from '@pibbo/components';
 import {
-  ACTIVITY_CATALOGUE,
-  activityScreen,
-  groupById,
-  LESSON_LINES,
-  LESSONS,
-  lessonById,
-import { AUDIO_PLAYER, type Activity, type ActivityGroup } from '@pibbo/api';
-import { AUDIO_PLAYER, PROGRESS_STORE, type Activity, type ActivityGroup } from '@pibbo/api';
-import { ActivityGrid, CheckCard, GroupSwitch, Wordmark } from '@pibbo/components';
+  AUDIO_PLAYER,
+  PROGRESS_STORE,
+  type Activity,
+  type ActivityGroup,
+  type Lesson,
+} from '@pibbo/api';
+import { ActivityGrid, CheckCard, GroupSwitch, Tap, Wordmark } from '@pibbo/components';
 import {
   ACTIVITY_CATALOGUE,
   activityScreen,
   addActivities,
   CHECK_GAME_CARD,
   groupById,
+  LESSON_LINES,
+  LESSONS,
+  lessonById,
   moreFor,
   PRACTISED_KEY,
 } from '@pibbo/domain';
@@ -36,8 +35,7 @@ import {
  */
 @Component({
   selector: 'pb-home',
-  imports: [Wordmark, GroupSwitch, ActivityGrid, Tap],
-  imports: [Wordmark, CheckCard, GroupSwitch, ActivityGrid],
+  imports: [Wordmark, CheckCard, GroupSwitch, ActivityGrid, Tap],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,6 +50,9 @@ export class Home {
 
   protected readonly catalogue = ACTIVITY_CATALOGUE;
   protected readonly checkGame = CHECK_GAME_CARD;
+  /** The chosen group's guided lesson, shown as its own picture (L2-024 #4, ADR 0026). */
+  protected readonly lesson = computed(() => lessonById(LESSONS, this.chosen()?.id));
+  protected readonly lessonLine = LESSON_LINES.picture;
   protected readonly chosen = linkedSignal(() => groupById(this.catalogue, this.group()));
   /** Which screen of the chosen group's activities is shown; a new group starts at the first. */
   protected readonly at = linkedSignal({ source: this.chosen, computation: () => 0 });
@@ -62,10 +63,6 @@ export class Home {
     const group = this.chosen();
     return group && this.screen().more ? moreFor(group.id) : null;
   });
-
-  /** The chosen group's guided lesson, shown as its own picture (L2-024 #4, ADR 0026). */
-  protected readonly lesson = computed(() => lessonById(LESSONS, this.chosen()?.id));
-  protected readonly lessonLine = LESSON_LINES.picture;
 
   /** Once an activity is opening, every further touch is ignored (L2-035). */
   private opening = false;
@@ -92,6 +89,17 @@ export class Home {
     this.open(activity);
   }
 
+  /** The Lesson picture: "Lesson" is spoken and the lesson opens where the child left off. */
+  protected openLesson(lesson: Lesson): void {
+    if (this.opening) return;
+    this.opening = true;
+    void this.audio.play(LESSON_LINES.picture.recording);
+    void this.router.navigate(['/lesson', lesson.id]).then(
+      (opened) => (this.opening = opened),
+      () => (this.opening = false),
+    );
+  }
+
   protected openCheckGame(): void {
     this.open(this.checkGame);
   }
@@ -108,17 +116,6 @@ export class Home {
     this.opening = true;
     void this.audio.play(recording);
     void this.router.navigateByUrl(path).then(
-      (opened) => (this.opening = opened),
-      () => (this.opening = false),
-    );
-  }
-
-  /** The Lesson picture: "Lesson" is spoken and the lesson opens where the child left off. */
-  protected openLesson(lesson: Lesson): void {
-    if (this.opening) return;
-    this.opening = true;
-    void this.audio.play(LESSON_LINES.picture.recording);
-    void this.router.navigate(['/lesson', lesson.id]).then(
       (opened) => (this.opening = opened),
       () => (this.opening = false),
     );

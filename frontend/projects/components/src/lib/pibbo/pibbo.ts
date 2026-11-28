@@ -10,9 +10,10 @@ import type { PibboMood } from '@pibbo/api';
 })
 export class Pibbo {
   readonly mood = input<PibboMood>('rest');
-  /** `sm` beside "Up next" on a lesson's path; `md` beside the instruction; `xl` as the figure of Counting dance. */
-  readonly size = input<'sm' | 'md' | 'xl'>('md');
-  /** `md` beside the instruction; `lg` over the check results; `xl` in Counting dance. */
-  readonly size = input<'md' | 'lg' | 'xl'>('md');
+  /**
+   * `sm` beside "Up next" on a lesson's path; `md` beside the instruction; `lg` over the check
+   * results; `xl` as the figure of Counting dance.
+   */
+  readonly size = input<'sm' | 'md' | 'lg' | 'xl'>('md');
   readonly label = input('Pibbo');
 }
