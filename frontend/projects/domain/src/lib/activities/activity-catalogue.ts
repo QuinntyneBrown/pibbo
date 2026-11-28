@@ -59,6 +59,14 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       path: '/count/add',
     },
     {
+      id: 'counting-dance',
+      group: 'count',
+      name: 'Counting dance',
+      glyph: '♪ 1 2',
+      recording: '/recordings/home/counting-dance.wav',
+      path: '/count/dance',
+    },
+    {
       id: 'sound-it-out',
       group: 'read',
       name: 'Sound it out',

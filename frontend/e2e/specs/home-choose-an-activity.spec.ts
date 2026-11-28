@@ -1,4 +1,4 @@
-// Traces to: L2-024
+// Traces to: L2-024, L2-009
 import { test, expect } from '../fixtures/test';
 import { HomePage } from '../pages/home.page';
 import { SoundItOutPage } from '../pages/sound-it-out.page';
@@ -63,6 +63,32 @@ test.describe('Home: choose an activity', () => {
     await expect(home.activity('Sound it out')).toHaveCount(0);
     expect(await spoken.recordings()).toEqual(['/recordings/home/count.wav']);
     await expectTargetsSizedAndApart(home);
+  });
+
+  test('Given Count has more than 6 activities, when it is chosen, then 5 show with More, and More speaks "More" and shows the next screen, whose More shows the first again', async ({
+    page,
+    spoken,
+  }) => {
+    const home = new HomePage(page);
+    await home.open();
+    await home.touch(home.group('Count'));
+
+    await expect(home.activities).toHaveCount(5);
+    await expect(home.activity('Counting dance')).toHaveCount(0);
+    await expect(home.more).toHaveText(/More/);
+
+    await home.touch(home.more);
+
+    await expect(home.activities).toHaveText([/Add together/, /Counting dance/]);
+    await expectTargetsSizedAndApart(home);
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual(['/recordings/home/count.wav', '/recordings/home/more.wav']);
+
+    await home.touch(home.more);
+
+    await expect(home.activities).toHaveCount(5);
+    await expect(home.activity('Count the toys')).toBeVisible();
   });
 
   test('Given Home, when the child touches the Read picture, then "Read" is spoken and the reading activities are shown', async ({

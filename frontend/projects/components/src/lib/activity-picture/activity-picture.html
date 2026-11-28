@@ -3,9 +3,16 @@
   class="game-card press"
   [class.game-card--count]="activity().group === 'count'"
   [class.game-card--read]="activity().group === 'read'"
+  [class.game-card--more]="more()"
   (pbTap)="touched.emit(activity())"
 >
-  <span class="game-card__glyph" aria-hidden="true">{{ activity().glyph }}</span>
+  <span class="game-card__glyph" aria-hidden="true">
+    @if (more()) {
+      <svg class="game-card__arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+    } @else {
+      {{ activity().glyph }}
+    }
+  </span>
   <span class="game-card__body">
     <span class="game-card__title">{{ activity().name }}</span>
   </span>

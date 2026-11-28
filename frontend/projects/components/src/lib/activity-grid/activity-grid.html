@@ -4,5 +4,8 @@
     @for (activity of activities(); track activity.id) {
       <li><pb-activity-picture [activity]="activity" (touched)="touched.emit($event)" /></li>
     }
+    @if (more(); as more) {
+      <li><pb-activity-picture [activity]="more" [more]="true" (touched)="next.emit()" /></li>
+    }
   </ul>
 </section>

@@ -36,6 +36,16 @@
   font-weight: var(--font-weight-bold);
 }
 
+.game-card__arrow {
+  width: var(--size-7);
+  height: var(--size-7);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .game-card--read .game-card__glyph {
   background: var(--color-read-soft);
   color: var(--color-read-strong);

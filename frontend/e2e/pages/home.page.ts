@@ -17,14 +17,17 @@ export class HomePage {
   readonly groups: Locator;
   readonly activities: Locator;
   readonly activityGroupTitle: Locator;
+  /** More: the next screen of a group with more than 6 activities. */
+  readonly more: Locator;
 
   constructor(private readonly page: Page) {
     this.root = page.locator('.home');
     this.wordmark = page.locator('.home__top .wordmark');
     this.main = page.locator('main#main');
     this.groups = page.locator('.switch--groups .switch__option');
-    this.activities = page.locator('.home__games .game-card');
+    this.activities = page.locator('.home__games .game-card:not(.game-card--more)');
     this.activityGroupTitle = page.locator('.home__games .game-group__title');
+    this.more = page.locator('.home__games .game-card--more');
   }
 
   group(name: GroupName): Locator {

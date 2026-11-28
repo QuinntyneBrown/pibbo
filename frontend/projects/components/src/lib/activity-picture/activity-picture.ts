@@ -12,5 +12,7 @@ import { Tap } from '../tap/tap';
 })
 export class ActivityPicture {
   readonly activity = input.required<Activity>();
+  /** Drawn as More, an arrow to the next screen of Home (ADR 0014). */
+  readonly more = input(false);
   readonly touched = output<Activity>();
 }

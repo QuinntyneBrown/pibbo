@@ -1,5 +1,5 @@
 import type { Activity, ActivityCatalogue } from '@pibbo/api';
-import { ACTIVITIES_PER_SCREEN, activitiesFor, groupById } from './activities-for';
+import { ACTIVITIES_PER_SCREEN, activitiesFor, activityScreen, groupById } from './activities-for';
 import { ACTIVITY_CATALOGUE } from './activity-catalogue';
 
 const activity = (id: string, group: 'count' | 'read'): Activity => ({
@@ -25,14 +25,35 @@ describe('activitiesFor', () => {
     expect(activitiesFor(catalogue, 'count').map((a) => a.id)).toEqual(['c1', 'c2']);
     expect(activitiesFor(catalogue, 'read').map((a) => a.id)).toEqual(['r1']);
   });
+});
 
-  it('gives at most one screen of activities', () => {
-    const many: ActivityCatalogue = {
-      groups: catalogue.groups,
-      activities: Array.from({ length: 9 }, (_, i) => activity(`c${i}`, 'count')),
-    };
-    expect(activitiesFor(many, 'count')).toHaveLength(ACTIVITIES_PER_SCREEN);
+describe('activityScreen', () => {
+  const of = (n: number): ActivityCatalogue => ({
+    groups: ACTIVITY_CATALOGUE.groups,
+    activities: Array.from({ length: n }, (_, i) => activity(`c${i}`, 'count')),
+  });
+  const ids = (c: ActivityCatalogue, screen: number) =>
+    activityScreen(c, 'count', screen).activities.map((a) => a.id);
+
+  it('shows a group of up to 6 on one screen with no More', () => {
     expect(ACTIVITIES_PER_SCREEN).toBe(6);
+    expect(activityScreen(of(6), 'count', 0)).toEqual({
+      activities: of(6).activities,
+      more: false,
+    });
+    expect(activityScreen(of(6), 'count', 1).more).toBe(false);
+  });
+
+  it('shows a group of more than 6 five a screen with More, wrapping to the first', () => {
+    expect(ids(of(7), 0)).toEqual(['c0', 'c1', 'c2', 'c3', 'c4']);
+    expect(activityScreen(of(7), 'count', 0).more).toBe(true);
+    expect(ids(of(7), 1)).toEqual(['c5', 'c6']);
+    expect(ids(of(7), 2)).toEqual(ids(of(7), 0));
+    expect(ids(of(11), 2)).toEqual(['c10']);
+  });
+
+  it('shows nothing when no group is chosen', () => {
+    expect(activityScreen(of(7), null, 0)).toEqual({ activities: [], more: false });
   });
 });
 

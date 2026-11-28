@@ -15,8 +15,10 @@
       @if (chosen(); as group) {
         <pb-activity-grid
           [title]="group.name"
-          [activities]="activities()"
+          [activities]="screen().activities"
+          [more]="more()"
           (touched)="openActivity($event)"
+          (next)="showMore()"
         />
       }
     </div>

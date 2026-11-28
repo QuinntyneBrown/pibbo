@@ -58,6 +58,7 @@ export class AddTogetherPage {
     const home = new HomePage(this.page);
     await home.open();
     await home.touch(home.group('Count'));
+    await home.touch(home.more);
     await home.touch(home.activity('Add together'));
     await expect(this.root).toBeVisible();
   }
