@@ -27,6 +27,9 @@
     "s": { "letters": "s", "shown": "/s/", "recording": "/recordings/sounds/s.wav" },
     "u": { "letters": "u", "shown": "/u/", "recording": "/recordings/sounds/u.wav" },
     "n": { "letters": "n", "shown": "/n/", "recording": "/recordings/sounds/n.wav" },
+    "b": { "letters": "b", "shown": "/b/", "recording": "/recordings/sounds/b.wav" },
+    "d": { "letters": "d", "shown": "/d/", "recording": "/recordings/sounds/d.wav" },
+    "g": { "letters": "g", "shown": "/g/", "recording": "/recordings/sounds/g.wav" },
     "c": { "letters": "c", "shown": "/k/", "recording": "/recordings/sounds/c.wav" },
     "t": { "letters": "t", "shown": "/t/", "recording": "/recordings/sounds/t.wav" }
   },
@@ -69,6 +72,24 @@
     "praise": {
       "text": "You know your letter sounds!",
       "recording": "/recordings/read/you-know-your-letter-sounds.wav"
+    }
+  },
+  "letterForms": {
+    "roundsPerPlay": 5,
+    "pairs": [
+      { "big": "A", "sound": "a" },
+      { "big": "B", "sound": "b" },
+      { "big": "D", "sound": "d" },
+      { "big": "G", "sound": "g" }
+    ],
+    "instruction": {
+      "text": "Find each big letter’s small letter.",
+      "recording": "/recordings/read/find-each-big-letters-small-letter.wav",
+      "picture": "tap"
+    },
+    "praise": {
+      "text": "Every letter found its partner!",
+      "recording": "/recordings/read/every-letter-found-its-partner.wav"
     }
   }
 }
