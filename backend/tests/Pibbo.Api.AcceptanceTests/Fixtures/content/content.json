@@ -1,0 +1,22 @@
+{
+  "version": "test-1",
+  "activities": [
+    {
+      "id": "count-the-toys",
+      "group": "count",
+      "name": "Count the toys",
+      "glyph": "1 2 3",
+      "recording": "/recordings/home/count-the-toys.wav",
+      "pictures": ["/pictures/words/cat.svg"],
+      "recordings": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "first-sounds",
+      "name": "First sounds",
+      "recording": "/recordings/home/first-sounds.wav",
+      "activities": ["count-the-toys"]
+    }
+  ]
+}
