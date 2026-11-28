@@ -63,6 +63,24 @@ export class LessonPage {
     return seen;
   }
 
+  /**
+   * Makes the reading lesson name an activity that does not exist, `make-a-story`, after its
+   * last step, by rewriting the served script for this page only (ADR 0031 #8). The shipped
+   * content names only activities that exist.
+   */
+  async nameUnknownActivity(): Promise<void> {
+    await this.page.route('**/*.js', async (route) => {
+      const response = await route.fetch();
+      const body = await response.text();
+      await route.fulfill({
+        response,
+        body: body.includes('Sounds that team up')
+          ? body.replace(/([`"'])build-a-sentence\1\]/, '$1build-a-sentence$1,$1make-a-story$1]')
+          : body,
+      });
+    });
+  }
+
   /** Touches (phone) or clicks (desktop) a target. */
   async touch(target: Locator): Promise<void> {
     const hasTouch = await this.page.evaluate(() => matchMedia('(pointer: coarse)').matches);

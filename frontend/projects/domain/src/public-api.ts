@@ -28,6 +28,8 @@ export * from './lib/sounds/spell-content';
 export * from './lib/sounds/spell-round';
 export * from './lib/sounds/rhymes-content';
 export * from './lib/sounds/rhyme-round';
+export * from './lib/sounds/sentences-content';
+export * from './lib/sounds/sentence-round';
 export * from './lib/sounds/word-pictures-content';
 export * from './lib/sounds/word-pictures-round';
 export * from './lib/sounds/common-words-content';

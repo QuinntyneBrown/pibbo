@@ -38,3 +38,4 @@ export * from './lib/grown-up-entry/grown-up-entry';
 export * from './lib/gate/gate';
 export * from './lib/volume-switch/volume-switch';
 export * from './lib/confirm/confirm';
+export * from './lib/sentence-builder/sentence-builder';

@@ -85,6 +85,7 @@ const QUESTIONS: Readonly<Record<string, RegExp>> = {
   'words-and-pictures': /^Which word goes with the picture\?$/,
   'spot-the-word': /^Find the word “\w+”\.$/,
   'rhyme-time': /^Which one rhymes with “\w+”\?$/,
+  'build-a-sentence': /^What comes next\?$/,
 };
 
 test.describe('Check game: what has been practised', () => {

@@ -283,6 +283,45 @@ for (const set of rhymes.sets ?? []) {
     fileExists(set[line]?.recording, `${label} ${line} recording`);
   }
 }
+// Build a sentence (ADR 0031): its own data file. Every word and line has a recording; each
+// sentence has a picture and its text, a recording of the whole sentence, 3 to 5 distinct
+// tiles that start with a capital and end with a full stop, and an extra word not among them.
+const sentences = JSON.parse(
+  readFileSync(
+    `${frontend}projects/domain/src/lib/sounds/sentences-content.json`,
+    "utf8",
+  ),
+);
+const sentenceKey = (text) => text.toLowerCase().replace(/[.!?]$/, "");
+for (const [name, recording] of Object.entries(sentences.words ?? {}))
+  fileExists(recording, `sentence word "${name}" recording`);
+for (const line of ["ask", "praise", "hint", "listen"]) {
+  if (!sentences[line]?.text) problems.push(`sentences ${line}: no text`);
+  fileExists(sentences[line]?.recording, `sentences ${line} recording`);
+}
+if (!(sentences.roundsPerPlay > 0))
+  problems.push("sentences: no rounds per play");
+if (!sentences.sentences?.length) problems.push("sentences: no sentences");
+for (const s of sentences.sentences ?? []) {
+  const words = s.words ?? [];
+  const label = `sentence "${words.join(" ")}"`;
+  if (words.length < 3 || words.length > 5)
+    problems.push(`${label}: ${words.length} words, not 3 to 5`);
+  if (!/^[A-Z]/.test(words[0] ?? ""))
+    problems.push(`${label}: no capital letter`);
+  if (!/\.$/.test(words.at(-1) ?? "")) problems.push(`${label}: no full stop`);
+  const tiles = [...words, s.extra];
+  if (new Set(tiles).size !== tiles.length)
+    problems.push(`${label}: tiles not distinct`);
+  if (!s.extra || words.map(sentenceKey).includes(sentenceKey(s.extra)))
+    problems.push(`${label}: no extra word that does not belong`);
+  for (const tile of tiles)
+    if (!sentences.words?.[sentenceKey(tile ?? "")])
+      problems.push(`${label}: "${tile}" is not in the words`);
+  if (!s.alt) problems.push(`${label}: no text alternative`);
+  fileExists(s.picture, `${label} picture`);
+  fileExists(s.recording, `${label} recording`);
+}
 if ((content.words ?? []).length < 3)
   problems.push("fewer than 3 words: a round offers 3 pictures");
 

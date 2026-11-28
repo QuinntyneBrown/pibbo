@@ -91,7 +91,7 @@ test.describe('Home: choose an activity', () => {
     await expect(home.activity('Count the toys')).toBeVisible();
   });
 
-  test('Given Read has more than 6 activities, when it is chosen, then 5 show with More, and More shows Spot the word and Rhyme time', async ({
+  test('Given Read has more than 6 activities, when it is chosen, then 5 show with More, and More shows Spot the word, Rhyme time and Build a sentence', async ({
     page,
     spoken,
   }) => {
@@ -105,7 +105,7 @@ test.describe('Home: choose an activity', () => {
 
     await home.touch(home.more);
 
-    await expect(home.activities).toHaveText([/Spot the word/, /Rhyme time/]);
+    await expect(home.activities).toHaveText([/Spot the word/, /Rhyme time/, /Build a sentence/]);
     await expectTargetsSizedAndApart(home);
     await expect
       .poll(() => spoken.recordings())
