@@ -610,6 +610,11 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
 .tile--sounding { box-shadow: inset 0 0 0 4px var(--color-reward), 0 var(--press-depth) 0 var(--depth); transform: translateY(calc(-1 * var(--space-1))); }
 @media (prefers-reduced-motion: reduce) { .tile--sounding { transform: none; } }
 .tile--silent { color: var(--color-fg-muted); }
+/* Silent e (L2-016): the quiet e is dashed and the vowel it changes wears a bar, so neither is told by colour alone. */
+.tile--silent { position: relative; background: transparent; box-shadow: none; outline: 4px dashed var(--color-fg-muted); outline-offset: -4px; }
+.tile--added { background: var(--color-bg-sunken); }
+.tile--changed { position: relative; }
+.tile__mark { position: absolute; top: 14%; left: 30%; right: 30%; height: 6px; border-radius: var(--radius-full); background: var(--color-read-strong); }
 .tile--silent.tile--heard { background: var(--color-bg-sunken); color: var(--color-fg-muted); --depth: var(--color-depth); }
 .tile:disabled { cursor: default; }
 @media (max-width: 39.99rem) { .tiles--long .tile { width: var(--size-10); } .tiles--long .tile--wide { width: auto; padding: 0 var(--space-3); } }
