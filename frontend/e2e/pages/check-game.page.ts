@@ -15,6 +15,11 @@ export class CheckGamePage {
   readonly message: Locator;
   readonly action: Locator;
   readonly mascot: Locator;
+  readonly results: Locator;
+  readonly resultsTitle: Locator;
+  readonly earnedLists: Locator;
+  readonly earned: Locator;
+  readonly home: Locator;
 
   constructor(private readonly page: Page) {
     this.root = page.locator('.shell');
@@ -29,6 +34,11 @@ export class CheckGamePage {
     this.message = page.locator('.answer-bar__message');
     this.action = page.locator('.answer-bar .chunky');
     this.mascot = page.locator('.shell__ask .pibbo');
+    this.results = page.locator('.results');
+    this.resultsTitle = page.locator('.results__title');
+    this.earnedLists = page.locator('.results__lists section');
+    this.earned = page.locator('.skills__picture');
+    this.home = page.locator('.results__actions .chunky');
   }
 
   /** The check game's picture on Home. */
@@ -121,6 +131,56 @@ export class CheckGamePage {
   async answer(name: string): Promise<void> {
     await this.touch(this.choice(name));
     await this.touch(this.action);
+  }
+
+  /**
+   * Plays every question to the end. `earn` tries one choice after another, so each is
+   * answered right by the third; `miss` is wrong three times, so Pibbo shows the answer.
+   * `how` says which, from the question's instruction. Returns each instruction asked.
+   */
+  async play(how: (asked: string) => 'earn' | 'miss' = () => 'earn'): Promise<string[]> {
+    const asked: string[] = [];
+    const rounds = Number(await this.progress.getAttribute('aria-valuemax'));
+    for (let round = 0; round < rounds; round++) {
+      await expect(this.progress).toHaveAttribute('aria-valuenow', String(round));
+      await expect(this.action).toHaveText('Check');
+      const instruction = (await this.instruction.textContent())!.trim();
+      asked.push(instruction);
+      if (how(instruction) === 'miss') {
+        const { wrong } = await this.solve();
+        for (let miss = 0; miss < 3; miss++) {
+          await this.answer(wrong);
+          await expect(this.action).not.toHaveText('Check');
+          if (miss < 2) await this.touch(this.action);
+        }
+      } else {
+        for (const name of await this.choiceNames()) {
+          await this.answer(name);
+          await expect(this.action).not.toHaveText('Check');
+          if ((await this.action.textContent())!.includes('Next')) break;
+          await this.touch(this.action);
+        }
+      }
+      await expect(this.action).toHaveText('Next');
+      await this.touch(this.action);
+    }
+    await expect(this.results).toBeVisible();
+    return asked;
+  }
+
+  /** The names on the earned pictures, in the order they are shown. */
+  async earnedNames(): Promise<string[]> {
+    return this.page.locator('.skills__title').allInnerTexts();
+  }
+
+  /** The subjects the earned pictures are grouped under, as shown. */
+  async subjects(): Promise<string[]> {
+    return this.page.locator('.results__subject').allInnerTexts();
+  }
+
+  /** Everything the results show, as text. */
+  async resultsText(): Promise<string> {
+    return (await this.results.innerText()).replace(/\s+/g, ' ');
   }
 
   async scrolls(): Promise<boolean> {

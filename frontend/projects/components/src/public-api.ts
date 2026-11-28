@@ -33,3 +33,4 @@ export * from './lib/lesson-path/lesson-path';
 export * from './lib/progress-bar/progress-bar';
 export * from './lib/check-card/check-card';
 export * from './lib/check-question/check-question';
+export * from './lib/earned-pictures/earned-pictures';

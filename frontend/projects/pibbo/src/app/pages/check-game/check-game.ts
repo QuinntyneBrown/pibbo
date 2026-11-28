@@ -16,11 +16,19 @@ import {
   RANDOM_SOURCE,
   type CheckChoice,
 } from '@pibbo/api';
-import { AnswerBar, CheckQuestionView, RoundShell, type AnswerBarKind } from '@pibbo/components';
 import {
+  AnswerBar,
+  CheckQuestionView,
+  EarnedPictures,
+  RoundShell,
+  type AnswerBarKind,
+} from '@pibbo/components';
+import {
+  ACTIVITY_CATALOGUE,
   CHECK_GAME,
   canCheckChoice,
   checkQuestionRound,
+  checkResults,
   CHECKED_ACTIVITIES,
   chooseAnswer,
   isCheckOver,
@@ -30,6 +38,7 @@ import {
   readActivities,
   startCheckRound,
   tryCheckAgain,
+  type CheckResults,
 } from '@pibbo/domain';
 import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
 
@@ -37,12 +46,12 @@ import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
 const PRAISE_MS = 1500;
 
 /**
- * The check game (docs/mocks/pages/progress-check): a few mixed questions. Orchestrates
- * recordings; every rule is in `@pibbo/domain` (ADR 0026).
+ * The check game (docs/mocks/pages/progress-check): a few mixed questions, then what the
+ * child can do. Orchestrates recordings; every rule is in `@pibbo/domain` (ADR 0026).
  */
 @Component({
   selector: 'pb-check-game',
-  imports: [RoundShell, CheckQuestionView, AnswerBar],
+  imports: [RoundShell, CheckQuestionView, AnswerBar, EarnedPictures],
   templateUrl: './check-game.html',
   styleUrl: './check-game.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,6 +83,11 @@ export class CheckGame {
   );
   /** The child's choice, until Pibbo shows the answer in its place. */
   protected readonly chosen = computed(() => (this.shownAnswer() ? null : this.round().chosen));
+
+  /** The activities answered right: all that is carried from one question to the next. */
+  private readonly earned: string[] = [];
+  /** Set once the last question is over. */
+  protected readonly results = signal<CheckResults | null>(null);
 
   protected readonly praising = signal(false);
   private endPraise: (() => void) | null = null;
@@ -142,6 +156,7 @@ export class CheckGame {
     else if (round.phase === 'modelled') {
       void this.say([CHECK_GAME.answerIs.recording, ...question.answerSpoken]);
     } else {
+      this.earned.push(question.activity);
       // Brief praise that never blocks Next: it ends itself after at most 1.5 s.
       this.praising.set(true);
       this.endPraise?.();
@@ -156,11 +171,30 @@ export class CheckGame {
     this.praising.set(false);
   }
 
-  /** The next question; after the last, Home. */
+  /** An earned picture says its name. */
+  protected hear(recording: string): void {
+    void this.audio.play(recording);
+  }
+
+  /** What the child can do, spoken and shown. */
+  private finish(): void {
+    const results = checkResults(this.earned, ACTIVITY_CATALOGUE.activities, CHECK_GAME);
+    this.results.set(results);
+    void this.sayResults(results.spoken);
+  }
+
+  /** The title and each name in turn, until a touch or leaving stops them. */
+  private async sayResults(recordings: readonly string[]): Promise<void> {
+    for (const recording of recordings) {
+      if ((await this.audio.play(recording)) === 'stopped') return;
+    }
+  }
+
+  /** The next question; after the last, the results. */
   private next(): void {
     this.stopPraise();
     if (this.at() + 1 >= this.questions.length) {
-      this.leave();
+      this.finish();
       return;
     }
     this.at.update((at) => at + 1);
@@ -174,9 +208,20 @@ export class CheckGame {
     void this.router.navigate(['/']);
   }
 
+  /** A question's assets; past the last, what the results will say. */
   private fetch(at: number): void {
-    const question = this.questions[at];
-    if (question) this.preloader.preload(question.assets);
+    this.preloader.preload(this.questions[at]?.assets ?? this.resultRecordings());
+  }
+
+  private resultRecordings(): string[] {
+    const asked = this.questions.map((question) => question.activity);
+    return [
+      CHECK_GAME.look.recording,
+      CHECK_GAME.played.recording,
+      ...ACTIVITY_CATALOGUE.activities
+        .filter((activity) => asked.includes(activity.id))
+        .map((activity) => activity.recording),
+    ];
   }
 
   /** The recordings in turn, until a newer sound or step stops them. */

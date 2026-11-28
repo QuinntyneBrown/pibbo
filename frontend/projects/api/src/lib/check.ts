@@ -1,4 +1,4 @@
-import type { GroupId } from './activity';
+import type { Activity, GroupId } from './activity';
 import type { Instruction } from './round';
 
 /** One of a check question's choices. */
@@ -45,4 +45,11 @@ export interface CheckQuestion {
   readonly answerSpoken: readonly string[];
   /** The pictures and recordings fetched before the question is shown. */
   readonly assets: readonly string[];
+}
+
+/** The pictures earned in one subject. A picture is an activity's name and glyph, spoken. */
+export interface CheckResultSection {
+  readonly group: GroupId;
+  readonly heading: string;
+  readonly pictures: readonly Pick<Activity, 'id' | 'name' | 'glyph' | 'recording'>[];
 }

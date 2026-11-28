@@ -34,6 +34,11 @@ export interface CheckGameContent {
   readonly hints: Readonly<
     Record<'words' | 'sequence' | 'sounds' | 'sound' | 'shape' | 'word', CheckLine>
   >;
+  /** The results' title when something was earned, and when nothing was (L2-023 #1). */
+  readonly look: CheckLine;
+  readonly played: CheckLine;
+  /** The results' headings. */
+  readonly subjects: Readonly<Record<'read' | 'count', string>>;
   /** Brief praise for a right answer (L2-026 #3). */
   readonly praise: CheckLine;
   /** Shown and spoken when Pibbo shows the answer (L2-026 #2). */

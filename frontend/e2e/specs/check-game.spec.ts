@@ -381,3 +381,110 @@ for (const size of [
     }
   });
 }
+
+const LOOK = '/recordings/check/look-what-you-can-do.wav';
+const PLAYED = '/recordings/check/you-played-the-check-game.wav';
+const home = (id: string) => `/recordings/home/${id}.wav`;
+
+test.describe('Check game: what the child can do', () => {
+  test('Given every question answered, when the last Next is touched, then Pibbo says and shows “Look what you can do!” and each earned picture by name, with no score', async ({
+    page,
+    spoken,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openPractised(['which-is-bigger', 'rhyme-time']);
+    await check.play();
+
+    await expect(check.resultsTitle).toHaveText('Look what you can do!');
+    expect(await check.subjects()).toEqual(['Reading', 'Counting']);
+    expect(await check.earnedNames()).toEqual(['Rhyme time', 'Which is bigger?']);
+    await expect(check.progress).toHaveCount(0);
+    // Apart from the activities' own picture glyphs, no number, mark of a miss or score.
+    expect(await check.resultsText()).not.toMatch(/%|score|wrong|miss|correct|\d+ ?(of|\/) ?\d+/i);
+    await expect(page.locator('.results [class*="star"]')).toHaveCount(0);
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(-3))
+      .toEqual([LOOK, home('rhyme-time'), home('which-is-bigger')]);
+  });
+
+  test('Given the results, when an earned picture is touched, then it says its name', async ({
+    page,
+    spoken,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openPractised(['which-is-bigger']);
+    await check.play();
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(home('which-is-bigger'));
+    const before = (await spoken.recordings()).length;
+
+    await check.touch(check.earned.first());
+
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(before))
+      .toEqual([home('which-is-bigger')]);
+  });
+
+  test('Given one activity always missed, when the results are shown, then only what was answered right is there', async ({
+    page,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openPractised(['which-is-bigger', 'rhyme-time']);
+    await check.play((asked) => (asked.startsWith('Which number') ? 'miss' : 'earn'));
+
+    expect(await check.subjects()).toEqual(['Reading']);
+    expect(await check.earnedNames()).toEqual(['Rhyme time']);
+  });
+
+  test('Given nothing answered right, when the results are shown, then Pibbo says the child played, with no list, and one large way Home', async ({
+    page,
+    spoken,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openPractised(['which-is-bigger']);
+    await check.play(() => 'miss');
+
+    await expect(check.resultsTitle).toHaveText('You played the check game!');
+    await expect(check.earnedLists).toHaveCount(0);
+    await expect(check.earned).toHaveCount(0);
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(PLAYED);
+    await expect(check.home).toHaveText('Home');
+    const box = (await check.home.boundingBox())!;
+    expect(box.height).toBeGreaterThanOrEqual(60);
+    expect(box.width).toBeGreaterThanOrEqual(60);
+
+    await check.touch(check.home);
+
+    await expect(check.card()).toBeVisible();
+  });
+});
+
+for (const size of [
+  { width: 320, height: 568 },
+  { width: 360, height: 640 },
+  { width: 640, height: 360 },
+  { width: 1280, height: 720 },
+]) {
+  test.describe(`Check game: eight earned pictures at ${size.width} x ${size.height}`, () => {
+    test.use({ viewport: size });
+
+    test('Given eight activities earned, when the results are shown, then every picture and Home is at least 60 x 60 px, in view, and nothing scrolls', async ({
+      page,
+    }) => {
+      const check = new CheckGamePage(page);
+      // Seven of one subject and one of the other: the longest list there can be.
+      await check.openPractised(Object.keys(QUESTIONS).slice(0, 8));
+      await check.play();
+
+      await expect(check.earned).toHaveCount(8);
+      for (const target of [...(await check.earned.all()), check.home]) {
+        const box = (await target.boundingBox())!;
+        expect(box.width).toBeGreaterThanOrEqual(60);
+        expect(box.height).toBeGreaterThanOrEqual(60);
+        expect(box.x).toBeGreaterThanOrEqual(0);
+        expect(box.x + box.width).toBeLessThanOrEqual(size.width);
+        expect(box.y + box.height).toBeLessThanOrEqual(size.height);
+      }
+      expect(await check.scrolls()).toBe(false);
+    });
+  });
+}

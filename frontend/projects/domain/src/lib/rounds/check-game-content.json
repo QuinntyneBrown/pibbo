@@ -58,6 +58,15 @@
       "recording": "/recordings/check/say-each-word-slowly.wav"
     }
   },
+  "look": {
+    "text": "Look what you can do!",
+    "recording": "/recordings/check/look-what-you-can-do.wav"
+  },
+  "played": {
+    "text": "You played the check game!",
+    "recording": "/recordings/check/you-played-the-check-game.wav"
+  },
+  "subjects": { "read": "Reading", "count": "Counting" },
   "praise": { "text": "Yes!", "recording": "/recordings/count/yes.wav" },
   "answerIs": {
     "text": "Here is the answer.",

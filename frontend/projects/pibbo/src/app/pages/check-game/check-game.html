@@ -1,30 +1,39 @@
-@let asked = question();
-<pb-round-shell
-  title="What do I know?"
-  [group]="asked.group"
-  [fit]="true"
-  [instruction]="asked.instruction"
-  [mood]="mood()"
-  [done]="at()"
-  [rounds]="questions.length"
-  (replay)="replay()"
-  (leave)="leave()"
->
-  <pb-check-question
-    [show]="asked.show"
-    [choices]="asked.choices"
-    [chosen]="chosen()"
-    [right]="shownAnswer()"
-    [locked]="round().phase !== 'choosing'"
-    (chose)="choose($event)"
+@if (results(); as shown) {
+  <pb-earned-pictures
+    [title]="shown.title"
+    [sections]="shown.sections"
+    (heard)="hear($event)"
+    (home)="leave()"
   />
-  <pb-answer-bar
-    answer
+} @else {
+  @let asked = question();
+  <pb-round-shell
+    title="What do I know?"
     [group]="asked.group"
     [fit]="true"
-    [kind]="bar().kind"
-    [message]="bar().message"
-    [ready]="bar().ready"
-    (action)="action()"
-  />
-</pb-round-shell>
+    [instruction]="asked.instruction"
+    [mood]="mood()"
+    [done]="at()"
+    [rounds]="questions.length"
+    (replay)="replay()"
+    (leave)="leave()"
+  >
+    <pb-check-question
+      [show]="asked.show"
+      [choices]="asked.choices"
+      [chosen]="chosen()"
+      [right]="shownAnswer()"
+      [locked]="round().phase !== 'choosing'"
+      (chose)="choose($event)"
+    />
+    <pb-answer-bar
+      answer
+      [group]="asked.group"
+      [fit]="true"
+      [kind]="bar().kind"
+      [message]="bar().message"
+      [ready]="bar().ready"
+      (action)="action()"
+    />
+  </pb-round-shell>
+}
