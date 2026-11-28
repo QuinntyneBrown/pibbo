@@ -7,6 +7,11 @@ using Pibbo.Api.Observability;
 using Pibbo.Api.Privacy;
 using Pibbo.Api.Security;
 
+if (args is [ReadinessProbe.Command])
+{
+    return await ReadinessProbe.RunAsync();
+}
+
 // A caller's trace id is never adopted: it would be an identifier written to the log.
 DistributedContextPropagator.Current = new NoInboundTraceContext();
 
@@ -48,7 +53,8 @@ app.MapOpenApi();
 app.MapContentEndpoints();
 app.MapAdministrationEndpoints();
 
-app.Run();
+await app.RunAsync();
+return 0;
 
 /// <summary>The entry point, named so the acceptance tests can host the API in memory.</summary>
 public partial class Program;
