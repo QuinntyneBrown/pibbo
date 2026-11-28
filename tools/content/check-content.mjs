@@ -298,7 +298,10 @@ for (const lesson of lessonContent.lessons ?? []) {
 for (const line of ["upNext", "done", "picture"]) {
   if (!lessonContent.lines?.[line]?.text)
     problems.push(`lesson ${line}: no text`);
-  fileExists(lessonContent.lines?.[line]?.recording, `lesson ${line} recording`);
+  fileExists(
+    lessonContent.lines?.[line]?.recording,
+    `lesson ${line} recording`,
+  );
 }
 
 if (problems.length) {

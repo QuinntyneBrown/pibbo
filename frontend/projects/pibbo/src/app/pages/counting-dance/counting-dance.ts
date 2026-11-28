@@ -7,8 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { AUDIO_PLAYER, CLOCK, type Instruction } from '@pibbo/api';
+import { AUDIO_PLAYER, CLOCK, type Instruction, ACTIVITY_EXIT } from '@pibbo/api';
 import { AnswerBar, Dance, RoundShell, type AnswerBarKind } from '@pibbo/components';
 import {
   beatLength,
@@ -48,7 +47,7 @@ const SPEEDS = [
 export class CountingDance {
   private readonly audio = inject(AUDIO_PLAYER);
   private readonly clock = inject(CLOCK);
-  private readonly router = inject(Router);
+  private readonly exit = inject(ACTIVITY_EXIT);
 
   protected readonly content = COUNTING_DANCE;
   protected readonly speeds = SPEEDS;
@@ -147,6 +146,13 @@ export class CountingDance {
   protected leave(): void {
     this.cancelBeat();
     this.audio.stop();
-    void this.router.navigate(['/'], { queryParams: { group: 'count' } });
+    this.exit.leave('count');
+  }
+
+  /** After the last round: Home, or back to the lesson's path (ADR 0025). */
+  protected finish(): void {
+    this.cancelBeat();
+    this.audio.stop();
+    this.exit.finish('count');
   }
 }

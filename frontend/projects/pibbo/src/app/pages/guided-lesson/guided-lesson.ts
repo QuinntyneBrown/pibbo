@@ -11,7 +11,14 @@ import {
 import { Router } from '@angular/router';
 import { AUDIO_PLAYER, type LessonStep } from '@pibbo/api';
 import { LessonPath, Pibbo, Tap } from '@pibbo/components';
-import { ACTIVITY_CATALOGUE, LESSON_LINES, LESSONS, lessonById, lessonSteps } from '@pibbo/domain';
+import {
+  ACTIVITY_CATALOGUE,
+  LESSON_LINES,
+  LESSONS,
+  finishStep,
+  lessonById,
+  lessonSteps,
+} from '@pibbo/domain';
 
 /**
  * A guided lesson (docs/mocks/pages/guided-lesson, ADR 0025): the path of its activities, the
@@ -31,6 +38,8 @@ export class GuidedLesson {
 
   /** The `:subject` route parameter. */
   readonly subject = input<unknown>();
+  /** `?finished=<n>`: the activity at step n has just ended its last round. */
+  readonly finished = input<unknown>();
 
   protected readonly lines = LESSON_LINES;
   protected readonly lesson = computed(() => lessonById(LESSONS, this.subject()));
@@ -39,7 +48,7 @@ export class GuidedLesson {
     return lesson ? lessonSteps(lesson, ACTIVITY_CATALOGUE).steps : [];
   });
   /** The current step, 1-based; one past the last once the lesson is done. */
-  protected readonly current = linkedSignal(() => 1);
+  protected readonly current = linkedSignal(() => finishStep(1, this.finished(), this.steps()));
   protected readonly next = computed<LessonStep | null>(
     () => this.steps()[this.current() - 1] ?? null,
   );
@@ -60,7 +69,7 @@ export class GuidedLesson {
     queueMicrotask(() => void this.arrive());
   }
 
-  /** The title, then "Up next" and the activity's name; a newer sound cuts the rest. */
+  /** The title on opening, then "Up next" and the activity's name; a newer sound cuts the rest. */
   private async arrive(): Promise<void> {
     const lesson = this.lesson();
     if (!lesson) {
@@ -68,7 +77,8 @@ export class GuidedLesson {
       return;
     }
     const next = this.next();
-    const lines = [lesson.recording];
+    // The title when the lesson opens; back from an activity, only what comes next.
+    const lines = this.finished() === undefined ? [lesson.recording] : [];
     if (next) lines.push(LESSON_LINES.upNext.recording, next.activity.recording);
     else lines.push(LESSON_LINES.done.recording);
     for (const line of lines) {

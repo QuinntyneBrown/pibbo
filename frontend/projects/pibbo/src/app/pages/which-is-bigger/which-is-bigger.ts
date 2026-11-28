@@ -7,8 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE } from '@pibbo/api';
+import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, ACTIVITY_EXIT } from '@pibbo/api';
 import { AnswerBar, Compare, RoundShell, type AnswerBarKind } from '@pibbo/components';
 import {
   biggerCard,
@@ -41,7 +40,7 @@ export class WhichIsBigger {
   private readonly audio = inject(AUDIO_PLAYER);
   private readonly clock = inject(CLOCK);
   private readonly random = inject(RANDOM_SOURCE);
-  private readonly router = inject(Router);
+  private readonly exit = inject(ACTIVITY_EXIT);
 
   protected readonly content = WHICH_IS_BIGGER;
   protected readonly round = signal(startCompareRound(this.random, WHICH_IS_BIGGER));
@@ -145,7 +144,7 @@ export class WhichIsBigger {
     this.stopPraise();
     const done = this.done() + 1;
     if (done >= WHICH_IS_BIGGER.roundsPerPlay) {
-      this.leave();
+      this.finish();
       return;
     }
     this.done.set(done);
@@ -159,6 +158,12 @@ export class WhichIsBigger {
 
   protected leave(): void {
     this.audio.stop();
-    void this.router.navigate(['/'], { queryParams: { group: 'count' } });
+    this.exit.leave('count');
+  }
+
+  /** After the last round: Home, or back to the lesson's path (ADR 0025). */
+  protected finish(): void {
+    this.audio.stop();
+    this.exit.finish('count');
   }
 }
