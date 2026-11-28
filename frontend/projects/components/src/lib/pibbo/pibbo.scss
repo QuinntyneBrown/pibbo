@@ -5,8 +5,49 @@
 
 .pibbo {
   display: block;
-  width: 4.5rem;
-  height: 4.5rem;
+  // The shell may make Pibbo smaller where the instruction needs the room (`--pibbo-size`).
+  width: var(--pibbo-size, 4.5rem);
+  height: var(--pibbo-size, 4.5rem);
+}
+
+.pibbo--sm {
+  width: 3.5rem;
+  height: 3.5rem;
+
+  @media (max-width: 22rem) and (orientation: portrait) {
+    width: var(--size-5);
+    height: var(--size-5);
+  }
+}
+
+.pibbo--lg {
+  width: var(--size-11);
+  height: var(--size-11);
+
+  @media (min-width: 40rem) {
+    width: 7.5rem;
+    height: 7.5rem;
+  }
+
+  @media (max-width: 29.99rem) {
+    width: var(--size-9);
+    height: var(--size-9);
+  }
+
+  @media (orientation: landscape) and (max-height: 30rem) {
+    width: var(--size-10);
+    height: var(--size-10);
+  }
+}
+
+.pibbo--xs {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.pibbo--sm {
+  width: 3.5rem;
+  height: 3.5rem;
 }
 
 .pibbo--xl {

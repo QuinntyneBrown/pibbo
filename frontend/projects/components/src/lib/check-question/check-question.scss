@@ -1,0 +1,191 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: var(--content-narrow);
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.show {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1);
+
+  .picture {
+    width: var(--size-11);
+    height: var(--size-11);
+    object-fit: contain;
+  }
+}
+
+.show--one .picture {
+  width: var(--size-15);
+  height: var(--size-15);
+}
+
+.show--many .picture,
+.show--sum .picture {
+  width: var(--size-8);
+  height: var(--size-8);
+}
+
+.show--sum {
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.show__group {
+  display: flex;
+  max-width: 10rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1);
+}
+
+.show__plus,
+.show__text {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.show__text {
+  font-family: var(--font-read);
+  font-size: var(--font-size-5xl);
+}
+
+.pick {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-targets);
+}
+
+.pick__option {
+  position: relative;
+  display: flex;
+  min-width: var(--target-child);
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  box-shadow:
+    inset 0 0 0 2px var(--color-border),
+    0 var(--press-depth) 0 var(--color-depth);
+  touch-action: manipulation;
+
+  &[aria-pressed='true'] {
+    background: var(--subject-soft);
+    box-shadow:
+      inset 0 0 0 4px var(--subject-strong),
+      0 var(--press-depth) 0 var(--subject-strong);
+  }
+
+  .picture {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.pick__option--text {
+  height: var(--size-12);
+  aspect-ratio: auto;
+  font-family: var(--font-read);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+
+  @media (min-width: 40rem) {
+    font-size: var(--font-size-5xl);
+  }
+}
+
+.pick__option--right,
+.pick__option--right[aria-pressed='true'] {
+  background: var(--color-success-soft);
+  box-shadow:
+    inset 0 0 0 4px var(--color-success),
+    0 var(--press-depth) 0 var(--color-success);
+}
+
+.pick__tick {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+  width: var(--size-6);
+  height: var(--size-6);
+  fill: none;
+  stroke: var(--color-success-strong);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+// A phone on its side: what is shown beside the choices; two sets stay above them.
+@media (orientation: landscape) and (min-width: 32rem) and (max-height: 30rem) {
+  :host {
+    max-width: var(--content-max);
+  }
+
+  .stage {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .show {
+    flex: 1;
+
+    .picture {
+      width: var(--size-8);
+      height: var(--size-8);
+    }
+  }
+
+  // Numbers in order are read along one line.
+  .show__text {
+    font-size: var(--font-size-3xl);
+    white-space: nowrap;
+  }
+
+  // Fourteen things beside the choices stay below the instruction.
+  .show.show--many .picture {
+    width: var(--size-6);
+    height: var(--size-6);
+  }
+
+  .show--one .picture {
+    width: var(--size-12);
+    height: var(--size-12);
+  }
+
+  .pick {
+    flex: 2;
+  }
+
+  .pick__option:not(.pick__option--text) {
+    max-height: 40dvh;
+  }
+
+  .stage--sum {
+    flex-direction: column;
+    gap: var(--space-2);
+
+    .show .picture {
+      width: var(--size-7);
+      height: var(--size-7);
+    }
+
+    .show__group {
+      max-width: none;
+    }
+  }
+}

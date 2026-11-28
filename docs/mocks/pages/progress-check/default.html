@@ -7,7 +7,8 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="progress-check">
 <meta name="mock:state" content="default">
-<meta name="description" content="Question 1 of 4: which word goes with the ship picture?">
+<meta name="mock:requirements" content="L2-023, L2-025, L2-026">
+<meta name="description" content="Question 1 of 5: which word goes with the ship picture? Check waits for a choice.">
 <script src="../../assets/appearance.js"></script>
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -18,7 +19,7 @@
 <div class="shell shell--read">
   <header class="shell__top">
     <a class="chunky chunky--white chunky--icon press" href="../home/default.html" aria-label="Leave game"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
-    <div class="progress" role="progressbar" aria-label="Question 1 of 4" aria-valuemin="0" aria-valuemax="4" aria-valuenow="1"><div class="progress__fill progress__fill--q1"></div></div>
+    <div class="progress" role="progressbar" aria-label="Question 1 of 5" aria-valuemin="0" aria-valuemax="5" aria-valuenow="1"><div class="progress__fill progress__fill--q1of5"></div></div>
   </header>
   <div class="shell__ask">
     <svg class="pibbo pibbo--md " viewBox="0 0 120 120" role="img" aria-label="Pibbo"><path class="pibbo__stem" d="M60 30 C60 22 60 18 61 13"/><path class="pibbo__leaf" d="M60 18 C52 18 44 13 43 5 C51 4 59 9 60 18 Z"/><path class="pibbo__leaf" d="M61 15 C66 8 75 5 82 8 C79 16 70 19 61 15 Z"/><ellipse class="pibbo__wing" cx="19" cy="74" rx="9" ry="15" transform="rotate(18 19 74)"/><ellipse class="pibbo__wing" cx="101" cy="74" rx="9" ry="15" transform="rotate(-18 101 74)"/><ellipse class="pibbo__foot" cx="49" cy="108" rx="8" ry="5"/><ellipse class="pibbo__foot" cx="71" cy="108" rx="8" ry="5"/><ellipse class="pibbo__body" cx="60" cy="67" rx="43" ry="41"/><ellipse class="pibbo__belly" cx="60" cy="84" rx="25" ry="18"/><ellipse class="pibbo__white" cx="45" cy="57" rx="11" ry="12.5"/><ellipse class="pibbo__white" cx="75" cy="57" rx="11" ry="12.5"/><circle class="pibbo__ink" cx="46" cy="58.5" r="6.5"/><circle class="pibbo__ink" cx="76" cy="58.5" r="6.5"/><circle class="pibbo__white" cx="48" cy="56.0" r="2.2"/><circle class="pibbo__white" cx="78" cy="56.0" r="2.2"/><circle class="pibbo__cheek" cx="30" cy="73" r="6"/><circle class="pibbo__cheek" cx="90" cy="73" r="6"/><path class="pibbo__beak" d="M53 69 Q60 65.5 67 69 Q60 79 53 69 Z"/></svg>
@@ -33,11 +34,11 @@
   </main>
   <footer class="answer-bar answer-bar--check"><button class="chunky chunky--read chunky--wide press" type="button" data-check-action disabled>Check</button></footer>
 </div>
-<p class="mock-note">Four quick questions across reading and counting. A wrong answer moves on kindly; it is not marked as wrong.</p>
+<p class="mock-note">Five to eight questions, mixed from what the child has practised (from the first lesson when nothing has been). A wrong answer gives a hint and the same question again; after the third, Pibbo shows the answer. No score is kept or shown.</p>
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html#state-progress-check-default" aria-label="All mocks">⌂</a>
   <span class="mock-bar__screen">What do I know?</span>
-  <ul class="mock-bar__states"><li><a href="default.html" aria-current="page">default</a></li><li><a href="answered.html">answered</a></li><li><a href="correct.html">correct</a></li><li><a href="retry.html"><span class="mock-bar__label--descenders">retry</span></a></li><li><a href="counting-question.html"><span class="mock-bar__label--descenders">counting-question</span></a></li><li><a href="results.html">results</a></li></ul>
+  <ul class="mock-bar__states"><li><a href="default.html" aria-current="page"><span class="mock-bar__label--descenders">default</span></a></li><li><a href="answered.html"><span class="mock-bar__label--descenders">answered</span></a></li><li><a href="correct.html"><span class="mock-bar__label--descenders">correct</span></a></li><li><a href="retry.html"><span class="mock-bar__label--descenders">retry</span></a></li><li><a href="model.html"><span class="mock-bar__label--descenders">model</span></a></li><li><a href="counting-question.html"><span class="mock-bar__label--descenders">counting-question</span></a></li><li><a href="letter-question.html"><span class="mock-bar__label--descenders">letter-question</span></a></li><li><a href="adding-question.html"><span class="mock-bar__label--descenders">adding-question</span></a></li><li><a href="results.html"><span class="mock-bar__label--descenders">results</span></a></li><li><a href="results-none.html"><span class="mock-bar__label--descenders">results-none</span></a></li></ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>

@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import type { Instruction } from './round';
 
 /** One sound of a word: the letter or letters that make it, as shown and as recorded. */
 export interface Sound {
@@ -8,6 +9,15 @@ export interface Sound {
   readonly shown: string;
   /** The recording of the sound alone ("mmm", never "em" or "muh"). */
   readonly recording: string;
+}
+
+/**
+ * One syllable of a longer word (L2-017): a tile like a sound's, whose `letters` are the
+ * syllable ("sun"), whose `shown` is its caption ("clap 1") and whose recording says it, with
+ * the sounds that spell it.
+ */
+export interface Syllable extends Sound {
+  readonly sounds: readonly Sound[];
 }
 
 /** A word Sound Out teaches: its sounds in order, its picture and its recording. */
@@ -21,6 +31,8 @@ export interface Word {
    * word's own sounds are what it says with the e added, the e making no sound of its own.
    */
   readonly withoutE?: Word;
+  /** A longer word (L2-017): its syllables in order, one tile each. `sounds` is all of theirs. */
+  readonly syllables?: readonly Syllable[];
 }
 
 /** One step of a plan of recordings: what to play, and which letter to light while it plays. */
@@ -59,4 +71,17 @@ export interface LetterPair extends MatchPair {
  */
 export interface FormPair extends MatchPair {
   readonly big: string;
+}
+
+/**
+ * A theme of Words and pictures (L2-018, ADR 0023): related words and what is shown and spoken
+ * around them, both naming the theme ("By the sea! …", "You read all the by the sea words!").
+ */
+export interface WordTheme {
+  /** The theme as spoken and shown ("by the sea"). */
+  readonly name: string;
+  /** Two to four words, each with its picture, recording and sounds. */
+  readonly words: readonly Word[];
+  readonly instruction: Instruction;
+  readonly praise: { readonly text: string; readonly recording: string };
 }

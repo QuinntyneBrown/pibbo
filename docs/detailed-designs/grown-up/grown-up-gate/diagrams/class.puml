@@ -11,18 +11,20 @@ skinparam class {
 }
 title Class structure — Grown-up gate and area
 
-class GateChallenge {
-  +sequence: number[]
-  +promptText: string
-  +touched: number[]
+class Gate {
+  +asked: number[]
+  +touched: number
 }
 class gateRules <<pure>> {
-  +newChallenge(rnd): GateChallenge
-  +touch(c: GateChallenge, n: number): "pending" | "passed" | "failed"
+  +newGate(rnd): Gate
+  +gateTask(g: Gate): string
+  +touchGate(g: Gate, n: number): "pending" | "passed" | "failed"
 }
-class GrownUpPage {
-  +setVolume(v: number): void
+class GrownUpArea {
+  +step: "gate" | "area" | "confirm"
+  +setVolume(v: VolumeLevel): void
   +clearProgress(): Promise<void>
 }
-gateRules ..> GateChallenge
+gateRules ..> Gate
+GrownUpArea ..> gateRules
 @enduml

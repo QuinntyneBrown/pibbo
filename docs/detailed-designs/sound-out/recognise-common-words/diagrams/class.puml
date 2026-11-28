@@ -12,32 +12,38 @@ skinparam class {
 title Class structure — Recognise common words
 
 interface AudioPlayer <<token AUDIO_PLAYER>> {
-  +play(recordingId: string): Promise<PlayOutcome>
+  +play(url: string): Promise<PlayOutcome>
   +stop(): void
 }
 interface RandomSource <<token RANDOM_SOURCE>> {
   +next(): number
 }
-interface RoundFeedback <<token ROUND_FEEDBACK>> {
-  +praise(): void
-  +hint(h: Hint): void
+class CommonWord {
+  +word: string
+  +recording: string
 }
-
-class RepetitionState {
-  +version: number
-  +entries: Map<string, RepetitionEntry>
+class SpotRound {
+  +phase: 'finding' | 'right'
+  +word: CommonWord
+  +story: string[]
+  +found: boolean[]
+  +miss: number | null
+  +missed: boolean
 }
-class RepetitionEntry {
-  +dueInRounds: number
+class "Spot rules" as rules <<pure>> {
+  +startSpotRound(word, story): SpotRound
+  +touchStoryWord(round, index): SpotTouch
+  +endMiss(round): SpotRound
+  +nextSpotWord(rnd, words, due, previous): CommonWord
+  +spotAssets(round): string[]
 }
-class repetitionRules <<pure>> {
-  +next(s: RepetitionState, rnd: RandomSource): string
-  +record(s: RepetitionState, word: string, right: boolean): RepetitionState
+class SpotTheWordPage {
+  -round: Signal<SpotRound>
+  -due: string[]  // route scope, never stored
 }
-interface ProgressStore <<token PROGRESS_STORE>> {
-  +read<T>(key, guard): T | null
-  +write<T>(key, value: T): void
-  +clearAll(): void
-}
-repetitionRules ..> RepetitionState
+SpotRound --> CommonWord
+rules ..> SpotRound
+rules ..> RandomSource
+SpotTheWordPage ..> rules
+SpotTheWordPage ..> AudioPlayer
 @enduml

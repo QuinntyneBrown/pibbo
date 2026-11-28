@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="home">
 <meta name="mock:state" content="counting">
-<meta name="mock:requirements" content="L2-024, L2-035">
+<meta name="mock:requirements" content="L2-024, L2-023, L2-035">
 <meta name="description" content="Count chosen: “Count” is spoken and the counting activities are shown as pictures.">
 <script src="../../assets/appearance.js"></script>
 <link rel="stylesheet" href="../../assets/tokens.css">
@@ -19,19 +19,24 @@
 <div class="home">
   <header class="home__top">
     <span class="wordmark wordmark--md" role="img" aria-label="Pibbo"><span aria-hidden="true">p</span><span class="wordmark__stem" aria-hidden="true"><span class="wordmark__seed"></span><span class="wordmark__leaf"></span></span><span aria-hidden="true">bbo</span></span>
+    <a class="chunky chunky--count home__lesson press" href="../guided-lesson/counting.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="6" r="2.5"/><path d="M7.5 18H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h7.5"/></svg>Lesson</a>
+    <a class="grown-up-entry" href="../grown-up/gate.html" aria-label="For grown-ups"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></a>
   </header>
   <main class="home__main" id="main" tabindex="-1" aria-labelledby="screen-title">
     <h1 id="screen-title" class="visually-hidden">Choose an activity</h1>
+    <div class="home__row">
     <nav class="home__subjects" aria-label="Groups"><div class="switch switch--groups"><button type="button" class="switch__option switch__option--group press" aria-pressed="true"><span class="switch__glyph" aria-hidden="true">1 2 3</span>Count</button><button type="button" class="switch__option switch__option--group switch__option--read press" aria-pressed="false" data-mock-href="default.html"><span class="switch__glyph" aria-hidden="true">a b c</span>Read</button></div></nav>
+    <div class="home__check"><a class="check-card check-card--home press" href="../progress-check/default.html"><span class="check-card__glyph" aria-hidden="true">?</span><span class="check-card__title">What do I know?</span></a></div>
+    </div>
     <div class="home__games">
     <section class="game-group" aria-labelledby="g-count"><h2 class="game-group__title" id="g-count">Count</h2><ul class="game-group__grid"><li><a class="game-card game-card--count press" href="../count-the-toys/start.html"><span class="game-card__glyph" aria-hidden="true">1 2 3</span><span class="game-card__body"><span class="game-card__title">Count the toys</span></span></a></li><li><a class="game-card game-card--count press" href="../count-and-write/counting.html"><span class="game-card__glyph" aria-hidden="true">14</span><span class="game-card__body"><span class="game-card__title">Count and write</span></span></a></li><li><a class="game-card game-card--count press" href="../which-is-bigger/default.html"><span class="game-card__glyph" aria-hidden="true">7 4</span><span class="game-card__body"><span class="game-card__title">Which is bigger?</span></span></a></li><li><a class="game-card game-card--count press" href="../rocket-countdown/start.html"><span class="game-card__glyph" aria-hidden="true">3 2 1</span><span class="game-card__body"><span class="game-card__title">Rocket countdown</span></span></a></li><li><a class="game-card game-card--count press" href="../skip-count/start.html"><span class="game-card__glyph" aria-hidden="true">2 4 6</span><span class="game-card__body"><span class="game-card__title">Skip-count</span></span></a></li><li><a class="game-card game-card--count game-card--more press" href="counting-more.html"><span class="game-card__glyph" aria-hidden="true"><svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span><span class="game-card__body"><span class="game-card__title">More</span></span></a></li></ul></section></div>
   </main>
 </div>
-<p class="mock-note">Touching a group picture speaks its name (a recording) and shows its activities, at most 6 per screen: when a group has more than 6, a screen shows 5 and More, which speaks “More” and shows the next screen (the last one’s More goes back to the first). Touching an activity picture once speaks its name and opens it. Only activities that exist are shown. Every target is at least 60 × 60 px with 16 px between targets.</p>
+<p class="mock-note">Touching a group picture speaks its name (a recording) and shows its activities, at most 6 per screen: when a group has more than 6, a screen shows 5 and More, which speaks “More” and shows the next screen (the last one’s More goes back to the first). Touching an activity picture once speaks its name and opens it. Only activities that exist are shown. The Lesson picture beside the wordmark is the chosen group’s guided lesson: touching it speaks “Lesson” and opens the lesson path where the child left off. The check game has its own picture, “What do I know?”, which is spoken when touched and opens it. The padlock alone in the top corner is the grown-up entry, at least 48 px from every activity picture; touching it speaks nothing. Every target is at least 60 × 60 px with 16 px between targets.</p>
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html#state-home-counting" aria-label="All mocks">⌂</a>
   <span class="mock-bar__screen">Home · Choose an activity</span>
-  <ul class="mock-bar__states"><li><a href="default.html">default</a></li><li><a href="counting.html" aria-current="page"><span class="mock-bar__label--descenders">counting</span></a></li><li><a href="counting-more.html"><span class="mock-bar__label--descenders">counting-more</span></a></li><li><a href="first-visit.html">first-visit</a></li></ul>
+  <ul class="mock-bar__states"><li><a href="default.html">default</a></li><li><a href="reading-more.html"><span class="mock-bar__label--descenders">reading-more</span></a></li><li><a href="counting.html" aria-current="page"><span class="mock-bar__label--descenders">counting</span></a></li><li><a href="counting-more.html"><span class="mock-bar__label--descenders">counting-more</span></a></li><li><a href="first-visit.html">first-visit</a></li></ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>

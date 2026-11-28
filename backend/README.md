@@ -2,7 +2,7 @@
 
 A small .NET 10 service that serves Pibbo's content: activities, lessons, and the pictures and
 recordings they need. It is read-only and holds nothing about a child
-([ADR 0022](../docs/adr/0022-content-backend.md)). The frontend does not call it yet.
+([ADR 0032](../docs/adr/0032-content-backend.md)). The frontend does not call it yet.
 
 ## Run it
 

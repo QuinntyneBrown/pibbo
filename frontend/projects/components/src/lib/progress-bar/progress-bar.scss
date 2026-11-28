@@ -1,0 +1,29 @@
+@use 'sass:math';
+
+:host {
+  display: block;
+  flex: 1;
+}
+
+.progress {
+  height: var(--progress-height);
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-sunken);
+}
+
+.progress__fill {
+  width: 0;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--subject);
+  transition: width var(--duration-slow) var(--ease-out-quint);
+}
+
+@each $rounds in 1, 5, 6, 7, 8 {
+  @for $done from 1 through $rounds {
+    .progress__fill--#{$done}of#{$rounds} {
+      width: math.percentage(math.div($done, $rounds));
+    }
+  }
+}

@@ -23,4 +23,14 @@
 | [0019](0019-letter-groups-in-sound-it-out.md) | Letter groups in Sound it out: one tile, one recording | Accepted |
 | [0020](0020-adjacent-consonants-in-sound-it-out.md) | Adjacent consonants in Sound it out: four tiles and the first two sounds | Accepted |
 | [0021](0021-silent-e-in-sound-it-out.md) | Silent e in Sound it out: a quiet e the child adds and takes away | Accepted |
-| [0022](0022-content-backend.md) | A content backend that holds nothing about a child | Proposed; waits for the repository owner |
+| [0022](0022-syllables-in-sound-it-out.md) | Longer words by syllable in Sound it out | Accepted |
+| [0023](0023-words-and-pictures-round.md) | Words and pictures: a pair match of words and their pictures | Accepted |
+| [0024](0024-spot-the-word-round.md) | Spot the word: every common word in a short story, and misses that come back | Accepted |
+| [0025](0025-rhyme-time-round.md) | Rhyme time: choose every rhyme, then Check | Accepted |
+| [0026](0026-guided-lesson-and-its-place-on-the-device.md) | Guided lesson: the path, and the one thing a lesson keeps on the device | Accepted |
+| [0027](0027-check-game.md) | The check game: one question for each activity, and what the device keeps | Accepted; storage open for the repository owner |
+| [0028](0028-practice-kept-on-the-device-and-a-grown-up-area.md) | Practice is kept on the device, and a grown-up has an area | Accepted |
+| [0029](0029-grown-up-gate-and-area.md) | The grown-up gate and area: a corner padlock, three numbers in words, and Clear progress | Accepted |
+| [0030](0030-performance-accessibility-and-privacy-checks.md) | Performance, accessibility and privacy: behaviour specs over every activity, and sweeps on request | Accepted |
+| [0031](0031-explainer-films-from-the-running-app.md) | Explainer films: one a journey, pictured from the running app | Accepted |
+| [0032](0032-content-backend.md) | A content backend that holds nothing about a child | Proposed; waits for the repository owner |

@@ -1,0 +1,30 @@
+<pb-round-shell
+  title="Words and pictures"
+  group="read"
+  [fit]="true"
+  [instruction]="instruction()"
+  [mood]="mood()"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-word-pictures
+    [words]="round().words"
+    [pictures]="round().pictures"
+    [wordColours]="wordColours()"
+    [pictureColours]="pictureColours()"
+    [held]="round().held"
+    [missed]="missed()"
+    [status]="status()"
+    (word)="touchWord($event)"
+    (picture)="touchPicture($event)"
+  />
+  <pb-answer-bar
+    answer
+    group="read"
+    [kind]="right() ? 'right' : 'none'"
+    [message]="right() ? round().theme.praise.text : ''"
+    (action)="next()"
+  />
+</pb-round-shell>

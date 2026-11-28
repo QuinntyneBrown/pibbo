@@ -1,0 +1,31 @@
+<div class="spot">
+  <div class="spot__find">
+    <p class="target-word">{{ word() }}</p>
+    <div class="spot__count">
+      <p class="spot__label">Found</p>
+      <div class="found" role="img" [attr.aria-label]="count() + ' of ' + total() + ' found'">
+        @for (on of dots(); track $index) {
+          <span class="found__dot" [class.found__dot--on]="on"></span>
+        }
+      </div>
+    </div>
+  </div>
+  <span class="story__status visually-hidden" role="status">{{ status() }}</span>
+  <div class="story" id="story">
+    <p class="story__text">
+      @for (shown of story(); track $index; let i = $index) {
+        <button
+          type="button"
+          class="story__word"
+          [class.story__word--found]="found()[i]"
+          [class.story__word--miss]="miss() === i"
+          [disabled]="done() || found()[i]"
+          [attr.aria-label]="found()[i] ? shown + ', found' : null"
+          (pbTap)="touched.emit(i)"
+        >
+          {{ shown }}
+        </button>
+      }
+    </p>
+  </div>
+</div>

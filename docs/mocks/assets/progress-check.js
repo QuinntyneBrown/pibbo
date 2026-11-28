@@ -1,10 +1,11 @@
-// The prototype's four fixed questions, in reading and counting order.
+// A cast of mixed questions for review; the app mixes them from what the child has practised.
 (function () {
   const questions = [
     { prompt: 'Which word goes with the picture?', subject: 'read', picture: 'ship', count: 1, options: ['sip', 'ship', 'hip'], answer: 'ship' },
     { prompt: 'How many ducks?', subject: 'count', picture: 'duck', count: 6, options: ['5', '7', '6'], answer: '6' },
     { prompt: 'Which one rhymes with “hat”?', subject: 'read', options: ['sun', 'bat', 'map'], answer: 'bat', pictures: true },
-    { prompt: 'Which number is bigger?', subject: 'count', options: ['6', '9', '3'], answer: '9' }
+    { prompt: 'Which number is bigger?', subject: 'count', options: ['6', '9', '3'], answer: '9' },
+    { prompt: 'Which word goes with the picture?', subject: 'read', picture: 'sun', count: 1, options: ['map', 'sun', 'cat'], answer: 'sun' }
   ];
   const progress = document.querySelector('.progress');
   const params = new URLSearchParams(location.search);
@@ -13,7 +14,7 @@
     return;
   }
   const requested = new URLSearchParams(location.hash.slice(1)).get('question');
-  const number = /^[1-4]$/.test(requested) ? Number(requested) : Number(progress.getAttribute('aria-valuenow'));
+  const number = /^[1-5]$/.test(requested) ? Number(requested) : Number(progress.getAttribute('aria-valuenow'));
   const question = questions[number - 1];
   window.addEventListener('hashchange', () => {
     if (new URLSearchParams(location.hash.slice(1)).get('question') !== requested) location.reload();
@@ -24,7 +25,7 @@
   document.querySelector('.hear').classList.toggle('hear--read', question.subject === 'read');
   progress.setAttribute('aria-valuenow', number);
   progress.setAttribute('aria-label', 'Question ' + number + ' of ' + questions.length);
-  progress.firstElementChild.className = 'progress__fill progress__fill--q' + number;
+  progress.firstElementChild.className = 'progress__fill progress__fill--q' + number + 'of' + questions.length;
   document.querySelector('.bubble__text').textContent = question.prompt;
 
   function picture(name) {
@@ -102,7 +103,9 @@
   }
   if (params.get('focus') === 'feedback') document.querySelector('.answer-bar a')?.focus();
   if (params.get('focus') === 'answers') options[0].focus();
-  if (!check) {
+  if (retry) {
+    retry.querySelector('a').href = 'default.html#question=' + number;
+  } else if (!check) {
     const next = document.querySelector('.answer-bar a');
     const finished = number === questions.length;
     next.href = finished ? 'results.html' : 'counting-question.html#question=' + (number + 1);

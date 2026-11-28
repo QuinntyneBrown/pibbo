@@ -9,7 +9,7 @@ const WHICH = '/recordings/read/which-picture.wav';
 const READ_AGAIN = '/recordings/read/read-again.wav';
 
 /** A seed whose first round is "cape" (the cast of the mock, not a rule). */
-const CAPE = 4;
+const CAPE = 30;
 
 test.describe('Sound it out: a silent-e word', () => {
   test.use({ seed: CAPE });

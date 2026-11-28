@@ -1,6 +1,16 @@
 import type { ActivityCatalogue } from '@pibbo/api';
 
 /**
+ * The check game's own picture on Home (L2-024 #4): its name, the recording that speaks it
+ * and the lazy route it opens. It is in neither group.
+ */
+export const CHECK_GAME_CARD = {
+  name: 'What do I know?',
+  recording: '/recordings/home/check-game.wav',
+  path: '/check',
+} as const;
+
+/**
  * What Home offers. Only activities that exist are listed; each journey that builds an
  * activity adds it here (ADR 0006). The order is the cast of the mock, not a rule.
  */
@@ -97,6 +107,30 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       glyph: 's u _',
       recording: '/recordings/home/spell-by-sound.wav',
       path: '/read/spell',
+    },
+    {
+      id: 'words-and-pictures',
+      group: 'read',
+      name: 'Words and pictures',
+      glyph: 'boat',
+      recording: '/recordings/home/words-and-pictures.wav',
+      path: '/read/word-pictures',
+    },
+    {
+      id: 'spot-the-word',
+      group: 'read',
+      name: 'Spot the word',
+      glyph: 'the',
+      recording: '/recordings/home/spot-the-word.wav',
+      path: '/read/sight-words',
+    },
+    {
+      id: 'rhyme-time',
+      group: 'read',
+      name: 'Rhyme time',
+      glyph: 'cat hat',
+      recording: '/recordings/home/rhyme-time.wav',
+      path: '/read/rhymes',
     },
   ],
 };

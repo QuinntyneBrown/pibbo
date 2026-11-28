@@ -59,5 +59,31 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/spell-by-sound/spell-by-sound').then((m) => m.SpellBySound),
   },
+  {
+    path: 'read/word-pictures',
+    loadComponent: () =>
+      import('./pages/words-and-pictures/words-and-pictures').then((m) => m.WordsAndPictures),
+  },
+  {
+    path: 'read/sight-words',
+    loadComponent: () =>
+      import('./pages/spot-the-word/spot-the-word').then((m) => m.SpotTheWordPage),
+  },
+  {
+    path: 'read/rhymes',
+    loadComponent: () => import('./pages/rhyme-time/rhyme-time').then((m) => m.RhymeTime),
+  },
+  {
+    path: 'lesson/:subject',
+    loadChildren: () => import('./pages/guided-lesson/guided-lesson.routes').then((m) => m.routes),
+  },
+  {
+    path: 'check',
+    loadComponent: () => import('./pages/check-game/check-game').then((m) => m.CheckGame),
+  },
+  {
+    path: 'grown-up',
+    loadComponent: () => import('./pages/grown-up/grown-up-area').then((m) => m.GrownUpArea),
+  },
   { path: '**', redirectTo: '' },
 ];

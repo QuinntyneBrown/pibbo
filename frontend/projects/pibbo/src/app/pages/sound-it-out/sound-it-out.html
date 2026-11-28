@@ -5,10 +5,11 @@
   [mood]="mood()"
   [done]="done()"
   [rounds]="content.roundsPerPlay"
+  [fit]="syllableRule() !== null"
   (replay)="replay()"
   (leave)="leave()"
 >
-  <div class="stage">
+  <div class="stage" [class.stage--syllables]="syllableRule()">
     @if (silentE(); as e) {
       <pb-silent-e
         [vowel]="e.vowel"
@@ -19,8 +20,13 @@
         [note]="e.note"
       />
     }
+    @if (syllableRule(); as glyph) {
+      <pb-rule [glyph]="glyph" [text]="content.syllables.rule" />
+    }
     <pb-word-tiles
+      [class.stage__word]="syllableRule()"
       [sounds]="sounds()"
+      [beats]="syllableRule() !== null"
       [heard]="round().heard"
       [next]="nextToTouch()"
       [sounding]="sounding()"

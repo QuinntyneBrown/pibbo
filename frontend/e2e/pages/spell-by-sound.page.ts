@@ -33,6 +33,13 @@ export class SpellBySoundPage {
   }
 
   /** Opens Spell by sound the way a child does: Read, then the activity on Home. */
+  /** Whether any of the letters is drawn with an outline inside its edge. */
+  async outlined(): Promise<boolean> {
+    return this.bank.evaluateAll((all) =>
+      all.some((el) => getComputedStyle(el).boxShadow.includes('inset')),
+    );
+  }
+
   async openFromHome(): Promise<void> {
     const home = new HomePage(this.page);
     await home.open();

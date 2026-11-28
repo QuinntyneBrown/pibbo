@@ -1,0 +1,215 @@
+// The guided lesson screen, as docs/mocks/assets/ui.css draws `.lesson` (ADR 0026).
+.lesson {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.lesson--read {
+  background: var(--color-read-soft);
+}
+
+.lesson--count {
+  background: var(--color-count-soft);
+}
+
+.lesson__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--layout-margin) 0;
+}
+
+.lesson__kicker {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+  color: var(--color-fg-muted);
+}
+
+.lesson__title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+
+  @media (min-width: 40rem) {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+.lesson__main {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  padding: var(--space-8) var(--layout-margin);
+}
+
+.lesson__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--layout-margin);
+  border-top: 2px solid rgb(255 255 255 / 0.7);
+
+  @media (min-width: 40rem) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.lesson__next {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.75rem;
+}
+
+.chunky {
+  --depth: var(--color-count-depth);
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-width: var(--target-child);
+  min-height: var(--target-child);
+  padding: 0 var(--space-8);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-count-strong);
+  color: var(--color-fg-on-strong);
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
+
+  &:active {
+    transform: translateY(var(--press-travel));
+    box-shadow: 0 var(--press-depth-down) 0 var(--depth);
+  }
+}
+
+.chunky--read {
+  --depth: var(--color-read-depth);
+  background: var(--color-read-strong);
+}
+
+.chunky--success {
+  --depth: var(--color-success-depth);
+  background: var(--color-success-strong);
+}
+
+.chunky--white {
+  --depth: var(--color-depth);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  box-shadow:
+    inset 0 0 0 2px var(--color-border),
+    0 var(--press-depth) 0 var(--depth);
+}
+
+.chunky--icon {
+  width: var(--target-child);
+  height: var(--target-child);
+  padding: 0;
+  border-radius: var(--radius-md);
+}
+
+.chunky--wide {
+  width: 100%;
+
+  @media (min-width: 40rem) {
+    width: auto;
+  }
+}
+
+.icon {
+  width: var(--size-4);
+  height: var(--size-4);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+// A phone on its side, or a short window: less padding so the path and Play both fit.
+@media (min-width: 32rem) and (max-height: 30rem),
+  (orientation: landscape) and (min-width: 32rem) and (max-width: 47.99rem) {
+  .lesson__top {
+    padding-top: var(--space-2);
+  }
+
+  .lesson__main {
+    padding-block: var(--space-2);
+  }
+
+  .lesson__foot {
+    flex-direction: row;
+    align-items: center;
+    padding-block: var(--space-2);
+  }
+
+  .chunky--wide {
+    width: auto;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 40rem) and (max-width: 47.99rem) and (max-height: 47rem) {
+  .lesson__main,
+  .lesson__foot {
+    padding-block: var(--space-3);
+  }
+}
+
+// A phone upright with little height (docs/mocks/assets/ui.css): the path and Play both fit.
+@media (max-width: 39.99rem) and (orientation: portrait) and (max-height: 51rem) {
+  .lesson__main {
+    padding-block: var(--space-2);
+  }
+}
+
+@media (max-width: 39.99rem) and (orientation: portrait) and (max-height: 42rem) {
+  .lesson__foot {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+  }
+
+  .lesson__foot .chunky {
+    width: auto;
+    padding-inline: var(--space-3);
+  }
+}
+
+@media (max-width: 39.99rem) and (orientation: portrait) and (max-height: 38rem) {
+  .lesson__top {
+    padding: var(--space-1) var(--space-2) 0;
+  }
+
+  .lesson__main,
+  .lesson__foot {
+    padding-inline: var(--space-2);
+  }
+}
+
+@media (max-width: 22rem) and (orientation: portrait) {
+  .lesson__next {
+    gap: var(--space-1);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-tight);
+  }
+}
+
+@media (min-width: 32rem) and (max-width: 39.99rem) and (orientation: landscape) and (max-height: 22rem) {
+  .lesson__main {
+    padding-block: var(--space-1);
+  }
+}

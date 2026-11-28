@@ -36,6 +36,17 @@ export class CountingDancePage {
   }
 
   /** Opens Counting dance the way a child does: Count, More, then Counting dance on Home. */
+  /** The colours of the speed switch: its tray and each option, in order. */
+  async switchSurfaces(): Promise<{ tray: string; options: string[] }> {
+    const background = (el: Element) => getComputedStyle(el).backgroundColor;
+    return {
+      tray: await this.page.locator('.switch--speed').evaluate(background),
+      options: await this.speeds.evaluateAll((all) =>
+        all.map((el) => getComputedStyle(el).backgroundColor),
+      ),
+    };
+  }
+
   async openFromHome(): Promise<void> {
     const home = new HomePage(this.page);
     await home.open();

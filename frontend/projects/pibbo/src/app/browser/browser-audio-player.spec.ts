@@ -4,6 +4,7 @@ import { AUDIO_ELEMENT_FACTORY, BrowserAudioPlayer } from './browser-audio-playe
 
 class FakeAudio {
   src = '';
+  volume = 1;
   currentTime = 0;
   onended: (() => void) | null = null;
   onerror: (() => void) | null = null;
@@ -74,5 +75,13 @@ describe('BrowserAudioPlayer', () => {
     expect(await outcome).toBe('stopped');
     expect(audio.paused).toBe(true);
     expect(audio.src).toBe('');
+  });
+
+  it('plays every recording at the volume chosen', () => {
+    player.setVolume(0.4);
+    void player.play('/recordings/a.mp3');
+    expect(audio.volume).toBe(0.4);
+    player.setVolume(2);
+    expect(audio.volume).toBe(1);
   });
 });

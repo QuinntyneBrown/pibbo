@@ -1,4 +1,4 @@
-# 0022: A content backend that holds nothing about a child
+# 0032: A content backend that holds nothing about a child
 
 **Status:** Proposed (journey 27); waits for the repository owner's agreement. Nothing of the
 backend is built until this reads Accepted with that agreement recorded here.

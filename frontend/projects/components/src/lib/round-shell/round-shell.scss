@@ -60,39 +60,6 @@
   stroke-linejoin: round;
 }
 
-.progress {
-  flex: 1;
-  height: var(--progress-height);
-  overflow: hidden;
-  border-radius: var(--radius-full);
-  background: var(--color-bg-sunken);
-}
-
-.progress__fill {
-  height: 100%;
-  border-radius: var(--radius-full);
-  background: var(--subject);
-  transition: width var(--duration-slow) var(--ease-out-quint);
-}
-.progress__fill--0 {
-  width: 0;
-}
-.progress__fill--1 {
-  width: 20%;
-}
-.progress__fill--2 {
-  width: 40%;
-}
-.progress__fill--3 {
-  width: 60%;
-}
-.progress__fill--4 {
-  width: 80%;
-}
-.progress__fill--5 {
-  width: 100%;
-}
-
 .shell__ask {
   display: flex;
   align-items: flex-end;
@@ -179,5 +146,140 @@
 
   .shell__game {
     padding-block: var(--space-2);
+  }
+}
+
+// From the mocks: a small upright phone keeps the prompt, the game and its answer in view, with
+// a compact prompt on every activity (L2-017 #3).
+@media (max-width: 39.99rem) and (max-height: 52rem) and (orientation: portrait) {
+  .shell {
+    .shell__top {
+      padding: var(--space-1) var(--space-2) 0;
+    }
+
+    .shell__ask {
+      // The mock's smaller Pibbo: the instruction keeps its width and fewer lines.
+      --pibbo-size: var(--size-7);
+
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-2) 0;
+    }
+
+    .bubble {
+      gap: var(--space-1);
+      margin-bottom: 0;
+      padding: var(--space-1) var(--space-2);
+    }
+
+    .bubble__picture {
+      width: var(--size-4);
+      height: var(--size-4);
+    }
+
+    .bubble__text {
+      font-size: var(--font-size-lg);
+    }
+
+    .shell__game {
+      padding: var(--space-2);
+    }
+  }
+}
+
+// A story layout (Spot the word, ADR 0024), as the mock draws it. Upright on a small phone the
+// word to find sits beside the progress bar; on its side the story spans the width between the
+// top row and the row it shares with the answer bar. The game's own parts name their areas.
+@media (max-width: 24rem) and (max-height: 42rem) {
+  .shell--story {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      'top find'
+      'ask ask'
+      'story story'
+      'answer answer';
+  }
+}
+
+@media (min-width: 32rem) and (orientation: landscape) and (max-height: 38rem) {
+  .shell--story {
+    display: grid;
+    grid-template-columns: minmax(8rem, 1fr) minmax(0, 3fr);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'top ask'
+      'story story'
+      'find answer';
+
+    .shell__ask {
+      padding-block: 0;
+    }
+
+    .bubble {
+      margin-block: var(--space-1);
+      padding-block: 0;
+    }
+  }
+}
+
+// On its side, the prompt stands beside the way out and the progress bar.
+@media (orientation: landscape) and (min-width: 32rem) and (max-height: 30rem) {
+  .shell--fit {
+    display: grid;
+    grid-template-columns: minmax(9rem, 1fr) minmax(0, 3fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+
+    .shell__top {
+      padding: var(--space-2) 0 var(--space-2) var(--space-4);
+    }
+
+    .shell__ask {
+      align-items: center;
+      justify-content: flex-end;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+    }
+
+    .bubble {
+      margin-bottom: 0;
+      padding-block: var(--space-1);
+    }
+
+    .shell__game {
+      grid-column: 1 / -1;
+      padding: var(--space-2) var(--space-4);
+    }
+
+    .shell__answer {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+@media (max-width: 24rem) and (max-height: 42rem),
+  (min-width: 32rem) and (orientation: landscape) and (max-height: 38rem) {
+  .shell--story {
+    .shell__top {
+      grid-area: top;
+    }
+
+    .shell__ask {
+      grid-area: ask;
+    }
+
+    .shell__game {
+      display: contents;
+    }
+
+    // The instruction needs the width more than Pibbo does; the word is shown large anyway.
+    pb-pibbo {
+      display: none;
+    }
+
+    .shell__answer {
+      grid-area: answer;
+    }
   }
 }

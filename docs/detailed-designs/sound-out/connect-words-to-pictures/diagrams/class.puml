@@ -12,27 +12,61 @@ skinparam class {
 title Class structure — Connect words to pictures
 
 interface AudioPlayer <<token AUDIO_PLAYER>> {
-  +play(recordingId: string): Promise<PlayOutcome>
+  +play(recording: string): Promise<PlayOutcome>
   +stop(): void
 }
 interface RandomSource <<token RANDOM_SOURCE>> {
   +next(): number
 }
-interface RoundFeedback <<token ROUND_FEEDBACK>> {
-  +praise(): void
-  +hint(h: Hint): void
+interface Clock <<token CLOCK>> {
+  +after(ms: number, run: () => void): () => void
 }
-
-class PairingRound {
-  +theme: Theme
+class Word <<api>> {
+  +word: string
+  +sounds: Sound[]
+  +picture: string
+  +recording: string
+}
+class WordTheme <<api>> {
+  +name: string
   +words: Word[]
-  +pictures: string[]
-  +joined: Map<string, string>
-  +selectedWord: string | null
+  +instruction: Instruction
+  +praise: { text, recording }
 }
-class pairingRules <<pure>> {
-  +selectWord(r, w): PairingRound
-  +selectPicture(r, p): PairResult
+class WordPicturesRound <<immutable>> {
+  +phase: 'matching' | 'right'
+  +theme: WordTheme
+  +words: Word[]
+  +pictures: Word[]
+  +held: number | null
+  +found: string[]
 }
-PairingRound "1" *-- "3" Word
+class "word-pictures-round" as rules <<pure>> {
+  +startWordPicturesRound(random, themes): WordPicturesRound
+  +holdWord(round, index): { round, spoken: string[] }
+  +matchPicture(round, index): { round, spoken: string[], touch }
+  +wordJoined(round, index): boolean
+  +pictureJoined(round, index): boolean
+  +joinColour(round, word): number
+  +wordPicturesAssets(round): string[]
+}
+class WordsAndPictures <<route /read/word-pictures>>
+class WordPictures <<pb-word-pictures>> {
+  +words: Word[]
+  +pictures: Word[]
+  +wordColours: number[]
+  +pictureColours: number[]
+  +held: number | null
+  +missed: number | null
+  +word: output<number>
+  +picture: output<number>
+}
+WordPicturesRound "1" *-- "2..4" Word
+WordPicturesRound --> WordTheme
+rules ..> WordPicturesRound
+rules ..> RandomSource
+WordsAndPictures ..> rules
+WordsAndPictures ..> AudioPlayer
+WordsAndPictures ..> Clock
+WordsAndPictures --> WordPictures
 @enduml

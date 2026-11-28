@@ -4,15 +4,9 @@ LAYOUT_WITH_LEGEND()
 title Containers — Play the check game
 Person(child, "Child", "Plays rounds")
 System_Boundary(pibbo, "Pibbo") {
-  Container(spa, "pibbo", "Angular, zoneless, standalone", "Home, Count, Sound Out and every activity screen")
-  Container(sw, "Service worker", "Angular service worker", "Caches app shell, content, pictures and recordings")
-  ContainerDb(store, "On-device storage", "localStorage / IndexedDB", "Progress only; never leaves the device")
-  Container(api, "Pibbo.Api", "ASP.NET Core, .NET 10", "Read-only versioned content")
-  ContainerDb(content, "Content store", "<TO SUPPLY>", "Words, sounds, lessons, recordings, pictures")
+  Container(spa, "pibbo", "Angular, zoneless, standalone", "Home, the activities and the check game, with bundled content and recordings")
+  ContainerDb(store, "On-device storage", "localStorage", "Ids of activities practised and earned; never leaves the device")
 }
 Rel(child, spa, "Touches", "HTTPS")
-Rel(spa, sw, "Fetches through")
-Rel(sw, api, "GET content", "JSON/HTTPS, same origin")
 Rel(spa, store, "Reads and writes progress")
-Rel(api, content, "Reads")
 @enduml

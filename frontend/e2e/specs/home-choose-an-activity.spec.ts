@@ -91,6 +91,27 @@ test.describe('Home: choose an activity', () => {
     await expect(home.activity('Count the toys')).toBeVisible();
   });
 
+  test('Given Read has more than 6 activities, when it is chosen, then 5 show with More, and More shows Spot the word and Rhyme time', async ({
+    page,
+    spoken,
+  }) => {
+    const home = new HomePage(page);
+    await home.open();
+    await home.touch(home.group('Read'));
+
+    await expect(home.activities).toHaveCount(5);
+    await expect(home.activity('Rhyme time')).toHaveCount(0);
+    await expect(home.more).toHaveText(/More/);
+
+    await home.touch(home.more);
+
+    await expect(home.activities).toHaveText([/Spot the word/, /Rhyme time/]);
+    await expectTargetsSizedAndApart(home);
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual(['/recordings/home/read.wav', '/recordings/home/more.wav']);
+  });
+
   test('Given Home, when the child touches the Read picture, then "Read" is spoken and the reading activities are shown', async ({
     page,
     spoken,
@@ -160,5 +181,21 @@ test.describe('Home: choose an activity', () => {
       '/recordings/home/read.wav',
       '/recordings/home/sound-it-out.wav',
     ]);
+  });
+});
+
+test.describe('Home: the group switch as its mock draws it', () => {
+  test('Given a group is chosen, when the switch is shown, then both sit on one tray, the chosen one filled and the other flat', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    const home = new HomePage(page);
+    await home.open();
+
+    await home.touch(home.group('Count'));
+
+    await expect
+      .poll(() => home.switchSurfaces())
+      .toEqual({ tray: 'rgb(237, 225, 248)', options: ['rgb(80, 25, 192)', 'rgba(0, 0, 0, 0)'] });
   });
 });

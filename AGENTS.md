@@ -19,8 +19,9 @@ not, do not build it, and if a request works against it, say so. The app stays t
   purchases, chat, accounts or notifications.
 
 Not decided yet, and never decided in code: which numbers, sounds and words the activities
-cover and in what order; whether Pibbo remembers what a child has practised; whether a grown-up
-has a screen; which languages and accents it speaks. The mission (`docs/specs/L0.md`) is not
+cover and in what order; which languages and accents it speaks. Decided by the repository owner
+(ADR 0028): Pibbo remembers what a child has practised on the device only, and a grown-up has an
+area behind a gate. The mission (`docs/specs/L0.md`) is not
 written: do not invent one. When it is, this section quotes it word for word.
 
 

@@ -28,6 +28,12 @@ export class AnswerBar {
   /** Whether the control takes a touch. */
   readonly ready = input(true);
 
+  /**
+   * Whether a small upright phone gets the mocks' compact bar, the message beside the way on,
+   * so the game above it keeps its room (as the shell's `fit` does).
+   */
+  readonly fit = input(false);
+
   /** Check, Try again, or Next once the round is done. */
   readonly action = output<void>();
 }

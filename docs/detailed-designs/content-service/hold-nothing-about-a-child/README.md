@@ -11,7 +11,7 @@ The feature is a vertical slice through the backend: `Pibbo.Api` (controllers an
 - **`ReadOnlyPublicPolicy`** — endpoint convention rejecting POST, PUT, PATCH and DELETE outside `/api/v1/admin` with 405.
 - **`PrivacyLogEnricher`** — Serilog / OpenTelemetry enricher that drops query strings, cookies and device identifiers and truncates IPs.
 - **`NoCookieMiddleware`** — removes any `Set-Cookie` header from public responses.
-- **`ADR`** — `docs/adr/` decision record for the content-only backend ([ADR 0022](../../../adr/0022-content-backend.md), proposed; not yet accepted).
+- **`ADR`** — `docs/adr/` decision record for the content-only backend ([ADR 0032](../../../adr/0032-content-backend.md), proposed; not yet accepted).
 
 ## Requirements
 

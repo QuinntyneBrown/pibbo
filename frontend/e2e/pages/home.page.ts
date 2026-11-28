@@ -19,6 +19,8 @@ export class HomePage {
   readonly activityGroupTitle: Locator;
   /** More: the next screen of a group with more than 6 activities. */
   readonly more: Locator;
+  /** The chosen group's guided lesson (L2-024 #4). */
+  readonly lesson: Locator;
 
   constructor(private readonly page: Page) {
     this.root = page.locator('.home');
@@ -28,6 +30,7 @@ export class HomePage {
     this.activities = page.locator('.home__games .game-card:not(.game-card--more)');
     this.activityGroupTitle = page.locator('.home__games .game-group__title');
     this.more = page.locator('.home__games .game-card--more');
+    this.lesson = page.locator('.home__lesson');
   }
 
   group(name: GroupName): Locator {
@@ -41,6 +44,30 @@ export class HomePage {
   async open(path = '/'): Promise<void> {
     await this.page.goto(path);
     await expect(this.root).toBeVisible();
+  }
+
+  /** The colours Home is drawn in: the page, its text and the wordmark's seed. */
+  async colours(): Promise<{ paper: string; ink: string; seed: string }> {
+    const body = this.page.locator('body');
+    const [paper, ink] = await body.evaluate((el) => {
+      const style = getComputedStyle(el);
+      return [style.backgroundColor, style.color];
+    });
+    const seed = await this.wordmark
+      .locator('.wordmark__seed')
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
+    return { paper: paper!, ink: ink!, seed };
+  }
+
+  /** The colours of the group switch: its tray and each option, in order. */
+  async switchSurfaces(): Promise<{ tray: string; options: string[] }> {
+    const background = (el: Element) => getComputedStyle(el).backgroundColor;
+    return {
+      tray: await this.page.locator('.switch--groups').evaluate(background),
+      options: await this.groups.evaluateAll((all) =>
+        all.map((el) => getComputedStyle(el).backgroundColor),
+      ),
+    };
   }
 
   /** Opens Home and returns the response headers of the page itself. */
@@ -123,7 +150,9 @@ export class HomePage {
   /** The bounding boxes of every target on screen. */
   async targetBoxes(): Promise<Box[]> {
     const boxes: Box[] = [];
-    for (const t of await this.page.locator('.switch__option, .game-card').all()) {
+    for (const t of await this.page
+      .locator('.switch__option, .game-card, .home__lesson, .check-card')
+      .all()) {
       const b = await t.boundingBox();
       if (b) boxes.push(b);
     }
