@@ -1,6 +1,6 @@
 <div
   class="tiles"
-  [class.tiles--long]="sounds().length > 3"
+  [class.tiles--long]="sounds().length + (quietE() === null ? 0 : 1) > 3"
   role="group"
   aria-label="The sounds in the word"
 >
@@ -14,21 +14,46 @@
         [class.tile--heard]="heardIt"
         [class.tile--next]="next() === i"
         [class.tile--sounding]="sounding() === i"
+        [class.tile--changed]="quietE() === true && changed() === i"
         [disabled]="next() !== i"
         [attr.aria-label]="
           heardIt
             ? sound.letters + ', says ' + sound.shown
             : next() === i
               ? sound.letters + ', tap to hear it'
-              : sound.letters
+              : quietE() === true && changed() === i
+                ? sound.letters + ', changed by the quiet e'
+                : sound.letters
         "
         (pbTap)="touched.emit(i)"
       >
         {{ sound.letters }}
+        @if (quietE() === true && changed() === i) {
+          <span class="tile__mark" aria-hidden="true"></span>
+        }
       </button>
       <span class="tiles__say" [class.tiles__say--hidden]="!heardIt" aria-hidden="true">{{
         sound.shown
       }}</span>
+    </div>
+  }
+  @if (quietE() !== null) {
+    <div class="tiles__unit">
+      <button
+        type="button"
+        class="tile tile--silent"
+        [class.tile--added]="quietE()"
+        [class.tile--next]="quietE() === false && canToggleE()"
+        [disabled]="!canToggleE()"
+        [attr.aria-pressed]="quietE()"
+        [attr.aria-label]="quietE() ? 'e, quiet, tap to take it away' : 'e, tap to add a quiet e'"
+        (pbTap)="toggledE.emit()"
+      >
+        e
+      </button>
+      <span class="tiles__say" [class.tiles__say--hidden]="!quietE()" aria-hidden="true"
+        >quiet</span
+      >
     </div>
   }
 </div>

@@ -25,6 +25,17 @@ export function adjacentConsonants(word: Word): readonly [Sound, Sound] | null {
   return a && b && isSingleConsonant(a) && isSingleConsonant(b) ? [a, b] : null;
 }
 
+/**
+ * The letter a quiet e changes (L2-016): where the word's sounds differ from the word without
+ * its e ("a" in "cape", /ā/ not /a/); null for a word that is not a silent-e word.
+ */
+export function changedLetter(word: Word): number | null {
+  const without = word.withoutE;
+  if (!without) return null;
+  const i = word.sounds.findIndex((s, k) => s.recording !== without.sounds[k]?.recording);
+  return i < 0 ? null : i;
+}
+
 /** The question a word with adjacent consonants asks once it is blended (L2-015 #2). */
 export interface FirstTwoQuestion {
   /** The two sounds asked for, in order. */
@@ -39,13 +50,21 @@ export interface FirstTwoQuestion {
 export const PICTURES_OFFERED = 3;
 
 /**
- * Where a round is: the child sounds each letter in order (`sounding`), then may blend
+ * Where a round is: a silent-e word first waits for its quiet e (`magic-e`); the child sounds each letter in order (`sounding`), then may blend
  * (`ready`); Pibbo blends (`blending`); a word with adjacent consonants first asks for its
  * first two sounds (`first-two`); the child picks the picture (`picking`); a wrong
  * picture gives a hint (`retry`); the round ends `right` or, after the third wrong, `modelled`.
  */
 export type SoundOutPhase =
-  'sounding' | 'ready' | 'blending' | 'first-two' | 'picking' | 'retry' | 'right' | 'modelled';
+  | 'magic-e'
+  | 'sounding'
+  | 'ready'
+  | 'blending'
+  | 'first-two'
+  | 'picking'
+  | 'retry'
+  | 'right'
+  | 'modelled';
 
 /** One Sound it out round. Immutable: every rule returns a new value. */
 export interface SoundOutRound {
@@ -61,6 +80,13 @@ export interface SoundOutRound {
   readonly wrong: number;
   /** The first-two-sounds question, for a word with adjacent consonants only. */
   readonly firstTwo: FirstTwoQuestion | null;
+  /** For a silent-e word, whether its quiet e is added; null for any other word. */
+  readonly eAdded: boolean | null;
+}
+
+/** The sounds a round shows: the word without its e until the e is added (L2-016). */
+export function shownSounds(round: SoundOutRound): readonly Sound[] {
+  return round.eAdded === false ? round.word.withoutE!.sounds : round.word.sounds;
 }
 
 function shuffled<T>(random: RandomSource, items: readonly T[]): T[] {
@@ -89,10 +115,12 @@ export function startSoundOutRound(
     random,
     words.filter((w) => w.word !== word.word),
   ).slice(0, PICTURES_OFFERED - 1);
-  const pictures = shuffled(random, [word, ...others]);
+  // A silent-e word offers the picture of the word without its e among its pictures (#3).
+  const offered = word.withoutE ? [word.withoutE, others[0]!] : others;
+  const pictures = shuffled(random, [word, ...offered]);
   const pair = adjacentConsonants(word);
   return {
-    phase: 'sounding',
+    phase: word.withoutE ? 'magic-e' : 'sounding',
     word,
     heard: word.sounds.map(() => false),
     pictures,
@@ -107,11 +135,13 @@ export function startSoundOutRound(
       ]),
       answered: false,
     },
+    eAdded: word.withoutE ? false : null,
   };
 }
 
 /** The letter to touch next, or null once every sound is heard. */
 export function nextLetter(round: SoundOutRound): number | null {
+  if (round.phase === 'magic-e') return null;
   const i = round.heard.indexOf(false);
   return i < 0 ? null : i;
 }
@@ -217,6 +247,7 @@ export function roundAssets(round: SoundOutRound): string[] {
       ...round.pictures.map((w) => w.picture),
       ...round.word.sounds.map((s) => s.recording),
       round.word.recording,
+      ...(round.word.withoutE ? [round.word.withoutE.recording] : []),
     ]),
   ];
 }

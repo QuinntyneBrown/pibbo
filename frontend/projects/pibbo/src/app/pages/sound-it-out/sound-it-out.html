@@ -9,14 +9,29 @@
   (leave)="leave()"
 >
   <div class="stage">
+    @if (silentE(); as e) {
+      <pb-silent-e
+        [vowel]="e.vowel"
+        [ruleBefore]="content.silentE.rule.before"
+        [ruleAfter]="content.silentE.rule.after"
+        [word]="e.word"
+        [picture]="e.picture"
+        [note]="e.note"
+      />
+    }
     <pb-word-tiles
-      [sounds]="round().word.sounds"
+      [sounds]="sounds()"
       [heard]="round().heard"
       [next]="nextToTouch()"
       [sounding]="sounding()"
       [showBlend]="!picking() && !choices()"
       [canBlend]="round().phase === 'ready'"
       [choices]="choices()"
+      [quietE]="round().eAdded"
+      [canToggleE]="
+        round().phase === 'magic-e' || round().phase === 'sounding' || round().phase === 'ready'
+      "
+      [changed]="silentE()?.changed ?? null"
       (touched)="touchLetter($event)"
       (blend)="blend()"
       (chose)="chooseFirstTwo($event)"
