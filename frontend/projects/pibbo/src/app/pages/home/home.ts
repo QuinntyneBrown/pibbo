@@ -50,7 +50,7 @@ export class Home {
     return group && this.screen().more ? moreFor(group.id) : null;
   });
 
-  /** The chosen group's guided lesson, shown as its own picture (L2-024 #4, ADR 0025). */
+  /** The chosen group's guided lesson, shown as its own picture (L2-024 #4, ADR 0026). */
   protected readonly lesson = computed(() => lessonById(LESSONS, this.chosen()?.id));
   protected readonly lessonLine = LESSON_LINES.picture;
 

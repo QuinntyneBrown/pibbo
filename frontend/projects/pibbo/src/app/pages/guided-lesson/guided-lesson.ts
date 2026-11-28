@@ -24,7 +24,7 @@ import {
 } from '@pibbo/domain';
 
 /**
- * A guided lesson (docs/mocks/pages/guided-lesson, ADR 0025): the path of its activities, the
+ * A guided lesson (docs/mocks/pages/guided-lesson, ADR 0026): the path of its activities, the
  * current one spoken and shown as "Up next", and one touch to play it. Every rule is in
  * `@pibbo/domain`; this page reads and keeps the lesson's place and plays recordings.
  */

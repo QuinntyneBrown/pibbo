@@ -15,7 +15,7 @@ interface PathStep {
 /**
  * The lesson path (docs/mocks/pages/guided-lesson): one node a step. A done step is a check
  * and plays again; the current step is larger, with a play mark, in the group's colour, and has
- * `aria-current="step"`; a later step is locked and takes no touch (ADR 0025).
+ * `aria-current="step"`; a later step is locked and takes no touch (ADR 0026).
  */
 @Component({
   selector: 'pb-lesson-path',

@@ -1,4 +1,4 @@
-# 0025: Guided lesson: the path, and the one thing a lesson keeps on the device
+# 0026: Guided lesson: the path, and the one thing a lesson keeps on the device
 
 **Status:** Accepted (journey 22)
 
@@ -32,8 +32,9 @@ absent, and whose `clearAll` the grown-up area's "clear progress" calls.
    `read`, the route `/lesson/:subject`), the kicker and title shown, and 3 to 6 activity ids
    from the catalogue. Which activities a lesson holds, and in what order, is not decided; the
    mock's two paths are the cast. "Two letters, one sound" is not a separate activity, so the
-   reading lesson's third game is Spell by sound. Rhyme time and Build a sentence (journeys 20
-   and 21) are named before they exist.
+   reading lesson's third game is Spell by sound. Build a sentence (journey 20) is named before
+   it exists; Rhyme time (journey 21) landed while this journey was open, so the reading path
+   has four steps.
 4. **An unknown activity is left off the path** (`lessonSteps`), and the page logs one client
    warning per unknown step through `CLIENT_LOG`: `Lesson "read" names an unknown activity
    "rhyme-time"; it is skipped.` It names content only. Nothing is sent anywhere.
@@ -76,9 +77,9 @@ Pibbo now keeps one number and one id per lesson on the device; it is not practi
 (no answers or results), so the open question of remembering practice stays open for
 journey 23. The recordings ("Up next", "Lesson", the lesson titles, "Lesson done") are
 placeholders like every other (ADR 0006). Inside a lesson the activity's progress bar still
-shows its own rounds; the mock's "game N of 5" bar is deferred. When Rhyme time and Build a
-sentence are built, the reading lesson grows to five steps and the e2e spec for the unknown
-step must name another unknown activity.
+shows its own rounds; the mock's "game N of 5" bar is deferred. When Build a sentence is
+built, the reading lesson grows to five steps and the e2e spec for the unknown step must name
+another unknown activity.
 
 The initial bundle grows by 4.2 kB raw (0.7 kB gzipped; 237.3 to 241.6 kB): the root
 `ACTIVITY_EXIT` binding (0.6 kB) and framework code the new lazy code reaches, which the

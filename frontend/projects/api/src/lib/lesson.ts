@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import type { Activity, GroupId } from './activity';
 
-/** A guided lesson is named by its group: `/lesson/count`, `/lesson/read` (ADR 0025). */
+/** A guided lesson is named by its group: `/lesson/count`, `/lesson/read` (ADR 0026). */
 export type LessonId = GroupId;
 
 /** A guided lesson as content: 3 to 6 activities in order (L2-022). */
@@ -32,7 +32,7 @@ export interface LessonLines {
 
 /**
  * Where an activity goes when the child leaves it or finishes its last round. Outside a lesson
- * both go Home with the activity's group chosen; inside one they go back to the path (ADR 0025).
+ * both go Home with the activity's group chosen; inside one they go back to the path (ADR 0026).
  */
 export interface ActivityExit {
   /** The child touched Leave. */

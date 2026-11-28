@@ -1,6 +1,6 @@
 import type { ActivityCatalogue, Lesson, LessonStep } from '@pibbo/api';
 
-/** The version of what a lesson keeps on the device; any other reads as nothing (ADR 0025). */
+/** The version of what a lesson keeps on the device; any other reads as nothing (ADR 0026). */
 export const LESSON_PLACE_VERSION = 1;
 
 /** The one value a lesson keeps: where the child is on its path. */

@@ -194,7 +194,7 @@ export class WordsAndPictures {
     this.exit.leave('read');
   }
 
-  /** After the last round: Home, or back to the lesson's path (ADR 0025). */
+  /** After the last round: Home, or back to the lesson's path (ADR 0026). */
   protected finish(): void {
     this.audio.stop();
     this.exit.finish('read');

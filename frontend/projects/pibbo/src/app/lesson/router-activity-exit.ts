@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import type { ActivityExit, GroupId } from '@pibbo/api';
 
 /**
- * Where an activity goes when it ends (ADR 0025). An activity opened from a lesson's path has
+ * Where an activity goes when it ends (ADR 0026). An activity opened from a lesson's path has
  * `?lesson=<id>&step=<n>` in its address: Leave returns to the path and the last Next returns
  * to it with `?finished=<n>`. Anything else returns Home with the activity's group chosen.
  */

@@ -191,9 +191,9 @@ test.describe('Guided lesson: resuming on the same device', () => {
 });
 
 test.describe('Guided lesson: an activity that does not exist yet', () => {
-  // The reading lesson names Rhyme time and Build a sentence (journeys 20 and 21) before they
-  // exist (ADR 0025). When they are built, name another unknown activity here.
-  test('Given the reading lesson names unknown activities, when it runs, then those steps are left off the path and a client warning with no child data is logged for each', async ({
+  // The reading lesson names Build a sentence (journey 20) before it exists (ADR 0026). When it
+  // is built, name another unknown activity here.
+  test('Given the reading lesson names an unknown activity, when it runs, then that step is left off the path and a client warning with no child data is logged', async ({
     page,
   }) => {
     const lesson = new LessonPage(page);
@@ -201,15 +201,12 @@ test.describe('Guided lesson: an activity that does not exist yet', () => {
 
     await lesson.open('read');
 
-    await expect(lesson.steps).toHaveCount(3);
-    await expect(lesson.name(3)).toHaveText('Spell by sound');
-    await expect(lesson.path).toHaveAttribute('aria-label', '3 games in order');
+    await expect(lesson.steps).toHaveCount(4);
+    await expect(lesson.name(4)).toHaveText('Rhyme time');
+    await expect(lesson.path).toHaveAttribute('aria-label', '4 games in order');
     await expect
       .poll(() => warnings)
-      .toEqual([
-        'Lesson "read" names an unknown activity "rhyme-time"; it is skipped.',
-        'Lesson "read" names an unknown activity "build-a-sentence"; it is skipped.',
-      ]);
+      .toEqual(['Lesson "read" names an unknown activity "build-a-sentence"; it is skipped.']);
   });
 });
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import type { ClientLog } from '@pibbo/api';
 
 /**
- * Warnings go to the browser's console and nowhere else: nothing is sent (ADR 0025). Callers
+ * Warnings go to the browser's console and nowhere else: nothing is sent (ADR 0026). Callers
  * pass content ids only, never anything about a child.
  */
 @Injectable()

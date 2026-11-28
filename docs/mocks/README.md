@@ -86,7 +86,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   its side the product makes the words and pictures one row, words on the left: at 568 × 320
   the mock's two rows of 60 px targets do not fit above the answer bar.
 
-- **Guided lesson aligned (journey 22, ADR 0025).** Home's Count and Read screens gain a
+- **Guided lesson aligned (journey 22, ADR 0026).** Home's Count and Read screens gain a
   Lesson picture beside the wordmark (`.home__lesson`, `L2-024` #4); it opens the chosen
   group's lesson where the child left off. The done state no longer earns a star: praise is
   for effort and nothing is counted, so it says "Lesson done! You played every game." On the

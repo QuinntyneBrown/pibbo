@@ -27,4 +27,4 @@
 | [0023](0023-words-and-pictures-round.md) | Words and pictures: a pair match of words and their pictures | Accepted |
 | [0024](0024-spot-the-word-round.md) | Spot the word: every common word in a short story, and misses that come back | Accepted |
 | [0025](0025-rhyme-time-round.md) | Rhyme time: choose every rhyme, then Check | Accepted |
-| [0025](0025-guided-lesson-and-its-place-on-the-device.md) | Guided lesson: the path, and the one thing a lesson keeps on the device | Accepted |
+| [0026](0026-guided-lesson-and-its-place-on-the-device.md) | Guided lesson: the path, and the one thing a lesson keeps on the device | Accepted |

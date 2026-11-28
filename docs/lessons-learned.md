@@ -809,10 +809,10 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 
 - `L2-022` said the next activity starts automatically after praise; the mock returns to the
   path after Next, lights the next step and waits for one touch on Play. The mock won: `L2-022`
-  was rewritten ("the child never chooses what comes next"), and ADR 0025 records why no timer
+  was rewritten ("the child never chooses what comes next"), and ADR 0026 records why no timer
   starts an activity. The done state's "You earned a star" was redrawn without the star, and
   Home's Lesson picture (`L2-024` #4) was drawn first.
-- Resuming keeps something on the device for the first time. ADR 0025 limits it to one value
+- Resuming keeps something on the device for the first time. ADR 0026 limits it to one value
   per lesson, `{"v":1,"step":n,"at":"<activity>"}`, checked against the path when read.
 - Every activity had its own `router.navigate(['/'], …)` in `leave()`. Routing all thirteen
   through `ACTIVITY_EXIT` took one script; `leave` and the new `finish` differ only in a lesson.
@@ -821,6 +821,9 @@ One entry per journey, newest last. Before a journey, read these and apply the o
   lazy code reaches, which a source-map diff of `main` showed (same modules, larger).
 - The path's first build scrolled 281 px at 320 x 568: the mock's small-phone rules for the
   lesson sit far from `.lesson` in `ui.css` (around line 1130), and a first read missed them.
+- Journey 21 (Rhyme time) landed while this branch was open and took ADR 0025, so this one
+  became 0026. The rebase joined two route entries without the brace between them, and Rhyme
+  time needed `ACTIVITY_EXIT` too; the reading lesson then had four steps, not three.
 - Two specs failed now and then on `net::ERR_ABORTED`: a `goto` straight after a navigation cut
   off fonts or Home's lazy chunk that were still loading.
 
@@ -836,7 +839,10 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 4. Assert what a page speaks on arrival from the end of the list (`slice(-n)`), or read the
    count before the touch that leads there: the fake player can finish before the next line of
    the spec runs.
-5. Filter console warnings by `location().url` when asserting the app's own: the browser logs
+5. A picture whose word changes while it loads aborts its image under load (seen once in a
+   full run, never alone in 84 runs); the network guard now allows an aborted image as it
+   allows an aborted recording or fetch.
+6. Filter console warnings by `location().url` when asserting the app's own: the browser logs
    header warnings (`Permissions-Policy`) as warnings too.
 
 **Earlier lessons applied**
@@ -849,6 +855,6 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - A spec that passes before its slice is a guard (J3 #5): the pausing specs, said so in the commit.
 - Measure 320 x 568 to 1920 x 1080 in every state (J9 #1, J19 #3): a throwaway spec found the
   path overflow, fixed with the mock's rules, and Home's pre-existing overflow (left to journey 26).
-- Lazy routes grow the initial chunk (J2 #4): measured, reduced and recorded in ADR 0025.
+- Lazy routes grow the initial chunk (J2 #4): measured, reduced and recorded in ADR 0026.
 - Tag the critical path in the same change (J11 #4): finishing activity 1 and moving on is
   `@critical`.

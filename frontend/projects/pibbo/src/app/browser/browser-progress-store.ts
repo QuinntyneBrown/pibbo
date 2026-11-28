@@ -8,7 +8,7 @@ export const PREFIX = 'pibbo:';
 const ours = (key: string) => (key.startsWith(PREFIX) ? key : PREFIX + key);
 
 /**
- * The device's `localStorage`, and nothing else (ADR 0025). A value that is missing or is not
+ * The device's `localStorage`, and nothing else (ADR 0026). A value that is missing or is not
  * JSON reads as `null`; storage that throws (private browsing, turned off, full) reads as
  * `null` and writes nothing, so a lesson always runs.
  */

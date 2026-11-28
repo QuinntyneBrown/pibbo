@@ -2,7 +2,7 @@
 
 ## Overview
 
-A *guided lesson* is an ordered list of 3 to 6 activities defined in content, drawn as a *lesson path* (`docs/mocks/pages/guided-lesson`). Finishing an activity and touching Next returns to the path with the next step current; "Up next" and its name are spoken and shown, and one touch plays it. The child never chooses what comes next (ADR 0025).
+A *guided lesson* is an ordered list of 3 to 6 activities defined in content, drawn as a *lesson path* (`docs/mocks/pages/guided-lesson`). Finishing an activity and touching Next returns to the path with the next step current; "Up next" and its name are spoken and shown, and one touch plays it. The child never chooses what comes next (ADR 0026).
 
 - **lesson path** — row of step marks, with the current step shown by shape (larger, with a play mark) and colour
 

@@ -6,7 +6,7 @@ import { GuidedLesson } from './guided-lesson';
 
 /**
  * The lesson route binds what only a lesson uses, so none of it is in the initial bundle: the
- * device store of its place and the client log (ADR 0025).
+ * device store of its place and the client log (ADR 0026).
  */
 export const routes: Routes = [
   {
