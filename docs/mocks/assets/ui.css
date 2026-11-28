@@ -144,6 +144,10 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
 @keyframes check-enter { from { opacity: 0; } }
 .answer-bar__message { line-height: 2rem; display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); }
 .answer-bar--correct .answer-bar__message { color: var(--color-success-strong); }
+/* Count and write names its feedback bars as the design system does: --right is the correct bar, --hint and --model the retry bar. */
+.answer-bar--right { background: var(--color-success-soft); }
+.answer-bar--right .answer-bar__message { color: var(--color-success-strong); }
+.answer-bar--hint, .answer-bar--model { background: var(--color-reward-soft); }
 
 .answer-bar__spacer { height: var(--control-height); }
 
@@ -682,6 +686,8 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
 .box--filled { border: 0; background: var(--color-surface); }
 .box--next { border-color: var(--color-read); background: color-mix(in srgb, var(--color-surface) 60%, transparent); }
 .box--right { border: 0; background: var(--color-success-soft); color: var(--color-success-strong); }
+/* Spell by sound: an empty box shows the sound it says (L2-013 #3), smaller than a placed letter. */
+.box__sound { color: var(--color-read-strong); font-size: var(--font-size-xl); line-height: 1; }
 .bank { display: grid; grid-template-columns: repeat(3, var(--size-10)); gap: var(--gap-targets); }
 @media (min-width: 40rem) { .bank { grid-template-columns: repeat(6, var(--size-10)); } }
 .bank__letter { width: var(--size-10); height: var(--size-10); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-fg); font-family: var(--font-read); font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); }
@@ -1301,6 +1307,10 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
   .stage:has(.rule):has(.pick) .pick { grid-area: 2 / 2; }
   .stage:has(.rule):has(.pick):not(:has(.before)) .rule { grid-column: 1 / -1; }
 }
+/* A four-sound word ("stop") keeps one row beside the pictures. */
+@media (min-width: 48rem) and (max-height: 56rem) {
+  .stage:has(.rule):has(.pick) .tiles--long .tile:not(.tile--wide) { width: var(--size-11); }
+}
 @media (max-width: 22rem) and (max-height: 38rem) {
   .stage:has(.before):has(.pick) { gap: var(--space-1); }
   .stage:has(.before):has(.pick) .pick { max-width: 14rem; }
@@ -1361,8 +1371,8 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
 [data-theme="dark"] :is(.hear, .compare__number, .dance__number, .tally__number, .sum__answer, .digit-pad__slot--filled) {
   color: var(--color-count-fg);
 }
-[data-theme="dark"] :is(.speaker, .hear--read) { color: var(--color-read-fg); }
-[data-theme="dark"] :is(.compare__card--won .compare__number, .answer-bar--correct .answer-bar__message,
+[data-theme="dark"] :is(.speaker, .hear--read, .box__sound) { color: var(--color-read-fg); }
+[data-theme="dark"] :is(.compare__card--won .compare__number, .answer-bar--correct .answer-bar__message, .answer-bar--right .answer-bar__message,
   .box--right, .sum__answer--right, .digit-pad__slot--answer) { color: var(--color-success-fg); }
 [data-theme="dark"] .digit-pad__slot--filled:not(.digit-pad__slot--answer) { box-shadow: inset 0 0 0 3px currentColor; }
 [data-theme="dark"] .track-row__cell:not(.track-row__cell--now, .track-row__cell--said) { color: var(--color-fg-muted); }
@@ -1560,7 +1570,7 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
   .numeral.numeral--answer { border: 4px double Highlight; }
   .bubble { outline: 1px solid CanvasText; outline-offset: -1px; }
   .hear { border: 2px solid ButtonText; }
-  .answer-bar--correct, .answer-bar--retry { border-block-start: 2px solid CanvasText; }
+  .answer-bar--correct, .answer-bar--retry, .answer-bar--right, .answer-bar--hint, .answer-bar--model { border-block-start: 2px solid CanvasText; }
 
   .press { border: 2px solid ButtonText; }
   .press[aria-pressed="true"] { border: 4px double Highlight; }

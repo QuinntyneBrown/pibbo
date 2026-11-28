@@ -101,6 +101,7 @@
       "states": [
         "start",
         "default",
+        "counted",
         "choose",
         "correct",
         "retry",
@@ -126,6 +127,7 @@
         "L2-026"
       ],
       "states": [
+        "start",
         "counting",
         "default",
         "written",
@@ -200,6 +202,7 @@
         "start",
         "default",
         "by-twos",
+        "by-tens",
         "retry",
         "correct"
       ],
@@ -295,6 +298,7 @@
         "L2-026"
       ],
       "states": [
+        "start",
         "default",
         "held",
         "miss",
@@ -319,6 +323,7 @@
         "L2-026"
       ],
       "states": [
+        "start",
         "default",
         "held",
         "miss",
@@ -346,6 +351,7 @@
         "L2-026"
       ],
       "states": [
+        "start",
         "default",
         "ready",
         "pick",
@@ -480,6 +486,8 @@
         "retry",
         "model",
         "counting-question",
+        "rhyme-question",
+        "number-question",
         "letter-question",
         "adding-question",
         "results",
@@ -498,6 +506,7 @@
         "correct": "read",
         "retry": "read",
         "model": "read",
+        "rhyme-question": "read",
         "letter-question": "read"
       }
     },

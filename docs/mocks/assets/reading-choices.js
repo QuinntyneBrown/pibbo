@@ -11,8 +11,8 @@
       cat: { bank: ['t', 'h', 'a', 'c', 'u', 'b'], answer: 'c a t' }
     },
     sentence: {
-      sun: { bank: ['the', 'sun.', 'I', 'map', 'see'], answer: 'I see the sun.' },
-      boat: { bank: ['is', 'The', 'big.', 'boat', 'sat'], answer: 'The boat is big.' }
+      sun: { bank: ['the', 'sun.', 'I', 'map', 'see'], answer: 'I see the sun.', alt: 'The sun shining' },
+      boat: { bank: ['is', 'The', 'big.', 'boat', 'sat'], answer: 'The boat is big.', alt: 'A big boat' }
     }
   };
   const sample = samples[mode] && Object.hasOwn(samples[mode], requested) ? samples[mode][requested] : null;
@@ -24,7 +24,7 @@
     bank.forEach((button, i) => { button.textContent = sample.bank[i]; });
     const picture = board.querySelector('.frame-picture img');
     picture.src = '../../assets/pictures/' + requested + '.jpg';
-    picture.alt = requested;
+    picture.alt = sample.alt || requested;
     const praise = document.querySelector('.answer-bar--correct .answer-bar__message');
     if (praise) {
       praise.lastChild.textContent = mode === 'sentence'
@@ -82,6 +82,8 @@
     if (!isFeedback && filled !== null) {
       const letters = Array.from(filled).slice(0, boxes.length);
       if (letters.every(letter => labels.includes(letter))) selected = letters.map(letter => labels.indexOf(letter));
+    } else if (!isFeedback && new URLSearchParams(location.search).get('begin') === '1') {
+      selected = [];
     }
     let activeCue;
     let cueTimer;
@@ -90,19 +92,24 @@
       activeCue?.remove();
       activeCue = null;
     }
+    function showCue(host, block, phoneme) {
+      clearCue();
+      activeCue = document.createElement('span');
+      activeCue.className = block + '__sound';
+      activeCue.setAttribute('aria-hidden', 'true');
+      activeCue.textContent = phoneme;
+      host.append(activeCue);
+      cueTimer = setTimeout(clearCue, 900);
+    }
     board.querySelectorAll('.boxes__unit .speaker').forEach((speaker, i) => {
       const phoneme = '/' + (target[i] === 'c' ? 'k' : target[i]) + '/';
       speaker.setAttribute('aria-label', 'Hear sound ' + (i + 1) + ', ' + phoneme);
-      speaker.addEventListener('click', () => {
-        clearCue();
-        activeCue = document.createElement('span');
-        activeCue.className = 'speaker__sound';
-        activeCue.setAttribute('aria-hidden', 'true');
-        activeCue.textContent = phoneme;
-        speaker.append(activeCue);
-        cueTimer = setTimeout(clearCue, 900);
-      });
+      speaker.addEventListener('click', () => showCue(speaker, 'speaker', phoneme));
     });
+    // An empty box says the sound that belongs there too (L2-013 #3), so a phone that hides the speakers still offers it.
+    boxes.forEach((box, i) => box.addEventListener('click', () => {
+      if (i >= selected.length) showCue(box, 'box', '/' + (target[i] === 'c' ? 'k' : target[i]) + '/');
+    }));
     document.addEventListener('visibilitychange', () => { if (document.hidden) clearCue(); });
     window.addEventListener('pagehide', clearCue);
   }
@@ -121,10 +128,10 @@
     boxes.forEach((box, i) => {
       const filled = i < selected.length;
       box.textContent = filled ? labels[selected[i]] : '';
-      box.disabled = isFeedback || !filled;
+      box.disabled = isFeedback;
       box.classList.toggle('box--filled', filled);
       box.classList.toggle('box--next', !filled && i === selected.length);
-      box.setAttribute('aria-label', filled ? (isFeedback ? 'Sound ' + (i + 1) + ', ' + box.textContent : 'Remove ' + box.textContent) : 'Empty box for sound ' + (i + 1));
+      box.setAttribute('aria-label', filled ? (isFeedback ? 'Sound ' + (i + 1) + ', ' + box.textContent : 'Remove ' + box.textContent) : 'Empty box for sound ' + (i + 1) + (isFeedback ? '' : ', hear it'));
     });
     bank.forEach(button => { button.disabled = isFeedback || selected.length === boxes.length; });
     prompt.textContent = selected.length === boxes.length ? 'Does it say the word? Check it!' : 'Listen: “' + target.join('') + '.” Pick a letter for each sound.';
@@ -180,6 +187,7 @@
 
   if (!isFeedback) {
     boxes.forEach((box, i) => box.addEventListener('click', event => {
+      if (i >= selected.length) return;
       const removed = selected[i];
       selected.splice(i);
       draw();

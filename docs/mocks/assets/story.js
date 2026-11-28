@@ -8,7 +8,8 @@
   const counter = document.querySelector('.found');
   const complete = document.querySelector('.answer-bar--correct');
   const preset = params.get('found');
-  let count = /^[0-9]+$/.test(preset) ? Math.min(Number(preset), matches.length) : 1;
+  const drawn = document.querySelectorAll('.story__word--found').length;
+  let count = /^[0-9]+$/.test(preset) ? Math.min(Number(preset), matches.length) : drawn;
   if (params.get('begin') === '1') count = 0;
   if (complete) count = matches.length;
   if (!complete && count === matches.length) {

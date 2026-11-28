@@ -18,7 +18,7 @@
   const illustrated = Array.from(document.querySelectorAll('.tile'), tile => tile.textContent).join('');
   const soundPatterns = {
     ship: { glyph: 'sh', rule: 'Two letters, one sound', units: ['sh', 'i', 'p'], sounds: ['/sh/', '/i/', '/p/'] },
-    stop: { glyph: 's + t', rule: 'Say both sounds, quickly', units: ['s', 't', 'o', 'p'], sounds: ['/s/', '/t/', '/o/', '/p/'] },
+    stop: { glyph: 's + t', rule: 'Say both sounds, quickly', units: ['s', 't', 'o', 'p'], sounds: ['/s/', '/t/', '/o/', '/p/'], firstTwo: true },
     night: { glyph: 'igh', rule: 'Three letters, one sound: /ī/', units: ['n', 'igh', 't'], sounds: ['/n/', '/ī/', '/t/'] },
     boat: { glyph: 'oa', rule: 'Two vowels team up to say /ō/', units: ['b', 'oa', 't'], sounds: ['/b/', '/ō/', '/t/'] }
   };
@@ -30,12 +30,27 @@
   const misses = [1, 2].includes(attempts) ? attempts : 0;
 
   function buttonFrom(link) {
+    if (link.tagName === 'BUTTON') return link;
     const button = document.createElement('button');
     button.type = 'button';
     button.className = link.className;
     button.textContent = link.textContent;
     link.replaceWith(button);
     return button;
+  }
+
+  // A tile is named by its letters and its state: heard (with its sound), next, or waiting.
+  function labelTile(tile) {
+    const sound = tile.nextElementSibling.textContent;
+    const letters = tile.textContent;
+    tile.setAttribute('aria-label', tile.classList.contains('tile--heard')
+      ? letters + (sound.startsWith('/') ? ', says ' : ', ') + sound
+      : tile.classList.contains('tile--next') ? letters + ', tap to hear it' : letters);
+  }
+  // Syllables are clapped one at a time; other words are sounded part by part.
+  function promptFor(next) {
+    const rule = document.querySelector('.rule__glyph');
+    return rule && rule.textContent.includes('·') ? 'Tap “' + next.textContent + '” and clap it.' : null;
   }
 
   const pattern = soundPatterns[word];
@@ -47,20 +62,23 @@
     glyph.textContent = pattern.glyph;
     rule.append(glyph, ' ' + pattern.rule);
     const group = document.querySelector('.tiles');
-    group.before(rule);
+    if (!document.querySelector('.rule')) group.before(rule);
+    group.classList.toggle('tiles--long', pattern.units.length > 3);
     while (group.children.length < pattern.units.length) {
       group.append(group.lastElementChild.cloneNode(true));
     }
-    if (blend && group.querySelector('.tile--next')) prompt.textContent = 'Tap each part and say its sound.';
+    if (blend && group.querySelector('.tile--next') && pattern.units.some(unit => unit.length > 1)) {
+      prompt.textContent = 'Tap each part and say its sound.';
+    }
     document.querySelectorAll('.tile').forEach((tile, i) => {
       tile.textContent = pattern.units[i];
       tile.classList.toggle('tile--wide', pattern.units[i].length > 1);
       tile.nextElementSibling.textContent = pattern.sounds[i];
-      tile.setAttribute('aria-label', pattern.units[i] + ', says ' + pattern.sounds[i]);
+      labelTile(tile);
     });
     document.querySelectorAll('.mock-bar a[href]').forEach(link => {
       const url = new URL(link.href);
-      if (new URL('.', url).href === new URL('.', location.href).href &&
+      if (illustrated !== word && new URL('.', url).href === new URL('.', location.href).href &&
           !/(magic-e|syllables)\.html$/.test(url.pathname)) {
         link.addEventListener('click', () => {
           const state = new URLSearchParams(link.hash.slice(1));
@@ -81,14 +99,15 @@
     });
     const fill = blend.querySelector('.blend__fill');
     const control = blend.querySelector('button') || buttonFrom(blend.querySelector('a'));
-    if (route.get('begin') === '1' && location.pathname.endsWith('/default.html')) {
+    if (route.get('begin') === '1') {
       tiles.forEach((tile, i) => {
         tile.disabled = i !== 0;
-        tile.setAttribute('aria-label', tile.textContent + (i === 0 ? ', tap to hear it' : ''));
         tile.classList.remove('tile--heard', 'tile--sounding');
         tile.classList.toggle('tile--next', i === 0);
         tile.nextElementSibling.classList.add('tiles__say--hidden');
+        labelTile(tile);
       });
+      prompt.textContent = promptFor(tiles[0]) || prompt.textContent;
     }
     // A longer word is read one clap at a time (L2-017). `?begin=1` shows the round as it opens.
     const claps = location.pathname.endsWith('/syllables.html');
@@ -131,12 +150,14 @@
         const next = tiles[heard];
         next.disabled = false;
         next.classList.add('tile--next');
-        next.setAttribute('aria-label', next.textContent + ', tap to hear it');
+        labelTile(next);
+        prompt.textContent = promptFor(next) || prompt.textContent;
         next.focus();
         if (claps) prompt.textContent = askClap(next);
       }
     }));
-    const link = document.querySelector('.mock-bar a[href="pick.html"]');
+    // Two consonants side by side ask for the first two sounds before the pictures (L2-015).
+    const link = document.querySelector('.mock-bar a[href="' + (pattern && pattern.firstTwo ? 'first-two.html' : 'pick.html') + '"]');
     control.addEventListener('click', event => {
       control.disabled = true;
       const state = new URLSearchParams({ word });

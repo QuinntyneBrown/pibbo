@@ -88,7 +88,7 @@
     let current;
     function stopRecount() {
       clearInterval(timer);
-      current?.classList.remove('picture--recount');
+      ducks.forEach(duck => duck.classList.remove('picture--recount'));
     }
     function recount() {
       stopRecount();

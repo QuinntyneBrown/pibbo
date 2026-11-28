@@ -9,6 +9,7 @@
 <meta name="mock:state" content="pick">
 <meta name="mock:requirements" content="L2-012, L2-014, L2-015, L2-016, L2-025, L2-026">
 <meta name="description" content="The child chooses the picture for “map” from cap, map and sun.">
+<script src="../../assets/appearance.js"></script>
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -30,10 +31,11 @@
   </div>
   <main class="shell__game" id="main" tabindex="-1" aria-labelledby="prompt">
     <h1 class="visually-hidden">Sound it out</h1>
-    <div class="stage stage--activity"><div class="tiles" role="group" aria-label="The sounds in the word"><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="m, says /m/">m</button><span class="tiles__say" aria-hidden="true">/m/</span></div><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="a, says /a/">a</button><span class="tiles__say" aria-hidden="true">/a/</span></div><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="p, says /p/">p</button><span class="tiles__say" aria-hidden="true">/p/</span></div></div><div class="pick" role="group" aria-label="Pictures"><button class="pick__option press" type="button" aria-pressed="false" aria-label="cap" data-check-href="retry.html?choice=0"><img class="picture " src="../../assets/pictures/cap.jpg" alt="" draggable="false"></button><button class="pick__option press" type="button" aria-pressed="true" aria-label="map" data-check-href="correct.html"><img class="picture " src="../../assets/pictures/map.jpg" alt="" draggable="false"></button><button class="pick__option press" type="button" aria-pressed="false" aria-label="sun" data-check-href="retry.html?choice=2"><img class="picture " src="../../assets/pictures/sun.jpg" alt="" draggable="false"></button></div></div>
+    <div class="stage stage--activity"><div class="tiles" role="group" aria-label="The sounds in the word"><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="m, says /m/">m</button><span class="tiles__say" aria-hidden="true">/m/</span></div><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="a, says /a/">a</button><span class="tiles__say" aria-hidden="true">/a/</span></div><div class="tiles__unit"><button class="tile tile--heard press" type="button" disabled aria-label="p, says /p/">p</button><span class="tiles__say" aria-hidden="true">/p/</span></div></div><div class="pick" role="group" aria-label="Pictures"><button class="pick__option press" type="button" aria-pressed="false" aria-label="cap" data-check-href="retry.html?choice=0"><img class="picture " src="../../assets/pictures/cap.jpg" alt="" draggable="false"></button><button class="pick__option press" type="button" aria-pressed="false" aria-label="map" data-check-href="correct.html"><img class="picture " src="../../assets/pictures/map.jpg" alt="" draggable="false"></button><button class="pick__option press" type="button" aria-pressed="false" aria-label="sun" data-check-href="retry.html?choice=2"><img class="picture " src="../../assets/pictures/sun.jpg" alt="" draggable="false"></button></div></div>
   </main>
-  <footer class="answer-bar answer-bar--check"><a class="chunky chunky--read chunky--wide press" href="../sound-it-out/correct.html" data-check-action>Check</a></footer>
+  <footer class="answer-bar answer-bar--check"><button class="chunky chunky--read chunky--wide press" type="button" data-check-action disabled>Check</button></footer>
 </div>
+<p class="mock-note">No picture is chosen yet, so Check waits. Touching a picture chooses it (it is pressed and ringed); touching another changes the choice; Check then decides.</p>
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html#state-sound-it-out-pick" aria-label="All mocks">⌂</a>
   <span class="mock-bar__screen">Sound it out</span>
