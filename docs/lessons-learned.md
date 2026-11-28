@@ -587,3 +587,23 @@ One entry per journey, newest last. Before a journey, read these and apply the o
   expected reason (no stop; tiles wrap; no question after blending).
 - Read shown text through `expect.poll` (J13 #3): spoken recordings are polled.
 - Tag the critical path in the same change (J11 #4): choosing st is `@critical`.
+
+## Fix: the e2e network guard reported requests as unanswered now and then
+
+**What slowed it**
+
+- Full `verify.mjs` runs sometimes failed with "request unanswered" (for example `cat.wav`),
+  while every affected spec passed alone. There were two causes. First, every checkout served
+  on port 4300 with `reuseExistingServer`, so concurrent runs from other worktrees reused one
+  another's server. That server served the wrong build and stopped mid-run when its owner
+  finished. Second, the guard relied on `waitForLoadState('networkidle')`, which resolves at
+  once when the page was idle earlier, so a preload still in flight at teardown counted as
+  unanswered. It also tracked requests by URL.
+
+**New lessons**
+
+1. Give each checkout its own e2e port and never reuse a server you did not start. Parallel
+   agents share one machine.
+2. `networkidle` is a load state, not "idle now". To settle in-flight requests, track each
+   `Request` object and wait for its finished or failed event, with a bound, so a request that
+   is never answered still fails the spec.
