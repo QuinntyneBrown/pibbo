@@ -32,4 +32,48 @@ test.describe('Sound it out: a silent-e word', () => {
     await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(ADD_E);
     expect(await read.scrolls()).toBe(false);
   });
+  test('Given "cap" with its picture, when the child touches the e tile, then the word becomes "cape", the a tile shows a change mark, "cape" is spoken, and the picture changes to a cape', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    await expect(read.silentE).toHaveAttribute('aria-pressed', 'false');
+    const before = (await spoken.recordings()).length;
+
+    await read.touch(read.silentE);
+
+    await expect(read.silentE).toHaveAttribute('aria-pressed', 'true');
+    await expect(read.silentE).toHaveClass(/tile--added/);
+    await expect(read.beforeWord).toHaveText('cape');
+    await expect(read.beforePicture).toHaveAttribute('src', /\/cape\.jpg$/);
+    await expect(read.changed).toHaveCount(1);
+    await expect(read.changed).toHaveText('a');
+    await expect(read.changed).toHaveAttribute('aria-label', 'a, changed by the quiet e');
+    await expect(read.changeMark).toHaveCount(1);
+    await expect(read.instruction).toHaveText('Tap each letter to hear its sound.');
+    await expect(read.letter(0)).toHaveClass(/tile--next/);
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(before))
+      .toEqual([word('cape')]);
+  });
+
+  test('Given "cape", when the child touches the e tile again, then e is removed and "cap" is spoken', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    await read.touch(read.silentE);
+    await expect(read.beforeWord).toHaveText('cape');
+    const added = (await spoken.recordings()).length;
+
+    await read.touch(read.silentE);
+
+    await expect(read.silentE).toHaveAttribute('aria-pressed', 'false');
+    await expect(read.beforeWord).toHaveText('cap');
+    await expect(read.beforePicture).toHaveAttribute('src', /\/cap\.jpg$/);
+    await expect(read.changed).toHaveCount(0);
+    await expect.poll(async () => (await spoken.recordings()).slice(added)).toEqual([word('cap')]);
+  });
 });
