@@ -7,7 +7,15 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction, ACTIVITY_EXIT } from '@pibbo/api';
+import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
+import {
+  ASSET_PRELOADER,
+  AUDIO_PLAYER,
+  CLOCK,
+  RANDOM_SOURCE,
+  type Instruction,
+  ACTIVITY_EXIT,
+} from '@pibbo/api';
 import { AnswerBar, DigitPad, RoundShell, Tenframes, type AnswerBarKind } from '@pibbo/components';
 import {
   checkNumeral,
@@ -21,6 +29,8 @@ import {
   tenFrames,
   writeDigit,
   type CountAndWriteRound,
+  contentAssets,
+  numberRecordings,
 } from '@pibbo/domain';
 
 /** Praise lasts no more than this (L2-026 #3). */
@@ -40,6 +50,8 @@ const HINT_STEP_MS = 700;
   templateUrl: './count-and-write.html',
   styleUrl: './count-and-write.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Scoped to the activity: its fetches end when the child leaves.
+  providers: [{ provide: ASSET_PRELOADER, useClass: BrowserAssetPreloader }],
 })
 export class CountAndWrite {
   private readonly audio = inject(AUDIO_PLAYER);
@@ -87,6 +99,12 @@ export class CountAndWrite {
   );
 
   constructor() {
+    // Every recording and picture a round can play or show is fetched before the first touch
+    // (L2-032 #3).
+    inject(ASSET_PRELOADER).preload([
+      ...contentAssets(COUNT_AND_WRITE),
+      ...numberRecordings(0, 20),
+    ]);
     // It rests: sound stops while the tab is hidden, and nothing resumes until a touch.
     const document = inject(DOCUMENT);
     const rest = () => {

@@ -10,7 +10,7 @@ Settings and information for a grown-up sit behind a *gate*. The gate entry is a
 
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api` (ADRs 0028 and 0029).
 
-- **`GrownUpEntry`** (`pb-grown-up-entry`) — the corner control on Home (`.grown-up-entry`): an outline padlock, 48 × 48 px, "For grown-ups", in the top bar; Home's row under it keeps every activity picture at least 48 px away.
+- **`GrownUpEntry`** (`pb-grown-up-entry`) — the corner control on Home (`.grown-up-entry`): an outline padlock, 48 × 48 px, "For grown-ups", alone in the far corner of the top bar; Home's row under it keeps every activity picture at least 48 px away. The Lesson picture shares the top bar and stacks its icon over its word below 24 rem wide, so it stays 48 px clear at 320 px.
 - **`GrownUpArea`** — lazy route `/grown-up` in the app, opened by the entry with Home's address in the navigation state. Its first step is always the gate; then the area; Clear progress adds a confirmation step in place of its button. Leaving goes back to Home's address as it was.
 - **`GateView`** (`pb-gate`, `.gate`) — three numbers written as words, dots for progress and a 3 × 3 keypad, with Back to Pibbo. Nothing is spoken. The first wrong number or Back to Pibbo returns to Home unchanged; the right three show the area.
 - **`gateRules`** — pure functions in `@pibbo/domain/grown-up`: `newGate` (three different numbers from 1 to 9, from `RANDOM_SOURCE`), `gateTask` ("Touch seven, three, nine in order."), `touchGate` (`pending`, `passed` or `failed`).

@@ -7,7 +7,8 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { AUDIO_PLAYER, CLOCK, type Instruction, ACTIVITY_EXIT } from '@pibbo/api';
+import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
+import { ASSET_PRELOADER, AUDIO_PLAYER, CLOCK, type Instruction, ACTIVITY_EXIT } from '@pibbo/api';
 import { AnswerBar, Dance, RoundShell, type AnswerBarKind } from '@pibbo/components';
 import {
   beatLength,
@@ -22,6 +23,7 @@ import {
   swaysOn,
   type DanceRound,
   type DanceSpeed,
+  contentAssets,
 } from '@pibbo/domain';
 
 /** Praise lasts no more than this (L2-026 #3). */
@@ -43,6 +45,8 @@ const SPEEDS = [
   templateUrl: './counting-dance.html',
   styleUrl: './counting-dance.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Scoped to the activity: its fetches end when the child leaves.
+  providers: [{ provide: ASSET_PRELOADER, useClass: BrowserAssetPreloader }],
 })
 export class CountingDance {
   private readonly audio = inject(AUDIO_PLAYER);
@@ -70,6 +74,12 @@ export class CountingDance {
   });
 
   constructor() {
+    // Every recording and picture a round can play or show is fetched before the first touch
+    // (L2-032 #3).
+    inject(ASSET_PRELOADER).preload([
+      ...contentAssets(COUNTING_DANCE),
+      ...Array.from({ length: 10 }, (_, i) => beatRecording(i + 1)),
+    ]);
     // It rests: a hidden tab pauses the dance, and nothing plays again until a touch.
     const document = inject(DOCUMENT);
     const rest = () => {

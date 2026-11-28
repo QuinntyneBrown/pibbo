@@ -20,7 +20,9 @@ the initial bundle is not done. No mock existed.
 2. **The entry is a quiet padlock** (`pb-grown-up-entry`, `.grown-up-entry`) in Home's top
    bar, right-hand corner, labelled "For grown-ups", outline only, 48 × 48 px. It is not a
    child's target, so it is smaller and plainer than one; `AGENTS.md`'s 60 px rule is for what a
-   child touches. Home's row under the top bar starts 48 px below it (`.home__row`), so every
+   child touches. Home's row under the top bar starts 48 px below it (`.home__row`),
+   which holds the group pictures and the check game's picture; the Lesson picture stays in the top
+   bar and stacks its icon over its word on narrow phones, 48 px clear of the entry, so every
    activity picture is at least 48 px away at every width. Touching it speaks nothing.
 3. **One grown-up screen, gate first.** The entry opens the lazy route `/grown-up` with Home's
    address in the navigation state. Its first step is always the gate (`pb-gate`, `.gate`):
