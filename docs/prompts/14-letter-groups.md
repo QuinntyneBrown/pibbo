@@ -1,5 +1,5 @@
 # Feature: Letter groups that make one sound
-n**Status:** Complete (PR #15)
+**Status:** Complete (PR #15)
 
 Journey 14 of 27 in `docs/journeys.md`. Requirements: L2-014.
 
