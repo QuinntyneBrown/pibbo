@@ -1,4 +1,4 @@
-# 0023: Spot the word: every common word in a short story, and misses that come back
+# 0024: Spot the word: every common word in a short story, and misses that come back
 
 **Status:** Accepted (journey 19)
 

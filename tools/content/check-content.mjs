@@ -1,4 +1,4 @@
-// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -212,13 +212,16 @@ else {
       if (!(content.words ?? []).some((w) => w.word === word))
         problems.push(`theme "${name}": "${word}" is not one of the words`);
     for (const line of ["instruction", "praise"]) {
-      if (typeof theme[line]?.text !== "string" || theme[line].text.length === 0)
+      if (
+        typeof theme[line]?.text !== "string" ||
+        theme[line].text.length === 0
+      )
         problems.push(`theme "${name}" ${line}: no text`);
       fileExists(theme[line]?.recording, `theme "${name}" ${line} recording`);
     }
   }
 }
-// Spot the word (ADR 0022): every common word is recorded and is in the story, the number said
+// Spot the word (ADR 0024): every common word is recorded and is in the story, the number said
 // in its praise is recorded, and every line is shown and recorded.
 const spotPath = `${frontend}projects/domain/src/lib/sounds/common-words-content.json`;
 const spot = JSON.parse(readFileSync(spotPath, "utf8"));

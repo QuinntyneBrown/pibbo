@@ -35,7 +35,7 @@ export class RoundShell {
   /**
    * `story`: on a small screen the shell becomes a grid whose areas the game's own parts take
    * (`find`, `story`), as the Spot the word mock draws it, so a story of 60 px words fits with
-   * nothing scrolling (ADR 0023). `stack`, the default, keeps the shell a column.
+   * nothing scrolling (ADR 0024). `stack`, the default, keeps the shell a column.
    */
   readonly layout = input<'stack' | 'story'>('stack');
 
