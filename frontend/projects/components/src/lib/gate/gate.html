@@ -4,7 +4,11 @@
   </button>
   <h1 class="gate__title" id="gate-title">For grown-ups</h1>
   <p class="gate__task" id="gate-task">{{ task() }}</p>
-  <div class="gate__dots" role="status" [attr.aria-label]="touched() + ' of ' + length() + ' touched'">
+  <div
+    class="gate__dots"
+    role="status"
+    [attr.aria-label]="touched() + ' of ' + length() + ' touched'"
+  >
     @for (i of dots(); track i) {
       <span class="gate__dot" [class.gate__dot--done]="i < touched()" aria-hidden="true"></span>
     }

@@ -1,17 +1,20 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { RANDOM_SOURCE } from '@pibbo/api';
-import { GateView } from '@pibbo/components';
-import { gateTask, newGate, touchGate } from '@pibbo/domain';
+import { AUDIO_PLAYER, PROGRESS_STORE, RANDOM_SOURCE } from '@pibbo/api';
+import { Confirm, GateView, VolumeSwitch } from '@pibbo/components';
+import {
+  DEFAULT_VOLUME,
+  gateTask,
+  isVolumeLevel,
+  newGate,
+  touchGate,
+  volumeGain,
+  VOLUMES,
+  type VolumeLevel,
+} from '@pibbo/domain';
 
 /** Where the grown-up screen is: the gate always comes first (L2-037 #7). */
-type Step = 'gate' | 'area';
+type Step = 'gate' | 'area' | 'confirm';
 
 /**
  * The grown-up screen (docs/mocks/pages/grown-up): first the gate, then the area with volume,
@@ -20,25 +23,56 @@ type Step = 'gate' | 'area';
  */
 @Component({
   selector: 'pb-grown-up-area',
-  imports: [GateView],
+  imports: [GateView, VolumeSwitch, Confirm],
   templateUrl: './grown-up-area.html',
   styleUrl: './grown-up-area.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GrownUpArea {
   private readonly router = inject(Router);
+  private readonly audio = inject(AUDIO_PLAYER);
+  private readonly store = inject(PROGRESS_STORE);
   /** Home's address when the entry was touched; only a path on Pibbo's own origin. */
   private readonly from = homeAddress(this.router.currentNavigation()?.extras.state?.['from']);
 
   protected readonly step = signal<Step>('gate');
   protected readonly gate = signal(newGate(inject(RANDOM_SOURCE)));
   protected readonly task = computed(() => gateTask(this.gate()));
+  protected readonly volumes = VOLUMES;
+  protected readonly volume = signal<VolumeLevel>(
+    this.store.read('volume', isVolumeLevel) ?? DEFAULT_VOLUME,
+  );
+  /** Said once progress is cleared, in a status. */
+  protected readonly cleared = signal(false);
 
   protected touchKey(n: number): void {
     const { gate, outcome } = touchGate(this.gate(), n);
     this.gate.set(gate);
     if (outcome === 'passed') this.step.set('area');
     else if (outcome === 'failed') this.back();
+  }
+
+  protected chooseVolume(level: string): void {
+    if (!isVolumeLevel(level)) return;
+    this.volume.set(level);
+    this.store.write('volume', level);
+    this.audio.setVolume(volumeGain(level));
+  }
+
+  protected askToClear(): void {
+    this.cleared.set(false);
+    this.step.set('confirm');
+  }
+
+  protected keep(): void {
+    this.step.set('area');
+  }
+
+  /** Erases all progress on this device; the volume stays (L2-029 #4, L2-037 #5). */
+  protected async clear(): Promise<void> {
+    await this.store.clearProgress();
+    this.step.set('area');
+    this.cleared.set(true);
   }
 
   protected back(): void {

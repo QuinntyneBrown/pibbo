@@ -11,10 +11,59 @@
 } @else {
   <div class="grown-up">
     <header class="grown-up__top">
-      <button type="button" class="chunky" (click)="back()">Back to Pibbo</button>
+      <button type="button" class="chunky chunky--white" (click)="back()">Back to Pibbo</button>
     </header>
     <main class="grown-up__main" id="main" aria-labelledby="area-title">
       <h1 class="grown-up__title" id="area-title">For grown-ups</h1>
+      <section class="grown-up__section" aria-labelledby="volume-title">
+        <h2 class="grown-up__heading" id="volume-title">Volume</h2>
+        <pb-volume-switch
+          labelledBy="volume-title"
+          [options]="volumes"
+          [chosen]="volume()"
+          (chose)="chooseVolume($event)"
+        />
+      </section>
+      <section class="grown-up__section" aria-labelledby="progress-title">
+        <h2 class="grown-up__heading" id="progress-title">Progress</h2>
+        <p class="grown-up__text">
+          Pibbo remembers, on this device only, which activities were played and what the last check
+          game found. Nothing is sent anywhere.
+        </p>
+        @if (step() === 'confirm') {
+          <pb-confirm
+            title="Clear progress?"
+            text="This erases what Pibbo remembers on this device: which activities were played and what the check game found. It cannot be undone. The volume stays as it is."
+            keepLabel="Keep it"
+            confirmLabel="Clear progress"
+            (kept)="keep()"
+            (confirmed)="clear()"
+          />
+        } @else {
+          <button type="button" class="chunky chunky--ink" (click)="askToClear()">
+            Clear progress
+          </button>
+        }
+        <p class="grown-up__status" role="status">
+          @if (cleared()) {
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            Progress cleared.
+          }
+        </p>
+      </section>
+      <section class="grown-up__section" aria-labelledby="about-title">
+        <h2 class="grown-up__heading" id="about-title">About Pibbo</h2>
+        <p class="grown-up__text">
+          Pibbo helps young children learn to count and to sound out words. A child cannot yet read,
+          so everything is spoken as well as shown.
+        </p>
+        <p class="grown-up__text">
+          Pibbo has no accounts, adverts, purchases, chat, notifications or tracking, and asks for
+          no microphone, camera or location. Everything it keeps stays on this device.
+        </p>
+      </section>
     </main>
   </div>
 }

@@ -1,5 +1,6 @@
 import { DestroyRef, inject, Injectable, InjectionToken } from '@angular/core';
-import type { AudioPlayer, PlayOutcome } from '@pibbo/api';
+import { PROGRESS_STORE, type AudioPlayer, type PlayOutcome } from '@pibbo/api';
+import { isVolumeLevel, volumeGain } from '@pibbo/domain';
 
 /** Makes the audio element a recording plays through; replaced in unit tests. */
 export const AUDIO_ELEMENT_FACTORY = new InjectionToken<() => HTMLAudioElement>(
@@ -16,6 +17,10 @@ export class BrowserAudioPlayer implements AudioPlayer {
   private readonly createElement = inject(AUDIO_ELEMENT_FACTORY);
   private element: HTMLAudioElement | null = null;
   private settleCurrent: ((outcome: PlayOutcome) => void) | null = null;
+  /** The volume a grown-up chose, kept on this device (ADR 0028). */
+  private gain = volumeGain(
+    inject(PROGRESS_STORE, { optional: true })?.read('volume', isVolumeLevel) ?? null,
+  );
 
   constructor() {
     inject(DestroyRef).onDestroy(() => this.release());
@@ -34,11 +39,17 @@ export class BrowserAudioPlayer implements AudioPlayer {
       this.settleCurrent = done;
       element.onended = () => done('played');
       element.onerror = () => done('failed');
+      element.volume = this.gain;
       element.src = url;
       element.play().catch(() => {
         if (this.settleCurrent === done) done('failed');
       });
     });
+  }
+
+  setVolume(gain: number): void {
+    this.gain = Math.min(1, Math.max(0, gain));
+    if (this.element) this.element.volume = this.gain;
   }
 
   stop(): void {

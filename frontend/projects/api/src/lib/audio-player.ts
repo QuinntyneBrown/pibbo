@@ -16,6 +16,8 @@ export interface AudioPlayer {
   play(url: string): Promise<PlayOutcome>;
   /** Stops whatever is playing. */
   stop(): void;
+  /** How loud every recording plays from now on, from 0 to 1 (a grown-up's choice). */
+  setVolume(gain: number): void;
 }
 
 export const AUDIO_PLAYER = new InjectionToken<AudioPlayer>('AUDIO_PLAYER');

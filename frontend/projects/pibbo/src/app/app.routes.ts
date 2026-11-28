@@ -79,8 +79,7 @@ export const routes: Routes = [
   },
   {
     path: 'grown-up',
-    loadComponent: () =>
-      import('./pages/grown-up/grown-up-area').then((m) => m.GrownUpArea),
+    loadComponent: () => import('./pages/grown-up/grown-up-area').then((m) => m.GrownUpArea),
   },
   { path: '**', redirectTo: '' },
 ];
