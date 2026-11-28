@@ -16,3 +16,12 @@ Pibbo is a static site: `cd frontend && npm ci && npm run build` writes it to
 - Load nothing from any other origin; the app needs none.
 
 No other setting is needed.
+
+## Where it is published
+
+Every commit to main that passes CI is published to Azure Static Web Apps (`swa-pibbo`, resource
+group `rg-pibbo`) at <https://blue-ocean-09e66a70f.8.azurestaticapps.net>; see
+[ADR 0032](adr/0032-publish-to-azure-static-web-apps-from-main.md). The `deploy` job in
+`.github/workflows/ci.yml` uploads the build the checks ran against. Its host settings,
+`staticwebapp.config.json`, are generated into the build from `security-headers.json` by
+`node tools/deploy/static-web-app-config.mjs`; never write that file by hand.
