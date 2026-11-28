@@ -16,6 +16,13 @@ import {
   LESSON_LINES,
   LESSONS,
   lessonById,
+import { AUDIO_PLAYER, type Activity, type ActivityGroup } from '@pibbo/api';
+import { ActivityGrid, CheckCard, GroupSwitch, Wordmark } from '@pibbo/components';
+import {
+  ACTIVITY_CATALOGUE,
+  activityScreen,
+  CHECK_GAME_CARD,
+  groupById,
   moreFor,
 } from '@pibbo/domain';
 
@@ -27,6 +34,7 @@ import {
 @Component({
   selector: 'pb-home',
   imports: [Wordmark, GroupSwitch, ActivityGrid, Tap],
+  imports: [Wordmark, CheckCard, GroupSwitch, ActivityGrid],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,6 +47,7 @@ export class Home {
   readonly group = input<unknown>();
 
   protected readonly catalogue = ACTIVITY_CATALOGUE;
+  protected readonly checkGame = CHECK_GAME_CARD;
   protected readonly chosen = linkedSignal(() => groupById(this.catalogue, this.group()));
   /** Which screen of the chosen group's activities is shown; a new group starts at the first. */
   protected readonly at = linkedSignal({ source: this.chosen, computation: () => 0 });
@@ -74,10 +83,18 @@ export class Home {
   }
 
   protected openActivity(activity: Activity): void {
+    this.open(activity);
+  }
+
+  protected openCheckGame(): void {
+    this.open(this.checkGame);
+  }
+
+  private open({ recording, path }: Pick<Activity, 'recording' | 'path'>): void {
     if (this.opening) return;
     this.opening = true;
-    void this.audio.play(activity.recording);
-    void this.router.navigateByUrl(activity.path).then(
+    void this.audio.play(recording);
+    void this.router.navigateByUrl(path).then(
       (opened) => (this.opening = opened),
       () => (this.opening = false),
     );

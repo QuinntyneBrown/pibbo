@@ -20,4 +20,17 @@ test.describe('Security headers', () => {
     expect(headers['permissions-policy']).toContain('camera=()');
     expect(headers['permissions-policy']).toContain('microphone=()');
   });
+
+  test('Given Home is requested, when the browser reads the headers, then it understands every one of them @critical', async ({
+    page,
+  }) => {
+    const complaints: string[] = [];
+    page.on('console', (message) => {
+      if (/header/i.test(message.text())) complaints.push(message.text());
+    });
+
+    await new HomePage(page).openWithHeaders();
+
+    expect(complaints).toEqual([]);
+  });
 });

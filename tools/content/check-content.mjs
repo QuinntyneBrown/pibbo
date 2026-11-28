@@ -1,4 +1,5 @@
 // Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0025, 0026): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0026): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -303,6 +304,26 @@ for (const line of ["upNext", "done", "picture"]) {
     `lesson ${line} recording`,
   );
 }
+// The check game (ADR 0026): 5 to 8 questions, a first lesson of 3 to 6 activities, and every
+// line shown and recorded.
+const checkPath = `${frontend}projects/domain/src/lib/rounds/check-game-content.json`;
+const check = JSON.parse(readFileSync(checkPath, "utf8"));
+if (!(check.rounds?.fewest === 5 && check.rounds?.most === 8))
+  problems.push("check game: not 5 to 8 rounds");
+if (!(check.firstLesson?.length >= 3 && check.firstLesson.length <= 6))
+  problems.push("check game: the first lesson is not 3 to 6 activities");
+const checkLines = (node, name) => {
+  if (node === null || typeof node !== "object" || Array.isArray(node)) return;
+  if (!("recording" in node)) {
+    for (const [key, child] of Object.entries(node))
+      checkLines(child, `${name} ${key}`);
+    return;
+  }
+  if (typeof node.text !== "string" || node.text.length === 0)
+    problems.push(`${name}: no text`);
+  fileExists(node.recording, `${name} recording`);
+};
+checkLines(check, "check game");
 
 if (problems.length) {
   console.error(

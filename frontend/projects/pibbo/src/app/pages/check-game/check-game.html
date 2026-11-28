@@ -1,0 +1,14 @@
+@let asked = question();
+<pb-round-shell
+  title="What do I know?"
+  [group]="asked.group"
+  [fit]="true"
+  [instruction]="asked.instruction"
+  [done]="at()"
+  [rounds]="questions.length"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-check-question [show]="asked.show" [choices]="asked.choices" />
+  <pb-answer-bar answer [group]="asked.group" [fit]="true" [ready]="false" />
+</pb-round-shell>

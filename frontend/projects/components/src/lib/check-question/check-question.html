@@ -1,0 +1,62 @@
+<div class="stage stage--question" [class.stage--sum]="show().kind === 'sum'">
+  @let shown = show();
+  @switch (shown.kind) {
+    @case ('pictures') {
+      <div
+        class="show"
+        role="img"
+        [class.show--one]="shown.pictures.length === 1"
+        [class.show--many]="shown.pictures.length > few"
+        [attr.aria-label]="shown.label"
+      >
+        @for (picture of shown.pictures; track $index) {
+          <img class="picture" [src]="picture" alt="" draggable="false" />
+        }
+      </div>
+    }
+    @case ('sum') {
+      <div class="show show--sum" role="img" [attr.aria-label]="shown.label">
+        @for (set of shown.sets; track $index; let first = $first) {
+          @if (!first) {
+            <span class="show__plus" aria-hidden="true">+</span>
+          }
+          <span class="show__group">
+            @for (picture of set; track $index) {
+              <img class="picture" [src]="picture" alt="" draggable="false" />
+            }
+          </span>
+        }
+      </div>
+    }
+    @case ('text') {
+      <div class="show show--text" role="img" [attr.aria-label]="shown.label">
+        <span class="show__text">{{ shown.text }}</span>
+      </div>
+    }
+  }
+  <div class="pick" role="group" aria-label="Choices">
+    @for (choice of choices(); track choice.id) {
+      <button
+        type="button"
+        class="pick__option"
+        [class.pick__option--text]="!choice.picture"
+        [class.pick__option--right]="right() === choice.id"
+        [attr.aria-pressed]="chosen() === choice.id || right() === choice.id"
+        [attr.aria-label]="choice.label"
+        [disabled]="locked()"
+        (pbTap)="chose.emit(choice.id)"
+      >
+        @if (choice.picture) {
+          <img class="picture" [src]="choice.picture" alt="" draggable="false" />
+        } @else {
+          {{ choice.label }}
+        }
+        @if (right() === choice.id) {
+          <svg class="pick__tick" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        }
+      </button>
+    }
+  </div>
+</div>

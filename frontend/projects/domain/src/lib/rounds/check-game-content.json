@@ -1,0 +1,27 @@
+{
+  "rounds": { "fewest": 5, "most": 8 },
+  "firstLesson": ["words-and-pictures", "count-the-toys", "rhyme-time", "which-is-bigger"],
+  "howMany": {
+    "teddy": { "text": "How many teddies?", "recording": "/recordings/check/how-many-teddies.wav" },
+    "duck": { "text": "How many ducks?", "recording": "/recordings/check/how-many-ducks.wav" },
+    "ball": { "text": "How many balls?", "recording": "/recordings/check/how-many-balls.wav" }
+  },
+  "wordForPicture": {
+    "text": "Which word goes with the picture?",
+    "recording": "/recordings/check/which-word-goes-with-the-picture.wav"
+  },
+  "rhymesWith": {
+    "text": "Which one rhymes with",
+    "recording": "/recordings/check/which-one-rhymes-with.wav"
+  },
+  "hints": {
+    "words": {
+      "text": "Say each word slowly, then look again.",
+      "recording": "/recordings/check/say-each-word-slowly.wav"
+    }
+  },
+  "answerIs": {
+    "text": "Here is the answer.",
+    "recording": "/recordings/check/here-is-the-answer.wav"
+  }
+}
