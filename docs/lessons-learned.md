@@ -182,3 +182,39 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Wait for something the new round shows before reading the page (J4 #4): the Next spec
   waits for the progress bar.
 - Write tool over heredocs (J2): followed for TypeScript; short heredocs were fine.
+
+## Journey 6: Compare two numbers
+
+**What slowed it**
+
+- `L2-005` took the answer on the first touch and asked for the sets to be "lined up" after a
+  wrong choice; the mock had Check and highlighted nothing. The mock won on Check, the `retry`
+  mock gained `ten-frame__dot--extra`, and `L2-005` was brought in line (ADR 0010) first.
+- `tryAgain` already existed in `@pibbo/domain` for Sound Out; the flat public API refused a
+  second one at build time, so the Compare rule is `chooseAgain`.
+- A card of 20 (two ten-frames) overflowed a 640 x 360 phone on its side and, with the taller
+  retry bar, a 360 x 640 one. The specs' 6 and 9 never showed it; a throwaway layout spec with
+  a 20 and 18 seed did, and short-height rules fixed it before commit.
+- A screenshot taken straight after Check caught the card mid-transition and looked like a
+  styling bug; waiting out the transition showed it was not.
+
+**New lessons**
+
+1. When a requirement decides a range, test the layout at its largest case, not only the
+   spec's cast: find a seed for it by replaying mulberry32 in Node.
+2. Before naming a domain function, grep `@pibbo/domain`'s public API: it is flat, and a clash
+   only shows at build time.
+3. Seed search is cheap: simulate the rule's random calls with the fixture's generator in Node
+   and pick the first seed that gives the cast.
+
+**Earlier lessons applied**
+
+- Read the mock against `AGENTS.md` and the requirement first (J2 #1): worked; it caught Check
+  and the missing extra dots before any code.
+- A round as a pure state machine (J3 #1): worked; `CompareRound` holds every rule.
+- Sequence speech by awaiting `PlayOutcome` (J3 #2): the comparison is three recordings and
+  praise, stopped by any newer sound.
+- `CLOCK.after` for praise (J3 #3): reused unchanged.
+- The `seed` fixture option (J5 #1): gave 6 and 9 with no hook in the bundle.
+- End a spec on what was last spoken (J5 #4): each spec polls for the last recording.
+- Wait for something the new round shows (J4 #4): the Next spec waits for the progress bar.
