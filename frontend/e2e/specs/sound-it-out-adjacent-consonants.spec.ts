@@ -33,3 +33,29 @@ test.describe('Sound it out: adjacent consonants are each their own sound', () =
       .toEqual([sound('s'), sound('t')]);
   });
 });
+
+for (const viewport of [
+  { width: 320, height: 640 },
+  { width: 360, height: 640 },
+  { width: 640, height: 360 },
+]) {
+  test.describe(`Sound it out: four tiles fit at ${viewport.width} x ${viewport.height}`, () => {
+    test.use({ seed: STOP, viewport });
+
+    test('Given "stop", when shown, then its four tiles sit in one row, each at least 60 x 60 px, with nothing to scroll', async ({
+      page,
+    }) => {
+      const read = new SoundItOutPage(page);
+      await read.openFromHome();
+      await expect.poll(() => read.tileLetters()).toEqual(['s', 't', 'o', 'p']);
+
+      const boxes = await read.tileBoxes();
+      expect(new Set(boxes.map((b) => Math.round(b.y))).size).toBe(1);
+      for (const b of boxes) {
+        expect(b.width).toBeGreaterThanOrEqual(60);
+        expect(b.height).toBeGreaterThanOrEqual(60);
+      }
+      expect(await read.scrolls()).toBe(false);
+    });
+  });
+}

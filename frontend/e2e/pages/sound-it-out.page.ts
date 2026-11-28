@@ -75,6 +75,16 @@ export class SoundItOutPage {
     return (await this.letters.allTextContents()).map((t) => t.trim());
   }
 
+  /** Where each tile is drawn, in order. */
+  async tileBoxes(): Promise<{ x: number; y: number; width: number; height: number }[]> {
+    return this.letters.evaluateAll((tiles) =>
+      tiles.map((t) => {
+        const r = t.getBoundingClientRect();
+        return { x: r.x, y: r.y, width: r.width, height: r.height };
+      }),
+    );
+  }
+
   /** Touches every tile in order. */
   async soundAll(): Promise<string> {
     const word = await this.word();
