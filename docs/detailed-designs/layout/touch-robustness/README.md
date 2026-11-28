@@ -58,6 +58,6 @@ The palm contact is ignored; the finger tap is emitted once.
 
 ## Decisions (journey 2)
 
-- The rule is the pure function `tapVerdict` in `@pibbo/components` with unit tests; `TapDirective` (`[pbTap]`) applies it per pointer. A touch is a tap when its contact is at most 48 × 48 px, it moved under 12 px and was held under 700 ms. Mouse and keyboard activation arrive as `click` and always count.
+- The rule is the pure function `tapVerdict` in `@pibbo/components` with unit tests; `TapDirective` (`[pbTap]`) applies it per pointer. A touch is a tap when its contact is at most 120 × 120 px (a fingertip on a tablet or Surface is reported as 50-65 px), it moved under 12 px and was held under 700 ms. Mouse and keyboard activation arrive as `click` and always count.
 - Each pointer is judged alone, so a resting palm, primary or not, never blocks another finger's tap. No edge zone is needed.
 - Global styles keep `touch-action: manipulation`, `user-select: none` and `-webkit-touch-callout: none` (journey 1).

@@ -9,8 +9,12 @@ export interface TouchContact {
   readonly heldMs: number;
 }
 
-/** A contact larger than this, either way, is a palm or a fist (ADR 0006). */
-export const PALM_SIZE_PX = 48;
+/**
+ * A contact larger than this, either way, is a palm or a fist (ADR 0006). A fingertip is
+ * 9-12 mm across, which a tablet or a Surface at 150 % reports as 50-65 CSS px; this is
+ * about 19-32 mm depending on the screen, so a fingertip is always a tap.
+ */
+export const PALM_SIZE_PX = 120;
 /** A contact that moves this far is a drag or a swipe. */
 export const MOVE_TOLERANCE_PX = 12;
 /** A contact held this long is a long press. */

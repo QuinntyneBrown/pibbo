@@ -125,6 +125,26 @@ export class CountTheToysPage {
     await this.touch(this.action);
   }
 
+  /**
+   * Taps `target` with a real fingertip's contact, as a tablet or a Surface reports it:
+   * about 64 CSS px across, through Chromium's touch input.
+   */
+  async fingertipTap(target: Locator): Promise<void> {
+    const box = await target.boundingBox();
+    if (!box) throw new Error('target not shown');
+    const point = {
+      x: box.x + box.width / 2,
+      y: box.y + box.height / 2,
+      radiusX: 32,
+      radiusY: 32,
+      id: 1,
+    };
+    const cdp = await this.page.context().newCDPSession(this.page);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await cdp.detach();
+  }
+
   /** Two fingers land on two toys in the same moment, through Chromium's touch input. */
   async touchTwoAtOnce(a: Locator, b: Locator): Promise<void> {
     const [ba, bb] = [await a.boundingBox(), await b.boundingBox()];

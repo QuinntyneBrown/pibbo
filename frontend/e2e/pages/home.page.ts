@@ -109,7 +109,7 @@ export class HomePage {
     const box = await target.boundingBox();
     if (!box) throw new Error('target not shown');
     const viewport = this.page.viewportSize() ?? { width: 400, height: 800 };
-    const palm = { x: 6, y: viewport.height - 60, radiusX: 45, radiusY: 45, id: 1 };
+    const palm = { x: 6, y: viewport.height - 60, radiusX: 80, radiusY: 80, id: 1 };
     const finger = {
       x: box.x + box.width / 2,
       y: box.y + box.height / 2,
