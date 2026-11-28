@@ -1,3 +1,4 @@
+import { ACTIVITY_CATALOGUE } from '../activities/activity-catalogue';
 import { CHECKED_ACTIVITIES, makeQuestion } from './check-questions';
 
 /** A random source that walks unevenly through [0, 1). */
@@ -26,6 +27,10 @@ describe('makeQuestion', () => {
       }
     },
   );
+
+  it('asks about every activity on Home', () => {
+    for (const { id } of ACTIVITY_CATALOGUE.activities) expect(CHECKED_ACTIVITIES).toContain(id);
+  });
 
   it('offers the largest of three numbers as the bigger one', () => {
     const q = makeQuestion(stepping(0.1), 'which-is-bigger');

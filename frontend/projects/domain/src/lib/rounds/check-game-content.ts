@@ -21,7 +21,19 @@ export interface CheckGameContent {
   readonly wordForPicture: CheckLine;
   /** Spoken before the word asked about. */
   readonly rhymesWith: CheckLine;
-  readonly hints: { readonly words: CheckLine };
+  /** "What comes next?", after numbers counted forward. */
+  readonly comesNext: CheckLine;
+  readonly pictureForWord: CheckLine;
+  /** Spoken before the sound. */
+  readonly letterForSound: CheckLine;
+  readonly smallForBig: CheckLine;
+  /** Spoken before the word, beside its picture. */
+  readonly wordSaid: CheckLine;
+  /** Spoken and shown before the common word. */
+  readonly findWord: CheckLine;
+  readonly hints: Readonly<
+    Record<'words' | 'sequence' | 'sounds' | 'sound' | 'shape' | 'word', CheckLine>
+  >;
   /** Shown and spoken when Pibbo shows the answer (L2-026 #2). */
   readonly answerIs: CheckLine;
 }

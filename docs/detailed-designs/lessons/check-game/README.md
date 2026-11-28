@@ -37,12 +37,12 @@ The feature is a vertical slice through the Angular workspace: the page in the `
 | Sound it out | a word | pictures | its sounds, one by one |
 | Letter sounds | a sound as shown | letters | the sound again |
 | Big and small letters | a big letter | small letters | look at its shape |
-| Spell by sound | — (the word is spoken) | words | say it slowly |
+| Spell by sound | a picture, and its word spoken | words | listen again |
 | Words and pictures | a picture | words | say each word slowly |
 | Spot the word | — (the word is spoken) | common words | listen again |
 | Rhyme time | — | pictures | the rhyme's own hint |
 
-Reading choices are silent, a numeral says its number and a picture its word. In Spell by sound and Spot the word the asked word is spoken and shown in the instruction.
+Reading choices are silent, a numeral says its number and a picture its word. Spell by sound shows the picture and speaks its word, so the spelling is not given away; Spot the word shows the word in its instruction, as the activity does.
 
 ## Requirements
 

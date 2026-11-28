@@ -43,7 +43,7 @@ practised". Journey 23's instructions put history-based rounds and saving result
    takes one away.
 6. **"Practised" is "opened from Home"**: one place records it, and no activity changes. A stray
    touch counts too; the only effect is that the check game asks one question about it.
-7. **`ProgressStore`** (`PROGRESS_STORE` in `@pibbo/api`) has `read(key, parse)`, `write` and
+7. **`ProgressStore`** (`PROGRESS_STORE` in `@pibbo/api`) has `read(key)` (unchecked; the domain rules check it), `write` and
    `clearAll`. The browser one uses `localStorage` under the `pibbo:` prefix and never throws:
    storage that is off, full or damaged counts as empty. No IndexedDB is used. `clearAll` is what
    journey 24's "clear progress" calls; until then no screen calls it.

@@ -18,6 +18,25 @@ export class BrowserProgressStore implements ProgressStore {
     try {
       const raw = localStorage.getItem(ours(key));
       return raw === null ? null : (JSON.parse(raw) as unknown);
+import { DOCUMENT } from '@angular/common';
+import { inject, Injectable } from '@angular/core';
+import type { ProgressStore } from '@pibbo/api';
+
+/** Every key Pibbo keeps starts with this, so "clear progress" erases them all. */
+const PREFIX = 'pibbo:';
+
+/**
+ * `localStorage` on this device. Reaching it can itself throw (storage switched off, a full
+ * disk), so every call is guarded: what cannot be read is empty, what cannot be kept is not.
+ */
+@Injectable()
+export class BrowserProgressStore implements ProgressStore {
+  private readonly window = inject(DOCUMENT).defaultView;
+
+  read(key: string): unknown {
+    try {
+      const kept = this.window?.localStorage.getItem(PREFIX + key);
+      return kept ? JSON.parse(kept) : null;
     } catch {
       return null;
     }
@@ -28,6 +47,9 @@ export class BrowserProgressStore implements ProgressStore {
       localStorage.setItem(ours(key), JSON.stringify(value));
     } catch {
       /* nothing is kept; the lesson goes on */
+      this.window?.localStorage.setItem(PREFIX + key, JSON.stringify(value));
+    } catch {
+      // The game goes on; this visit is not remembered.
     }
   }
 
@@ -41,6 +63,14 @@ export class BrowserProgressStore implements ProgressStore {
       for (const key of keys) localStorage.removeItem(key);
     } catch {
       /* nothing to clear */
+      const storage = this.window?.localStorage;
+      if (!storage) return;
+      const ours = Array.from({ length: storage.length }, (_, i) => storage.key(i)).filter(
+        (key): key is string => !!key?.startsWith(PREFIX),
+      );
+      for (const key of ours) storage.removeItem(key);
+    } catch {
+      // Storage that cannot be reached holds nothing that can be read either.
     }
   }
 }

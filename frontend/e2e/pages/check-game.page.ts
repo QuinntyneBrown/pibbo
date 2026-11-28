@@ -39,6 +39,39 @@ export class CheckGamePage {
     return this.page.locator('.stage--question .pick').getByRole('button', { name, exact: true });
   }
 
+  /**
+   * Puts `value` in on-device storage, as an earlier visit would have, with Home shown. The
+   * game reads it each time it opens, so a game already open is left, not reloaded: a reload
+   * cancels fetches still on their way, which the network guard reports.
+   */
+  async openWithStored(key: string, value: string): Promise<void> {
+    const home = new HomePage(this.page);
+    if (this.page.url() === 'about:blank') await home.open();
+    else await this.touch(this.leave);
+    await expect(this.card()).toBeVisible();
+    await this.page.evaluate(([k, v]) => localStorage.setItem(`pibbo:${k}`, v), [
+      key,
+      value,
+    ] as const);
+  }
+
+  /** Home, with `activities` practised on an earlier visit, then the check game. */
+  async openPractised(activities: readonly string[]): Promise<void> {
+    await this.openWithStored('practised', JSON.stringify({ version: 1, activities }));
+    await this.touch(this.card());
+    await expect(this.root).toBeVisible();
+  }
+
+  /** What on-device storage holds under Pibbo's `key`, parsed. */
+  async stored(key: string): Promise<unknown> {
+    return this.page.evaluate((k) => JSON.parse(localStorage.getItem(`pibbo:${k}`) ?? 'null'), key);
+  }
+
+  /** The names of everything kept on the device. */
+  async storedKeys(): Promise<string[]> {
+    return this.page.evaluate(() => Object.keys(localStorage).sort());
+  }
+
   /** Opens the check game the way a child does: its picture on Home. */
   async openFromHome(): Promise<void> {
     const home = new HomePage(this.page);
@@ -62,6 +95,22 @@ export class CheckGamePage {
 
   async scrolls(): Promise<boolean> {
     return new HomePage(this.page).scrolls();
+  }
+
+  /** Whether what is shown stays between the instruction and the choices, never over either. */
+  async shownFits(): Promise<boolean> {
+    if ((await this.show.count()) === 0) return true;
+    const ask = (await this.page.locator('.shell__ask').boundingBox())!;
+    const pick = (await this.page.locator('.stage--question .pick').boundingBox())!;
+    const parts = await this.page.locator('.show .picture, .show__text').all();
+    for (const part of parts) {
+      const box = (await part.boundingBox())!;
+      const belowAsk = box.y >= ask.y + ask.height - 0.5;
+      const above = box.y + box.height <= pick.y + 0.5;
+      const beside = box.x + box.width <= pick.x + 0.5;
+      if (!belowAsk || !(above || beside)) return false;
+    }
+    return true;
   }
 
   /** Whether any choice reaches under the answer bar, where it could not be touched. */

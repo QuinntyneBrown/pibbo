@@ -150,6 +150,18 @@
     }
   }
 
+  // Numbers in order are read along one line.
+  .show__text {
+    font-size: var(--font-size-3xl);
+    white-space: nowrap;
+  }
+
+  // Fourteen things beside the choices stay below the instruction.
+  .show.show--many .picture {
+    width: var(--size-6);
+    height: var(--size-6);
+  }
+
   .show--one .picture {
     width: var(--size-12);
     height: var(--size-12);

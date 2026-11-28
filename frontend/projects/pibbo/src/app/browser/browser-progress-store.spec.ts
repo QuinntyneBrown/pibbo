@@ -37,5 +37,56 @@ describe('BrowserProgressStore', () => {
     store.clearAll();
     expect(localStorage.length).toBe(1);
     expect(localStorage.getItem('other')).toBe('kept');
+import { TestBed } from '@angular/core/testing';
+import { BrowserProgressStore } from './browser-progress-store';
+
+function store(): BrowserProgressStore {
+  TestBed.configureTestingModule({ providers: [BrowserProgressStore] });
+  return TestBed.inject(BrowserProgressStore);
+}
+
+describe('BrowserProgressStore', () => {
+  beforeEach(() => localStorage.clear());
+  afterEach(() => vi.restoreAllMocks());
+
+  it('reads back what it keeps, under the pibbo: prefix', () => {
+    const progress = store();
+    progress.write('earned', { version: 1, activities: ['a'] });
+
+    expect(progress.read('earned')).toEqual({ version: 1, activities: ['a'] });
+    expect(Object.keys(localStorage)).toEqual(['pibbo:earned']);
+  });
+
+  it('reads nothing where nothing, or something damaged, is kept', () => {
+    const progress = store();
+    localStorage.setItem('pibbo:earned', '{nonsense');
+
+    expect(progress.read('earned')).toBeNull();
+    expect(progress.read('practised')).toBeNull();
+  });
+
+  it('never throws when storage refuses', () => {
+    const progress = store();
+    const refuse = () => {
+      throw new DOMException('full', 'QuotaExceededError');
+    };
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(refuse);
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(refuse);
+    vi.spyOn(Storage.prototype, 'key').mockImplementation(refuse);
+
+    expect(() => progress.write('earned', {})).not.toThrow();
+    expect(progress.read('earned')).toBeNull();
+    expect(() => progress.clearAll()).not.toThrow();
+  });
+
+  it('erases everything Pibbo keeps, and only that, on clear progress (L2-023 #3)', () => {
+    const progress = store();
+    progress.write('practised', {});
+    progress.write('earned', {});
+    localStorage.setItem('another', 'kept');
+
+    progress.clearAll();
+
+    expect(Object.keys(localStorage)).toEqual(['another']);
   });
 });

@@ -8,9 +8,16 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { ASSET_PRELOADER, AUDIO_PLAYER, RANDOM_SOURCE } from '@pibbo/api';
+import { ASSET_PRELOADER, AUDIO_PLAYER, PROGRESS_STORE, RANDOM_SOURCE } from '@pibbo/api';
 import { AnswerBar, CheckQuestionView, RoundShell } from '@pibbo/components';
-import { CHECK_GAME, makeQuestion, planCheck } from '@pibbo/domain';
+import {
+  CHECK_GAME,
+  CHECKED_ACTIVITIES,
+  makeQuestion,
+  planCheck,
+  PRACTISED_KEY,
+  readActivities,
+} from '@pibbo/domain';
 import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
 
 /**
@@ -31,10 +38,14 @@ export class CheckGame {
   private readonly random = inject(RANDOM_SOURCE);
   private readonly router = inject(Router);
   private readonly preloader = inject(ASSET_PRELOADER);
+  private readonly progress = inject(PROGRESS_STORE);
 
-  protected readonly questions = planCheck(this.random, CHECK_GAME).map((activity) =>
-    makeQuestion(this.random, activity),
-  );
+  protected readonly questions = planCheck(
+    this.random,
+    CHECK_GAME,
+    readActivities(this.progress.read(PRACTISED_KEY), CHECKED_ACTIVITIES),
+    CHECKED_ACTIVITIES,
+  ).map((activity) => makeQuestion(this.random, activity));
   /** Which question is asked. */
   protected readonly at = signal(0);
   protected readonly question = computed(() => this.questions[this.at()]!);

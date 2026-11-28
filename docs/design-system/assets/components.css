@@ -576,6 +576,10 @@ img { display: block; max-width: 100%; }
 .show__plus { font-family: var(--font-display); font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); }
 .show--many .picture, .show--sum .picture { width: var(--size-8); height: var(--size-8); }
 @media (orientation: landscape) and (min-width: 32rem) and (max-height: 30rem) {
+  /* Numbers in order are read along one line. */
+  .stage--question .show__text { font-size: var(--font-size-3xl); white-space: nowrap; }
+  /* Fourteen things beside the choices stay below the instruction. */
+  .stage--question .show--many .picture { width: var(--size-6); height: var(--size-6); }
   .stage--question:has(.show--sum) { flex-direction: column; gap: var(--space-2); }
   .stage--question:has(.show--sum) .show .picture { width: var(--size-7); height: var(--size-7); }
 }

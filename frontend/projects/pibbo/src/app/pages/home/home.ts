@@ -17,13 +17,16 @@ import {
   LESSONS,
   lessonById,
 import { AUDIO_PLAYER, type Activity, type ActivityGroup } from '@pibbo/api';
+import { AUDIO_PLAYER, PROGRESS_STORE, type Activity, type ActivityGroup } from '@pibbo/api';
 import { ActivityGrid, CheckCard, GroupSwitch, Wordmark } from '@pibbo/components';
 import {
   ACTIVITY_CATALOGUE,
   activityScreen,
+  addActivities,
   CHECK_GAME_CARD,
   groupById,
   moreFor,
+  PRACTISED_KEY,
 } from '@pibbo/domain';
 
 /**
@@ -42,6 +45,7 @@ import {
 export class Home {
   private readonly audio = inject(AUDIO_PLAYER);
   private readonly router = inject(Router);
+  private readonly progress = inject(PROGRESS_STORE);
 
   /** The `group` query parameter; anything that is not a group means none is chosen. */
   readonly group = input<unknown>();
@@ -83,11 +87,20 @@ export class Home {
   }
 
   protected openActivity(activity: Activity): void {
+    if (this.opening) return;
+    this.practise(activity.id);
     this.open(activity);
   }
 
   protected openCheckGame(): void {
     this.open(this.checkGame);
+  }
+
+  /** An activity opened from Home is practised: its id, and nothing else, is kept (ADR 0026). */
+  private practise(activity: string): void {
+    const known = this.catalogue.activities.map((a) => a.id);
+    const kept = this.progress.read(PRACTISED_KEY);
+    this.progress.write(PRACTISED_KEY, addActivities(kept, [activity], known));
   }
 
   private open({ recording, path }: Pick<Activity, 'recording' | 'path'>): void {

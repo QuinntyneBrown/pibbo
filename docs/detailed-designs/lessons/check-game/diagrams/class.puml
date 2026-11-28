@@ -37,7 +37,7 @@ class progressRules <<pure>> {
   +addActivities(have, more): StoredActivities
 }
 interface ProgressStore {
-  +read(key, parse)
+  +read(key): unknown
   +write(key, value)
   +clearAll()
 }

@@ -14,7 +14,45 @@
     "text": "Which one rhymes with",
     "recording": "/recordings/check/which-one-rhymes-with.wav"
   },
+  "comesNext": { "text": "What comes next?", "recording": "/recordings/check/what-comes-next.wav" },
+  "pictureForWord": {
+    "text": "Which picture goes with this word?",
+    "recording": "/recordings/check/which-picture-goes-with-this-word.wav"
+  },
+  "letterForSound": {
+    "text": "Which letter makes this sound?",
+    "recording": "/recordings/check/which-letter-makes-this-sound.wav"
+  },
+  "smallForBig": {
+    "text": "Which small letter goes with this big letter?",
+    "recording": "/recordings/check/which-small-letter.wav"
+  },
+  "wordSaid": {
+    "text": "Which word says this?",
+    "recording": "/recordings/check/which-word-says-this.wav"
+  },
+  "findWord": { "text": "Find the word", "recording": "/recordings/check/find-the-word.wav" },
   "hints": {
+    "sequence": {
+      "text": "Listen to the numbers again. What comes next?",
+      "recording": "/recordings/check/listen-to-the-numbers-again.wav"
+    },
+    "sounds": {
+      "text": "Say each sound, then put them together.",
+      "recording": "/recordings/check/say-each-sound.wav"
+    },
+    "sound": {
+      "text": "Listen to the sound again.",
+      "recording": "/recordings/check/listen-to-the-sound-again.wav"
+    },
+    "shape": {
+      "text": "Look at the shape of the big letter.",
+      "recording": "/recordings/check/look-at-the-shape.wav"
+    },
+    "word": {
+      "text": "Listen to the word, then look at each one.",
+      "recording": "/recordings/check/listen-to-the-word.wav"
+    },
     "words": {
       "text": "Say each word slowly, then look again.",
       "recording": "/recordings/check/say-each-word-slowly.wav"
