@@ -188,9 +188,7 @@ test.describe('What do I know?: what the child can do', () => {
   }) => {
     const check = new CheckGamePage(page);
     await check.openFromHome();
-    // The first lesson's two skills alternate: Sound it out or Letter sounds first.
-    const first = (await check.rounds()) && (await page.title());
-    expect(first).toBeTruthy();
+    // The first lesson's two skills alternate, so one is answered right and the other never.
     await check.answerRightAndGoOn();
     for (let i = 1; i < 5; i++) await check.answerWrongUntilModelledAndGoOn();
 

@@ -7,6 +7,11 @@
       "loading",
       "empty",
       "error"
+    ],
+    "dialog": [
+      "default",
+      "busy",
+      "invalid"
     ]
   },
   "screens": [
@@ -18,7 +23,8 @@
       "requirements": [
         "L2-024",
         "L2-035",
-        "L2-023"
+        "L2-023",
+        "L2-037"
       ],
       "states": [
         "default",
@@ -487,6 +493,63 @@
         "counting-question": "count",
         "results": "both",
         "results-empty": "both"
+      }
+    },
+    {
+      "id": "grown-up-gate",
+      "kind": "dialog",
+      "title": "For grown-ups (gate)",
+      "opens_from": "home",
+      "requirements": [
+        "L2-029",
+        "L2-037"
+      ],
+      "states": [
+        "default",
+        "progress"
+      ],
+      "subject": "none",
+      "not_applicable": {
+        "busy": "Nothing is sent or waited for: the gate is judged on the device, at once.",
+        "invalid": "There is nothing to type; a wrong number closes the gate and Home is unchanged (L2-037 #3)."
+      }
+    },
+    {
+      "id": "grown-up",
+      "kind": "page",
+      "title": "For grown-ups",
+      "route": "/grown-up",
+      "requirements": [
+        "L2-029",
+        "L2-037"
+      ],
+      "states": [
+        "default",
+        "cleared"
+      ],
+      "subject": "none",
+      "not_applicable": {
+        "loading": "Everything shown is in the bundle; nothing is fetched.",
+        "empty": "The area always offers volume, clear progress and about Pibbo.",
+        "error": "Nothing here can fail: a store that cannot be used behaves as an empty one."
+      }
+    },
+    {
+      "id": "clear-progress",
+      "kind": "dialog",
+      "title": "Clear progress",
+      "opens_from": "grown-up",
+      "requirements": [
+        "L2-029",
+        "L2-037"
+      ],
+      "states": [
+        "default"
+      ],
+      "subject": "none",
+      "not_applicable": {
+        "busy": "Clearing the device's storage is immediate; there is no wait to show.",
+        "invalid": "There is nothing to type: Keep it or Clear progress."
       }
     },
     {

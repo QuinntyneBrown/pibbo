@@ -29,3 +29,4 @@
 | [0025](0025-rhyme-time-round.md) | Rhyme time: choose every rhyme, then Check | Accepted |
 | [0025](0025-practice-kept-on-the-device-and-a-grown-up-area.md) | Practice is kept on the device, and a grown-up has an area | Accepted |
 | [0026](0026-check-game-round.md) | What do I know?: mixed questions, the normal retry, and earned pictures | Accepted |
+| [0027](0027-grown-up-gate-and-area.md) | The grown-up gate and area: a corner padlock, three numbers in words, and Clear progress | Accepted |
