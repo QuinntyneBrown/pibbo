@@ -803,3 +803,32 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Build before proving a failure (J8 #1): each slice's spec failed for the expected reason.
 - Tag the critical path in the same change (J11 #4): praise and Next is `@critical`.
 - Grep the flat domain API before naming (J6 #2): the names are rhyme-specific; no clash.
+
+## Journey 21, follow-up: the smallest phones and Home's mock
+
+**What slowed it**
+
+- Two sessions built journey 21 at once from the same prompt. The second finished its own
+  version, fetched `main` before opening its pull request and found the first already merged.
+  Its version was dropped; only what the merged one lacked was kept, on top of `main`.
+- The merged fit spec ran three sizes with the default seed, which asks "cat". On 320 × 568
+  "map" makes the instruction four lines, the word ran under it and the last cards under the
+  bar; on 568 × 320 the praise took three lines beside a wide Next and pushed the word up.
+- The Home mock still showed six Read activities and no Rhyme time card.
+
+**New lessons**
+
+1. Before starting a journey, list the open pull requests and remote branches for it, and
+   fetch `main` at the end of every slice, not only before the pull request.
+2. A fit spec walks every word of the cast and every state with a bar (hint, model, praise),
+   on the smallest upright and sideways phones (320 × 568, 568 × 320), not only one seed.
+3. Size a child component from its parent with a custom property the child reads
+   (`--pibbo-size`): nothing styles another block and the default stays in the child.
+4. When a journey adds an activity to Home, the Home mock gains its card in the same change.
+
+**Earlier lessons applied**
+
+- Measure the shell before the board (J18 #1): Pibbo's size, not the cards, was the first fault.
+- Measure every state (J19 #3): only the praise state showed the fault on 568 × 320.
+- Build before proving a failure (J8 #1): both spec changes were committed failing first.
+
