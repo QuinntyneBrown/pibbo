@@ -12,6 +12,7 @@ import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE, type Instruction } from '@pibbo/api
 import { AnswerBar, Countdown, RoundShell, type AnswerBarKind } from '@pibbo/components';
 import {
   chooseNext,
+  countAgain,
   numberRecording,
   rocketNotch,
   ROCKET_COUNTDOWN,
@@ -56,12 +57,21 @@ export class RocketCountdown {
         },
   );
   protected readonly notch = computed(() => rocketNotch(this.round()));
-  protected readonly mood = computed(() => (this.praising() ? 'cheer' : 'rest'));
-  protected readonly bar = computed<{ kind: AnswerBarKind; message: string }>(() =>
-    this.round().phase === 'done'
-      ? { kind: 'right', message: '3, 2, 1… blast off!' }
-      : { kind: 'none', message: '' },
+  protected readonly mood = computed(() =>
+    this.praising() ? 'cheer' : this.round().phase === 'retry' ? 'oh' : 'rest',
   );
+  protected readonly bar = computed<{ kind: AnswerBarKind; message: string }>(() => {
+    const round = this.round();
+    if (round.phase === 'done') return { kind: 'right', message: '3, 2, 1… blast off!' };
+    if (round.phase === 'retry') {
+      const { goingDownFrom, tryAgain } = ROCKET_COUNTDOWN;
+      return {
+        kind: 'retry',
+        message: `${goingDownFrom.text} ${round.current}… ${tryAgain.text}.`,
+      };
+    }
+    return { kind: 'none', message: '' };
+  });
 
   constructor() {
     // It rests: sound stops while the tab is hidden, and nothing resumes until a touch.
@@ -93,11 +103,29 @@ export class RocketCountdown {
     this.round.set(round);
     if (outcome === 'step') void this.audio.play(numberRecording(n));
     else if (outcome === 'done') void this.blastOff(round);
+    else void this.retry(round);
   }
 
-  /** Next once the round is done. */
+  /** Try again after a wrong choice; Next once the round is done. */
   protected action(): void {
-    if (this.round().phase === 'done') this.next();
+    const round = this.round();
+    if (round.phase === 'done') this.next();
+    else if (round.phase === 'retry') {
+      this.round.set(countAgain(round));
+      void this.ask(this.round());
+    }
+  }
+
+  /** A wrong choice (L2-006 #3): nothing advances; "Going down from 7… try again." is said. */
+  private async retry(round: CountdownRound): Promise<void> {
+    for (const recording of [
+      ROCKET_COUNTDOWN.goingDownFrom.recording,
+      numberRecording(round.current),
+      ROCKET_COUNTDOWN.tryAgain.recording,
+    ]) {
+      if (this.round() !== round) return;
+      if ((await this.audio.play(recording)) === 'stopped') return;
+    }
   }
 
   /** "Zero", then "Blast off!": brief praise that never blocks Next; it ends after 1.5 s. */

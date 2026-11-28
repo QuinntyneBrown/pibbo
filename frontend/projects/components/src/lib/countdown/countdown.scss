@@ -4,33 +4,27 @@
   justify-content: center;
 }
 
+// The rocket stands beside the numbers at every width, so a start of 20 and the answer bar
+// fit a phone held either way with no scrolling (ADR 0011).
 .countdown {
   display: flex;
   width: 100%;
   max-width: var(--content-max);
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-8);
-
-  @media (min-width: 48rem) {
-    flex-direction: row;
-    align-items: flex-end;
-  }
-
-  @media (max-height: 40rem) {
-    gap: var(--space-4);
-  }
+  gap: var(--space-4);
 }
 
 .countdown__left {
   display: flex;
-  width: 100%;
+  min-width: 0;
   flex: 1;
   flex-direction: column;
-  gap: var(--space-6);
+  justify-content: center;
+  gap: var(--space-4);
 
-  @media (max-height: 40rem) {
-    gap: var(--space-3);
+  // A phone on its side: the track and the choices sit side by side.
+  @media (max-height: 30rem) {
+    flex-direction: row;
+    align-items: center;
   }
 }
 
@@ -39,14 +33,12 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-
-  @media (min-width: 48rem) {
-    justify-content: flex-start;
-  }
 }
 
+// The track is shown, not touched, so its cells may be smaller than a target.
 .track-row {
-  gap: var(--space-2);
+  flex: 1;
+  gap: var(--space-1);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -54,21 +46,21 @@
 
 .track-row__cell {
   display: flex;
-  width: var(--size-9);
-  height: var(--size-9);
+  width: var(--size-4);
+  height: var(--size-4);
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-border);
   font-family: var(--font-read);
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
 
   @media (min-width: 40rem) and (min-height: 40rem) {
-    width: var(--size-10);
-    height: var(--size-10);
-    font-size: var(--font-size-3xl);
+    width: var(--size-9);
+    height: var(--size-9);
+    font-size: var(--font-size-2xl);
   }
 }
 
@@ -80,7 +72,7 @@
 .track-row__cell--now {
   background: var(--color-count-strong);
   color: var(--color-fg-on-strong);
-  box-shadow: 0 0 0 4px var(--color-count-soft);
+  box-shadow: 0 0 0 3px var(--color-count-soft);
 }
 
 .choices {
@@ -90,6 +82,8 @@
 .numeral {
   --depth: var(--color-depth);
   display: inline-flex;
+  width: var(--size-10);
+  height: var(--size-10);
   align-items: center;
   justify-content: center;
   border: 0;
@@ -97,7 +91,7 @@
   background: var(--color-surface);
   color: var(--color-fg);
   font-family: var(--font-read);
-  font-size: var(--font-size-5xl);
+  font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-bold);
   box-shadow: 0 var(--press-depth) 0 var(--depth);
   touch-action: manipulation;
@@ -105,33 +99,26 @@
   &:disabled {
     cursor: default;
   }
-}
-
-.numeral--lg {
-  width: var(--size-12);
-  height: var(--size-12);
 
   @media (min-width: 40rem) and (min-height: 40rem) {
-    width: var(--size-13);
-    height: var(--size-13);
+    width: var(--size-12);
+    height: var(--size-12);
+    font-size: var(--font-size-5xl);
   }
 }
 
+// The rocket and each notch are a share of the launch's height.
 .launch {
   position: relative;
-  width: 10rem;
-  height: 16rem;
+  width: var(--size-10);
   flex: none;
   overflow: hidden;
   border-radius: var(--radius-2xl);
   background: var(--color-count-soft);
 
-  @media (min-width: 40rem) and (min-height: 48rem) {
-    height: 20rem;
-  }
-
-  @media (max-height: 40rem) {
-    height: 10rem;
+  @media (min-width: 40rem) and (min-height: 40rem) {
+    width: 10rem;
+    min-height: 16rem;
   }
 }
 
@@ -144,20 +131,21 @@
 
 .launch__rocket {
   position: absolute;
-  bottom: var(--space-3);
-  left: 50%;
-  margin-left: calc(-1 * var(--size-10) / 2);
+  inset: 0 0 var(--space-3);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   transition: translate var(--duration-slow) var(--ease-out-quint);
 }
 
 @for $notch from 1 through 10 {
   .launch__rocket--#{$notch} {
-    translate: 0 calc(-15px * #{$notch});
+    translate: 0 calc(-5.5% * #{$notch});
   }
 }
 
 .launch__rocket--off {
-  translate: 0 -260px;
+  translate: 0 -110%;
 }
 
 // Reduced motion: the rocket stays on the pad; the track and the words carry the count.
@@ -170,8 +158,8 @@
 
 .rocket {
   display: block;
-  width: var(--size-10);
-  height: 6.875rem;
+  height: min(6.875rem, 40%);
+  aspect-ratio: 64 / 110;
 }
 
 .rocket__flame {
@@ -186,7 +174,8 @@
   fill: var(--color-read);
 }
 
-.rocket__body {
+.rocket__body,
+.rocket__window {
   fill: var(--color-pibbo-eye);
   stroke: var(--color-pibbo-ink);
   stroke-width: 3;
@@ -194,6 +183,4 @@
 
 .rocket__window {
   fill: var(--color-count);
-  stroke: var(--color-pibbo-ink);
-  stroke-width: 3;
 }

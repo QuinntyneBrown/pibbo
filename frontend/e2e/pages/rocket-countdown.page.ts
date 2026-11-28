@@ -54,6 +54,11 @@ export class RocketCountdownPage {
     else await expect(this.now).toHaveCount(0);
   }
 
+  /** The rocket's computed `translate`: `none` while it is on the pad. */
+  async rocketTranslate(): Promise<string> {
+    return this.rocket.evaluate((el) => getComputedStyle(el).translate);
+  }
+
   async scrolls(): Promise<boolean> {
     return this.page.evaluate(() => {
       const el = document.scrollingElement ?? document.documentElement;

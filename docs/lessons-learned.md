@@ -218,3 +218,45 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - The `seed` fixture option (J5 #1): gave 6 and 9 with no hook in the bundle.
 - End a spec on what was last spoken (J5 #4): each spec polls for the last recording.
 - Wait for something the new round shows (J4 #4): the Next spec waits for the progress bar.
+
+## Journey 7: Count backward
+
+**What slowed it**
+
+- `L2-006` and the design had the child touch numbers on a number track and, after a wrong
+  touch, the expected number highlighted; the mock had three numeral choices, a track that is
+  only shown, and "Going down from 6… try again." The mock won (ADR 0011) before any code.
+- The mock's layout (rocket under the numbers on a phone, 56 px track cells) overflowed a
+  360 x 640 and a 640 x 360 phone at start 20. A throwaway spec with seed 36 (start 20) found it;
+  the rocket now stands beside the numbers and the track cells are smaller on a phone.
+- The rocket first used container query units (`cqh`) and vanished at 1280 x 720: the launch's
+  stretched height did not reach the container. Percentages of an absolutely positioned box
+  that fills the launch worked at every size.
+- A Python string edit turned `\s` into `\s` in a page object's `RegExp`, again: the choice
+  locator matched nothing.
+- The unit spec used `jasmine.objectContaining`; the runner is Vitest (`expect.objectContaining`).
+
+**New lessons**
+
+1. Edit a TypeScript regex with the Edit tool, never through a Python or sed string: both
+   eat backslashes.
+2. Unit tests run on Vitest: use `expect.objectContaining` and `toThrow`, not Jasmine helpers.
+3. Size a picture that moves inside a box by percentages of an absolutely positioned layer that
+   fills the box, not by container query units.
+4. A screen with no Check (a right touch moves on) uses `AnswerBar` kind `none`: the bar keeps
+   its height with the mock's `answer-bar__spacer`, so nothing jumps when Try again appears.
+
+**Earlier lessons applied**
+
+- Read the mock against `AGENTS.md` and the requirement first (J2 #1): worked; it caught the
+  three choices and the retry line before any code.
+- A round as a pure state machine (J3 #1): `CountdownRound` holds every rule, including where
+  the rocket is.
+- Sequence speech by awaiting `PlayOutcome` (J3 #2): the start, the retry line and blast off.
+- `CLOCK.after` for praise (J3 #3): reused unchanged.
+- The `seed` fixture option and a Node seed search (J5 #1, J6 #3): seed 24 gives start 10 and
+  seed 36 start 20, found in one command.
+- Test the layout at the largest case (J6 #1): it found the overflow.
+- End a spec on what was last spoken (J5 #4): each spec polls for the last recording.
+- Grep the flat domain API before naming (J6 #2): `countAgain`, not `tryAgain`.
+

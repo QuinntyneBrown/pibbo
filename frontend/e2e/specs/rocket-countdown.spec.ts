@@ -4,6 +4,8 @@ import { RocketCountdownPage } from '../pages/rocket-countdown.page';
 
 const HOME = ['/recordings/home/count.wav', '/recordings/home/rocket-countdown.wav'];
 const ASK = '/recordings/count/what-comes-next-going-down.wav';
+const GOING_DOWN = '/recordings/count/going-down-from.wav';
+const TRY_AGAIN = '/recordings/count/try-again.wav';
 const BLAST_OFF = '/recordings/count/blast-off.wav';
 const number = (n: number) => `/recordings/numbers/${n}.wav`;
 
@@ -68,5 +70,33 @@ test.describe('Rocket countdown', () => {
     await expect(countdown.progress).toHaveAttribute('aria-valuenow', '1');
     await expect(countdown.choices).toHaveCount(3);
     await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(ASK);
+  });
+
+  test('Given the current number is 7, when the child chooses 5, then nothing advances, "Going down from 7… try again." is spoken and shown, and after Try again the child continues from 7; with reduced motion the rocket stays on the pad', async ({
+    page,
+    spoken,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const countdown = new RocketCountdownPage(page);
+    await countdown.openFromHome();
+    for (const n of [9, 8, 7]) await countdown.step(n);
+    await expect(countdown.rocket).toHaveClass(/launch__rocket--3/);
+    expect(await countdown.rocketTranslate()).toBe('none');
+
+    await countdown.touch(countdown.choice(5));
+
+    await expect(countdown.message).toHaveText('Going down from 7… try again.');
+    await expect(countdown.now).toHaveText('7');
+    await expect(countdown.choice(6)).toBeDisabled();
+    await expect(countdown.action).toHaveText(/Try again/);
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(-3))
+      .toEqual([GOING_DOWN, number(7), TRY_AGAIN]);
+
+    await countdown.touch(countdown.action);
+
+    await expect(countdown.message).toHaveCount(0);
+    await countdown.step(6);
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(number(6));
   });
 });

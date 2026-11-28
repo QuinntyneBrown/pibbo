@@ -101,8 +101,12 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   its side it sits beside its ten-frames, so a card of 20 and the answer bar fit with no scrolling. Choosing a card and then Check stays as drawn, and
   `L2-005` was brought in line (ADR 0010).
 - **Rocket countdown reconciled with `L2-006` (journey 7).** The rocket rises in tenths of the
-  way from the start to 0 (`launch__rocket--0` to `--10`, 15 px each), so any start from 5 to 20
-  draws; the mock's `--4` at 6 of 10 is one of them. The three choices, the track that is not
+  way from the start to 0 (`launch__rocket--0` to `--10`, 15 px each here, 5.5% of the launch's
+  height in the product), so any start from 5 to 20 draws; the mock's `--4` at 6 of 10 is one of
+  them. So that a start of 20 and the answer bar fit a 360 x 640 phone and a 640 x 360 one with
+  no scrolling, the product keeps the launch beside the numbers at every width, draws the track
+  (shown, never touched) with smaller cells on a phone, and on a phone on its side puts the track
+  and the choices side by side. The three choices, the track that is not
   touched and the retry line stay as drawn, and `L2-006` was brought in line (ADR 0011).
 
 ## Open questions
