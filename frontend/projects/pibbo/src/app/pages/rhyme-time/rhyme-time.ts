@@ -10,7 +10,14 @@ import {
 import { Router } from '@angular/router';
 import { ASSET_PRELOADER, AUDIO_PLAYER, RANDOM_SOURCE, type Instruction } from '@pibbo/api';
 import { AnswerBar, RhymeCards, RoundShell } from '@pibbo/components';
-import { rhymeAsk, rhymeAssets, RHYMES, startRhymeRound } from '@pibbo/domain';
+import {
+  canCheckRhymes,
+  rhymeAsk,
+  rhymeAssets,
+  RHYMES,
+  startRhymeRound,
+  toggleRhyme,
+} from '@pibbo/domain';
 import { BrowserAssetPreloader } from '../../browser/browser-asset-preloader';
 
 /**
@@ -42,6 +49,8 @@ export class RhymeTime {
     picture: 'ask',
   }));
 
+  protected readonly canCheck = computed(() => canCheckRhymes(this.round()));
+
   constructor() {
     this.preloader.preload(rhymeAssets(this.round()));
     // It rests: sound stops while the tab is hidden, and nothing resumes until a touch.
@@ -55,6 +64,13 @@ export class RhymeTime {
       this.audio.stop();
     });
     void this.say(rhymeAsk(this.round(), RHYMES.ask));
+  }
+
+  /** A card says the pair and is chosen or unchosen (L2-021 #2). */
+  protected touch(index: number): void {
+    const { round, spoken } = toggleRhyme(this.round(), index);
+    this.round.set(round);
+    void this.say(spoken);
   }
 
   protected replay(): void {

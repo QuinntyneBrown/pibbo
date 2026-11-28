@@ -8,6 +8,12 @@
   (replay)="replay()"
   (leave)="leave()"
 >
-  <pb-rhyme-cards [target]="round().set.target" [end]="round().set.end" [cards]="round().cards" />
-  <pb-answer-bar answer group="read" kind="check" [ready]="false" />
+  <pb-rhyme-cards
+    [target]="round().set.target"
+    [end]="round().set.end"
+    [cards]="round().cards"
+    [chosen]="round().chosen"
+    (touched)="touch($event)"
+  />
+  <pb-answer-bar answer group="read" kind="check" [ready]="canCheck()" />
 </pb-round-shell>

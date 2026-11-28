@@ -1,4 +1,4 @@
-import { rhymeAsk, rhymeAssets, startRhymeRound } from './rhyme-round';
+import { canCheckRhymes, rhymeAsk, rhymeAssets, startRhymeRound, toggleRhyme } from './rhyme-round';
 import { RHYMES } from './rhymes-content';
 
 const first = { next: () => 0 };
@@ -26,6 +26,33 @@ describe('startRhymeRound', () => {
 
   it('refuses to start with nothing to ask', () => {
     expect(() => startRhymeRound(first, [])).toThrow(RangeError);
+  });
+});
+
+describe('toggleRhyme', () => {
+  const round = startRhymeRound(first, RHYMES.sets);
+
+  it('chooses a card and says the word asked, then the card’s word', () => {
+    const touch = toggleRhyme(round, 1);
+
+    expect(touch.round.chosen).toEqual([1]);
+    expect(touch.spoken).toEqual([round.set.target.recording, round.cards[1]!.recording]);
+    expect(canCheckRhymes(touch.round)).toBe(true);
+  });
+
+  it('unchooses a chosen card, leaving the others chosen', () => {
+    const two = toggleRhyme(toggleRhyme(round, 0).round, 2).round;
+
+    expect(toggleRhyme(two, 0).round.chosen).toEqual([2]);
+  });
+
+  it('gives nothing to check with no card chosen', () => {
+    expect(canCheckRhymes(round)).toBe(false);
+    expect(canCheckRhymes(toggleRhyme(toggleRhyme(round, 0).round, 0).round)).toBe(false);
+  });
+
+  it('ignores a card that is not there', () => {
+    expect(toggleRhyme(round, 9)).toEqual({ round, spoken: [] });
   });
 });
 

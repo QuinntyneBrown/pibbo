@@ -32,6 +32,11 @@ export class RhymeTimePage {
     return this.cards.filter({ has: this.page.getByText(word, { exact: true }) });
   }
 
+  /** The tick on the card of `word`, shown while it is chosen. */
+  tick(word: string): Locator {
+    return this.card(word).locator('.word-card__tick');
+  }
+
   /** Opens Rhyme time the way a child does: Read, then the activity on Home. */
   async openFromHome(): Promise<void> {
     const home = new HomePage(this.page);

@@ -68,3 +68,37 @@ test.describe('Rhyme time: a round', () => {
     await expect(home.more).toBeVisible();
   });
 });
+
+test.describe('Rhyme time: choosing words', () => {
+  test('Given a round, when the child touches two cards, then the word asked and each card’s word are spoken, both are chosen and ticked, and Check takes a touch; touching a chosen card unchooses it, and with none chosen Check takes no touch', async ({
+    page,
+    spoken,
+  }) => {
+    const rhyme = new RhymeTimePage(page);
+    await rhyme.openFromHome();
+    const w = await rhyme.word();
+    const [one, two] = await rhyme.cardWords();
+    await expect.poll(() => spoken.recordings()).toEqual([...HOME, ...asked(w)]);
+    const before = (await spoken.recordings()).length;
+    const since = async () => (await spoken.recordings()).slice(before);
+
+    await rhyme.touch(rhyme.card(one!));
+    await expect.poll(since).toEqual([word(w), word(one!)]);
+    await expect(rhyme.card(one!)).toHaveAttribute('aria-pressed', 'true');
+    await expect(rhyme.tick(one!)).toBeVisible();
+    await expect(rhyme.tick(two!)).toBeHidden();
+    await expect(rhyme.action).toBeEnabled();
+
+    await rhyme.touch(rhyme.card(two!));
+    await expect.poll(since).toEqual([word(w), word(one!), word(w), word(two!)]);
+    await expect(rhyme.card(two!)).toHaveAttribute('aria-pressed', 'true');
+
+    await rhyme.touch(rhyme.card(one!));
+    await expect(rhyme.card(one!)).toHaveAttribute('aria-pressed', 'false');
+    await expect(rhyme.action).toBeEnabled();
+    await rhyme.touch(rhyme.card(two!));
+    await expect(rhyme.card(two!)).toHaveAttribute('aria-pressed', 'false');
+    await expect(rhyme.action).toBeDisabled();
+    await expect.poll(async () => (await since()).length).toBe(8);
+  });
+});

@@ -20,6 +20,9 @@ export class RhymeCards {
   readonly end = input.required<string>();
   readonly cards = input.required<readonly RhymeWord[]>();
 
+  /** The indexes of the chosen cards. */
+  readonly chosen = input<readonly number[]>([]);
+
   /** The index of the card touched. */
   readonly touched = output<number>();
 }
