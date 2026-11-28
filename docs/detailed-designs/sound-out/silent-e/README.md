@@ -8,10 +8,13 @@ A final e changes a word and its vowel: "cap" becomes "cape". The child toggles 
 
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
-- **`SilentEPage`** — route component in `pibbo`, loaded by `loadComponent` when the child chooses the activity. It is provided with its own `silentERules` state at route scope, asks the rules for each round, plays recordings through `AUDIO_PLAYER` and hands state to the presentation component.
-- **`SilentEWordComponent`** — presentation component in `@pibbo/components` (selector `pb-silenteword`). It takes the round state as signal inputs, emits a `touched` output per target, and injects no service.
-- **`SilentERound`** — immutable round state in `@pibbo/domain/sounds`; every transition returns a new value.
-- **`silentERules`** — pure functions in `@pibbo/domain/sounds` that build a round from the injected `RandomSource` and decide the outcome of each touch, with unit tests.
+As built (ADR 0021), the feature lives inside Sound it out rather than in a page of its own:
+
+- **`SoundItOut`** — the Sound it out route component in `pibbo`, loaded by `loadComponent`. For a silent-e word it first asks for the quiet e, speaks the word made each time the e is added or taken away through `AUDIO_PLAYER`, and then runs the round as for any word.
+- **`WordTiles`** — presentation component in `@pibbo/components` (selector `pb-word-tiles`). Its `quietE` input draws the e as a toggle tile after the letters (`tile--silent`, `tile--added`, `aria-pressed`), its `changed` input marks the vowel the e changes (`tile--changed`, `tile__mark`), and its `toggledE` output reports a touch on the e.
+- **`SilentE`** — presentation component in `@pibbo/components` (selector `pb-silent-e`): the rule around its vowel (`.rule`) and the word shown now with its picture and a note (`.before`). While the child picks the picture only the rule is shown.
+- **`SoundOutRound`** — immutable round state in `@pibbo/domain/sounds`, with a `magic-e` phase before sounding and `eAdded` for a silent-e word. A silent-e `Word` carries the word it is without its e (`withoutE`).
+- **`toggleSilentE`, `changedLetter`, `shownSounds`** — pure functions in `@pibbo/domain/sounds`: the first adds or takes away the e and names the word to speak; the second finds the letter the e changes; the third gives the sounds to show. A silent-e round offers the picture of the word without its e among its three. Unit tested.
 - **`AudioPlayer`** — contract in `@pibbo/api` bound to `AUDIO_PLAYER`. Playing a recording stops the one before it; a recording that cannot play resolves as `unavailable` and the screen shows the text instead.
 - **`RoundFeedback`** — shared round behaviour (`retry-and-praise`): brief praise, hints after a wrong answer, and modelling the answer after three wrong answers.
 
