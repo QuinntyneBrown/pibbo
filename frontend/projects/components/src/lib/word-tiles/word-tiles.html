@@ -46,7 +46,13 @@
         [class.tile--next]="quietE() === false && canToggleE()"
         [disabled]="!canToggleE()"
         [attr.aria-pressed]="quietE()"
-        [attr.aria-label]="quietE() ? 'e, quiet, tap to take it away' : 'e, tap to add a quiet e'"
+        [attr.aria-label]="
+          !quietE()
+            ? 'e, tap to add a quiet e'
+            : canToggleE()
+              ? 'e, quiet, tap to take it away'
+              : 'e, quiet'
+        "
         (pbTap)="toggledE.emit()"
       >
         e

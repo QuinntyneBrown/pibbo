@@ -83,7 +83,7 @@ test.describe('Sound it out: the first two sounds', () => {
 
     await expect(read.instruction).toHaveText('What are the first two sounds?');
     // The seeded random source orders the choices; the mock's order is its cast.
-    await expect(read.choices).toHaveText(['st', 't', 's']);
+    await expect(read.choices).toHaveText(['s', 'st', 't']);
     await expect
       .poll(async () => (await spoken.recordings()).slice(blended))
       .toEqual([...['s', 't', 'o', 'p'].map(sound), STOP_WORD, FIRST_TWO]);

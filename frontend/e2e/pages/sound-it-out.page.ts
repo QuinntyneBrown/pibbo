@@ -85,9 +85,13 @@ export class SoundItOutPage {
     else await target.click();
   }
 
-  /** The word this round shows, read from its letters. */
+  /** The word this round shows, read from its letters, with its quiet e once that is added. */
   async word(): Promise<string> {
-    return (await this.letters.allTextContents()).map((t) => t.trim()).join('');
+    const letters = (await this.letters.allTextContents()).map((t) => t.trim()).join('');
+    const added =
+      (await this.silentE.count()) > 0 &&
+      (await this.silentE.getAttribute('aria-pressed')) === 'true';
+    return added ? `${letters}e` : letters;
   }
 
   /** The letters on each tile, in order: a letter group is one tile ("sh"). */
@@ -95,9 +99,11 @@ export class SoundItOutPage {
     return (await this.letters.allTextContents()).map((t) => t.trim());
   }
 
-  /** Where each tile is drawn, in order. */
-  async tileBoxes(): Promise<{ x: number; y: number; width: number; height: number }[]> {
-    return this.letters.evaluateAll((tiles) =>
+  /** Where each tile is drawn, in order; with `quietE`, the quiet e tile after them. */
+  async tileBoxes(
+    quietE = false,
+  ): Promise<{ x: number; y: number; width: number; height: number }[]> {
+    return (quietE ? this.letters.or(this.silentE) : this.letters).evaluateAll((tiles) =>
       tiles.map((t) => {
         const r = t.getBoundingClientRect();
         return { x: r.x, y: r.y, width: r.width, height: r.height };

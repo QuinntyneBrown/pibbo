@@ -149,18 +149,21 @@ export class SoundItOut {
   });
   /** The sounds shown: a silent-e word's without its e until the e is added (L2-016). */
   protected readonly sounds = computed(() => shownSounds(this.round()));
-  /** The rule and the word shown beside it, for a silent-e word before its pictures. */
+  /**
+   * The rule and the word shown beside it, for a silent-e word. While the child picks the
+   * picture the rule stays and the word's own picture is not shown: it would be the answer.
+   */
   protected readonly silentE = computed(() => {
     const round = this.round();
     const without = round.word.withoutE;
-    if (!without || this.picking()) return null;
+    if (!without) return null;
     const changed = changedLetter(round.word);
     const shown = round.eAdded ? round.word : without;
     return {
       vowel: changed === null ? '' : without.sounds[changed]!.letters,
       changed,
       word: shown.word,
-      picture: shown.picture,
+      picture: this.picking() ? null : shown.picture,
       note: round.eAdded ? SOUND_OUT.silentE.added : SOUND_OUT.silentE.waiting,
     };
   });
