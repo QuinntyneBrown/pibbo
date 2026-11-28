@@ -514,3 +514,36 @@ One entry per journey, newest last. Before a journey, read these and apply the o
   the expected reason (no Spell by sound on Home; letters do not fill; Check does nothing).
 - Tag the critical path in the same change (J11 #4): the right check and Next is `@critical`.
 - Avoid heredocs with quotes (J11, J12): prose went through Python or the Write tool.
+
+## Journey 14: Letter groups that make one sound
+
+**What slowed it**
+
+- Adding words to Sound it out's content changed which word a seeded round shows, and the
+  existing specs spelled the recordings from the word's characters (`[...word].map(sound)`),
+  which breaks on "ship". The page object now reads each tile's letters (`tileLetters()`),
+  and the specs map tiles, not characters, to recordings; that change went in with the
+  failing spec, before the data.
+- Spell by sound reads the same words and offers only single letters; a group word would have
+  been unspellable. It now leaves out words with a letter group (ADR 0019).
+- The night spec failed once with the network guard on the phone project and passed in 208
+  further runs; the problem text was not captured. Noted so the next journey watches it.
+
+**New lessons**
+
+1. When a spec or page object derives tiles, boxes or recordings from a word's characters,
+   derive them from what is shown instead; content will not stay one letter per sound.
+2. A seed that picks a particular round is found offline from the fixture's mulberry32 and the
+   content's word count; recompute it whenever the content grows.
+3. When the components already carry a variant the requirement needs (`tile--wide`), the work is
+   data and its check; plan the slices so the later ones are honest regression guards.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1, J7 to J13): the `groups` state went in the first commit.
+- Build before proving a failure (J8 #1): slice 1 failed for the expected reason (seed 1 showed
+  "sun", no [sh] tile). Slices 2 and 3 passed on their first run, as J12 #3 predicts; they are
+  kept as guards and said so in their commit.
+- Read shown text through `expect.poll` (J13 #3): tile letters and the last recording are polled.
+- Tag the critical path in the same change (J11 #4): night's sound-out-and-blend is `@critical`.
+- `--reporter=line` and timeouts (J8 #3): no hang.

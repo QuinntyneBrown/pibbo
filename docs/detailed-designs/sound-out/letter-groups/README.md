@@ -16,7 +16,8 @@ The feature is a vertical slice through the Angular workspace: the page in the `
 - **`blendRules`** — pure functions in `@pibbo/domain/sounds` that build a round from the injected `RandomSource` and decide the outcome of each touch, with unit tests.
 - **`AudioPlayer`** — contract in `@pibbo/api` bound to `AUDIO_PLAYER`. Playing a recording stops the one before it; a recording that cannot play resolves as `unavailable` and the screen shows the text instead.
 - **`RoundFeedback`** — shared round behaviour (`retry-and-praise`): brief praise, hints after a wrong answer, and modelling the answer after three wrong answers.
-- **`Reuse`** — this slice reuses `sound-out-and-blend`; a word's `sounds` list already carries one `SoundUnit` per sound, so [sh][i][p] has three units. The tile draws one outline around a group, at least 60 × 60 px.
+- **`Reuse`** — this slice reuses `sound-out-and-blend`; a word's `sounds` list already carries one `SoundUnit` per sound, so [sh][i][p] has three units. The tile draws one outline around a group, at least 60 × 60 px (`tile--wide`).
+- **`isLetterGroup`** — pure rule in `@pibbo/domain/sounds`: a sound of more than one letter is a letter group. The groups are sounds in `sound-out-content.json` with their own recordings, checked before every build; Spell by sound leaves out words with a group (ADR 0019).
 
 ## Requirements
 
