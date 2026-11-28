@@ -8,9 +8,9 @@ const WHICH = '/recordings/read/which-picture.wav';
 const SAY_FAST = '/recordings/read/say-them-fast.wav';
 
 /** Seeds whose first round is the word named (the cast of the mock, not a rule). */
-const SHIP = 6;
-const NIGHT = 1;
-const BOAT = 2;
+const SHIP = 18;
+const NIGHT = 6;
+const BOAT = 1;
 
 test.describe('Sound it out: a letter group is one tile', () => {
   test.use({ seed: SHIP });

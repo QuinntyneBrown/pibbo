@@ -91,7 +91,12 @@
   if (blend) {
     const stage = blend.closest('.stage');
     stage.classList.add('stage--initial-sounds');
-    const tiles = Array.from(document.querySelectorAll('.tile'));
+    // The quiet e makes no sound of its own: touching it adds it or takes it away (L2-016).
+    const tiles = Array.from(document.querySelectorAll('.tile:not(.tile--silent)'));
+    const quietE = document.querySelector('.tile--silent[aria-pressed]');
+    if (quietE) quietE.addEventListener('click', () => {
+      location.href = quietE.getAttribute('aria-pressed') === 'true' ? 'magic-e.html' : 'magic-e-on.html';
+    });
     const fill = blend.querySelector('.blend__fill');
     const control = blend.querySelector('button') || buttonFrom(blend.querySelector('a'));
     if (route.get('begin') === '1') {
@@ -103,6 +108,19 @@
         labelTile(tile);
       });
       prompt.textContent = promptFor(tiles[0]) || prompt.textContent;
+    }
+    // A longer word is read one clap at a time (L2-017). `?begin=1` shows the round as it opens.
+    const claps = location.pathname.endsWith('/syllables.html');
+    const askClap = tile => 'Tap \u201c' + tile.textContent + '\u201d and clap it.';
+    if (claps && route.get('begin') === '1') {
+      tiles.forEach((tile, i) => {
+        tile.disabled = i !== 0;
+        tile.setAttribute('aria-label', tile.textContent + (i === 0 ? ', tap to hear it' : ''));
+        tile.classList.remove('tile--heard');
+        tile.classList.toggle('tile--next', i === 0);
+        tile.nextElementSibling.classList.add('tiles__say--hidden');
+      });
+      prompt.textContent = askClap(tiles[0]);
     }
     let heard = tiles.filter(tile => tile.classList.contains('tile--heard')).length;
     function updateBlendProgress() {
@@ -120,7 +138,7 @@
       tile.classList.remove('tile--next');
       tile.classList.add('tile--heard');
       tile.disabled = true;
-      labelTile(tile);
+      tile.setAttribute('aria-label', tile.textContent + (claps ? ', says ' : ', ') + sound.textContent);
       sound.classList.remove('tiles__say--hidden');
       heard++;
       updateBlendProgress();
@@ -135,6 +153,7 @@
         labelTile(next);
         prompt.textContent = promptFor(next) || prompt.textContent;
         next.focus();
+        if (claps) prompt.textContent = askClap(next);
       }
     }));
     // Two consonants side by side ask for the first two sounds before the pictures (L2-015).

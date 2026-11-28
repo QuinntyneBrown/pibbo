@@ -32,6 +32,9 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--gap-targets);
+  padding: var(--space-1-5);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-sunken);
 }
 
 .switch__option {
@@ -52,6 +55,12 @@
   transition:
     background-color var(--duration-fast) var(--ease-standard),
     color var(--duration-fast) var(--ease-standard);
+
+  &[aria-checked='false'] {
+    background: transparent;
+    color: var(--color-fg-muted);
+    box-shadow: none;
+  }
 
   &[aria-checked='true'] {
     --depth: var(--color-count-depth);

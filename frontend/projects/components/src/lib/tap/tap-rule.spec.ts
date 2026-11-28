@@ -12,9 +12,13 @@ describe('tapVerdict', () => {
     expect(tapVerdict({ ...finger, width: 1, height: 1 })).toBe('tap');
   });
 
+  it('takes a fingertip as a tablet or a Surface reports it (about 64 px) as a tap', () => {
+    expect(tapVerdict({ ...finger, width: 64, height: 64 })).toBe('tap');
+  });
+
   it('rejects a palm-sized contact either way', () => {
     expect(tapVerdict({ ...finger, width: PALM_SIZE_PX + 1 })).toBe('palm');
-    expect(tapVerdict({ ...finger, height: 90 })).toBe('palm');
+    expect(tapVerdict({ ...finger, height: 160 })).toBe('palm');
     expect(tapVerdict({ ...finger, width: PALM_SIZE_PX, height: PALM_SIZE_PX })).toBe('tap');
   });
 
@@ -28,6 +32,6 @@ describe('tapVerdict', () => {
   });
 
   it('calls a palm a palm even when it also moved and was held', () => {
-    expect(tapVerdict({ width: 80, height: 80, moved: 40, heldMs: 3000 })).toBe('palm');
+    expect(tapVerdict({ width: 160, height: 160, moved: 40, heldMs: 3000 })).toBe('palm');
   });
 });

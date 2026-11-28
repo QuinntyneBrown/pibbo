@@ -4,8 +4,8 @@ How each issue from the audit comparing these mocks with the Magic Patterns prot
 
 | Issue | Resolution | What was done or why it stays |
 |---|---|---|
-| [#17](https://github.com/QuinntyneBrown/pibbo/issues/17) | departure | Already recorded: the lesson card goes with the child-facing Home reconciliation (L2-024, ADR 0006) and returns as a lesson picture with journey 22. |
-| [#18](https://github.com/QuinntyneBrown/pibbo/issues/18) | departure | Already recorded (check picture returns with journey 23); tightened the README bullet that wrongly said What do I know? is linked from Home and the lesson. |
+| [#17](https://github.com/QuinntyneBrown/pibbo/issues/17) | departure | Already recorded; since the merge of main, journey 22 has drawn the lesson picture beside the wordmark (`.home__lesson`, L2-024 #4, ADR 0026). |
+| [#18](https://github.com/QuinntyneBrown/pibbo/issues/18) | departure | Already recorded; since the merge of main, What do I know? is linked from Home and the lesson again (journey 23, ADR 0027), as the README says. |
 | [#19](https://github.com/QuinntyneBrown/pibbo/issues/19) | departure | first-visit is required by L2-024 #6 (no group chosen, nothing spoken before the first touch); recorded in a new Home details bullet. |
 | [#20](https://github.com/QuinntyneBrown/pibbo/issues/20) | departure | Already recorded: Home shows only activities that exist (L2-024, ADR 0006), and at most 6 a screen. |
 | [#21](https://github.com/QuinntyneBrown/pibbo/issues/21) | departure | Already recorded: “Two letters, one sound” has no Home card until its journey adds it to the catalogue (L2-024, ADR 0006). |
@@ -22,7 +22,7 @@ How each issue from the audit comparing these mocks with the Magic Patterns prot
 | [#32](https://github.com/QuinntyneBrown/pibbo/issues/32) | departure | Already recorded: 5 a screen plus More (L2-024 #7, ADR 0014), so nothing scrolls. |
 | [#33](https://github.com/QuinntyneBrown/pibbo/issues/33) | departure | Already recorded: no stars or score (AGENTS.md, L2-025 #4). |
 | [#34](https://github.com/QuinntyneBrown/pibbo/issues/34) | departure | Already recorded: no child name (AGENTS.md privacy, ADR 0006). |
-| [#35](https://github.com/QuinntyneBrown/pibbo/issues/35) | departure | Already recorded: no lesson card, so no lesson progress; lesson picture returns with journey 22. |
+| [#35](https://github.com/QuinntyneBrown/pibbo/issues/35) | departure | Already recorded; since the merge of main, journey 22 draws the lesson picture and the lesson keeps its place (ADR 0026). |
 | [#36](https://github.com/QuinntyneBrown/pibbo/issues/36) | departure | Already recorded: the subject tabs became two large group pictures (.switch--groups), 60 px targets 16 px apart. |
 | [#37](https://github.com/QuinntyneBrown/pibbo/issues/37) | departure | Count before Read follows AGENTS.md and L2-024; recorded in the Home details bullet. |
 | [#38](https://github.com/QuinntyneBrown/pibbo/issues/38) | departure | Already recorded with .switch--groups; the Home details bullet now says the glyphs let a non-reader tell the groups apart. |
@@ -166,8 +166,8 @@ How each issue from the audit comparing these mocks with the Magic Patterns prot
 | [#176](https://github.com/QuinntyneBrown/pibbo/issues/176) | departure | Cards share the room left so nothing scrolls during the round (AGENTS.md One thing at a time); recorded. |
 | [#177](https://github.com/QuinntyneBrown/pibbo/issues/177) | departure | Two columns of four 60 px cards cannot fit a phone on its side, so words and pictures make two rows; recorded. |
 | [#178](https://github.com/QuinntyneBrown/pibbo/issues/178) | fix | Next on correct now goes back to Home with Read chosen (home/default.html, as Leave), not on to Spot the word. |
-| [#179](https://github.com/QuinntyneBrown/pibbo/issues/179) | fix | New held state: boat matched, ship held (aria-pressed true, berry with a ring); in manifest.json. |
-| [#180](https://github.com/QuinntyneBrown/pibbo/issues/180) | fix | New miss state: ship was held, the sunset picture shakes (pair--miss) and ship is let go, as data-release-on-miss does; in manifest.json. |
+| [#179](https://github.com/QuinntyneBrown/pibbo/issues/179) | fix | The held state is drawn; after the merge of main, journey 18's held.html (ADR 0023) replaces the audit's. |
+| [#180](https://github.com/QuinntyneBrown/pibbo/issues/180) | fix | The miss state is drawn; after the merge of main, journey 18's miss.html (ADR 0023) replaces the audit's. |
 | [#181](https://github.com/QuinntyneBrown/pibbo/issues/181) | departure | A state is drawn once with one word of the cast: the letter-group state is drawn with "ship", and "night" (igh) plays through every state from default.html?begin=1&word=night via the script; words are the cast, not states. New README bullet. |
 | [#182](https://github.com/QuinntyneBrown/pibbo/issues/182) | fix | first-two and first-two-retry now lead on: "st" opens pick.html#word=stop (pictures stop, ship, map, then correct/retry/modelled for stop), s or t opens first-two-retry; the script marks a four-sound word tiles--long and a scoped ui.css rule keeps its four tiles on one row beside the pictures at 1024 x 768. |
 | [#183](https://github.com/QuinntyneBrown/pibbo/issues/183) | departure | The first-two-sounds question is required by L2-015 #2 and ADR 0020 (#2, #3); kept and recorded in the README. |
@@ -177,7 +177,7 @@ How each issue from the audit comparing these mocks with the Magic Patterns prot
 | [#187](https://github.com/QuinntyneBrown/pibbo/issues/187) | align | groups now draws the rule line "sh Two letters, one sound"; the script no longer adds a second rule line when the page already has one. |
 | [#188](https://github.com/QuinntyneBrown/pibbo/issues/188) | departure | "boat" (oa) is the cast of the letter-group state already drawn with "ship"; it plays through every state from default.html?begin=1&word=boat (the Results link). New README bullet. |
 | [#189](https://github.com/QuinntyneBrown/pibbo/issues/189) | fix | groups (and clusters) now load appearance.js and sound-it-out.js, so their tiles and Read it fast play through to the ship (or stop) picture, praise and retry states; appearance.js was also missing from pick, first-two and first-two-retry, where mock.js threw a page error. |
-| [#190](https://github.com/QuinntyneBrown/pibbo/issues/190) | departure | cape's picture phase is the pick/correct/retry/modelled states with cape's tiles swapped in by the script (Read it fast on magic-e); words are the cast, not states. New README bullet. |
+| [#190](https://github.com/QuinntyneBrown/pibbo/issues/190) | departure | cape's picture phase is the pick/correct/retry/modelled states with cape's tiles swapped in by the script (Read it fast on magic-e-on, which main's journey 16 added; magic-e now draws "cap"); words are the cast, not states. |
 | [#191](https://github.com/QuinntyneBrown/pibbo/issues/191) | fix | begin=1 now starts any Sound it out state from nothing heard; syllables.html?begin=1 draws the start of "sunset" with "Tap “sun” and clap it." and the prompt moves to "Tap “set” and clap it." after the first clap. |
 | [#192](https://github.com/QuinntyneBrown/pibbo/issues/192) | fix | One wording per kind of word: words of single sounding letters (map, stop) keep "Tap each letter to hear its sound." (L2-012 #1, the product and its e2e use it); words with a letter group or a quiet e (ship, night, boat, cape) say "Tap each part and say its sound." groups changed; the script now uses "part" only for words with a group. |
 | [#193](https://github.com/QuinntyneBrown/pibbo/issues/193) | align | Already aligned in 22083dc: pick, correct, retry and modelled draw cap, map, sun. The README bullet saying "sun and cat" is corrected; ADR 0008 #1/#4 and the sound-out-and-blend design still name sun and cat and need the owner to update them. |

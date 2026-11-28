@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import type { GroupId, Instruction, PibboMood } from '@pibbo/api';
 import { Pibbo } from '../pibbo/pibbo';
+import { ProgressBar } from '../progress-bar/progress-bar';
 import { Tap } from '../tap/tap';
 
 /**
@@ -11,7 +12,7 @@ import { Tap } from '../tap/tap';
  */
 @Component({
   selector: 'pb-round-shell',
-  imports: [Pibbo, Tap],
+  imports: [Pibbo, ProgressBar, Tap],
   templateUrl: './round-shell.html',
   styleUrl: './round-shell.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +27,18 @@ export class RoundShell {
   /** Rounds finished so far, out of `rounds`. */
   readonly done = input(0);
   readonly rounds = input(5);
+  /**
+   * Whether the shell gives up room on a short screen, as the mocks draw it (`shell--fit`): a
+   * smaller prompt on a short upright phone, and on a phone on its side the prompt beside the
+   * way out and the progress bar.
+   */
+  readonly fit = input(false);
+  /**
+   * `story`: on a small screen the shell becomes a grid whose areas the game's own parts take
+   * (`find`, `story`), as the Spot the word mock draws it, so a story of 60 px words fits with
+   * nothing scrolling (ADR 0024). `stack`, the default, keeps the shell a column.
+   */
+  readonly layout = input<'stack' | 'story'>('stack');
 
   readonly leave = output<void>();
   readonly replay = output<void>();

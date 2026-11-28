@@ -9,7 +9,7 @@ A small child pinches, double-taps, long-presses and rests a palm on the screen.
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
 - **`Global touch styles`** — `touch-action: manipulation`, `user-select: none` and `-webkit-touch-callout: none` on activity screens; viewport meta prevents pinch zoom inside activities.
-- **`TapDirective`** — directive `pbTap` turning a primary-pointer short press into one `tap` event; it judges each pointer on its own and ignores contacts larger than a palm threshold, contacts that move and long presses (thresholds in ADR 0006), and suppresses `contextmenu`.
+- **`TapDirective`** — directive `pbTap` turning a primary-pointer short press into one `tap` event; it judges each pointer on its own and ignores contacts larger than a palm threshold, contacts that move and long presses (thresholds in ADR 0006), and suppresses `contextmenu`. It cancels each touch's end with a listener the element itself keeps, not a host binding, so the browser's synthetic click is stopped even when the tap has already destroyed the view: a tap that leaves a page never also activates what appears under the finger.
 
 ## Requirements
 
@@ -58,6 +58,6 @@ The palm contact is ignored; the finger tap is emitted once.
 
 ## Decisions (journey 2)
 
-- The rule is the pure function `tapVerdict` in `@pibbo/components` with unit tests; `TapDirective` (`[pbTap]`) applies it per pointer. A touch is a tap when its contact is at most 48 × 48 px, it moved under 12 px and was held under 700 ms. Mouse and keyboard activation arrive as `click` and always count.
+- The rule is the pure function `tapVerdict` in `@pibbo/components` with unit tests; `TapDirective` (`[pbTap]`) applies it per pointer. A touch is a tap when its contact is at most 120 × 120 px (a fingertip on a tablet or Surface is reported as 50-65 px), it moved under 12 px and was held under 700 ms. Mouse and keyboard activation arrive as `click` and always count.
 - Each pointer is judged alone, so a resting palm, primary or not, never blocks another finger's tap. No edge zone is needed.
 - Global styles keep `touch-action: manipulation`, `user-select: none` and `-webkit-touch-callout: none` (journey 1).

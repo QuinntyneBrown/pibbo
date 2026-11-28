@@ -25,6 +25,17 @@ export function adjacentConsonants(word: Word): readonly [Sound, Sound] | null {
   return a && b && isSingleConsonant(a) && isSingleConsonant(b) ? [a, b] : null;
 }
 
+/**
+ * The letter a quiet e changes (L2-016): where the word's sounds differ from the word without
+ * its e ("a" in "cape", /ā/ not /a/); null for a word that is not a silent-e word.
+ */
+export function changedLetter(word: Word): number | null {
+  const without = word.withoutE;
+  if (!without) return null;
+  const i = word.sounds.findIndex((s, k) => s.recording !== without.sounds[k]?.recording);
+  return i < 0 ? null : i;
+}
+
 /** The question a word with adjacent consonants asks once it is blended (L2-015 #2). */
 export interface FirstTwoQuestion {
   /** The two sounds asked for, in order. */
@@ -39,13 +50,21 @@ export interface FirstTwoQuestion {
 export const PICTURES_OFFERED = 3;
 
 /**
- * Where a round is: the child sounds each letter in order (`sounding`), then may blend
+ * Where a round is: a silent-e word first waits for its quiet e (`magic-e`); the child sounds each letter in order (`sounding`), then may blend
  * (`ready`); Pibbo blends (`blending`); a word with adjacent consonants first asks for its
  * first two sounds (`first-two`); the child picks the picture (`picking`); a wrong
  * picture gives a hint (`retry`); the round ends `right` or, after the third wrong, `modelled`.
  */
 export type SoundOutPhase =
-  'sounding' | 'ready' | 'blending' | 'first-two' | 'picking' | 'retry' | 'right' | 'modelled';
+  | 'magic-e'
+  | 'sounding'
+  | 'ready'
+  | 'blending'
+  | 'first-two'
+  | 'picking'
+  | 'retry'
+  | 'right'
+  | 'modelled';
 
 /** One Sound it out round. Immutable: every rule returns a new value. */
 export interface SoundOutRound {
@@ -61,6 +80,42 @@ export interface SoundOutRound {
   readonly wrong: number;
   /** The first-two-sounds question, for a word with adjacent consonants only. */
   readonly firstTwo: FirstTwoQuestion | null;
+  /** For a silent-e word, whether its quiet e is added; null for any other word. */
+  readonly eAdded: boolean | null;
+}
+
+/** A word's tiles in order: a longer word's syllables (L2-017), otherwise its sounds. */
+export function wordTiles(word: Word): readonly Sound[] {
+  return word.syllables ?? word.sounds;
+}
+
+/** The tiles a round shows: the word without its e until the e is added (L2-016). */
+export function shownSounds(round: SoundOutRound): readonly Sound[] {
+  return round.eAdded === false ? round.word.withoutE!.sounds : wordTiles(round.word);
+}
+
+/** An instruction of several recordings: its text as shown, and what to play in order. */
+export interface SpokenInstruction {
+  readonly text: string;
+  readonly recordings: readonly string[];
+}
+
+/**
+ * What a longer word asks while it is read (L2-017 #1): "Tap", the next syllable and "and
+ * clap it", as text and as recordings; null for any other word or once every syllable is read.
+ */
+export function syllableAsk(
+  round: SoundOutRound,
+  before: { readonly text: string; readonly recording: string },
+  after: { readonly text: string; readonly recording: string },
+): SpokenInstruction | null {
+  const next = nextLetter(round);
+  const syllable = next === null ? undefined : round.word.syllables?.[next];
+  if (round.phase !== 'sounding' || !syllable) return null;
+  return {
+    text: `${before.text} “${syllable.letters}” ${after.text}`,
+    recordings: [before.recording, syllable.recording, after.recording],
+  };
 }
 
 function shuffled<T>(random: RandomSource, items: readonly T[]): T[] {
@@ -89,12 +144,15 @@ export function startSoundOutRound(
     random,
     words.filter((w) => w.word !== word.word),
   ).slice(0, PICTURES_OFFERED - 1);
-  const pictures = shuffled(random, [word, ...others]);
-  const pair = adjacentConsonants(word);
+  // A silent-e word offers the picture of the word without its e among its pictures (#3).
+  const offered = word.withoutE ? [word.withoutE, others[0]!] : others;
+  const pictures = shuffled(random, [word, ...offered]);
+  // A longer word is read by syllable, so it asks no first-two-sounds question.
+  const pair = word.syllables ? null : adjacentConsonants(word);
   return {
-    phase: 'sounding',
+    phase: word.withoutE ? 'magic-e' : 'sounding',
     word,
-    heard: word.sounds.map(() => false),
+    heard: wordTiles(word).map(() => false),
     pictures,
     chosen: null,
     wrong: 0,
@@ -107,11 +165,13 @@ export function startSoundOutRound(
       ]),
       answered: false,
     },
+    eAdded: word.withoutE ? false : null,
   };
 }
 
 /** The letter to touch next, or null once every sound is heard. */
 export function nextLetter(round: SoundOutRound): number | null {
+  if (round.phase === 'magic-e') return null;
   const i = round.heard.indexOf(false);
   return i < 0 ? null : i;
 }
@@ -130,13 +190,45 @@ export function touchLetter(round: SoundOutRound, index: number): LetterResult {
   if (round.phase !== 'sounding' || index !== nextLetter(round)) return { round, spoken: null };
   const heard = round.heard.map((h, i) => h || i === index);
   const phase = heard.every(Boolean) ? 'ready' : 'sounding';
-  return { round: { ...round, heard, phase }, spoken: round.word.sounds[index]!.recording };
+  return { round: { ...round, heard, phase }, spoken: wordTiles(round.word)[index]!.recording };
 }
 
-/** Blending (L2-012 #2): each sound again, back to back, each letter lit, then the word. */
+/**
+ * What a touch on a tile plays, the tile lit throughout: its one recording, or for a longer
+ * word's syllable (L2-017 #1) each of its sounds and then the syllable, sounded out and blended.
+ */
+export function soundingPlan(word: Word, index: number): PlaybackStep[] {
+  const syllable = word.syllables?.[index];
+  const recordings = syllable
+    ? [...syllable.sounds.map((s) => s.recording), syllable.recording]
+    : [wordTiles(word)[index]!.recording];
+  return recordings.map((recording) => ({ recording, letter: index }));
+}
+
+/**
+ * The child touches the quiet e (L2-016 #1, #2): adding it makes the word ("cape") and its
+ * sounds, and taking it away makes the word without it ("cap"); either way the word made is
+ * spoken and the sounds are heard afresh. Only before blending.
+ */
+export function toggleSilentE(round: SoundOutRound): LetterResult {
+  const without = round.word.withoutE;
+  const open = round.phase === 'magic-e' || round.phase === 'sounding' || round.phase === 'ready';
+  if (!without || round.eAdded === null || !open) return { round, spoken: null };
+  const eAdded = !round.eAdded;
+  const heard = round.word.sounds.map(() => false);
+  return {
+    round: { ...round, eAdded, heard, phase: eAdded ? 'sounding' : 'magic-e' },
+    spoken: eAdded ? round.word.recording : without.recording,
+  };
+}
+
+/**
+ * Blending (L2-012 #2): each tile's recording again, back to back, each tile lit, then the
+ * word. A longer word blends its syllables, not its single sounds (L2-017 #2).
+ */
 export function blendPlan(word: Word): PlaybackStep[] {
   return [
-    ...word.sounds.map((s, letter) => ({ recording: s.recording, letter })),
+    ...wordTiles(word).map((s, letter) => ({ recording: s.recording, letter })),
     { recording: word.recording, letter: null },
   ];
 }
@@ -216,7 +308,9 @@ export function roundAssets(round: SoundOutRound): string[] {
     ...new Set([
       ...round.pictures.map((w) => w.picture),
       ...round.word.sounds.map((s) => s.recording),
+      ...(round.word.syllables ?? []).map((s) => s.recording),
       round.word.recording,
+      ...(round.word.withoutE ? [round.word.withoutE.recording] : []),
     ]),
   ];
 }

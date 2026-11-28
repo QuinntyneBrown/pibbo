@@ -16,14 +16,19 @@
       "title": "Home · Choose an activity",
       "route": "/",
       "requirements": [
+        "L2-023",
         "L2-024",
-        "L2-035"
+        "L2-035",
+        "L2-033",
+        "L2-037"
       ],
       "states": [
         "default",
+        "reading-more",
         "counting",
         "counting-more",
-        "first-visit"
+        "first-visit",
+        "offline"
       ],
       "prototype_frame": "qWbazJPhFtQFND16jvAWTf",
       "subject": "both",
@@ -33,7 +38,8 @@
         "error": "Home reads nothing that can fail."
       },
       "state_subjects": {
-        "default": "read"
+        "default": "read",
+        "reading-more": "read"
       }
     },
     {
@@ -59,7 +65,9 @@
       "kind": "page",
       "title": "Guided lesson",
       "route": "/lesson/:subject",
-      "requirements": [],
+      "requirements": [
+        "L2-022"
+      ],
       "states": [
         "default",
         "start",
@@ -309,7 +317,11 @@
       "kind": "page",
       "title": "Words and pictures",
       "route": "/read/word-pictures",
-      "requirements": [],
+      "requirements": [
+        "L2-018",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "start",
         "default",
@@ -330,7 +342,14 @@
       "kind": "page",
       "title": "Sound it out",
       "route": "/read/sound-out",
-      "requirements": ["L2-012", "L2-014", "L2-015", "L2-025", "L2-026"],
+      "requirements": [
+        "L2-012",
+        "L2-014",
+        "L2-015",
+        "L2-016",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "start",
         "default",
@@ -340,6 +359,7 @@
         "retry",
         "modelled",
         "magic-e",
+        "magic-e-on",
         "syllables",
         "groups",
         "clusters",
@@ -389,7 +409,8 @@
         "default",
         "all-chosen",
         "correct",
-        "retry"
+        "retry",
+        "model"
       ],
       "prototype_frame": "oyGFSwVHG2Nz2m28fZ8sqi",
       "subject": "read",
@@ -404,7 +425,11 @@
       "kind": "page",
       "title": "Spot the word",
       "route": "/read/sight-words",
-      "requirements": [],
+      "requirements": [
+        "L2-019",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "default",
         "miss",
@@ -423,13 +448,18 @@
       "kind": "page",
       "title": "Build a sentence",
       "route": "/read/sentence",
-      "requirements": [],
+      "requirements": [
+        "L2-020",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "start",
         "default",
         "full",
         "correct",
-        "retry"
+        "retry",
+        "model"
       ],
       "prototype_frame": "3mB6d7j8yJagSd2CagJNKf",
       "subject": "read",
@@ -444,30 +474,63 @@
       "kind": "page",
       "title": "What do I know?",
       "route": "/check",
-      "requirements": [],
+      "requirements": [
+        "L2-023",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "default",
         "answered",
         "correct",
         "retry",
+        "model",
         "counting-question",
         "rhyme-question",
         "number-question",
-        "results"
+        "letter-question",
+        "adding-question",
+        "results",
+        "results-none"
       ],
       "prototype_frame": "uqsXti2BwppQA9k9zEtnFN",
       "subject": "both",
       "not_applicable": {
-        "loading": "The questions are fixed data in the bundle.",
-        "empty": "There are always four questions.",
-        "error": "Nothing on this screen can fail."
+        "loading": "A question's pictures and recordings are bundled and fetched before it is shown.",
+        "empty": "With nothing practised the questions come from the first lesson; results with nothing earned is the results-none state.",
+        "error": "A recording that cannot play never blocks a question, and storage that cannot be read counts as nothing practised."
       },
       "state_subjects": {
         "default": "read",
         "answered": "read",
         "correct": "read",
         "retry": "read",
-        "rhyme-question": "read"
+        "model": "read",
+        "rhyme-question": "read",
+        "letter-question": "read"
+      }
+    },
+    {
+      "id": "grown-up",
+      "kind": "page",
+      "title": "For grown-ups",
+      "route": "/grown-up",
+      "requirements": [
+        "L2-029",
+        "L2-037"
+      ],
+      "states": [
+        "gate",
+        "gate-progress",
+        "default",
+        "confirm",
+        "cleared"
+      ],
+      "subject": "none",
+      "not_applicable": {
+        "loading": "Everything shown is in the bundle; nothing is fetched.",
+        "empty": "The area always offers volume, clear progress and about Pibbo.",
+        "error": "Nothing here can fail: a store that cannot be used behaves as an empty one."
       }
     },
     {

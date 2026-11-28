@@ -12,3 +12,7 @@ node_modules/
 
 # Worktrees of parallel Claude Code sessions
 .claude/worktrees/
+
+# Explainer videos: the fitted voice alone and half-written films
+docs/videos/**/narration.wav
+docs/videos/**/*.partial.mp4

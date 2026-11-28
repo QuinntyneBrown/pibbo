@@ -6,7 +6,7 @@ CI builds the .NET and Angular projects and runs unit tests, acceptance tests, l
 
 `L2-039` #1 asks CI to run unit tests, while `AGENTS.md` states unit tests run locally and never in CI; [ADR 0005](../../../adr/0005-unit-tests-run-locally.md) follows `AGENTS.md` until the repository owner decides.
 
-**Built so far (journey 1):** the frontend half. `.github/workflows/ci.yml` runs format, lint, `npm audit`, the Angular build with its bundle budgets and the behaviour e2e; `node tools/verify/verify.mjs` adds the unit tests locally. The static host settings are in [`docs/deploy.md`](../../../deploy.md). The .NET build, container image and deployment wait for the backend ADR.
+**Built so far (journey 1):** the frontend half. `.github/workflows/ci.yml` runs format, lint, `npm audit`, the Angular build with its bundle budgets and the behaviour e2e; `node tools/verify/verify.mjs` adds the unit tests locally. The static host settings are in [`docs/deploy.md`](../../../deploy.md). Every commit to main that passes CI is published to Azure Static Web Apps by the workflow's `deploy` job ([ADR 0033](../../../adr/0033-publish-to-azure-static-web-apps-from-main.md)). The .NET build, container image and readiness-gated rollout wait for the backend ADR.
 
 ## Description
 
@@ -14,7 +14,7 @@ The feature is a vertical slice through the backend: `Pibbo.Api` (controllers an
 
 - **`GitHub Actions workflow`** — `.github/workflows/ci.yml`: lint, build, one acceptance path per feature, bundle budgets, audits; under 5 minutes.
 - **`Dockerfile`** — multi-stage, base pinned by digest, `USER` non-root.
-- **`Deployment`** — rolling or blue-green with readiness gate and automatic rollback; platform `<TO SUPPLY>`.
+- **`Deployment`** — rolling or blue-green with readiness gate and automatic rollback; platform Azure Static Web Apps for the static frontend (ADR 0033); the backend's `<TO SUPPLY>`.
 
 ## Requirements
 

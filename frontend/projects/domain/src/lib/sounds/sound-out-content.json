@@ -42,6 +42,37 @@
       "sounds": ["s", "t", "o", "p"],
       "picture": "/pictures/words/stop.jpg",
       "recording": "/recordings/words/stop.wav"
+    },
+    {
+      "word": "cape",
+      "sounds": ["c", "a_e", "p"],
+      "picture": "/pictures/words/cape.jpg",
+      "recording": "/recordings/words/cape.wav",
+      "withoutE": {
+        "word": "cap",
+        "sounds": ["c", "a", "p"],
+        "picture": "/pictures/words/cap.jpg",
+        "recording": "/recordings/words/cap.wav"
+      }
+    },
+    {
+      "word": "sunset",
+      "syllables": [
+        {
+          "letters": "sun",
+          "sounds": ["s", "u", "n"],
+          "shown": "clap 1",
+          "recording": "/recordings/words/sun.wav"
+        },
+        {
+          "letters": "set",
+          "sounds": ["s", "e", "t"],
+          "shown": "clap 2",
+          "recording": "/recordings/syllables/set.wav"
+        }
+      ],
+      "picture": "/pictures/words/sunset.jpg",
+      "recording": "/recordings/words/sunset.wav"
     }
   ],
   "sounds": {
@@ -54,6 +85,16 @@
       "letters": "a",
       "shown": "/a/",
       "recording": "/recordings/sounds/a.wav"
+    },
+    "e": {
+      "letters": "e",
+      "shown": "/e/",
+      "recording": "/recordings/sounds/e.wav"
+    },
+    "a_e": {
+      "letters": "a",
+      "shown": "/ā/",
+      "recording": "/recordings/sounds/a_e.wav"
     },
     "p": {
       "letters": "p",
@@ -172,6 +213,27 @@
       "recording": "/recordings/read/choose-again.wav"
     }
   },
+  "silentE": {
+    "instruction": {
+      "text": "Add a quiet e to the end.",
+      "recording": "/recordings/read/add-a-quiet-e.wav",
+      "picture": "tap"
+    },
+    "rule": {
+      "before": "The e is quiet and makes",
+      "after": "say its name"
+    },
+    "waiting": "add a quiet e",
+    "added": "the e is quiet"
+  },
+  "syllables": {
+    "ask": {
+      "before": { "text": "Tap", "recording": "/recordings/read/tap.wav" },
+      "after": { "text": "and clap it.", "recording": "/recordings/read/and-clap-it.wav" },
+      "picture": "tap"
+    },
+    "rule": "Read one beat at a time"
+  },
   "letterSounds": {
     "roundsPerPlay": 5,
     "pairs": [
@@ -258,5 +320,23 @@
       "text": "You spelled",
       "recording": "/recordings/read/you-spelled.wav"
     }
+  },
+  "wordPictures": {
+    "roundsPerPlay": 5,
+    "themes": [
+      {
+        "name": "by the sea",
+        "words": ["boat", "ship", "sun"],
+        "instruction": {
+          "text": "By the sea! Read a word, then tap its picture.",
+          "recording": "/recordings/read/by-the-sea-read-a-word.wav",
+          "picture": "tap"
+        },
+        "praise": {
+          "text": "You read all the by the sea words!",
+          "recording": "/recordings/read/you-read-all-the-by-the-sea-words.wav"
+        }
+      }
+    ]
   }
 }

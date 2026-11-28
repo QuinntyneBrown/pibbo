@@ -95,6 +95,42 @@
   }
 }
 
+// A silent-e word (L2-016): the quiet e is dashed and the vowel it changes wears a bar, so
+// neither is told by colour alone.
+.tile--silent {
+  background: transparent;
+  color: var(--color-fg-muted);
+  box-shadow: none;
+  outline: 4px dashed var(--color-fg-muted);
+  outline-offset: -4px;
+}
+
+.tile--silent.tile--next {
+  outline-color: var(--color-read);
+}
+
+.tile--added {
+  background: var(--color-bg-sunken);
+}
+
+.tile--changed {
+  position: relative;
+}
+
+.tile__mark {
+  position: absolute;
+  top: 14%;
+  right: 30%;
+  left: 30%;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-read-strong);
+}
+
+.tile--heard .tile__mark {
+  background: var(--color-fg-on-strong);
+}
+
 .tiles__say {
   height: var(--space-6);
   margin-top: var(--space-2);
@@ -184,5 +220,19 @@
 
   &:disabled {
     opacity: 0.45;
+  }
+}
+
+// A longer word's two syllables keep one line, smaller on a phone on its side (L2-017 #3).
+.tiles--beats {
+  flex-wrap: nowrap;
+}
+
+@media (orientation: landscape) and (min-width: 32rem) and (max-height: 30rem) {
+  .tiles--beats .tile {
+    width: auto;
+    height: var(--size-11);
+    padding: 0 var(--space-3);
+    font-size: var(--font-size-5xl);
   }
 }

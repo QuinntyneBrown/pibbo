@@ -39,6 +39,46 @@ export class CountTheToysPage {
     this.action = page.locator('.answer-bar .chunky');
   }
 
+  /** The prompt as drawn: how wide Pibbo is and how many lines the instruction takes. */
+  async promptSize(): Promise<{ pibbo: number; lines: number }> {
+    const pibbo = await this.pibbo.boundingBox();
+    const lines = await this.instruction.evaluate((el) =>
+      Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)),
+    );
+    return { pibbo: Math.round(pibbo!.width), lines };
+  }
+
+  /** The colours of the rug, of what lies behind a toy on it, and of the number counted. */
+  async rugColours(): Promise<{ rug: string; behindToy: string; counted: string }> {
+    return {
+      rug: await this.rug.evaluate((el) => getComputedStyle(el).backgroundColor),
+      behindToy: await this.toy(0).evaluate((el) => getComputedStyle(el).backgroundColor),
+      counted: await this.tally.evaluate((el) => getComputedStyle(el).color),
+    };
+  }
+
+  /** Where a toy's badge sits: its share of the toy's width, and whether it is at the lower right. */
+  async badgePlace(index: number): Promise<{ small: boolean; lowerRight: boolean }> {
+    const toy = (await this.toy(index).boundingBox())!;
+    const badge = (await this.badge(index).boundingBox())!;
+    return {
+      small: badge.width / toy.width < 0.5,
+      lowerRight:
+        toy.x + toy.width - (badge.x + badge.width) < 10 &&
+        toy.y + toy.height - (badge.y + badge.height) < 10,
+    };
+  }
+
+  /** The answer bar as drawn: the message's colour, and whether the way on stands beside it. */
+  async answerLook(): Promise<{ colour: string; oneRow: boolean }> {
+    const message = (await this.message.boundingBox())!;
+    const action = (await this.action.boundingBox())!;
+    return {
+      colour: await this.message.evaluate((el) => getComputedStyle(el).color),
+      oneRow: message.y + message.height > action.y && action.y + action.height > message.y,
+    };
+  }
+
   toy(index: number): Locator {
     return this.toys.nth(index);
   }
@@ -83,6 +123,26 @@ export class CountTheToysPage {
   async answer(n: number): Promise<void> {
     await this.touch(this.numeral(n));
     await this.touch(this.action);
+  }
+
+  /**
+   * Taps `target` with a real fingertip's contact, as a tablet or a Surface reports it:
+   * about 64 CSS px across, through Chromium's touch input.
+   */
+  async fingertipTap(target: Locator): Promise<void> {
+    const box = await target.boundingBox();
+    if (!box) throw new Error('target not shown');
+    const point = {
+      x: box.x + box.width / 2,
+      y: box.y + box.height / 2,
+      radiusX: 32,
+      radiusY: 32,
+      id: 1,
+    };
+    const cdp = await this.page.context().newCDPSession(this.page);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await cdp.detach();
   }
 
   /** Two fingers land on two toys in the same moment, through Chromium's touch input. */

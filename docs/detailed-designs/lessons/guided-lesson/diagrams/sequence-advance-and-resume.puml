@@ -18,15 +18,19 @@ end box
 box "Frontend — browser services (audio, storage)" #FFF4E5
   participant "ProgressStore" as store
 end box
-page -> store : read("lesson", guard)
-page -> rules : resume(stored, lesson) [L2-022 #2]
-actor -> page : Finish activity 1
-page -> rules : advance(lesson, progress, known)
-alt next is unknown
-  rules --> page : skip; ClientLog.warn(no child data) [L2-022 #4]
+page -> rules : lessonSteps(lesson, catalogue)
+alt a step names an unknown activity
+  page -> page : ClientLog.warn(lesson and activity ids only) [L2-022 #4]
 end
-page --> path : step 2 current by shape and colour [L2-022 #1]
-page -> store : write position
+page -> store : read("pibbo:lesson:count")
+page -> rules : readLessonPlace(stored, steps) [L2-022 #2]
+page --> path : current step by shape and colour; "Up next" spoken and shown
+actor -> page : Touch Play
+page -> page : open activity ?lesson=count&step=1
+actor -> page : Finish activity 1, touch Next
+page -> rules : finishStep(1, finished 1, steps)
+page -> store : write {v:1, step:2, at}
+page --> path : step 2 current [L2-022 #1]
 actor -> page : Touch Home
 page -> page : navigate to Home, no confirmation [L2-022 #3]
 @enduml

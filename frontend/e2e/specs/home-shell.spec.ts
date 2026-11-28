@@ -18,4 +18,19 @@ test.describe('Home shell', () => {
     // Nothing is spoken before the child touches the screen.
     expect(await spoken.recordings()).toEqual([]);
   });
+
+  test('Given a light device, when Home loads, then it is drawn in the colours of its mock: lavender paper, deep purple ink and a yellow seed @critical', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    const home = new HomePage(page);
+
+    await home.open();
+
+    expect(await home.colours()).toEqual({
+      paper: 'rgb(247, 241, 252)',
+      ink: 'rgb(33, 11, 74)',
+      seed: 'rgb(255, 194, 61)',
+    });
+  });
 });

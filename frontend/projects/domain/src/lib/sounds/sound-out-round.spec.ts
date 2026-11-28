@@ -4,6 +4,8 @@ import {
   blendDone,
   adjacentConsonants,
   blendPlan,
+  changedLetter,
+  shownSounds,
   chooseFirstTwo,
   checkPicture,
   choosePicture,
@@ -12,9 +14,12 @@ import {
   roundAssets,
   startBlend,
   startSoundOutRound,
+  toggleSilentE,
   touchLetter,
   tryAgain,
   type SoundOutRound,
+  soundingPlan,
+  syllableAsk,
 } from './sound-out-round';
 
 const sequence = (...values: number[]): RandomSource => {
@@ -37,8 +42,17 @@ const picking = (): SoundOutRound =>
   blendDone(startBlend(soundAll(startSoundOutRound(sequence(0), words)))!);
 
 describe('Sound it out content', () => {
-  it('spells every word with its sounds', () => {
-    for (const w of SOUND_OUT.words) expect(w.sounds.map((s) => s.letters).join('')).toBe(w.word);
+  it('spells every word with its sounds, and a quiet e after them', () => {
+    for (const w of SOUND_OUT.words) {
+      const quiet = w.withoutE ? 'e' : '';
+      expect(w.sounds.map((s) => s.letters).join('') + quiet).toBe(w.word);
+    }
+  });
+
+  it('spells a silent-e word without its e with its own sounds', () => {
+    const cape = SOUND_OUT.words.find((w) => w.withoutE)!;
+    expect(cape.withoutE!.sounds.map((s) => s.letters).join('')).toBe(cape.withoutE!.word);
+    expect(cape.withoutE!.word + 'e').toBe(cape.word);
   });
 
   it('refuses a word that uses a sound with no recording', () => {
@@ -252,5 +266,139 @@ describe('roundAssets', () => {
         '/w/map.wav',
       ].sort(),
     );
+  });
+});
+
+describe('a silent-e word (L2-016)', () => {
+  const cape: Word = {
+    word: 'cape',
+    sounds: [
+      { letters: 'c', shown: '/c/', recording: '/s/c.wav' },
+      { letters: 'a', shown: '/ā/', recording: '/s/a_e.wav' },
+      { letters: 'p', shown: '/p/', recording: '/s/p.wav' },
+    ],
+    picture: '/p/cape.jpg',
+    recording: '/w/cape.wav',
+    withoutE: word('cap'),
+  };
+  const capeFirst = () => startSoundOutRound(sequence(0), [cape, ...words]);
+
+  it('finds the letter the quiet e changes, and none in a word without one', () => {
+    expect(changedLetter(cape)).toBe(1);
+    expect(changedLetter(word('map'))).toBeNull();
+  });
+
+  it('starts waiting for its e, showing the word without it, with no letter to touch', () => {
+    const r = capeFirst();
+    expect(r.phase).toBe('magic-e');
+    expect(r.eAdded).toBe(false);
+    expect(shownSounds(r).map((s) => s.letters)).toEqual(['c', 'a', 'p']);
+    expect(shownSounds(r)[1]!.recording).toBe('/s/a.wav');
+    expect(nextLetter(r)).toBeNull();
+    expect(touchLetter(r, 0).spoken).toBeNull();
+  });
+
+  it('offers the picture of the word without its e among its three', () => {
+    const words3 = capeFirst().pictures.map((w) => w.word);
+    expect(words3).toHaveLength(3);
+    expect(words3).toContain('cape');
+    expect(words3).toContain('cap');
+  });
+
+  it('fetches the word without its e as well', () => {
+    expect(roundAssets(capeFirst())).toEqual(
+      expect.arrayContaining(['/p/cap.jpg', '/w/cap.wav', '/s/a_e.wav', '/w/cape.wav']),
+    );
+  });
+
+  it('adds the e: the word with it, its sounds to hear, and the word spoken (#1)', () => {
+    const { round, spoken } = toggleSilentE(capeFirst());
+    expect(spoken).toBe('/w/cape.wav');
+    expect(round.eAdded).toBe(true);
+    expect(round.phase).toBe('sounding');
+    expect(shownSounds(round)[1]!.recording).toBe('/s/a_e.wav');
+    expect(nextLetter(round)).toBe(0);
+  });
+
+  it('takes the e away again: the word without it is spoken and its sounds heard afresh (#2)', () => {
+    const added = touchLetter(toggleSilentE(capeFirst()).round, 0).round;
+    const { round, spoken } = toggleSilentE(added);
+    expect(spoken).toBe('/w/cap.wav');
+    expect(round.eAdded).toBe(false);
+    expect(round.phase).toBe('magic-e');
+    expect(round.heard).toEqual([false, false, false]);
+  });
+
+  it('keeps the e once blending starts, and ignores it for any other word', () => {
+    const added = toggleSilentE(capeFirst()).round;
+    const blending = startBlend(soundAll(added))!;
+    expect(toggleSilentE(blending)).toEqual({ round: blending, spoken: null });
+    const map = startSoundOutRound(sequence(0), words);
+    expect(toggleSilentE(map).spoken).toBeNull();
+  });
+
+  it('is not a silent-e round for any other word', () => {
+    const r = startSoundOutRound(sequence(0), words);
+    expect(r.eAdded).toBeNull();
+    expect(shownSounds(r)).toBe(r.word.sounds);
+  });
+});
+
+describe('a longer word read by syllable (L2-017)', () => {
+  const sunset = SOUND_OUT.words.find((w) => w.syllables)!;
+  const filler = SOUND_OUT.words.filter((w) => w.word === 'map' || w.word === 'cat');
+  const start = () => startSoundOutRound(sequence(0), [sunset, ...filler]);
+  const { before, after } = SOUND_OUT.syllables.ask;
+  const recordings = (plan: { recording: string }[]) => plan.map((s) => s.recording);
+
+  it('has one tile for each syllable and asks for the first', () => {
+    const round = start();
+    expect(shownSounds(round).map((s) => s.letters)).toEqual(['sun', 'set']);
+    expect(round.heard).toEqual([false, false]);
+    expect(round.firstTwo).toBeNull();
+    expect(syllableAsk(round, before, after)).toEqual({
+      text: 'Tap “sun” and clap it.',
+      recordings: [before.recording, sunset.syllables![0]!.recording, after.recording],
+    });
+  });
+
+  it('sounds out and blends the syllable touched, its tile lit', () => {
+    const [sun] = sunset.syllables!;
+    const plan = soundingPlan(sunset, 0);
+    expect(recordings(plan)).toEqual([...sun!.sounds.map((s) => s.recording), sun!.recording]);
+    expect(plan.every((s) => s.letter === 0)).toBe(true);
+  });
+
+  it('takes the syllables in order, asks for the next, then is ready to blend', () => {
+    expect(touchLetter(start(), 1).spoken).toBeNull();
+    const first = touchLetter(start(), 0).round;
+    expect(syllableAsk(first, before, after)!.text).toBe('Tap “set” and clap it.');
+    const both = touchLetter(first, 1).round;
+    expect(both.phase).toBe('ready');
+    expect(syllableAsk(both, before, after)).toBeNull();
+  });
+
+  it('blends the syllables, then the word', () => {
+    expect(recordings(blendPlan(sunset))).toEqual([
+      ...sunset.syllables!.map((s) => s.recording),
+      sunset.recording,
+    ]);
+  });
+
+  it('fetches every sound and syllable before the round is shown', () => {
+    const assets = roundAssets(start());
+    for (const s of [...sunset.sounds, ...sunset.syllables!]) expect(assets).toContain(s.recording);
+  });
+
+  it('leaves a letter word alone', () => {
+    const map = filler.find((w) => w.word === 'map')!;
+    expect(recordings(soundingPlan(map, 1))).toEqual([map.sounds[1]!.recording]);
+    expect(
+      syllableAsk(
+        startSoundOutRound(sequence(0), [map, ...filler.slice(1), sunset]),
+        before,
+        after,
+      ),
+    ).toBeNull();
   });
 });

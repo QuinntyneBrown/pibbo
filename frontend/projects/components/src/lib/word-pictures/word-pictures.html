@@ -1,0 +1,30 @@
+<div class="pairs pairs--pictures">
+  <div class="pairs__column" role="group" aria-label="Words">
+    @for (word of words(); track word.word; let i = $index) {
+      <button
+        type="button"
+        [class]="pairClass(wordColours()[i] ?? 0)"
+        [attr.aria-label]="wordLabel(word, wordColours()[i] ?? 0)"
+        [attr.aria-pressed]="held() === i"
+        [disabled]="(wordColours()[i] ?? 0) > 0"
+        (pbTap)="this.word.emit(i)"
+      >
+        <span class="pair__word" aria-hidden="true">{{ word.word }}</span>
+      </button>
+    }
+  </div>
+  <div class="pairs__column" role="group" aria-label="Pictures">
+    @for (word of pictures(); track word.word; let i = $index) {
+      <button
+        type="button"
+        [class]="pairClass(pictureColours()[i] ?? 0, missed() === i)"
+        [attr.aria-label]="pictureLabel(word, pictureColours()[i] ?? 0)"
+        [disabled]="(pictureColours()[i] ?? 0) > 0"
+        (pbTap)="picture.emit(i)"
+      >
+        <img class="picture" [src]="word.picture" alt="" draggable="false" />
+      </button>
+    }
+  </div>
+</div>
+<p class="visually-hidden" role="status">{{ status() }}</p>

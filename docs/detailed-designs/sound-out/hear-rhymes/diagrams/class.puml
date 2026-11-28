@@ -18,17 +18,30 @@ interface AudioPlayer <<token AUDIO_PLAYER>> {
 interface RandomSource <<token RANDOM_SOURCE>> {
   +next(): number
 }
-interface RoundFeedback <<token ROUND_FEEDBACK>> {
-  +praise(): void
-  +hint(h: Hint): void
+interface Clock <<token CLOCK>> {
+  +after(ms: number, run: () => void): () => void
 }
 
+class RhymeTime
+class RhymeCards <<pb-rhyme-cards>>
 class RhymeRound {
-  +target: Word
-  +choices: Word[]
+  +phase: choosing | retry | right | modelled
+  +set: RhymeSet
+  +cards: RhymeWord[]
+  +chosen: number[]
+  +wrong: number
 }
-class rhymeRules <<pure>> {
-  +judge(r: RhymeRound, w: Word): Answer
+class "rhyme rules" as rules <<pure>> {
+  +startRhymeRound(random, sets, previous): RhymeRound
+  +toggleRhyme(r, i): RhymeTouch
+  +checkRhymes(r): RhymeRound
+  +chooseRhymesAgain(r): RhymeRound
 }
-RhymeRound "1" *-- "3" Word
+RhymeRound "1" *-- "2..4" RhymeWord
+RhymeTime --> RhymeCards
+RhymeTime --> rules
+RhymeTime --> RhymeRound
+RhymeTime --> AudioPlayer
+RhymeTime --> Clock
+rules --> RandomSource
 @enduml

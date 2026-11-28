@@ -2,21 +2,21 @@
 
 ## Overview
 
-Common words ("the", "is", "said") are high-frequency words practised by sight. They come back in later rounds, chosen by on-device *spaced repetition*.
+Common words ("the", "is", "a") are high-frequency words a child finds by sight. In *Spot the word* the child hears a common word, sees it shown large, and touches every one of it in a short *story* (ADR 0024). A word missed in a round comes back in a later round while the activity is open.
 
-- **spaced repetition** — scheduling that brings a word back sooner after a wrong answer and later after a right one
+- **story** — a few short sentences, every word of which is a touch target
+- **due** — the common words missed in this play, asked again before any other; held at route scope and never stored
 
 ## Description
 
 The feature is a vertical slice through the Angular workspace: the page in the `pibbo` application, presentation components in `@pibbo/components`, pure rules in `@pibbo/domain`, and the contracts and tokens in `@pibbo/api`.
 
-- **`CommonWordsPage`** — route component in `pibbo`, loaded by `loadComponent` when the child chooses the activity. It is provided with its own `repetitionRules` state at route scope, asks the rules for each round, plays recordings through `AUDIO_PLAYER` and hands state to the presentation component.
-- **`WordChoiceComponent`** — presentation component in `@pibbo/components` (selector `pb-wordchoice`). It takes the round state as signal inputs, emits a `touched` output per target, and injects no service.
-- **`RepetitionState`** — immutable round state in `@pibbo/domain/sounds`; every transition returns a new value.
-- **`repetitionRules`** — pure functions in `@pibbo/domain/sounds` that build a round from the injected `RandomSource` and decide the outcome of each touch, with unit tests.
-- **`AudioPlayer`** — contract in `@pibbo/api` bound to `AUDIO_PLAYER`. Playing a recording stops the one before it; a recording that cannot play resolves as `unavailable` and the screen shows the text instead.
-- **`RoundFeedback`** — shared round behaviour (`retry-and-praise`): brief praise, hints after a wrong answer, and modelling the answer after three wrong answers.
-- **`ProgressStore`** — on-device storage contract (`privacy/device-only-data`); state is validated on read and is never sent to the backend. Whether Pibbo remembers practice at all is not decided in `AGENTS.md` and needs an ADR (`<TO SUPPLY>`).
+- **`SpotTheWordPage`** — route component in `pibbo` (`/read/sight-words`), loaded by `loadComponent` when the child chooses the activity. It holds the round and the due words in signals at route scope, provides `ASSET_PRELOADER`, plays recordings through `AUDIO_PLAYER`, times the miss and praise through `CLOCK`, and hands state to the presentation component.
+- **`SpotTheWord`** — presentation component in `@pibbo/components` (selector `pb-spot`). It takes the common word, the story, which words are found, the missed word and whether the round is done as signal inputs, emits a `word` output with the touched index, and injects no service. It keeps the mock's `.spot`, `.spot__find`, `.target-word`, `.found`, `.story` and `.story__word` classes.
+- **`SpotRound`** — immutable round state in `@pibbo/domain/sounds` (`finding`, `right`); every transition returns a new value.
+- **Spot rules** — pure functions in `@pibbo/domain/sounds`: `startSpotRound`, `touchStoryWord`, `endMiss`, `nextSpotWord` (from the injected `RandomSource` and the due words) and `spotAssets`, with unit tests.
+- **`AudioPlayer`** — contract in `@pibbo/api` bound to `AUDIO_PLAYER`. Playing a recording stops the one before it; a recording that cannot play never blocks the round, because everything spoken is shown.
+- **Content** — `common-words-content.json` in `@pibbo/domain/sounds`: the story's words as shown, the common words with their recordings, and the lines spoken around them, checked before every build by `tools/content/check-content.mjs`.
 
 ## Requirements
 
@@ -24,13 +24,16 @@ The feature realises the following level-2 (L2) requirements. Each L2 requiremen
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
-| `L2-019` | `L1-017` | Recognise common words. Common words ("the", "is", "said") appear in rounds and come back in later rounds, chosen by on-device spaced repetition. |
+| `L2-019` | `L1-017` | Recognise common words. Common words are found by sight in a short story; a common word missed in a round comes back in a later round while the activity is open. |
 
 Acceptance criteria of `L2-019` (Recognise common words):
 
-1. Given "the" is spoken with 3 word choices, when the child chooses "the", then praise plays; when another word is chosen, then that word is spoken and "the" is highlighted.
-2. Given a common word answered wrongly, when the next 5 common-word rounds are generated, then that word appears in at least one of them.
-3. Given repetition state, when saved, then it is in on-device storage only and is never sent to the backend.
+1. Given a round asks for "the", when it is shown, then "Find every “the” in the story." is spoken and shown, "the" is shown large, one empty dot stands for each "the" in the story, and every word of the story is a touch target of at least 60 × 60 px with nothing scrolling.
+2. Given the round, when the child touches a "the" (or "The"), then "the" is spoken, that word stays highlighted and takes no further touch, and one more dot is filled.
+3. Given the round, when the child touches another word, then it greys for 0.4 s with no sound, and nothing found is lost.
+4. Given every "the" is found, then "You found “the” 5 times!" is spoken and shown with Next, briefly, and the story takes no further touch; after 5 rounds Next returns to Home with Read chosen.
+5. Given a common word missed in a round, when the next 5 rounds are chosen, then that word is asked in at least one of them.
+6. Given what was missed, when the child leaves the activity, then it is forgotten: nothing is stored on the device or sent anywhere. Whether Pibbo remembers practice is not decided (`AGENTS.md`).
 
 ## Diagrams
 
@@ -42,24 +45,30 @@ The child uses Pibbo directly; a grown-up is beside or nearby and is not needed 
 
 ### Containers
 
-The feature runs in the `pibbo` single-page application. Content arrives from `Pibbo.Api` through the service worker cache; nothing a child does is sent back.
+The feature runs in the `pibbo` single-page application. Its content is bundled; nothing a child does is stored or sent.
 
 ![C4 container view for recognise common words](diagrams/c4-container.png)
 
 ### Components
 
-`CommonWordsPage` composes `WordChoiceComponent` for presentation and calls `repetitionRules` for every decision. The page is the only part that injects tokens; the rules hold no Angular dependency.
+`SpotTheWordPage` composes `SpotTheWord` for presentation and calls the spot rules for every decision. The page is the only part that injects tokens; the rules hold no Angular dependency.
 
 ![C4 component view for recognise common words](diagrams/c4-component.png)
 
 ### Class structure
 
-`RepetitionState` is the value the rules transform; `CommonWordsPage` holds it in a signal and passes it to `WordChoiceComponent`.
+`SpotRound` is the value the rules transform; `SpotTheWordPage` holds it in a signal and passes it to `SpotTheWord`.
 
 ![Class diagram for recognise common words](diagrams/class.png)
 
-### Choose a common word
+### Find a common word
 
-A wrong answer makes that word due within the next 5 common-word rounds.
+A found word is spoken and stays found; a miss greys the word with no sound and makes the common word due within the next 5 rounds.
 
-![Sequence for choose a common word](diagrams/sequence-choose-common-word.png)
+![Sequence for find a common word](diagrams/sequence-choose-common-word.png)
+
+## Open questions
+
+- Whether Pibbo remembers what a child has practised across visits, and so whether repetition outlives the activity (`AGENTS.md`, ADR 0024).
+- Which common words and stories Pibbo covers, and in what order.
+- The PNG renderings of the class, component and sequence diagrams predate journey 19; their `.puml` sources describe the feature as built and are re-rendered when PlantUML is to hand.

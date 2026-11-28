@@ -121,6 +121,24 @@ test.describe('Count the toys: one touch, one number', () => {
     expect(await spoken.recordings()).toEqual([...HOME, TAP_EACH, number(1), number(2), number(3)]);
   });
 
+  test('Given a tablet or touchscreen laptop that reports a fingertip as 64 px across, when the child taps a toy, then it is counted and its number is spoken', async ({
+    page,
+    spoken,
+  }) => {
+    test.skip(
+      !(await page.evaluate(() => matchMedia('(pointer: coarse)').matches)),
+      'touch is for the phone',
+    );
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+
+    await count.fingertipTap(count.toy(0));
+
+    await expect(count.tally).toHaveText('1');
+    await expect(count.toy(0)).toHaveClass(/rug__toy--counted/);
+    expect((await spoken.recordings()).slice(3)).toEqual([number(1)]);
+  });
+
   test('Given two fingers touch two uncounted toys at the same instant, when the touches are processed, then each is counted once and the count rises by exactly 2', async ({
     page,
     spoken,
@@ -323,5 +341,64 @@ test.describe('Count the toys: it rests', () => {
 
     expect(await spoken.stops()).toBeGreaterThan(stops);
     expect((await spoken.recordings()).length).toBe(said);
+  });
+});
+
+test.describe('Count the toys: the prompt on a small upright phone', () => {
+  test.use({ viewport: { width: 390, height: 780 } });
+
+  test('Given a small upright phone, when a round is shown, then the prompt is compact as its mock draws it: a 44 px Pibbo and the instruction in two lines', async ({
+    page,
+  }) => {
+    const count = new CountTheToysPage(page);
+
+    await count.openFromHome();
+
+    expect(await count.promptSize()).toEqual({ pibbo: 44, lines: 2 });
+  });
+});
+
+test.describe('Count the toys: drawn as its mock', () => {
+  test('Given a light device, when a round is shown, then each toy lies on the rug with no white plate and the count is deep purple', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    const count = new CountTheToysPage(page);
+
+    await count.openFromHome();
+
+    const colours = await count.rugColours();
+    expect(colours.behindToy).toBe(colours.rug);
+    expect(colours.counted).toBe('rgb(80, 25, 192)');
+  });
+});
+
+test.describe('Count the toys: counted and right, drawn as its mock', () => {
+  test.use({ viewport: { width: 390, height: 780 } });
+
+  test('Given a small upright phone, when a toy is counted, then its number is a small badge at the lower right and the toy stays in view', async ({
+    page,
+  }) => {
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+
+    await count.touch(count.toy(0));
+
+    await expect(count.badge(0)).toHaveText('1');
+    expect(await count.badgePlace(0)).toEqual({ small: true, lowerRight: true });
+  });
+
+  test('Given a small upright phone in light, when the answer is right, then the praise is deep indigo and Next stands beside it', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    const count = new CountTheToysPage(page);
+    await count.openFromHome();
+
+    const n = await count.countAll();
+    await count.answer(n);
+
+    await expect(count.message).toHaveText(`Yes! ${n} toys.`);
+    expect(await count.answerLook()).toEqual({ colour: 'rgb(34, 48, 159)', oneRow: true });
   });
 });

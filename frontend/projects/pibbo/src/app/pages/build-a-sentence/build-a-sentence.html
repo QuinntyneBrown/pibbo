@@ -1,0 +1,31 @@
+<pb-round-shell
+  title="Build a sentence"
+  group="read"
+  [fit]="true"
+  [instruction]="instruction"
+  [mood]="mood()"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-sentence-builder
+    [picture]="round().sentence.picture"
+    [alt]="round().sentence.alt"
+    [tiles]="round().tiles"
+    [placed]="round().placed"
+    [open]="round().phase === 'building'"
+    [right]="round().phase === 'right' || round().phase === 'modelled'"
+    (tile)="placeWord($event)"
+    (word)="takeBack($event)"
+  />
+  <pb-answer-bar
+    answer
+    group="read"
+    [fit]="true"
+    [kind]="bar().kind"
+    [message]="bar().message"
+    [ready]="bar().ready"
+    (action)="action()"
+  />
+</pb-round-shell>

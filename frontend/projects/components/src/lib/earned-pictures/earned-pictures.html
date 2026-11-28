@@ -1,0 +1,28 @@
+<main class="results" aria-labelledby="results-title">
+  <header class="results__hero">
+    <pb-pibbo size="lg" mood="cheer" />
+    <h1 id="results-title" class="results__title">{{ title() }}</h1>
+    <div class="results__actions">
+      <button type="button" class="chunky chunky--white" (pbTap)="home.emit()">Home</button>
+    </div>
+  </header>
+  <div class="results__lists">
+    @for (section of sections(); track section.group) {
+      <section>
+        <h2 [class]="'results__subject results__subject--' + section.group">
+          {{ section.heading }}
+        </h2>
+        <ul class="skills">
+          @for (picture of section.pictures; track picture.id) {
+            <li class="skills__row">
+              <button type="button" class="skills__picture" (pbTap)="heard.emit(picture.recording)">
+                <span class="skills__glyph" aria-hidden="true">{{ picture.glyph }}</span>
+                <span class="skills__title">{{ picture.name }}</span>
+              </button>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+</main>

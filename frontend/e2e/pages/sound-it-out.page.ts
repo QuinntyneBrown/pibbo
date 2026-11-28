@@ -14,6 +14,12 @@ export class SoundItOutPage {
   readonly next: Locator;
   readonly sounding: Locator;
   readonly shownSounds: Locator;
+  readonly silentE: Locator;
+  readonly changed: Locator;
+  readonly changeMark: Locator;
+  readonly beforePicture: Locator;
+  readonly beforeWord: Locator;
+  readonly rule: Locator;
   readonly blend: Locator;
   readonly blendFill: Locator;
   readonly choices: Locator;
@@ -29,7 +35,14 @@ export class SoundItOutPage {
     this.replay = page.locator('.hear');
     this.leave = page.locator('.shell__top .chunky--icon');
     this.progress = page.locator('.progress');
-    this.letters = page.locator('.tile');
+    // The letters that make a sound; a quiet e (L2-016) is `silentE`.
+    this.letters = page.locator('.tiles .tile:not(.tile--silent)');
+    this.silentE = page.locator('.tile--silent');
+    this.changed = page.locator('.tile--changed');
+    this.changeMark = page.locator('.tile--changed .tile__mark');
+    this.beforePicture = page.locator('.before .picture');
+    this.beforeWord = page.locator('.before__word');
+    this.rule = page.locator('.rule');
     this.heard = page.locator('.tile--heard');
     this.next = page.locator('.tile--next');
     this.sounding = page.locator('.tile--sounding');
@@ -72,9 +85,13 @@ export class SoundItOutPage {
     else await target.click();
   }
 
-  /** The word this round shows, read from its letters. */
+  /** The word this round shows, read from its letters, with its quiet e once that is added. */
   async word(): Promise<string> {
-    return (await this.letters.allTextContents()).map((t) => t.trim()).join('');
+    const letters = (await this.letters.allTextContents()).map((t) => t.trim()).join('');
+    const added =
+      (await this.silentE.count()) > 0 &&
+      (await this.silentE.getAttribute('aria-pressed')) === 'true';
+    return added ? `${letters}e` : letters;
   }
 
   /** The letters on each tile, in order: a letter group is one tile ("sh"). */
@@ -82,9 +99,11 @@ export class SoundItOutPage {
     return (await this.letters.allTextContents()).map((t) => t.trim());
   }
 
-  /** Where each tile is drawn, in order. */
-  async tileBoxes(): Promise<{ x: number; y: number; width: number; height: number }[]> {
-    return this.letters.evaluateAll((tiles) =>
+  /** Where each tile is drawn, in order; with `quietE`, the quiet e tile after them. */
+  async tileBoxes(
+    quietE = false,
+  ): Promise<{ x: number; y: number; width: number; height: number }[]> {
+    return (quietE ? this.letters.or(this.silentE) : this.letters).evaluateAll((tiles) =>
       tiles.map((t) => {
         const r = t.getBoundingClientRect();
         return { x: r.x, y: r.y, width: r.width, height: r.height };
@@ -92,8 +111,15 @@ export class SoundItOutPage {
     );
   }
 
-  /** Touches every tile in order. */
+  /** Touches every tile in order, first adding a quiet e when a silent-e word waits for it. */
   async soundAll(): Promise<string> {
+    if (
+      (await this.silentE.count()) > 0 &&
+      (await this.silentE.getAttribute('aria-pressed')) === 'false'
+    ) {
+      await this.touch(this.silentE);
+      await expect(this.silentE).toHaveAttribute('aria-pressed', 'true');
+    }
     const word = await this.word();
     const tiles = await this.letters.count();
     for (let i = 0; i < tiles; i++) await this.touch(this.letter(i));
@@ -125,6 +151,32 @@ export class SoundItOutPage {
       .locator('img')
       .evaluateAll((imgs) => imgs.map((i) => (i as HTMLImageElement).getAttribute('src') ?? ''));
     return srcs.map((s) => s.replace(/^.*\//, '').replace(/\.jpg$/, ''));
+  }
+
+  /** How many tiles are too small for their letters. */
+  async truncatedTiles(): Promise<number> {
+    return this.letters.evaluateAll(
+      (tiles) =>
+        tiles.filter((t) => t.scrollWidth > t.clientWidth || t.scrollHeight > t.clientHeight)
+          .length,
+    );
+  }
+
+  /**
+   * The targets in the game that reach below the top of the answer bar, where they cannot be
+   * seen or touched even though nothing scrolls (journey 10, lesson 2).
+   */
+  async hiddenUnderAnswerBar(): Promise<string[]> {
+    return this.page.evaluate(() => {
+      const bar = document.querySelector('.answer-bar')!.getBoundingClientRect();
+      return [...document.querySelectorAll('.tile, .pick__option, .blend .chunky')]
+        .map((el) => ({ el, r: el.getBoundingClientRect() }))
+        .filter(({ r }) => r.bottom > bar.top + 1 && r.right > bar.left && r.left < bar.right)
+        .map(
+          ({ el, r }) =>
+            `${el.getAttribute('aria-label') ?? el.textContent!.trim()} ${r.bottom}>${bar.top}`,
+        );
+    });
   }
 
   async scrolls(): Promise<boolean> {

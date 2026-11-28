@@ -25,6 +25,8 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${port}`,
     trace: 'retain-on-failure',
+    // A spec starts from nothing kept; offline specs allow service workers (ADR 0032).
+    serviceWorkers: 'block',
   },
   projects: [
     {

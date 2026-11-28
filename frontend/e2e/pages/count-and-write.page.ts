@@ -51,6 +51,18 @@ export class CountAndWritePage {
     this.action = page.locator('.answer-bar .chunky');
   }
 
+  /** Where a counted thing's badge sits: its share of the cell, and whether it is lower right. */
+  async badgePlace(index: number): Promise<{ small: boolean; lowerRight: boolean }> {
+    const cell = (await this.thing(index).boundingBox())!;
+    const badge = (await this.thing(index).locator('.tenframe__badge').boundingBox())!;
+    return {
+      small: badge.width / cell.width < 0.5,
+      lowerRight:
+        cell.x + cell.width - (badge.x + badge.width) < 10 &&
+        cell.y + cell.height - (badge.y + badge.height) < 10,
+    };
+  }
+
   thing(index: number): Locator {
     return this.things.nth(index);
   }

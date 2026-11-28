@@ -1,5 +1,9 @@
 name: CI
 
+# Every push and pull request runs the checks. A push to main that passes them is published to
+# Azure Static Web Apps (ADR 0033, docs/deploy.md): the build the checks ran against is the one
+# deployed, unchanged.
+
 on:
   push:
     branches: [main]
@@ -7,7 +11,9 @@ on:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # A newer pull-request push replaces the older run; on main every commit runs to the end, in
+  # order, so each one is published and a deployment is never cut off.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
@@ -31,6 +37,35 @@ jobs:
       - run: npm run lint
       - run: npm audit --audit-level=high --omit=dev
       - run: npm run build
+      # The host's settings, generated from deploy/security-headers.json into the build.
+      - run: node ../tools/deploy/static-web-app-config.mjs
       - run: npx playwright install --with-deps chromium
       # One critical acceptance path per feature (ADR 0016); verify.mjs runs every spec locally.
       - run: npx playwright test --grep @critical
+      - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pibbo-browser
+          path: frontend/dist/pibbo/browser/
+          retention-days: 7
+
+  deploy:
+    needs: frontend
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://blue-ocean-09e66a70f.8.azurestaticapps.net
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: pibbo-browser
+          path: browser
+      - uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: upload
+          app_location: browser
+          skip_app_build: true
+          skip_api_build: true

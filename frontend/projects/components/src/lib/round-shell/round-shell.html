@@ -1,4 +1,4 @@
-<div [class]="'shell shell--' + group()">
+<div [class]="'shell shell--' + group() + ' shell--' + layout()" [class.shell--fit]="fit()">
   <header class="shell__top">
     <button
       type="button"
@@ -10,16 +10,7 @@
         <path d="M18 6 6 18M6 6l12 12" />
       </svg>
     </button>
-    <div
-      class="progress"
-      role="progressbar"
-      aria-label="Game progress"
-      aria-valuemin="0"
-      [attr.aria-valuemax]="rounds()"
-      [attr.aria-valuenow]="done()"
-    >
-      <div class="progress__fill" [class]="'progress__fill progress__fill--' + done()"></div>
-    </div>
+    <pb-progress-bar [done]="done()" [rounds]="rounds()" />
   </header>
   <div class="shell__ask">
     <pb-pibbo [mood]="mood()" />
@@ -53,5 +44,7 @@
     <h1 class="visually-hidden">{{ title() }}</h1>
     <ng-content />
   </main>
-  <ng-content select="[answer]" />
+  <div class="shell__answer">
+    <ng-content select="[answer]" />
+  </div>
 </div>

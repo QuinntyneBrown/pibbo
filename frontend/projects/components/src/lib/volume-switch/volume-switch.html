@@ -1,0 +1,16 @@
+<div class="switch switch--volume" role="radiogroup" [attr.aria-labelledby]="labelledBy()">
+  @for (option of options(); track option.level) {
+    <button
+      type="button"
+      class="switch__option"
+      role="radio"
+      [attr.aria-checked]="chosen() === option.level"
+      (pbTap)="chose.emit(option.level)"
+    >
+      @if (chosen() === option.level) {
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+      }
+      {{ option.name }}
+    </button>
+  }
+</div>

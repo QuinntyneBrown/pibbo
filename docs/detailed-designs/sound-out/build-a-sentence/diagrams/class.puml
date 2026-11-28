@@ -18,19 +18,37 @@ interface AudioPlayer <<token AUDIO_PLAYER>> {
 interface RandomSource <<token RANDOM_SOURCE>> {
   +next(): number
 }
-interface RoundFeedback <<token ROUND_FEEDBACK>> {
-  +praise(): void
-  +hint(h: Hint): void
+interface Clock <<token CLOCK>> {
+  +after(ms: number, run: () => void): () => void
+}
+interface ActivityExit <<token ACTIVITY_EXIT>> {
+  +leave(group): void
+  +finish(group): void
 }
 
+class BuildASentence
+class SentenceBuilder <<pb-sentence-builder>>
 class SentenceRound {
-  +words: string[]
-  +tiles: string[]
-  +placed: number
+  +phase: building | retry | right | modelled
+  +sentence: Sentence
+  +tiles: SentenceWord[]
+  +placed: number[]
+  +wrong: number
 }
-class sentenceRules <<pure>> {
-  +place(r: SentenceRound, w: string): PlaceResult
-  +display(r: SentenceRound): string
+class "sentence rules" as rules <<pure>> {
+  +startSentenceRound(random, sentences, previous): SentenceRound
+  +placeWord(r, i): SentenceTouch
+  +takeBackWord(r, position): SentenceRound
+  +canCheckSentence(r): boolean
+  +checkSentence(r): SentenceRound
+  +buildSentenceAgain(r): SentenceRound
 }
-sentenceRules ..> SentenceRound
+SentenceRound "1" *-- "4..6" SentenceWord
+BuildASentence --> SentenceBuilder
+BuildASentence --> rules
+BuildASentence --> SentenceRound
+BuildASentence --> AudioPlayer
+BuildASentence --> Clock
+BuildASentence --> ActivityExit
+rules --> RandomSource
 @enduml

@@ -3,12 +3,14 @@
 LAYOUT_WITH_LEGEND()
 title Components — Grown-up gate and area
 Container_Boundary(b, "pibbo (Angular workspace)") {
-  Component(entry, "GrownUpEntryComponent", "Presentation", "Corner control")
-  Component(gate, "GateDialog", "CDK Dialog", "Reading task")
-  Component(rules, "gateRules", "Pure domain", "Sequence")
-  Component(ga, "GrownUpPage", "Lazy route", "Volume, clear, about")
+  Component(entry, "GrownUpEntry", "Presentation", "Corner padlock on Home")
+  Component(screen, "GrownUpArea", "Lazy route /grown-up", "Gate, area, confirmation")
+  Component(gate, "GateView", "Presentation", "Numbers in words, keypad")
+  Component(rules, "gateRules", "Pure domain", "Sequence and judging")
+  Component(store, "BrowserProgressStore", "Token PROGRESS_STORE", "Clear progress, volume")
 }
-Rel(entry, gate, "Opens")
-Rel(gate, rules, "Calls")
-Rel(gate, ga, "Navigates on pass")
+Rel(entry, screen, "Opens")
+Rel(screen, gate, "Shows first")
+Rel(screen, rules, "Calls")
+Rel(screen, store, "Clears progress, keeps volume")
 @enduml
