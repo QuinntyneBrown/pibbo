@@ -3,6 +3,7 @@
     <button
       type="button"
       class="compare__card"
+      [class.compare__card--won]="won() === i"
       [attr.aria-pressed]="chosen() === i"
       [attr.aria-label]="card.number + ', ' + card.number + (card.number === 1 ? ' dot' : ' dots')"
       [disabled]="locked()"

@@ -4,6 +4,8 @@ import { WhichIsBiggerPage } from '../pages/which-is-bigger.page';
 
 const HOME = ['/recordings/home/count.wav', '/recordings/home/which-is-bigger.wav'];
 const ASK = '/recordings/count/which-is-bigger.wav';
+const BIGGER_THAN = '/recordings/count/is-bigger-than.wav';
+const YES = '/recordings/count/yes.wav';
 const number = (n: number) => `/recordings/numbers/${n}.wav`;
 
 /** The seed whose first round shows 6 on the left and 9 on the right (ADR 0010). */
@@ -41,5 +43,30 @@ test.describe('Which is bigger', () => {
     await expect(compare.card(0)).toHaveAttribute('aria-pressed', 'false');
     await expect(compare.action).toBeEnabled();
     await expect.poll(() => spoken.recordings()).toEqual([...HOME, ASK, number(6), number(9)]);
+  });
+
+  test('Given 6 and 9 are shown, when the child touches 9 and then Check, then "nine is bigger than six" is spoken and shown, praise plays, and Next starts the next round', async ({
+    page,
+    spoken,
+  }) => {
+    const compare = new WhichIsBiggerPage(page);
+    await compare.openFromHome();
+
+    await compare.answer(1);
+
+    await expect(compare.message).toHaveText('9 is bigger than 6!');
+    await expect(compare.card(1)).toHaveClass(/compare__card--won/);
+    await expect(compare.card(0)).toBeDisabled();
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([...HOME, ASK, number(9), number(9), BIGGER_THAN, number(6), YES]);
+
+    await compare.touch(compare.action);
+
+    await expect(compare.progress).toHaveAttribute('aria-valuenow', '1');
+    await expect(compare.message).toHaveCount(0);
+    await expect(compare.card(0)).toHaveAttribute('aria-pressed', 'false');
+    await expect(compare.card(1)).toHaveAttribute('aria-pressed', 'false');
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(ASK);
   });
 });

@@ -8,9 +8,20 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { AUDIO_PLAYER, RANDOM_SOURCE } from '@pibbo/api';
+import { AUDIO_PLAYER, CLOCK, RANDOM_SOURCE } from '@pibbo/api';
 import { AnswerBar, Compare, RoundShell, type AnswerBarKind } from '@pibbo/components';
-import { chooseCard, numberRecording, startCompareRound, WHICH_IS_BIGGER } from '@pibbo/domain';
+import {
+  biggerCard,
+  checkChoice,
+  chooseCard,
+  numberRecording,
+  startCompareRound,
+  WHICH_IS_BIGGER,
+  type CompareRound,
+} from '@pibbo/domain';
+
+/** Praise lasts no more than this (L2-026 #3). */
+const PRAISE_MS = 1500;
 
 /**
  * Which is bigger (docs/mocks/pages/which-is-bigger): two numbers from 0 to 20 as numerals
@@ -26,6 +37,7 @@ import { chooseCard, numberRecording, startCompareRound, WHICH_IS_BIGGER } from 
 })
 export class WhichIsBigger {
   private readonly audio = inject(AUDIO_PLAYER);
+  private readonly clock = inject(CLOCK);
   private readonly random = inject(RANDOM_SOURCE);
   private readonly router = inject(Router);
 
@@ -33,10 +45,22 @@ export class WhichIsBigger {
   protected readonly round = signal(startCompareRound(this.random, WHICH_IS_BIGGER));
   /** Rounds finished in this play. */
   protected readonly done = signal(0);
+  protected readonly praising = signal(false);
+  private endPraise: (() => void) | null = null;
 
-  protected readonly mood = computed(() => 'rest' as const);
+  protected readonly won = computed(() =>
+    this.round().phase === 'right' ? biggerCard(this.round()) : null,
+  );
+  protected readonly mood = computed(() => (this.praising() ? 'cheer' : 'rest'));
   protected readonly bar = computed<{ kind: AnswerBarKind; message: string; ready: boolean }>(
-    () => ({ kind: 'check', message: '', ready: this.round().chosen !== null }),
+    () => {
+      const round = this.round();
+      if (round.phase === 'right') {
+        const [big, small] = [Math.max(...round.numbers), Math.min(...round.numbers)];
+        return { kind: 'right', message: `${big} is bigger than ${small}!`, ready: true };
+      }
+      return { kind: 'check', message: '', ready: round.chosen !== null };
+    },
   );
 
   constructor() {
@@ -48,6 +72,7 @@ export class WhichIsBigger {
     document.addEventListener('visibilitychange', rest);
     inject(DestroyRef).onDestroy(() => {
       document.removeEventListener('visibilitychange', rest);
+      this.endPraise?.();
       this.audio.stop();
     });
     void this.audio.play(WHICH_IS_BIGGER.ask.recording);
@@ -61,8 +86,55 @@ export class WhichIsBigger {
     void this.audio.play(numberRecording(spoken));
   }
 
+  /** Check while choosing; Next once the round is done. */
   protected action(): void {
-    /* Check comes with the next slice. */
+    if (this.round().phase === 'right') {
+      this.next();
+      return;
+    }
+    const { round, outcome } = checkChoice(this.round());
+    if (outcome === null) return;
+    this.round.set(round);
+    if (outcome === 'right') void this.praise(round);
+  }
+
+  /**
+   * The comparison is said, "nine is bigger than six" (L2-005 #1), then brief praise that
+   * never blocks Next: it ends after 1.5 s. Any newer sound ends the sentence.
+   */
+  private async praise(round: CompareRound): Promise<void> {
+    this.praising.set(true);
+    this.endPraise?.();
+    this.endPraise = this.clock.after(PRAISE_MS, () => this.stopPraise());
+    const big = Math.max(...round.numbers);
+    const small = Math.min(...round.numbers);
+    for (const recording of [
+      numberRecording(big),
+      WHICH_IS_BIGGER.biggerThan.recording,
+      numberRecording(small),
+      WHICH_IS_BIGGER.praise.recording,
+    ]) {
+      if (this.round() !== round) return;
+      if ((await this.audio.play(recording)) === 'stopped') return;
+    }
+  }
+
+  private stopPraise(): void {
+    this.endPraise?.();
+    this.endPraise = null;
+    this.praising.set(false);
+  }
+
+  private next(): void {
+    this.stopPraise();
+    const done = this.done() + 1;
+    if (done >= WHICH_IS_BIGGER.roundsPerPlay) {
+      this.leave();
+      return;
+    }
+    this.done.set(done);
+    this.round.set(startCompareRound(this.random, WHICH_IS_BIGGER));
+    void this.audio.play(WHICH_IS_BIGGER.ask.recording);
   }
 
   protected replay(): void {

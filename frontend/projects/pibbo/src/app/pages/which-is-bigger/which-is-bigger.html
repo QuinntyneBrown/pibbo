@@ -10,6 +10,7 @@
   <pb-compare
     [numbers]="round().numbers"
     [chosen]="round().chosen"
+    [won]="won()"
     [locked]="round().phase !== 'choosing'"
     (chose)="choose($event)"
   />
