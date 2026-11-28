@@ -10,6 +10,7 @@ The feature is a vertical slice through the Angular workspace: the page in the `
 
 - **`RhymeTime`** — route component in `pibbo` (`read/rhymes`), loaded by `loadComponent` when the child chooses the activity. It asks the rules for each round, plays recordings through `AUDIO_PLAYER`, times praise on `CLOCK` and hands state to the presentation component inside `pb-round-shell` with `pb-answer-bar`.
 - **`RhymeCards`** — presentation component in `@pibbo/components` (selector `pb-rhyme-cards`): the target word with its picture and marked ending (`.rhyme-target`) and the cards (`.word-cards`). It emits `touched` with a card's index and injects no service.
+- **Small phones** — the page opts `pb-round-shell` and `pb-answer-bar` into `fit`: on a small upright phone the feedback message sits beside Try again or Next, so every card stays in view.
 - **`RhymeRound`** — immutable round state in `@pibbo/domain/sounds`: `choosing`, `retry`, `right` or `modelled`; every rule returns a new value.
 - **Rules** — pure functions `startRhymeRound`, `toggleRhyme`, `canCheck`, `checkRhymes`, `chooseRhymesAgain` and `rhymeAssets`, with unit tests. The round and the card order come from the injected `RandomSource`.
 - **Content** — `rhymes-content.json` in `@pibbo/domain/sounds`: each round names its target, its cards and its lines. The content check requires a picture and a recording for every word and a recording for every line.
