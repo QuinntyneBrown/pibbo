@@ -29,7 +29,7 @@ export class SpellBySoundPage {
 
   /** The bank letter `letter`. */
   letter(letter: string): Locator {
-    return this.bank.filter({ hasText: new RegExp(`^${letter}$`) });
+    return this.page.locator('.bank').getByRole('button', { name: letter, exact: true });
   }
 
   /** Opens Spell by sound the way a child does: Read, then the activity on Home. */

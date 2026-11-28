@@ -6,6 +6,7 @@ import { SpellBySoundPage } from '../pages/spell-by-sound.page';
 const HOME = ['/recordings/home/read.wav', '/recordings/home/spell-by-sound.wav'];
 const LISTEN = '/recordings/read/listen.wav';
 const PICK = '/recordings/read/pick-a-letter-for-each-sound.wav';
+const CHECK_IT = '/recordings/read/check-it.wav';
 const sound = (s: string) => `/recordings/sounds/${s}.wav`;
 const word = (w: string) => `/recordings/words/${w}.wav`;
 /** The cast of the content: each word's letters. */
@@ -87,5 +88,54 @@ test.describe('Spell by sound: a round', () => {
 
     await expect(home.group('Read')).toHaveAttribute('aria-pressed', 'true');
     await expect(home.activity('Spell by sound')).toBeVisible();
+  });
+});
+
+test.describe('Spell by sound: filling the boxes', () => {
+  test('Given a round, when the child touches a letter, then its sound is spoken and it fills the next box, which moves on; when the child touches that filled box, then the letter is taken out and that box is next again', async ({
+    page,
+    spoken,
+  }) => {
+    const spell = new SpellBySoundPage(page);
+    await spell.openFromHome();
+    const w = await spell.word();
+    const [first, second] = WORDS[w]!;
+    await expect.poll(() => spoken.recordings()).toEqual([...HOME, LISTEN, word(w), PICK]);
+
+    await spell.touch(spell.letter(first!));
+    expect(await spell.boxTexts()).toEqual([first, '', '']);
+    await expect(spell.boxes.nth(0)).toHaveAttribute('aria-label', `Remove ${first}`);
+    await expect(spell.boxes.nth(1)).toHaveClass(/box--next/);
+    await spell.touch(spell.letter(second!));
+    expect(await spell.boxTexts()).toEqual([first, second, '']);
+    await spell.touch(spell.boxes.nth(0));
+
+    expect(await spell.boxTexts()).toEqual(['', second, '']);
+    await expect(spell.boxes.nth(0)).toHaveClass(/box--next/);
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([...HOME, LISTEN, word(w), PICK, sound(first!), sound(second!)]);
+  });
+
+  test('Given a round, when every box is filled, then the letters take no touch, "Does it say the word? Check it!" is spoken and shown, and Check is ready', async ({
+    page,
+    spoken,
+  }) => {
+    const spell = new SpellBySoundPage(page);
+    await spell.openFromHome();
+    const w = await spell.word();
+    const letters = WORDS[w]!;
+    await expect(spell.action).toBeDisabled();
+
+    await spell.spell(letters);
+
+    expect(await spell.boxTexts()).toEqual(letters);
+    await expect(spell.instruction).toHaveText('Does it say the word? Check it!');
+    for (const l of await spell.bank.all()) await expect(l).toBeDisabled();
+    await expect(spell.action).toHaveText('Check');
+    await expect(spell.action).toBeEnabled();
+    await expect
+      .poll(() => spoken.recordings())
+      .toEqual([...HOME, LISTEN, word(w), PICK, ...letters.map(sound), CHECK_IT]);
   });
 });
