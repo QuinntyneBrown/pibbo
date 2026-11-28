@@ -97,7 +97,7 @@ img { display: block; max-width: 100%; }
 .shell--read .progress__fill { background: var(--color-read); }
 .progress__fill--0 { width: 0; } .progress__fill--1 { width: 20%; } .progress__fill--2 { width: 40%; }
 .progress__fill--3 { width: 60%; } .progress__fill--4 { width: 80%; } .progress__fill--5 { width: 100%; }
-.progress__fill--q1 { width: 25%; } .progress__fill--q2 { width: 50%; } .progress__fill--q3 { width: 75%; } .progress__fill--q4 { width: 100%; }
+.progress__fill--q1 { width: 20%; } .progress__fill--q2 { width: 40%; } .progress__fill--q3 { width: 60%; } .progress__fill--q4 { width: 80%; } .progress__fill--q5 { width: 100%; }
 
 .shell__ask { display: flex; align-items: flex-end; gap: var(--space-3); padding: var(--space-5) var(--layout-margin) 0; }
 .bubble {
@@ -554,6 +554,10 @@ img { display: block; max-width: 100%; }
 .skills__row { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2-5, 0.625rem) 0; border-bottom: 2px solid var(--color-border); }
 .skills__glyph { width: var(--size-11); flex: none; font-family: var(--font-read); font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); color: var(--color-fg-muted); }
 .skills__title { min-width: 0; flex: 1; font-size: var(--font-size-lg); font-weight: var(--font-weight-medium); line-height: var(--line-height-tight); }
+button.skills__row { width: 100%; min-height: var(--target-child); border: 0; border-radius: var(--radius-lg); background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.skills__tick { width: var(--size-6); height: var(--size-6); flex: none; fill: none; stroke: var(--color-success-strong); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.home__check .check-card { flex-direction: row; align-items: center; min-height: var(--target-child); padding: var(--space-3) var(--space-5); }
+.home__check .check-card__title { font-size: var(--font-size-xl); }
 .show { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-1); }
 .show .picture { width: var(--size-11); height: var(--size-11); }
 .show--one .picture { width: var(--size-15); height: var(--size-15); }

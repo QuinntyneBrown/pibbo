@@ -17,7 +17,8 @@
       "route": "/",
       "requirements": [
         "L2-024",
-        "L2-035"
+        "L2-035",
+        "L2-023"
       ],
       "states": [
         "default",
@@ -329,7 +330,14 @@
       "kind": "page",
       "title": "Sound it out",
       "route": "/read/sound-out",
-      "requirements": ["L2-012", "L2-014", "L2-015", "L2-016", "L2-025", "L2-026"],
+      "requirements": [
+        "L2-012",
+        "L2-014",
+        "L2-015",
+        "L2-016",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "default",
         "ready",
@@ -448,27 +456,37 @@
       "kind": "page",
       "title": "What do I know?",
       "route": "/check",
-      "requirements": [],
+      "requirements": [
+        "L2-023",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "default",
         "answered",
         "correct",
         "retry",
+        "modelled",
         "counting-question",
-        "results"
+        "results",
+        "results-empty"
       ],
       "prototype_frame": "uqsXti2BwppQA9k9zEtnFN",
       "subject": "both",
       "not_applicable": {
-        "loading": "The questions are fixed data in the bundle.",
-        "empty": "There are always four questions.",
-        "error": "Nothing on this screen can fail."
+        "loading": "The rounds' pictures and recordings are fetched before the first question shows; there is nothing to wait for on screen.",
+        "empty": "There are always five questions: with no practice history they come from the first lesson's activities.",
+        "error": "A recording that cannot play never blocks a question: what it would say is shown. A damaged stored history counts as none."
       },
       "state_subjects": {
         "default": "read",
         "answered": "read",
         "correct": "read",
-        "retry": "read"
+        "retry": "read",
+        "modelled": "read",
+        "counting-question": "count",
+        "results": "both",
+        "results-empty": "both"
       }
     },
     {

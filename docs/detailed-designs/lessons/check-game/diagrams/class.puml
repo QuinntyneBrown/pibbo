@@ -11,16 +11,45 @@ skinparam class {
 }
 title Class structure — Play the check game
 
-class CheckPlan {
-  +rounds: RoundRef[]
+class CheckRound {
+  +skill: string
+  +kind: 'count' | 'word'
+  +phase: 'choosing' | 'right' | 'modelled'
+  +choices: CheckChoice[]
+  +answer: number
+  +chosen: number | null
+  +wrong: number
+}
+class CheckGame {
+  +rounds: CheckRound[]
+  +at: number
+  +earned: string[]
 }
 class CheckResult {
-  +earnedSkills: string[]
+  +version: 1
+  +earned: string[]
+}
+class PracticeHistory {
+  +version: 1
+  +practised: string[]
 }
 class checkRules <<pure>> {
-  +plan(history: unknown, firstLesson: Lesson, rnd): CheckPlan
-  +earned(answers: Answer[]): CheckResult
+  +checkSkills(history, catalogue, lessons, rnd): string[]
+  +startCheck(skills, catalogue, content, rnd): CheckGame
+  +chooseCheckOption(round, i): CheckTouch
+  +checkCheckAnswer(round): CheckJudged
+  +nextCheckRound(game): CheckGame
+  +earnedSkills(game, catalogue): Activity[]
+  +notePractised(history, id, catalogue): PracticeHistory
 }
-checkRules ..> CheckPlan
+interface ProgressStore <<PROGRESS_STORE>> {
+  +read(key, guard): T | null
+  +write(key, value): void
+  +clearProgress(): Promise<void>
+}
+checkRules ..> CheckGame
 checkRules ..> CheckResult
+checkRules ..> PracticeHistory
+CheckGame *-- CheckRound
+note bottom of CheckResult : Earned skills only;\nmisses are never stored.
 @enduml

@@ -27,3 +27,5 @@
 | [0023](0023-words-and-pictures-round.md) | Words and pictures: a pair match of words and their pictures | Accepted |
 | [0024](0024-spot-the-word-round.md) | Spot the word: every common word in a short story, and misses that come back | Accepted |
 | [0025](0025-rhyme-time-round.md) | Rhyme time: choose every rhyme, then Check | Accepted |
+| [0025](0025-practice-kept-on-the-device-and-a-grown-up-area.md) | Practice is kept on the device, and a grown-up has an area | Accepted |
+| [0026](0026-check-game-round.md) | What do I know?: mixed questions, the normal retry, and earned pictures | Accepted |

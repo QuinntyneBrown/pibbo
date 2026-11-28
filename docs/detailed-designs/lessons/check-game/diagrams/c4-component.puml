@@ -3,11 +3,15 @@
 LAYOUT_WITH_LEGEND()
 title Components — Play the check game
 Container_Boundary(b, "pibbo (Angular workspace)") {
-  Component(page, "CheckGamePage", "Angular route", "Runs mixed rounds")
-  Component(res, "EarnedPicturesComponent", "Presentation", "Earned skills only")
-  Component(rules, "checkRules", "Pure domain functions", "Selection, results")
-  Component(store, "ProgressStore", "Token PROGRESS_STORE", "Device-only")
+  Component(home, "Home", "Angular route", "Notes practised activities; the check card")
+  Component(page, "CheckGame", "Angular route /check", "Runs mixed rounds, then the results")
+  Component(q, "CheckQuestion", "Presentation", "Things or picture, three choices")
+  Component(res, "EarnedPictures", "Presentation", "Earned skills only")
+  Component(rules, "checkRules, LESSONS", "Pure domain functions and data", "Selection, retry, results")
+  Component(store, "BrowserProgressStore", "Token PROGRESS_STORE", "localStorage, device only")
 }
+Rel(home, store, "Notes each activity opened")
+Rel(page, q, "Binds the round")
 Rel(page, res, "Binds earned skills")
 Rel(page, rules, "Calls")
 Rel(page, store, "Reads history, writes results")

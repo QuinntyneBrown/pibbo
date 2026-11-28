@@ -7,23 +7,43 @@ skinparam defaultFontName Arial
 skinparam ArrowColor #344054
 actor "Child" as actor
 box "Frontend — pibbo application" #E0F2FE
-  participant "CheckGamePage" as page
+  participant "Home" as home
+  participant "CheckGame" as page
 end box
 box "Frontend — @pibbo/components library" #E0F2FE
-  participant "EarnedPicturesComponent" as res
+  participant "CheckQuestion" as q
+  participant "EarnedPictures" as res
 end box
 box "Frontend — @pibbo/domain library" #ECFDF3
   participant "checkRules" as rules
 end box
 box "Frontend — browser services (audio, storage)" #FFF4E5
   participant "ProgressStore" as store
+  participant "AudioPlayer" as audio
 end box
-page -> store : read("history", guard)
-page -> rules : plan(history, firstLesson, rnd) [L2-023 #4]
+actor -> home : touch the check card [L2-023 #6]
+home -> audio : "What do I know?"
+home -> page : open /check
+page -> store : read("practice", isPracticeHistory)
+page -> rules : checkSkills(history, catalogue, LESSONS, rnd) [L2-023 #4]
+page -> rules : startCheck(skills, catalogue, content, rnd)
 loop 5-8 rounds
-  actor -> page : Answer (retry rule on wrong) [L2-023 #2]
+  page --> q : question, three choices
+  actor -> q : touch a choice
+  page -> audio : the choice
+  actor -> page : Check
+  page -> rules : checkCheckAnswer(round)
+  alt right
+    page -> audio : "Yes!" (brief)
+  else wrong (first or second)
+    page -> audio : hint, then the sounds or the numbers [L2-023 #2]
+  else third wrong
+    page -> audio : "This is" / "There are" and the answer
+  end
 end
-page -> rules : earned(answers)
+page -> rules : earnedSkills(game, catalogue)
 page --> res : earned pictures only [L2-023 #1]
-page -> store : write("check", result) [L2-023 #3]
+page -> store : write("check", { earned }) [L2-023 #3]
+actor -> res : touch an earned picture
+page -> audio : its name [L2-023 #5]
 @enduml
