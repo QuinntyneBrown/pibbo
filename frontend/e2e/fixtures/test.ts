@@ -1,4 +1,4 @@
-import { test as base, expect, type Page } from '@playwright/test';
+import { test as base, expect, type Page, type Request } from '@playwright/test';
 
 /**
  * The shared fixture every spec imports `test` and `expect` from.
@@ -79,7 +79,9 @@ function isLocal(url: string): boolean {
 
 async function guardNetwork(page: Page, use: () => Promise<void>): Promise<void> {
   const problems: string[] = [];
-  const pending = new Set<string>();
+  // Keyed by request, not URL: a recording is fetched twice (preloaded, then played), and the
+  // two fetches overlap.
+  const pending = new Set<Request>();
 
   await page.route(
     (url) => !isLocal(url.href),
@@ -88,10 +90,10 @@ async function guardNetwork(page: Page, use: () => Promise<void>): Promise<void>
       return route.abort('blockedbyclient');
     },
   );
-  page.on('request', (r) => pending.add(r.url()));
-  page.on('requestfinished', (r) => pending.delete(r.url()));
+  page.on('request', (r) => pending.add(r));
+  page.on('requestfinished', (r) => pending.delete(r));
   page.on('requestfailed', (r) => {
-    pending.delete(r.url());
+    pending.delete(r);
     // A recording cut short by the next one (one sound at a time) aborts its download, and
     // leaving an activity aborts the fetches of its next round.
     const stoppedRecording =
@@ -107,8 +109,14 @@ async function guardNetwork(page: Page, use: () => Promise<void>): Promise<void>
 
   await use();
 
-  await page.waitForLoadState('networkidle').catch(() => undefined);
-  for (const url of pending) problems.push(`request unanswered: ${url}`);
+  // A fetch the last touch started (the next round's preload) may still be in flight when the
+  // spec ends; `networkidle` has already been reached once and does not wait for it. Give each
+  // request still open a bounded time to settle; one that never does is unanswered.
+  await expect
+    .poll(() => pending.size, { timeout: 5000 })
+    .toBe(0)
+    .catch(() => undefined);
+  for (const r of pending) problems.push(`request unanswered: ${r.url()}`);
   expect(problems, 'the network guard').toEqual([]);
 }
 
