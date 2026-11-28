@@ -5,7 +5,7 @@ import { Tap } from '../tap/tap';
  * Spot the word's game area (docs/mocks/pages/spot-the-word, `.spot`): the word to find shown
  * large, one dot for each time it is in the story, and the story, every word of which is a
  * touch target. A found word stays highlighted and takes no touch; a missed one greys for a
- * moment (L2-019, ADR 0022).
+ * moment (L2-019, ADR 0023).
  */
 @Component({
   selector: 'pb-spot',

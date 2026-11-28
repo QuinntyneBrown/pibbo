@@ -39,7 +39,7 @@ const PRAISE_MS = 1500;
 /**
  * Spot the word (docs/mocks/pages/spot-the-word): the child hears a common word and finds
  * every one of it in a short story. Orchestrates recordings; every rule is in `@pibbo/domain`
- * (ADR 0022).
+ * (ADR 0023).
  */
 @Component({
   selector: 'pb-spot-the-word',

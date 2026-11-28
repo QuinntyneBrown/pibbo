@@ -15,7 +15,7 @@ export interface CommonWord {
 /**
  * The content of Spot the word: data, not rules, checked before every build by
  * `tools/content/check-content.mjs`. The story and its words are the cast of the mock; which
- * common words and stories Pibbo covers, and in what order, is not decided (ADR 0022).
+ * common words and stories Pibbo covers, and in what order, is not decided (ADR 0023).
  */
 export interface SpotContent {
   readonly roundsPerPlay: number;

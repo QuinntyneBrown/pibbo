@@ -149,7 +149,7 @@
   color: var(--color-fg-muted);
 }
 
-// In the shell's story layout (ADR 0022) the word to find and the story take the shell's own
+// In the shell's story layout (ADR 0023) the word to find and the story take the shell's own
 // grid areas, as the mock draws them.
 @media (max-width: 24rem) and (max-height: 42rem),
   (min-width: 32rem) and (orientation: landscape) and (max-height: 38rem) {
