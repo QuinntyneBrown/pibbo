@@ -11,16 +11,39 @@ skinparam class {
 }
 title Class structure — Play the check game
 
-class CheckPlan {
-  +rounds: RoundRef[]
+class CheckQuestion {
+  +activity: string
+  +show: CheckShow
+  +options: CheckOption[]
+  +answer: number
 }
-class CheckResult {
-  +earnedSkills: string[]
+class CheckRound {
+  +phase: choosing | retry | right | modelled
+  +chosen: number
+  +wrong: number
+}
+class StoredActivities {
+  +version: 1
+  +activities: string[]
 }
 class checkRules <<pure>> {
-  +plan(history: unknown, firstLesson: Lesson, rnd): CheckPlan
-  +earned(answers: Answer[]): CheckResult
+  +planCheck(rnd, practised, content): string[]
+  +makeQuestion(rnd, activity, previous): CheckQuestion
+  +checkChoice(round): CheckRound
+  +earnedActivities(rounds): string[]
 }
-checkRules ..> CheckPlan
-checkRules ..> CheckResult
+class progressRules <<pure>> {
+  +readActivities(value: unknown): string[]
+  +addActivities(have, more): StoredActivities
+}
+interface ProgressStore {
+  +read(key, parse)
+  +write(key, value)
+  +clearAll()
+}
+checkRules ..> CheckQuestion
+checkRules ..> CheckRound
+CheckRound o--> CheckQuestion
+progressRules ..> StoredActivities
+ProgressStore ..> StoredActivities
 @enduml

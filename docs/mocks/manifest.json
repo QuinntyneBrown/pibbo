@@ -16,6 +16,7 @@
       "title": "Home · Choose an activity",
       "route": "/",
       "requirements": [
+        "L2-023",
         "L2-024",
         "L2-035"
       ],
@@ -333,7 +334,14 @@
       "kind": "page",
       "title": "Sound it out",
       "route": "/read/sound-out",
-      "requirements": ["L2-012", "L2-014", "L2-015", "L2-016", "L2-025", "L2-026"],
+      "requirements": [
+        "L2-012",
+        "L2-014",
+        "L2-015",
+        "L2-016",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "default",
         "ready",
@@ -452,27 +460,37 @@
       "kind": "page",
       "title": "What do I know?",
       "route": "/check",
-      "requirements": [],
+      "requirements": [
+        "L2-023",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "default",
         "answered",
         "correct",
         "retry",
+        "model",
         "counting-question",
-        "results"
+        "letter-question",
+        "adding-question",
+        "results",
+        "results-none"
       ],
       "prototype_frame": "uqsXti2BwppQA9k9zEtnFN",
       "subject": "both",
       "not_applicable": {
-        "loading": "The questions are fixed data in the bundle.",
-        "empty": "There are always four questions.",
-        "error": "Nothing on this screen can fail."
+        "loading": "A question's pictures and recordings are bundled and fetched before it is shown.",
+        "empty": "With nothing practised the questions come from the first lesson; results with nothing earned is the results-none state.",
+        "error": "A recording that cannot play never blocks a question, and storage that cannot be read counts as nothing practised."
       },
       "state_subjects": {
         "default": "read",
         "answered": "read",
         "correct": "read",
-        "retry": "read"
+        "retry": "read",
+        "model": "read",
+        "letter-question": "read"
       }
     },
     {

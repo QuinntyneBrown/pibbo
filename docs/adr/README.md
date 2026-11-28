@@ -28,3 +28,4 @@
 | [0024](0024-spot-the-word-round.md) | Spot the word: every common word in a short story, and misses that come back | Accepted |
 | [0025](0025-rhyme-time-round.md) | Rhyme time: choose every rhyme, then Check | Accepted |
 | [0026](0026-guided-lesson-and-its-place-on-the-device.md) | Guided lesson: the path, and the one thing a lesson keeps on the device | Accepted |
+| [0026](0026-check-game.md) | The check game: one question for each activity, and what the device keeps | Accepted; storage open for the repository owner |
