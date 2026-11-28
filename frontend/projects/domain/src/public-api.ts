@@ -15,3 +15,5 @@ export * from './lib/counting/compare-content';
 export * from './lib/counting/compare-round';
 export * from './lib/counting/countdown-content';
 export * from './lib/counting/countdown-round';
+export * from './lib/counting/skip-count-content';
+export * from './lib/counting/skip-round';
