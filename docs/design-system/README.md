@@ -24,6 +24,10 @@ The light theme draws its page, text, subject, feedback and button colours from 
 
 ## Components
 
+On compact screens, keyboard outlines on edge controls fit inside the viewport. The short landscape layout draws the outline inside the button in its label colour. The illustrated prompt uses the subject’s light foreground on a dark speech bubble.
+
+A raised button travels 4 px when pressed and its 5 px lower edge compresses to 1 px. White button outlines, selected-answer rings and the next sound tile’s ring stay visible throughout the press.
+
 | Component                                        | Variants                                                     | States                                           | Source mocks                                                                                                                                                                                                                                                   |
 | ------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Button (Chunky)](components/button.html)        | Count, Read, Success, Reward, Ink, White, icon, Wide (phone) | Minimum 60 × 60 px child target. Default, Hover, Focus, Active, Disabled          | [count-the-toys/choose](../mocks/pages/count-the-toys/choose.html), [count-the-toys/correct](../mocks/pages/count-the-toys/correct.html), [home/default](../mocks/pages/home/default.html), [guided-lesson/default](../mocks/pages/guided-lesson/default.html) |
@@ -148,7 +152,7 @@ Core components from the generic catalog that Pibbo does not have (text field, s
 | Added `.switch--step`; `.number-line__label` 44 units                                                                    | The prototype's step switch was 44 px, 4 px apart, colour only; it is 64 px, 16 px apart, with a tick. Labels grew so a phone can read them. Added to the mocks first (journey 8, ADR 0012).                                                                    |
 | Added `.turn--star`, `.turn--moon` and `.player[aria-current="step"]`; `.turn-controls`; `.round-btn` 64 px, 16 px apart | The prototype named the players and its + and − were 44 px, 8 px apart, on both players; only the player whose turn it is has them now. A turn is shown by a symbol and colour, never a name (`L2-008`). Added to the mocks first (journey 9, ADR 0013).        |
 | Added `.switch--speed`; `.game-card--more`                                                                               | The prototype's speed switch was 44 px, 4 px apart, colour only; it is 64 px, 16 px apart, with a tick, as `.switch--step`. Home shows at most 6 activities a screen, so a group with more has a More picture. Added to the mocks first (journey 10, ADR 0014). |
-| Added `.pair--miss`                                                                                                      | A wrong partner in Letter sounds gives a small shake (`--duration-slow`), removed by reduced motion. Added to the mocks first (journey 11, ADR 0015).                                                                                                           |
+| Added `.pair--miss`                                                                                                      | A wrong partner shows a dashed inset ring. Reduced motion removes the shake and retains the ring. Matched partners share a corner shape and a fill colour. Added to the mocks first (journey 11, ADR 0015).                                                                                                           |
 
 ## Open questions
 
@@ -159,3 +163,9 @@ Core components from the generic catalog that Pibbo does not have (text field, s
   journeys that build each component.
 
 See the report of the extraction run: `check_design_system.py` and `check_contrast.py` both exit 0; screenshots in `.cache/shots` (git-ignored).
+
+### High-contrast controls
+
+In forced-colors mode, the shared press edge becomes a 2 px button-text border. A pressed choice has a 4 px double border, and disabled controls use the system's disabled text color. Game and blending progress tracks have a 1 px canvas-text border around a canvas background, with the completed portion in the system highlight color.
+
+The spoken prompt keeps its bubble outline in high contrast. The replay button has a separate 2 px circular border around the speaker. A 2 px horizontal divider separates answer feedback from the activity above it.

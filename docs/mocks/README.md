@@ -15,20 +15,22 @@ The [Magic Patterns alignment log](alignment-log.md) records each verified chang
 ## Opening the mocks
 
 - On a state page, scroll past the mock to reach its design note and review toolbar. At phone widths, the state pills wrap so every label stays visible.
-- The gallery shows a larger preview of each screen with review chrome hidden. The Dark theme switch updates the previews and the linked state pages. Available states appear beneath each preview; the coverage table below lists inapplicable states.
-- `?theme=dark` or `?theme=light` forces a theme; the mock bar toggles it, and so does the `t` key.
-- `?chrome=0` hides the mock bar and the yellow design notes, leaving only the product.
-- Home’s group pictures switch the visible activities. Count the toys, Which is bigger and Sound it out let a reviewer change the selected answer and check it.
-- Spell by sound, Rhyme time and Build a sentence let you build an answer, change it, and check it. Spot the word highlights each target you find and opens the completion screen after the last one.
+- On phones and portrait tablets, gallery previews use the device viewport. Rotate the device to review the landscape phone layout.
+- In the gallery, focus or hover over a state pill to preview that state. The selected pill uses the same subject colour as the open mock and has an underline. Press Enter or tap the pill to open the full page. To keep a state in view, select **Preview states in gallery** and activate a pill. The gallery address now bookmarks that preview. Back and Forward revisit the states you selected. In this mode, moving the pointer or tabbing to another pill keeps the selected preview in place until you activate a pill. **Open mock** opens that preview in the current theme. All mocks returns to that same pill and preview, with the current theme. The Change log link in the gallery header opens the documented changes.
+- The gallery and mock pages follow the browser’s color scheme until you choose a theme. A theme in the URL takes precedence over the saved choice. Changing the theme updates the URL so reloading or sharing a state preserves its appearance. Use the theme button, or press `t` while keyboard focus is in the review toolbar. Holding the key switches the theme once. Opening a toolbar state pill with Enter focuses the current pill on the destination page so you can continue through adjacent states.
+- The × button hides the review toolbar and notes and takes you to the top of the mock. Use browser Back or press Escape to return to the toolbar with the round intact. Open a file with `?chrome=0` to start in preview mode.
+- Home’s group pictures switch the visible activities. Count the toys, Which is bigger and Sound it out let a reviewer change the selected answer and check it. For Which is bigger, open [the right card selected](pages/which-is-bigger/default.html?picked=right) or set `picked` to `left` or `none` on either editable state.
+- Spell by sound, Rhyme time and Build a sentence let you build an answer, change it, and check it. On short landscape phones, Spell by sound puts the picture, sound boxes and six-letter bank side by side so the answer button stays visible. Spell by sound also includes the [map](pages/spell-by-sound/default.html?word=map) and [cat](pages/spell-by-sound/default.html?word=cat) examples from the frame. Each has its own picture and letter bank. Build a sentence includes the [sun](pages/build-a-sentence/start.html?sentence=sun) and [boat](pages/build-a-sentence/start.html?sentence=boat) examples. Add `placed=0` through `placed=5` to an editable sentence URL to preview how many words are already on the strip, as in [the boat with three words placed](pages/build-a-sentence/default.html?sentence=boat&placed=3). Each sample has four words, so both 4 and 5 show the complete sentence. Spot the word includes [is](pages/spot-the-word/default.html?target=is) and [a](pages/spot-the-word/default.html?target=a) as well as the illustrated “the”. It highlights each target you find and opens the completion screen after the last one.
 - Games opened from Home return to the same group. Opening Sound it out, Big and small letters or Count and write from Home starts a fresh round. Opening a state directly shows its illustrated example.
 - In a guided lesson, Leave returns to the current step. Finish the game and choose Next to unlock the following step. The second reading game uses “map” and the third introduces “sh” in “ship”.
 - Sound it out previews map, ship, boat, cape and sunset. Touch the remaining parts, choose Read it fast, and select a picture. The quiet e and the syllable captions stay visible when choosing a picture.
 - What do I know? runs through the ship, duck, rhyme and numeral questions. Feedback keeps the selected answer visible and the fourth question leads to Results. Choose Try it to practise the “oa” sound in “boat”.
 - In Count and write, touch the remaining toys, enter the total, and choose Check. Clear empties both boxes. A wrong answer demonstrates the digits in order.
 - Add together lets Star and Moon add or remove ducks in turn. Done passes the pond to the next player, then opens the total choices. A wrong answer highlights each duck before the players choose again.
-- Counting dance previews the beat visually. Start or resume to advance the chant, pause to hold a number, and choose Slow or Fast to change tempo. The playing frame opens at beat five for inspection.
-- Rocket countdown moves one notch per correct answer. Skip-count draws each hop and lets you restart the line by choosing a step size. Both keep your place when you try again.
-- In Letter sounds, Big and small letters and Words and pictures, choose one card from each column. Matched pairs keep their colour as you finish the round.
+- Counting dance previews the beat visually. Start or resume to advance the chant, pause to hold a number, and choose Slow or Fast to change tempo. The playing frame opens at beat five for inspection. Set `beat` from 0 through 10 and `tempo` to slow or fast to inspect a specific moment, such as [beat seven at fast tempo](pages/counting-dance/playing.html?beat=7&tempo=fast).
+- Progress Check keeps the selected answer when a question is reloaded. To review a specific choice, open [the bat selected for the rhyme question](pages/progress-check/answered.html?choice=1#question=3).
+- Rocket countdown moves one notch per correct answer. Reloading resumes at the displayed number. Opening [a countdown at zero](pages/rocket-countdown/default.html#from=17&at=0) shows the completed track and launch. Short launch pads use smaller notches so the rocket stays visible until zero. Skip-count draws each hop and lets you restart the line by choosing a step size. Its address keeps the step and hop on reload. To review them separately, open [four hops by tens](pages/skip-count/default.html#by=10) or [nine hops at the illustrated step size](pages/skip-count/default.html#hops=9). Both keep your place when you try again.
+- In Letter sounds, Big and small letters and Words and pictures, choose one card from each column. Matched pairs keep their colour and corner shape as you finish the round. Reloading a partially matched board restores each completed pair in the order you found it.
 - Each Check, Next and Try again button links to the state it leads to, so you can click
   through a game the way a child would play it.
 
@@ -49,6 +51,8 @@ args. It is the cast, not a set of rules.
   sound); cat with hat, bat, sun, map (Rhyme time); "The cat can sit." (Build a sentence);
   the story "The cat is on the mat. A ship is on the sea. The sun is up and the cat has a
   nap." (Spot the word).
+- Open the [stop example](pages/sound-it-out/default.html?begin=1&word=stop) for four separate sounds, with the first two said quickly.
+- Open the [night example](pages/sound-it-out/default.html?begin=1&word=night) to see the three-letter unit and follow it through blending, picture choice and feedback. The static mock displays the sound labels.
 - **Numbers:** 7 toys; 14 to write; 7 against 4; countdown from 10; skip-count by 5s to
   50; 3 + 4; dance to 10.
 
@@ -60,6 +64,8 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
 `.pairs`, and so on). Every state of a screen is the same layout with different content.
 
 ### Where the mocks depart from the prototype
+
+- **Short tablet and split windows.** The progress bar and spoken prompt share the top row when height is limited. In activities such as Count the toys and Spell by sound, the picture sits beside the choices so the child can see the prompt, play and reach the answer button in one view.
 
 - **Replaying a completed lesson step.** Next returns to the first unfinished game. The prototype advances its step counter after each completion, which can skip an unplayed game during a replay.
 - **Dark theme added.** The prototype is light only. The dark theme is new: Pibbo and
@@ -81,7 +87,10 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   switch became the group pictures (`.switch--groups`), its game cards lost their stars, and
   targets and gaps grew to 60 px and 16 px (`--target-child`, `--gap-targets`). The lesson and
   check pictures (`L2-024` #4) come back with journeys 22 and 23. `activity-placeholder` is new:
-  it stands in for an activity until its journey builds it (ADR 0006).
+  it stands in for an activity until its journey builds it (ADR 0006). Review either the
+  [Count the toys placeholder](pages/activity-placeholder/default.html) or the
+  [Sound it out placeholder](pages/activity-placeholder/default.html?activity=sound-it-out).
+  Home returns to the matching group. Pressing Enter on Home focuses the activity card.
 
 - **Sound it out reconciled with `L2-012` and `L2-026` (journey 4).** The prototype's cast was
   "ship", a digraph (`L2-014`, journey 14); the journey-4 states now draw a three-sound word of
@@ -89,6 +98,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   speech bubble carries a picture of what is asked (`bubble__picture`), the letter sounding is
   lit (`tile--sounding`), the right picture carries a tick (`pick__tick`), Next starts the next round, and a new `modelled` state shows the
   right picture after the third wrong one. `magic-e` and `syllables` are unchanged (ADR 0008).
+- **Counting stamps on small toys.** At tile widths of 112 px or less, Count the toys and Count and write place the number inside the lower corner. The prototype centres the stamp, which can cover the whole illustration on a phone. Larger rug toys keep the centred stamp.
 - **Count the toys reconciled with `L2-001`, `L2-002`, `L2-025` and `L2-026` (journey 3).** The
   prototype's Try again cleared the stamps; now nothing is cleared: Pibbo counts the toys again
   aloud, lighting each in turn (`rug__toy--highlight`), and the child chooses again. A new
@@ -103,7 +113,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   toys in two ten-frames (`.tenframes`, `.tenframe`, `__thing`, `__cell`, `__badge`),
   filled in order, each at least 60 px; once counted they shrink (`tenframes--small`) and a digit
   pad (`.digit-pad`, `__slots`, `__slot`, `__keys`, `__key`, `__clear`) writes the numeral
-  by taps. New `hint` (the boxes clear and Pibbo lights 1, then 4: `digit-pad__key--lit`) and
+  by taps. On narrow portrait phones the ten digits form four columns with 9 and 0 centred on the last row. In landscape the small ten-frames and answer slots share the space beside the keys. New `hint` (the boxes clear and Pibbo lights 1, then 4: `digit-pad__key--lit`) and
   `modelled` (`digit-pad__slot--answer`) states. The title is "Count and write"; the
   cells between digit keys and things are 6 px, not 16 px, so five 60 px targets fit a 360 px
   phone (ADR 0009).
@@ -111,7 +121,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   dots of the bigger set beyond the smaller number (`ten-frame__dot--extra`, a ring as well as a
   colour), so the ten-frames line the sets up one-to-one and show the extra. A number above 10
   is drawn as two `.ten-frame`s in its card; on a short screen the numeral shrinks, and on a phone on
-  its side it sits beside its ten-frames, so a card of 20 and the answer bar fit with no scrolling. Choosing a card and then Check stays as drawn, and
+  its side it sits beside its ten-frames, so a card of 20 and the answer bar fit with no scrolling. Open [6 and 9](pages/which-is-bigger/default.html?left=6&right=9) for a larger right-hand set or [20 and 0](pages/which-is-bigger/default.html?left=20&right=0) for two full ten-frames beside an empty one. Choosing a card and then Check stays as drawn, and
   `L2-005` was brought in line (ADR 0010).
 - **Rocket countdown reconciled with `L2-006` (journey 7).** The rocket rises in tenths of the
   way from the start to 0 (`launch__rocket--0` to `--10`, 15 px each here, 5.5% of the launch's
@@ -145,6 +155,7 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   screen `L2-024` allows: `home/counting` shows five and a More picture
   (`.game-card--more`), and the new `home/counting-more` shows Add together, Counting dance
   and More, which goes back to the first screen.
+- **Matching feedback.** Letter sounds, Big and small letters, and Words and pictures give each completed pair a shared corner shape as well as its prototype colour. A solid ring identifies the held card. A missed partner shows a dashed ring, including with reduced motion.
 - **Letter sounds reconciled with `L2-010` (journey 11).** The prototype is a pair match, four
   letters beside their four sounds, each sound with its recording and a picture "as in" a word;
   `L2-010` asked for one sound played and three letters to choose from. The mock wins and

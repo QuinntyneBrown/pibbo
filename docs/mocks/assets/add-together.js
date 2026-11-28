@@ -7,16 +7,22 @@
   const params = new URLSearchParams(location.hash.slice(1));
   const valid = ['star', 'moon'].every(key => {
     const value = params.get(key);
-    return value !== null && /^[0-5]$/.test(value) && (active >= 0 || Number(value) > 0);
+    return value !== null && /^[0-5]$/.test(value) && (Number(value) > 0 || active === 0 || (active === 1 && key === 'moon'));
   });
   if (valid) counts.splice(0, 2, Number(params.get('star')), Number(params.get('moon')));
   const answer = document.querySelector('.sum__answer');
   const options = Array.from(document.querySelectorAll('.choices button'));
   let pick = /^\d+$/.test(answer.textContent) ? Number(answer.textContent) : null;
   const total = () => counts[0] + counts[1];
-  if (valid) pick = null;
-  if (valid && /^\d+$/.test(params.get('pick')) && Math.abs(Number(params.get('pick')) - total()) <= 1) {
-    pick = Number(params.get('pick'));
+  const correct = document.querySelector('.answer-bar--correct');
+  const retry = document.querySelector('.answer-bar--retry a');
+  if (valid && active < 0) {
+    const savedPick = params.has('pick') ? Number(params.get('pick')) : NaN;
+    const isOption = Number.isInteger(savedPick) && Math.abs(savedPick - total()) <= 1;
+    if (correct) pick = total();
+    else if (retry) pick = isOption && savedPick !== total() ? savedPick : total() + 1;
+    else if (isOption) pick = savedPick;
+    else if (pick !== null) pick = total();
   }
   const controls = document.querySelectorAll('.turn-controls button');
   const action = document.querySelector('.answer-bar--check .chunky');
@@ -38,6 +44,8 @@
         duck.draggable = false;
         group.append(duck);
       }
+      group.setAttribute('role', 'group');
+      group.setAttribute('aria-label', (i === 0 ? 'Star' : 'Moon') + ', ' + counts[i] + (counts[i] === 1 ? ' duck' : ' ducks'));
       group.parentElement.querySelector('.player__adds').textContent = 'adds ' + counts[i];
     });
     answer.previousSibling.textContent = counts.join(' + ') + ' = ';
@@ -61,9 +69,10 @@
     }
   }
 
-  controls.forEach((button, i) => button.addEventListener('click', () => {
+  controls.forEach((button, i) => button.addEventListener('click', event => {
     counts[active] += i === 0 ? -1 : 1;
     draw();
+    if (event.detail === 0 && button.disabled) controls[1 - i].focus();
   }));
   options.forEach(option => option.addEventListener('click', () => {
     pick = Number(option.textContent);
@@ -71,22 +80,52 @@
   }));
   draw();
 
-  const retry = document.querySelector('.answer-bar--retry a');
   if (retry) {
     pick = null;
     retry.href = href('default');
-    if (valid) {
-      const ducks = groups.flatMap(group => Array.from(group.children));
-      let index = 0;
-      ducks[index].classList.add('picture--recount');
-      const timer = setInterval(() => {
-        if (document.hidden) return;
-        ducks[index++].classList.remove('picture--recount');
-        if (index === ducks.length) clearInterval(timer);
-        else ducks[index].classList.add('picture--recount');
-      }, 650);
-      window.addEventListener('pagehide', () => clearInterval(timer), { once: true });
+    const ducks = groups.flatMap(group => Array.from(group.children));
+    let timer;
+    let current;
+    function stopRecount() {
+      clearInterval(timer);
+      current?.classList.remove('picture--recount');
     }
+    function recount() {
+      stopRecount();
+      let i = 0;
+      function next() {
+        current?.classList.remove('picture--recount');
+        current = ducks[i++];
+        if (current) current.classList.add('picture--recount');
+        else stopRecount();
+      }
+      next();
+      timer = setInterval(next, 650);
+    }
+    if (valid) recount();
+    document.querySelector('.hear').addEventListener('click', recount);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stopRecount(); });
+    window.addEventListener('pagehide', stopRecount);
+  }
+  const nextAction = action || retry;
+  if (nextAction) {
+    nextAction.addEventListener('click', event => {
+      const link = nextAction.tagName === 'A';
+      const url = new URL(link ? nextAction.href : nextAction.dataset.mockHref, location.href);
+      if (event.detail === 0) url.searchParams.set('focus', 'pond');
+      else url.searchParams.delete('focus');
+      if (link) nextAction.href = url.href;
+      else nextAction.dataset.mockHref = url.href;
+    });
+  }
+  const url = new URL(location.href);
+  if (url.searchParams.get('focus') === 'pond') {
+    let target = options[0];
+    if (turn) target = controls[1].disabled ? controls[0] : controls[1];
+    else if (correct || retry) target = document.querySelector('.answer-bar a');
+    target?.focus();
+    url.searchParams.delete('focus');
+    history.replaceState(history.state, '', url);
   }
   const praise = document.querySelector('.answer-bar--correct .answer-bar__message');
   if (praise) praise.lastChild.textContent = counts.join(' and ') + ' make ' + total() + '! Great teamwork.';

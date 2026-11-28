@@ -8,13 +8,16 @@
   const success = document.querySelector('.answer-bar--correct');
   const last = dots.length - 1;
   const params = new URLSearchParams(location.hash.slice(1));
+  window.addEventListener('hashchange', () => location.reload());
   const stepOf = button => Number(button.dataset.by);
   let by = stepOf(steps.find(button => button.getAttribute('aria-checked') === 'true'));
   let hops = line.querySelectorAll('.number-line__dot--said').length - 1;
 
-  function navigate(state, position) {
+  function navigate(state, position, focus) {
     const link = document.querySelector('.mock-bar a[href="' + state + '.html"]');
-    link.hash = new URLSearchParams({ by, hops: position }).toString();
+    const next = new URLSearchParams({ by, hops: position });
+    if (focus) next.set('focus', focus);
+    link.hash = next.toString();
     link.click();
   }
 
@@ -59,22 +62,46 @@
     if (success) success.querySelector('.answer-bar__message').lastChild.textContent = 'Hop, hop, hop — all the way to ' + last * by + '!';
   }
 
-  const requestedStep = Number(params.get('by'));
-  const requestedHop = Number(params.get('hops'));
-  if (steps.some(button => stepOf(button) === requestedStep) && params.has('hops') &&
-      Number.isInteger(requestedHop) && requestedHop >= 0 && requestedHop <= last &&
-      (success ? requestedHop === last : requestedHop < last)) {
-    by = requestedStep;
-    hops = requestedHop;
-    draw();
+  function savePosition() {
+    const url = new URL(location.href);
+    url.hash = new URLSearchParams({ by, hops }).toString();
+    history.replaceState(history.state, '', url);
   }
+
+  const requestedStep = Number(params.get('by'));
+  if (steps.some(button => stepOf(button) === requestedStep)) by = requestedStep;
+  const requestedHop = params.get('hops');
+  if (/^(?:[0-9]|10)$/.test(requestedHop)) {
+    if (!success && Number(requestedHop) === last) {
+      const finished = new URL('correct.html', location.href);
+      finished.search = location.search;
+      finished.hash = new URLSearchParams({ by, hops: last }).toString();
+      location.replace(finished.href);
+      return;
+    }
+    if (!success) hops = Number(requestedHop);
+  }
+  if (params.has('by') || params.has('hops')) draw();
+  const retryLink = retry?.querySelector('a');
+  retryLink?.addEventListener('click', event => {
+    const next = new URLSearchParams({ by, hops });
+    if (event.detail === 0) next.set('focus', 'choices');
+    retryLink.hash = next.toString();
+  });
+  if (params.get('focus') === 'next') success?.querySelector('a').focus();
+  if (params.get('focus') === 'retry') retryLink?.focus();
+  if (params.get('focus') === 'choices') buttons[0]?.focus();
+  if (params.get('focus') === 'step') steps.find(button => stepOf(button) === by)?.focus();
   steps.forEach((button, i) => {
     button.tabIndex = stepOf(button) === by ? 0 : -1;
-    button.addEventListener('click', () => {
+    button.addEventListener('click', event => {
       by = stepOf(button);
       hops = 0;
-      if (retry || success) navigate('start', hops);
-      else draw();
+      if (retry || success) navigate('start', hops, event.detail === 0 ? 'step' : '');
+      else {
+        draw();
+        savePosition();
+      }
     });
     button.addEventListener('keydown', event => {
       const delta = { ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1 }[event.key];
@@ -85,10 +112,13 @@
       next.click();
     });
   });
-  buttons.forEach(button => button.addEventListener('click', () => {
-    if (Number(button.textContent) !== (hops + 1) * by) { navigate('retry', hops); return; }
+  buttons.forEach(button => button.addEventListener('click', event => {
+    if (Number(button.textContent) !== (hops + 1) * by) { navigate('retry', hops, event.detail === 0 ? 'retry' : ''); return; }
     hops++;
-    if (hops === last) navigate('correct', hops);
-    else draw();
+    if (hops === last) navigate('correct', hops, event.detail === 0 ? 'next' : '');
+    else {
+      draw();
+      savePosition();
+    }
   }));
 })();

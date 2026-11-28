@@ -9,6 +9,7 @@
 <meta name="mock:state" content="moon-turn">
 <meta name="mock:requirements" content="L2-008, L2-025">
 <meta name="description" content="Moon’s turn: Star added 3, Moon has added 4.">
+<script src="../../assets/appearance.js"></script>
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -18,16 +19,16 @@
 <div class="shell shell--count">
   <header class="shell__top">
     <a class="chunky chunky--white chunky--icon press" href="../home/counting-more.html" aria-label="Leave game"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
-    <div class="progress" role="progressbar" aria-label="Game progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="4"><div class="progress__fill progress__fill--4"></div></div>
+    <div class="progress" role="progressbar" aria-label="Step 4 of 5" aria-valuemin="0" aria-valuemax="5" aria-valuenow="4"><div class="progress__fill progress__fill--4"></div></div>
   </header>
   <div class="shell__ask">
     <svg class="pibbo pibbo--md " viewBox="0 0 120 120" role="img" aria-label="Pibbo"><path class="pibbo__stem" d="M60 30 C60 22 60 18 61 13"/><path class="pibbo__leaf" d="M60 18 C52 18 44 13 43 5 C51 4 59 9 60 18 Z"/><path class="pibbo__leaf" d="M61 15 C66 8 75 5 82 8 C79 16 70 19 61 15 Z"/><ellipse class="pibbo__wing" cx="19" cy="74" rx="9" ry="15" transform="rotate(18 19 74)"/><ellipse class="pibbo__wing" cx="101" cy="74" rx="9" ry="15" transform="rotate(-18 101 74)"/><ellipse class="pibbo__foot" cx="49" cy="108" rx="8" ry="5"/><ellipse class="pibbo__foot" cx="71" cy="108" rx="8" ry="5"/><ellipse class="pibbo__body" cx="60" cy="67" rx="43" ry="41"/><ellipse class="pibbo__belly" cx="60" cy="84" rx="25" ry="18"/><ellipse class="pibbo__white" cx="45" cy="57" rx="11" ry="12.5"/><ellipse class="pibbo__white" cx="75" cy="57" rx="11" ry="12.5"/><circle class="pibbo__ink" cx="46" cy="58.5" r="6.5"/><circle class="pibbo__ink" cx="76" cy="58.5" r="6.5"/><circle class="pibbo__white" cx="48" cy="56.0" r="2.2"/><circle class="pibbo__white" cx="78" cy="56.0" r="2.2"/><circle class="pibbo__cheek" cx="30" cy="73" r="6"/><circle class="pibbo__cheek" cx="90" cy="73" r="6"/><path class="pibbo__beak" d="M53 69 Q60 65.5 67 69 Q60 79 53 69 Z"/></svg>
     <div class="bubble">
       <p class="bubble__text" id="prompt">Moon’s turn. Add ducks to the pond.</p>
-      <button class="hear" type="button" aria-label="Hear it again"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button>
+      <button class="hear" type="button" aria-label="Hear it again" aria-describedby="prompt"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button>
     </div>
   </div>
-  <main class="shell__game" id="main" aria-labelledby="prompt">
+  <main class="shell__game" id="main" tabindex="-1" aria-labelledby="prompt">
     <h1 class="visually-hidden">Add together</h1>
     <div class="stage">
       <div class="players"><div class="player player--count player--star"><p class="player__name"><svg class="turn turn--star" viewBox="0 0 24 24" role="img" aria-label="Star"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21.1l1.4-7L2 9.3l7-.8z"/></svg> <span class="player__adds">adds 3</span></p><div class="player__ducks"><img class="picture " src="../../assets/pictures/duck.jpg" alt="duck" draggable="false"><img class="picture " src="../../assets/pictures/duck.jpg" alt="duck" draggable="false"><img class="picture " src="../../assets/pictures/duck.jpg" alt="duck" draggable="false"></div></div><div class="plus" aria-hidden="true">+</div><div class="player player--reward player--moon" aria-current="step"><p class="player__name"><svg class="turn turn--moon" viewBox="0 0 24 24" role="img" aria-label="Moon"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg> <span class="player__adds">adds 4</span></p><div class="player__ducks"><img class="picture " src="../../assets/pictures/duck.jpg" alt="duck" draggable="false"><img class="picture " src="../../assets/pictures/duck.jpg" alt="duck" draggable="false"><img class="picture " src="../../assets/pictures/duck.jpg" alt="duck" draggable="false"><img class="picture " src="../../assets/pictures/duck.jpg" alt="duck" draggable="false"></div></div></div>
@@ -40,9 +41,9 @@
   <footer class="answer-bar answer-bar--check"><button class="chunky chunky--count chunky--wide press" type="button">Done</button></footer>
 </div>
 <nav class="mock-bar" aria-label="Mock navigation">
-  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <a class="mock-bar__home" href="../../index.html#state-add-together-moon-turn" aria-label="All mocks">⌂</a>
   <span class="mock-bar__screen">Add together</span>
-  <ul class="mock-bar__states"><li><a href="start.html">start</a></li><li><a href="moon-turn.html" aria-current="page">moon-turn</a></li><li><a href="default.html">default</a></li><li><a href="picked.html">picked</a></li><li><a href="correct.html">correct</a></li><li><a href="retry.html">retry</a></li></ul>
+  <ul class="mock-bar__states"><li><a href="start.html">start</a></li><li><a href="moon-turn.html" aria-current="page">moon-turn</a></li><li><a href="default.html">default</a></li><li><a href="picked.html"><span class="mock-bar__label--descenders">picked</span></a></li><li><a href="correct.html">correct</a></li><li><a href="retry.html"><span class="mock-bar__label--descenders">retry</span></a></li></ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
 </nav>

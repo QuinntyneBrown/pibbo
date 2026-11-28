@@ -1,8 +1,10 @@
 // Carry the illustrated word through the sound tiles, blend and picture choices.
 (function () {
   const samples = {
-    map: ['sun', 'map', 'cat'],
+    map: ['cap', 'map', 'sun'],
     ship: ['boat', 'sun', 'ship'],
+    stop: ['stop', 'ship', 'map'],
+    night: ['sunset', 'sun', 'night'],
     boat: ['ship', 'boat', 'bat'],
     cape: ['cap', 'hat', 'cape'],
     sunset: ['sunset', 'night', 'sun']
@@ -14,13 +16,15 @@
   const lessonWord = route.get('lesson') === 'read' && ['2', '3'].includes(route.get('game'))
     ? (route.get('game') === '3' ? 'ship' : 'map') : null;
   const illustrated = Array.from(document.querySelectorAll('.tile'), tile => tile.textContent).join('');
-  const teams = {
+  const soundPatterns = {
     ship: { glyph: 'sh', rule: 'Two letters, one sound', units: ['sh', 'i', 'p'], sounds: ['/sh/', '/i/', '/p/'] },
+    stop: { glyph: 's + t', rule: 'Say both sounds, quickly', units: ['s', 't', 'o', 'p'], sounds: ['/s/', '/t/', '/o/', '/p/'] },
+    night: { glyph: 'igh', rule: 'Three letters, one sound: /ī/', units: ['n', 'igh', 't'], sounds: ['/n/', '/ī/', '/t/'] },
     boat: { glyph: 'oa', rule: 'Two vowels team up to say /ō/', units: ['b', 'oa', 't'], sounds: ['/b/', '/ō/', '/t/'] }
   };
   const requested = params.get('word') || route.get('word');
   const word = blend
-    ? (illustrated === 'map' ? (Object.hasOwn(teams, requested) ? requested : lessonWord || 'map') : illustrated)
+    ? (illustrated === 'map' ? (Object.hasOwn(soundPatterns, requested) ? requested : lessonWord || 'map') : illustrated)
     : Object.hasOwn(samples, requested) ? requested : lessonWord || 'map';
   const attempts = Number(params.get('misses'));
   const misses = [1, 2].includes(attempts) ? attempts : 0;
@@ -34,30 +38,41 @@
     return button;
   }
 
-  const team = teams[word];
-  if (team) {
+  const pattern = soundPatterns[word];
+  if (pattern) {
     const rule = document.createElement('p');
     rule.className = 'rule';
     const glyph = document.createElement('span');
     glyph.className = 'rule__glyph';
-    glyph.textContent = team.glyph;
-    rule.append(glyph, ' ' + team.rule);
-    document.querySelector('.tiles').before(rule);
+    glyph.textContent = pattern.glyph;
+    rule.append(glyph, ' ' + pattern.rule);
+    const group = document.querySelector('.tiles');
+    group.before(rule);
+    while (group.children.length < pattern.units.length) {
+      group.append(group.lastElementChild.cloneNode(true));
+    }
+    if (blend && group.querySelector('.tile--next')) prompt.textContent = 'Tap each part and say its sound.';
     document.querySelectorAll('.tile').forEach((tile, i) => {
-      tile.textContent = team.units[i];
-      tile.classList.toggle('tile--wide', team.units[i].length > 1);
-      tile.nextElementSibling.textContent = team.sounds[i];
-      tile.setAttribute('aria-label', team.units[i] + ', says ' + team.sounds[i]);
+      tile.textContent = pattern.units[i];
+      tile.classList.toggle('tile--wide', pattern.units[i].length > 1);
+      tile.nextElementSibling.textContent = pattern.sounds[i];
+      tile.setAttribute('aria-label', pattern.units[i] + ', says ' + pattern.sounds[i]);
     });
     document.querySelectorAll('.mock-bar a[href]').forEach(link => {
       const url = new URL(link.href);
       if (new URL('.', url).href === new URL('.', location.href).href &&
           !/(magic-e|syllables)\.html$/.test(url.pathname)) {
-        link.addEventListener('click', () => { link.hash = new URLSearchParams({ word }).toString(); });
+        link.addEventListener('click', () => {
+          const state = new URLSearchParams(link.hash.slice(1));
+          state.set('word', word);
+          link.hash = state.toString();
+        });
       }
     });
   }
   if (blend) {
+    const stage = blend.closest('.stage');
+    stage.classList.add('stage--initial-sounds');
     const tiles = Array.from(document.querySelectorAll('.tile'));
     const fill = blend.querySelector('.blend__fill');
     const control = blend.querySelector('button') || buttonFrom(blend.querySelector('a'));
@@ -69,11 +84,19 @@
         tile.classList.toggle('tile--next', i === 0);
         tile.nextElementSibling.classList.add('tiles__say--hidden');
       });
-      fill.style.width = '0%';
     }
     let heard = tiles.filter(tile => tile.classList.contains('tile--heard')).length;
+    function updateBlendProgress() {
+      fill.style.width = (heard / tiles.length * 100) + '%';
+      const bar = fill.parentElement;
+      bar.setAttribute('aria-valuemax', tiles.length);
+      bar.setAttribute('aria-valuenow', heard);
+      bar.setAttribute('aria-label', heard + ' of ' + tiles.length + ' parts explored');
+    }
+    updateBlendProgress();
     tiles.forEach((tile, index) => tile.addEventListener('click', () => {
       if (index !== heard) return;
+      stage.classList.remove('stage--initial-sounds');
       const sound = tile.nextElementSibling;
       tile.classList.remove('tile--next');
       tile.classList.add('tile--heard');
@@ -81,7 +104,7 @@
       tile.setAttribute('aria-label', tile.textContent + ', ' + sound.textContent);
       sound.classList.remove('tiles__say--hidden');
       heard++;
-      fill.style.width = (heard / tiles.length * 100) + '%';
+      updateBlendProgress();
       if (heard === tiles.length) {
         prompt.textContent = 'Now say the sounds fast to read the word.';
         control.disabled = false;
@@ -94,10 +117,12 @@
         next.focus();
       }
     }));
-    control.addEventListener('click', () => {
+    const link = document.querySelector('.mock-bar a[href="pick.html"]');
+    control.addEventListener('click', event => {
       control.disabled = true;
-      const link = document.querySelector('.mock-bar a[href="pick.html"]');
-      link.hash = new URLSearchParams({ word }).toString();
+      const state = new URLSearchParams({ word });
+      if (event.detail === 0) state.set('focus', 'pictures');
+      link.hash = state.toString();
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) { link.click(); return; }
       // Light each unit in reading order over the prototype's 520 ms blend.
       let index = 0;
@@ -106,9 +131,23 @@
         tiles[index].classList.remove('tile--sounding');
         index++;
         if (index < tiles.length) tiles[index].classList.add('tile--sounding');
-        else { clearInterval(timer); link.click(); }
+        else {
+          stopBlend();
+          link.click();
+        }
       }, 520 / tiles.length);
-      window.addEventListener('pagehide', () => clearInterval(timer), { once: true });
+      function stopBlend() {
+        clearInterval(timer);
+        tiles.forEach(tile => tile.classList.remove('tile--sounding'));
+        control.disabled = false;
+        document.removeEventListener('visibilitychange', onVisibility);
+        window.removeEventListener('pagehide', stopBlend);
+      }
+      function onVisibility() {
+        if (document.hidden) stopBlend();
+      }
+      document.addEventListener('visibilitychange', onVisibility);
+      window.addEventListener('pagehide', stopBlend, { once: true });
     });
     return;
   }
@@ -132,6 +171,10 @@
       option.querySelector('img').src = '../../assets/pictures/' + picture + '.jpg';
       if (document.querySelector('.answer-bar--correct')) option.setAttribute('aria-pressed', String(option === right));
     });
+    if (document.querySelector('.answer-bar--retry') && right.getAttribute('aria-pressed') === 'true') {
+      right.setAttribute('aria-pressed', 'false');
+      options.find(option => option !== right).setAttribute('aria-pressed', 'true');
+    }
     const message = document.querySelector('.answer-bar__message');
     if (message) message.lastChild.textContent = message.lastChild.textContent.replace('“map”', '“' + word + '”');
   }
@@ -148,8 +191,16 @@
       const state = correct ? 'correct.html' : misses === 2 ? 'modelled.html' : 'retry.html?choice=' + i;
       option.dataset.checkHref = state + '#' + new URLSearchParams({ word, misses: correct ? 0 : misses + 1 });
     });
+    if (params.get('focus') === 'pictures') options[0].focus();
   } else {
     const retry = document.querySelector('.answer-bar--retry a');
-    if (retry) retry.hash = new URLSearchParams({ word, misses }).toString();
+    if (retry) {
+      retry.hash = new URLSearchParams({ word, misses }).toString();
+      retry.addEventListener('click', event => {
+        const state = new URLSearchParams({ word, misses });
+        if (event.detail === 0) state.set('focus', 'pictures');
+        retry.hash = state.toString();
+      });
+    }
   }
 })();

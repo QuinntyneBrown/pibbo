@@ -31,6 +31,9 @@
         "loading": "Home is in the initial bundle; it never waits on anything.",
         "empty": "Count and Read always have at least one activity; only activities that exist are listed.",
         "error": "Home reads nothing that can fail."
+      },
+      "state_subjects": {
+        "default": "read"
       }
     },
     {
@@ -69,6 +72,11 @@
         "loading": "The lesson is fixed data in the bundle.",
         "empty": "A lesson always has five games.",
         "error": "Nothing on this screen can fail."
+      },
+      "state_subjects": {
+        "default": "read",
+        "start": "read",
+        "done": "read"
       }
     },
     {
@@ -76,7 +84,12 @@
       "kind": "page",
       "title": "Count the toys",
       "route": "/count/toys",
-      "requirements": ["L2-001", "L2-002", "L2-025", "L2-026"],
+      "requirements": [
+        "L2-001",
+        "L2-002",
+        "L2-025",
+        "L2-026"
+      ],
       "states": [
         "start",
         "default",
@@ -98,8 +111,20 @@
       "kind": "page",
       "title": "Count and write",
       "route": "/count/write",
-      "requirements": ["L2-003", "L2-004", "L2-025", "L2-026"],
-      "states": ["counting", "default", "written", "hint", "correct", "modelled"],
+      "requirements": [
+        "L2-003",
+        "L2-004",
+        "L2-025",
+        "L2-026"
+      ],
+      "states": [
+        "counting",
+        "default",
+        "written",
+        "hint",
+        "correct",
+        "modelled"
+      ],
       "prototype_frame": "tnYweeoJu9A6giLgvwYCdA",
       "subject": "count",
       "not_applicable": {
@@ -113,7 +138,10 @@
       "kind": "page",
       "title": "Which is bigger?",
       "route": "/count/compare",
-      "requirements": ["L2-005", "L2-025"],
+      "requirements": [
+        "L2-005",
+        "L2-025"
+      ],
       "states": [
         "default",
         "picked",
@@ -133,7 +161,10 @@
       "kind": "page",
       "title": "Rocket countdown",
       "route": "/count/countdown",
-      "requirements": ["L2-006", "L2-025"],
+      "requirements": [
+        "L2-006",
+        "L2-025"
+      ],
       "states": [
         "start",
         "default",
@@ -153,7 +184,10 @@
       "kind": "page",
       "title": "Skip-count",
       "route": "/count/skip",
-      "requirements": ["L2-007", "L2-025"],
+      "requirements": [
+        "L2-007",
+        "L2-025"
+      ],
       "states": [
         "start",
         "default",
@@ -174,7 +208,10 @@
       "kind": "page",
       "title": "Add together",
       "route": "/count/add",
-      "requirements": ["L2-008", "L2-025"],
+      "requirements": [
+        "L2-008",
+        "L2-025"
+      ],
       "states": [
         "start",
         "moon-turn",
@@ -196,7 +233,10 @@
       "kind": "page",
       "title": "Counting dance",
       "route": "/count/dance",
-      "requirements": ["L2-009", "L2-025"],
+      "requirements": [
+        "L2-009",
+        "L2-025"
+      ],
       "states": [
         "start",
         "default",
@@ -411,6 +451,12 @@
         "loading": "The questions are fixed data in the bundle.",
         "empty": "There are always four questions.",
         "error": "Nothing on this screen can fail."
+      },
+      "state_subjects": {
+        "default": "read",
+        "answered": "read",
+        "correct": "read",
+        "retry": "read"
       }
     },
     {
