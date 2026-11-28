@@ -20,3 +20,4 @@ export * from './lib/picture-pick/picture-pick';
 export * from './lib/compare/compare';
 export * from './lib/countdown/countdown';
 export * from './lib/number-line/number-line';
+export * from './lib/turn-sets/turn-sets';

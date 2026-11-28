@@ -1,0 +1,243 @@
+// Add together (ADR 0013). A short screen is a phone on its side: max-height 30rem.
+$short: '(max-height: 30rem)';
+$roomy: '(min-width: 40rem) and (min-height: 40rem)';
+
+:host {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.stage {
+  display: flex;
+  width: 100%;
+  max-width: var(--content-max);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+
+  @media #{$short} {
+    gap: var(--space-2);
+  }
+}
+
+// The two sets, side by side at every width.
+.players {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-2);
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-2xl);
+
+  // Whose turn it is: a ring, as well as the symbol and the spoken turn.
+  &[aria-current='step'] {
+    box-shadow: inset 0 0 0 var(--space-1) var(--color-fg);
+  }
+
+  @media #{$short} {
+    flex-direction: row;
+    align-items: center;
+    padding-block: var(--space-1);
+  }
+}
+
+.player--count {
+  background: var(--color-count-soft);
+}
+
+.player--reward {
+  background: var(--color-reward-soft);
+}
+
+.player__name {
+  display: flex;
+  margin: 0;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+
+  @media #{$roomy} {
+    font-size: var(--font-size-xl);
+  }
+}
+
+.player__adds {
+  color: var(--color-fg-muted);
+}
+
+.turn {
+  width: var(--size-7);
+  height: var(--size-7);
+  flex: none;
+  stroke: var(--color-fg);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.turn--star {
+  fill: var(--color-count-strong);
+}
+
+.turn--moon {
+  fill: var(--color-reward-strong);
+}
+
+.player__ducks {
+  display: grid;
+  min-height: var(--size-8);
+  flex: 1;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  gap: var(--space-1);
+
+  @media #{$short}, #{$roomy} {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  @media #{$short} {
+    min-height: var(--size-6);
+  }
+
+  @media #{$roomy} {
+    min-height: var(--size-12);
+  }
+}
+
+.picture {
+  display: block;
+  width: 100%;
+  max-height: var(--size-8);
+  object-fit: contain;
+  mix-blend-mode: var(--picture-blend);
+  user-select: none;
+  pointer-events: none;
+
+  @media #{$short} {
+    max-height: var(--size-6);
+  }
+
+  @media #{$roomy} {
+    max-height: var(--size-12);
+  }
+}
+
+.plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-fg-muted);
+  font-family: var(--font-read);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+
+  @media #{$roomy} {
+    font-size: var(--font-size-6xl);
+  }
+}
+
+// The sum, then + and − on a turn or the numerals once both sets are shown.
+.sum-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+
+  @media (min-width: 40rem), #{$short} {
+    flex-direction: row;
+    gap: var(--space-6);
+  }
+}
+
+.sum {
+  margin: 0;
+  font-family: var(--font-read);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+
+  @media #{$roomy} {
+    font-size: var(--font-size-5xl);
+  }
+}
+
+.sum__answer {
+  display: inline-block;
+  min-width: 1.6ch;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-count-strong);
+  text-align: center;
+}
+
+.sum__answer--right {
+  background: var(--color-success-soft);
+  color: var(--color-success-strong);
+}
+
+.turn-controls,
+.choices {
+  display: flex;
+  justify-content: center;
+  gap: var(--gap-targets);
+}
+
+.round-btn,
+.numeral {
+  --depth: var(--color-depth);
+  display: inline-flex;
+  width: var(--size-10);
+  height: var(--size-10);
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: var(--color-surface);
+  color: var(--color-fg);
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  touch-action: manipulation;
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.round-btn {
+  border-radius: var(--radius-full);
+
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+.icon {
+  width: var(--size-4);
+  height: var(--size-4);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.numeral {
+  border-radius: var(--radius-md);
+  font-family: var(--font-read);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+
+  &[aria-pressed='true'] {
+    --depth: var(--color-count-depth);
+    background: var(--color-count-strong);
+    color: var(--color-fg-on-strong);
+  }
+}

@@ -2,7 +2,7 @@ import type { RandomSource } from '@pibbo/api';
 import {
   addThing,
   checkTotal,
-  chooseAgain,
+  chooseTotalAgain,
   passTurn,
   pickTotal,
   startAddRound,
@@ -80,7 +80,7 @@ describe('totalChoices', () => {
   });
 });
 
-describe('pickTotal, checkTotal and chooseAgain', () => {
+describe('pickTotal, checkTotal and chooseTotalAgain', () => {
   it('only a numeral offered is picked, and only while choosing', () => {
     const r = played(3, 4);
     expect(pickTotal(r, 9)).toBe(r);
@@ -91,7 +91,7 @@ describe('pickTotal, checkTotal and chooseAgain', () => {
   it('a wrong total waits for Try again; the sets stay and nothing stays chosen (L2-008 #3)', () => {
     const wrong = checkTotal(pickTotal(played(3, 4), 6));
     expect(wrong).toEqual(expect.objectContaining({ phase: 'retry', wrong: 1 }));
-    expect(chooseAgain(wrong)).toEqual(
+    expect(chooseTotalAgain(wrong)).toEqual(
       expect.objectContaining({ phase: 'choosing', picked: null, sets: { star: 3, moon: 4 } }),
     );
   });

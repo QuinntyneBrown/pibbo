@@ -344,25 +344,28 @@ img { display: block; max-width: 100%; }
 .number-line__label--next { fill: var(--color-count-strong); }
 
 /* ---------- Add together ---------- */
-.players { display: grid; width: 100%; gap: var(--space-3); }
-@media (min-width: 40rem) { .players { grid-template-columns: 1fr auto 1fr; align-items: stretch; } }
+.players { display: grid; width: 100%; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: var(--space-2); }
 .player { display: flex; flex-direction: column; padding: var(--space-4); border-radius: var(--radius-2xl); }
 .player--count { background: var(--color-count-soft); }
 .player--reward { background: var(--color-reward-soft); }
 /* Whose turn it is: the turn symbol (a star, a moon) by shape and colour, and a ring on the
    player whose turn it is; never a name (L2-008, ADR 0013). */
 .player[aria-current="step"] { box-shadow: inset 0 0 0 var(--space-1) var(--color-fg); }
-.turn { display: inline-block; width: var(--size-8); height: var(--size-8); vertical-align: middle; stroke: var(--color-fg); stroke-width: 1.5; stroke-linejoin: round; }
+.turn { display: inline-block; flex: none; width: var(--size-7); height: var(--size-7); stroke: var(--color-fg); stroke-width: 1.5; stroke-linejoin: round; }
 .turn--star { fill: var(--color-count-strong); }
 .turn--moon { fill: var(--color-reward-strong); }
 .player__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
-.player__name { font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); }
+.player__name { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); white-space: nowrap; }
+/* + and − belong to the player whose turn it is, beside the sum; the other player has none (ADR 0013). */
+.turn-controls { display: flex; gap: var(--gap-targets); }
 .player__adds { color: var(--color-fg-muted); }
 .player__buttons { display: flex; gap: var(--gap-targets); }
 .round-btn { display: flex; width: var(--size-10); height: var(--size-10); align-items: center; justify-content: center; border: 0; border-radius: var(--radius-full); background: var(--color-surface); }
 .round-btn:disabled { opacity: 0.4; }
 .player__ducks { display: grid; min-height: var(--size-12); margin-top: var(--space-3); grid-template-columns: repeat(5, 1fr); align-items: center; gap: var(--space-1); }
 .player__ducks .picture { background: transparent; }
+@media (max-width: 39.99rem) { .player__ducks { min-height: var(--size-8); grid-template-columns: repeat(3, 1fr); } .plus { font-size: var(--font-size-3xl); } }
+@media (max-height: 30rem) { .player { flex-direction: row; align-items: center; } .player__ducks { min-height: var(--size-6); margin-top: 0; grid-template-columns: repeat(5, 1fr); } .player__ducks .picture { max-height: var(--size-6); } .sum-row { flex-direction: row; } }
 .plus { display: flex; align-items: center; justify-content: center; font-family: var(--font-read); font-size: var(--font-size-6xl); font-weight: var(--font-weight-bold); color: var(--color-fg-muted); }
 .sum-row { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
 @media (min-width: 40rem) { .sum-row { flex-direction: row; gap: var(--space-6); } }

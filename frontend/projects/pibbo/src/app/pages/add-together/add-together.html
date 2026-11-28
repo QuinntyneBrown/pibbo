@@ -1,0 +1,30 @@
+<pb-round-shell
+  title="Add together"
+  [instruction]="instruction()"
+  [mood]="mood()"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-turn-sets
+    [sets]="round().sets"
+    [turn]="turn()"
+    [most]="content.most"
+    [thing]="content.thing"
+    [choices]="round().choices"
+    [picked]="round().picked"
+    [locked]="round().phase !== 'choosing'"
+    [right]="round().phase === 'done'"
+    (added)="add($event)"
+    (took)="take($event)"
+    (chose)="pick($event)"
+  />
+  <pb-answer-bar
+    answer
+    [kind]="bar().kind"
+    [message]="bar().message"
+    [ready]="bar().ready"
+    (action)="action()"
+  />
+</pb-round-shell>

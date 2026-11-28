@@ -1,0 +1,82 @@
+<div class="stage">
+  <div class="players">
+    @for (player of players(); track player.id; let first = $first) {
+      @if (!first) {
+        <div class="plus" aria-hidden="true">+</div>
+      }
+      <div
+        [class]="'player player--' + player.tone + ' player--' + player.id"
+        [attr.aria-current]="turn() === player.id ? 'step' : null"
+      >
+        <p class="player__name">
+          <svg
+            [class]="'turn turn--' + player.id"
+            viewBox="0 0 24 24"
+            role="img"
+            [attr.aria-label]="player.label"
+          >
+            @if (player.id === 'star') {
+              <path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21.1l1.4-7L2 9.3l7-.8z" />
+            } @else {
+              <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" />
+            }
+          </svg>
+          <span class="player__adds">adds {{ player.count }}</span>
+        </p>
+        <div class="player__ducks">
+          @for (i of player.things; track i) {
+            <img class="picture" [src]="thing().picture" [alt]="thing().name" draggable="false" />
+          }
+        </div>
+      </div>
+    }
+  </div>
+  <div class="sum-row">
+    <p class="sum" aria-live="polite">
+      {{ sets().star }} + {{ sets().moon }} =
+      <span class="sum__answer" [class.sum__answer--right]="right()">{{ picked() ?? '?' }}</span>
+    </p>
+    @if (current(); as player) {
+      <div
+        [class]="'turn-controls turn-controls--' + player.id"
+        role="group"
+        [attr.aria-label]="player.label + '’s turn'"
+      >
+        <button
+          type="button"
+          class="round-btn"
+          [attr.aria-label]="player.label + ' takes one away'"
+          [disabled]="player.count === 0"
+          (pbTap)="took.emit(player.id)"
+        >
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /></svg>
+        </button>
+        <button
+          type="button"
+          class="round-btn"
+          [attr.aria-label]="player.label + ' adds one'"
+          [disabled]="player.count >= most()"
+          (pbTap)="added.emit(player.id)"
+        >
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14M12 5v14" />
+          </svg>
+        </button>
+      </div>
+    } @else if (choices().length > 0) {
+      <div class="choices" role="group" aria-label="How many altogether?">
+        @for (n of choices(); track n) {
+          <button
+            type="button"
+            class="numeral numeral--sm"
+            [attr.aria-pressed]="picked() === n"
+            [disabled]="locked()"
+            (pbTap)="chose.emit(n)"
+          >
+            {{ n }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>

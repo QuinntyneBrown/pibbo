@@ -99,6 +99,6 @@ export function checkTotal(round: AddRound): AddRound {
 }
 
 /** Try again: the same sets and choices, nothing chosen. */
-export function chooseAgain(round: AddRound): AddRound {
+export function chooseTotalAgain(round: AddRound): AddRound {
   return round.phase === 'retry' ? { ...round, phase: 'choosing', picked: null } : round;
 }

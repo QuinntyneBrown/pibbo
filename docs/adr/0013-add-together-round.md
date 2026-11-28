@@ -18,8 +18,9 @@ themselves. The design named `AddTogetherPage`, `TurnSetsComponent` (`pb-turnset
 1. **No names.** The players are a star (the Count colour) and a moon (the reward colour),
    drawn as shapes so colour is not the only carrier. The player whose turn it is has a ring
    (`aria-current="step"`), and the turn is spoken: "Star's turn. Add ducks to the pond."
-2. **Turns are taken in order.** The star adds first; only the player whose turn it is can
-   touch + and −. Each + adds one duck and speaks the new number of that set (one touch, one
+2. **Turns are taken in order.** The star adds first; only the player whose turn it is has
+   + and −, drawn beside the sum (`.turn-controls`), so the other player has nothing to touch
+   and a phone keeps both sets side by side without scrolling. Each + adds one duck and speaks the new number of that set (one touch, one
    number); − takes one away. Done passes the turn once the set has at least one duck; a set
    holds at most five. After the moon's Done, "How many altogether?" is spoken and shown, and
    the choices appear. The mocks gained a `moon-turn` state.
@@ -31,6 +32,8 @@ themselves. The design named `AddTogetherPage`, `TurnSetsComponent` (`pb-turnset
 5. **A right total** says and shows "3 and 4 make 7! Great teamwork.": brief praise for both,
    no winner, loser or score. Next starts a new round with empty sets; five rounds make a play.
 6. **The + and − are 64 px, 16 px apart** (`.round-btn`), to keep `AGENTS.md`'s 60 px rule.
+   The two sets stay side by side at every width, three ducks to a row on a phone held upright
+   and one row of five on its side, so the largest round (5 + 5) fits 360 × 640 and 640 × 360.
 7. **The round is a pure state machine in `@pibbo/domain/counting`** (`AddRound`: `turn`,
    `choosing`, `retry`, `done`) with `startAddRound`, `addThing`, `takeThing`, `passTurn`,
    `pickTotal`, `checkTotal` and `chooseAgain`.

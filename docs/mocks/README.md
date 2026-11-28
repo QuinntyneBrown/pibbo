@@ -118,8 +118,10 @@ prototype component (`ActivityShell` is `.shell`, `Chunky` is `.chunky`, `PairMa
   players "Maya" and "Dad"; Pibbo asks a child for nothing about themselves and `L2-008` #1
   shows a turn by a symbol and colour, never a name, so the players are a star and a moon
   (`.turn--star`, `.turn--moon`), and the player whose turn it is has a ring
-  (`.player[aria-current="step"]`). The + and − buttons (`.round-btn`) were 44 px, 8 px apart;
-  they are 64 px, 16 px apart. The turns are taken one after the other: `start` is the star's
+  (`.player[aria-current="step"]`). The + and − buttons (`.round-btn`) were 44 px, 8 px apart, on
+  both players at once; they are 64 px, 16 px apart, and only the player whose turn it is has
+  them, beside the sum (`.turn-controls`). The two sets stay side by side at every width, so
+  5 + 5 fits a 360 × 640 phone either way up. The turns are taken one after the other: `start` is the star's
   turn, the new `moon-turn` the moon's, each ended by Done, and the three choices appear only
   when both sets are shown (`default`). Home's Count group lists Add together (ADR 0013).
 

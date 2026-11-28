@@ -1,5 +1,5 @@
 <footer
-  [class]="'answer-bar answer-bar--' + (kind() === 'none' ? 'check' : kind())"
+  [class]="'answer-bar answer-bar--' + (kind() === 'none' || kind() === 'pass' ? 'check' : kind())"
   [attr.role]="message() ? 'status' : null"
 >
   @if (message()) {
@@ -33,6 +33,8 @@
           <path d="M3 3v5h5" />
         </svg>
         Try again
+      } @else if (kind() === 'pass') {
+        Done
       } @else {
         Check
       }

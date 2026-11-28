@@ -5,9 +5,9 @@ import { Tap } from '../tap/tap';
 /**
  * What the answer bar shows: Check, a right answer, a hint with Check, a hint with Try again
  * (`retry`), the modelled answer, or nothing to touch yet (`none`: a right touch moves straight
- * on, as in Rocket countdown).
+ * on, as in Rocket countdown), or Done to end a player's turn (`pass`, Add together).
  */
-export type AnswerBarKind = 'check' | 'right' | 'hint' | 'retry' | 'model' | 'none';
+export type AnswerBarKind = 'check' | 'right' | 'hint' | 'retry' | 'model' | 'none' | 'pass';
 
 /**
  * The bar under an activity (`.answer-bar`): Check while the child answers, then what
