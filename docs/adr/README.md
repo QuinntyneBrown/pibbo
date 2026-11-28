@@ -19,3 +19,4 @@
 | [0015](0015-letter-sounds-round.md) | Letter sounds: a pair match of letters and their sounds | Accepted |
 | [0016](0016-ci-runs-one-critical-path-per-feature.md) | CI runs one critical acceptance path per feature | Accepted |
 | [0017](0017-big-and-small-letters-round.md) | Big and small letters: a pair match of letter forms | Accepted |
+| [0018](0018-spell-by-sound-round.md) | Spell by sound: boxes, a letter bank and Check | Accepted |
