@@ -20,7 +20,8 @@ public class PibboApiFactory : WebApplicationFactory<Program>
     public static readonly string FixtureContentRoot =
         Path.Combine(AppContext.BaseDirectory, "Fixtures", "content");
 
-    private readonly Dictionary<string, string?> _settings = new()
+    private readonly Dictionary<string, string?> _settings = new(
+        AdminTokens.Settings().Select(setting => new KeyValuePair<string, string?>(setting.Key, setting.Value)))
     {
         ["Content:Root"] = FixtureContentRoot,
     };
@@ -58,6 +59,18 @@ public class PibboApiFactory : WebApplicationFactory<Program>
             AllowAutoRedirect = false,
             HandleCookies = false,
         });
+
+    /// <summary>An HTTPS client that sends the given bearer token.</summary>
+    public HttpClient CreateAdminClient(string? token)
+    {
+        var client = CreateHttpsClient();
+        if (token is not null)
+        {
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        }
+
+        return client;
+    }
 
     public HttpClient CreateHttpClient() =>
         CreateClient(new WebApplicationFactoryClientOptions

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Pibbo.Api;
+using Pibbo.Api.Administration;
 using Pibbo.Api.Endpoints;
 using Pibbo.Api.Health;
 using Pibbo.Api.Observability;
@@ -20,6 +21,7 @@ builder.Services.AddExceptionHandler<UnhandledExceptionHandler>();
 builder.Services.AddPibboOpenApi();
 builder.Services.AddContent(builder.Configuration, builder.Environment);
 builder.Services.AddHardening(builder.Configuration);
+builder.Services.AddContentAdministration();
 builder.Services.AddHealth();
 builder.Services.AddPibboMetrics();
 
@@ -37,11 +39,14 @@ app.UseRateLimiter();
 app.UseMiddleware<ReadOnlyMiddleware>();
 app.UseCors();
 app.UseContentAssets();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapHealth();
 app.MapPibboMetrics();
 app.MapOpenApi();
 app.MapContentEndpoints();
+app.MapAdministrationEndpoints();
 
 app.Run();
 

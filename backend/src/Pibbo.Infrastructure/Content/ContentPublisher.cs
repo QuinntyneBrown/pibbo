@@ -1,5 +1,8 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Pibbo.Application.Content;
+using Pibbo.Domain.Content;
 using Pibbo.Infrastructure.Persistence;
 
 namespace Pibbo.Infrastructure.Content;
@@ -11,13 +14,19 @@ namespace Pibbo.Infrastructure.Content;
 /// </summary>
 public sealed partial class ContentPublisher(ContentStoreOptions options, ILogger<ContentPublisher> log) : IDisposable
 {
+    public const string PublishedByFile = "content-file";
+
     private readonly SemaphoreSlim _gate = new(1, 1);
     private bool _schemaReady;
     private (DateTime Written, long Length)? _stamp;
 
     public void Dispose() => _gate.Dispose();
 
-    public async Task SyncAsync(ContentDbContext database, CancellationToken cancellationToken)
+    public async Task SyncAsync(
+        ContentDbContext database,
+        IValidator<ContentSet> validator,
+        IContentVersions versions,
+        CancellationToken cancellationToken)
     {
         await _gate.WaitAsync(cancellationToken);
         try
@@ -49,7 +58,7 @@ public sealed partial class ContentPublisher(ContentStoreOptions options, ILogge
                 return;
             }
 
-            await PublishAsync(database, cancellationToken);
+            await PublishAsync(validator, versions, cancellationToken);
             _stamp = stamp;
         }
         finally
@@ -58,53 +67,31 @@ public sealed partial class ContentPublisher(ContentStoreOptions options, ILogge
         }
     }
 
-    private async Task PublishAsync(ContentDbContext database, CancellationToken cancellationToken)
+    private async Task PublishAsync(IValidator<ContentSet> validator, IContentVersions versions, CancellationToken cancellationToken)
     {
         var loaded = await ContentFile.LoadAsync(options, cancellationToken);
-        if (loaded.Content is not { } content || loaded.ETag is not { } eTag)
+        if (loaded.Content is not { } content)
         {
-            NotPublished(log, string.Join(' ', loaded.Problems));
+            NotPublished(log, loaded.Problem ?? "The content file is empty.");
             return;
         }
 
-        var existing = await database.Versions.AsNoTracking()
-            .FirstOrDefaultAsync(version => version.Version == content.Version, cancellationToken);
-        if (existing is not null)
+        var result = await validator.ValidateAsync(content, cancellationToken);
+        if (!result.IsValid)
         {
-            if (existing.ETag != eTag)
-            {
-                NotPublished(log, $"Version '{content.Version}' is already published with other content. Give the change a new version.");
-            }
-
+            NotPublished(log, string.Join(' ', result.Errors.Select(error => $"{error.PropertyName}: {error.ErrorMessage}")));
             return;
         }
 
-        database.Versions.Add(new ContentVersionRow
+        var outcome = await versions.PublishAsync(content, PublishedByFile, cancellationToken);
+        if (outcome.Published)
         {
-            Version = content.Version,
-            ETag = eTag,
-            Activities = content.Activities.Select((activity, position) => new ActivityRow
-            {
-                Position = position,
-                ActivityId = activity.Id,
-                Group = activity.Group,
-                Name = activity.Name,
-                Glyph = activity.Glyph,
-                Recording = activity.Recording,
-                Pictures = [.. activity.Pictures],
-                Recordings = [.. activity.Recordings],
-            }).ToList(),
-            Lessons = content.Lessons.Select((lesson, position) => new LessonRow
-            {
-                Position = position,
-                LessonId = lesson.Id,
-                Name = lesson.Name,
-                Recording = lesson.Recording,
-                Activities = [.. lesson.Activities],
-            }).ToList(),
-        });
-        await database.SaveChangesAsync(cancellationToken);
-        Published(log, content.Version, content.Activities.Count, content.Lessons.Count);
+            Published(log, content.Version, content.Activities.Count, content.Lessons.Count);
+        }
+        else if (!outcome.SameContent)
+        {
+            NotPublished(log, $"Version '{content.Version}' is already published with other content. Give the change a new version.");
+        }
     }
 
     [LoggerMessage(

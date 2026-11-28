@@ -1,5 +1,6 @@
 using FluentValidation;
 using MediatR;
+using Pibbo.Application.Content.Validation;
 using Pibbo.Domain.Content;
 
 namespace Pibbo.Application.Content.Queries;
@@ -9,7 +10,7 @@ public sealed record GetLessonQuery(string Id) : IRequest<ContentResult<Lesson>>
 
 public sealed class GetLessonQueryValidator : AbstractValidator<GetLessonQuery>
 {
-    public GetLessonQueryValidator() => RuleFor(query => query.Id).ContentId();
+    public GetLessonQueryValidator() => RuleFor(query => query.Id).ContentId().OverridePropertyName("id");
 }
 
 public sealed class GetLessonQueryHandler(IContentStore store)

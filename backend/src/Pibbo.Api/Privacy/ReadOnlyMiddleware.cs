@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Pibbo.Api.Administration;
 
 namespace Pibbo.Api.Privacy;
 
 /// <summary>
-/// The service is read-only: anything but GET and HEAD is answered 405 before it reaches an
-/// endpoint, so nothing a child did can be sent here. OPTIONS passes, for a CORS preflight.
+/// The public service is read-only: anything but GET and HEAD is answered 405 before it
+/// reaches an endpoint, so nothing a child did can be sent here. OPTIONS passes, for a CORS
+/// preflight. Only the administration endpoints, behind a staff token, accept writes.
 /// </summary>
 public sealed class ReadOnlyMiddleware(RequestDelegate next, IProblemDetailsService problems)
 {
@@ -13,7 +15,8 @@ public sealed class ReadOnlyMiddleware(RequestDelegate next, IProblemDetailsServ
     public async Task InvokeAsync(HttpContext context)
     {
         var method = context.Request.Method;
-        if (HttpMethods.IsGet(method) || HttpMethods.IsHead(method) || HttpMethods.IsOptions(method))
+        if (HttpMethods.IsGet(method) || HttpMethods.IsHead(method) || HttpMethods.IsOptions(method)
+            || AdministrationServices.IsAdministration(context.Request.Path))
         {
             await next(context);
             return;

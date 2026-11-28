@@ -7,7 +7,7 @@ namespace Pibbo.Infrastructure.Persistence;
 public sealed class ContentDbContext(DbContextOptions<ContentDbContext> options) : DbContext(options)
 {
     private const int MaxIdLength = 64;
-    private const int MaxPathLength = 256;
+    private const int MaxPathLength = Domain.Assets.AssetPath.MaxLength;
 
     public DbSet<ContentVersionRow> Versions => Set<ContentVersionRow>();
 
@@ -20,8 +20,9 @@ public sealed class ContentDbContext(DbContextOptions<ContentDbContext> options)
         modelBuilder.Entity<ContentVersionRow>(version =>
         {
             version.ToTable("content_versions");
-            version.Property(row => row.Version).HasMaxLength(ContentCheck.MaxTextLength);
+            version.Property(row => row.Version).HasMaxLength(ContentText.MaxLength);
             version.Property(row => row.ETag).HasMaxLength(MaxIdLength);
+            version.Property(row => row.PublishedBy).HasMaxLength(MaxIdLength * 2);
             version.HasIndex(row => row.Version).IsUnique();
             version.HasMany(row => row.Activities).WithOne().HasForeignKey(row => row.ContentVersionId);
             version.HasMany(row => row.Lessons).WithOne().HasForeignKey(row => row.ContentVersionId);
@@ -32,8 +33,8 @@ public sealed class ContentDbContext(DbContextOptions<ContentDbContext> options)
             activity.ToTable("activities");
             activity.Property(row => row.ActivityId).HasMaxLength(MaxIdLength);
             activity.Property(row => row.Group).HasMaxLength(MaxIdLength);
-            activity.Property(row => row.Name).HasMaxLength(ContentCheck.MaxTextLength);
-            activity.Property(row => row.Glyph).HasMaxLength(ContentCheck.MaxTextLength);
+            activity.Property(row => row.Name).HasMaxLength(ContentText.MaxLength);
+            activity.Property(row => row.Glyph).HasMaxLength(ContentText.MaxLength);
             activity.Property(row => row.Recording).HasMaxLength(MaxPathLength);
             activity.HasIndex(row => new { row.ContentVersionId, row.ActivityId }).IsUnique();
         });
@@ -42,7 +43,7 @@ public sealed class ContentDbContext(DbContextOptions<ContentDbContext> options)
         {
             lesson.ToTable("lessons");
             lesson.Property(row => row.LessonId).HasMaxLength(MaxIdLength);
-            lesson.Property(row => row.Name).HasMaxLength(ContentCheck.MaxTextLength);
+            lesson.Property(row => row.Name).HasMaxLength(ContentText.MaxLength);
             lesson.Property(row => row.Recording).HasMaxLength(MaxPathLength);
             lesson.HasIndex(row => new { row.ContentVersionId, row.LessonId }).IsUnique();
         });

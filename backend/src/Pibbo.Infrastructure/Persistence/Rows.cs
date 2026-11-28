@@ -9,6 +9,10 @@ public sealed class ContentVersionRow
 
     public required string ETag { get; set; }
 
+    /// <summary>Who published it: the content file, or the staff member's id from their token.
+    /// Never anything about a child.</summary>
+    public required string PublishedBy { get; set; }
+
     public List<ActivityRow> Activities { get; set; } = [];
 
     public List<LessonRow> Lessons { get; set; } = [];

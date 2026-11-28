@@ -80,6 +80,11 @@ namespace Pibbo.Infrastructure.Persistence.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PublishedBy")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Version")
                         .IsRequired()
                         .HasMaxLength(80)

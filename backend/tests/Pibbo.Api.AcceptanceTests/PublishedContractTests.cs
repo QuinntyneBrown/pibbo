@@ -15,12 +15,14 @@ public sealed class PublishedContractTests : IDisposable
     // #5 (the backend's half) Given the OpenAPI document, when the build runs, then it fails if
     //    the API has drifted from the published document a client is generated from.
     //    To publish a deliberate change: PIBBO_UPDATE_OPENAPI=1 dotnet test
-    [Fact]
-    public async Task Given_the_published_OpenAPI_document_When_the_API_is_built_Then_it_has_not_drifted()
+    [Theory]
+    [InlineData("v1")]
+    [InlineData("admin")]
+    public async Task Given_a_published_OpenAPI_document_When_the_API_is_built_Then_it_has_not_drifted(string document)
     {
-        var served = JsonNode.Parse(await _factory.CreateHttpsClient().GetStringAsync("/openapi/v1.json"))!
+        var served = JsonNode.Parse(await _factory.CreateHttpsClient().GetStringAsync($"/openapi/{document}.json"))!
             .ToJsonString(new JsonSerializerOptions { WriteIndented = true }) + "\n";
-        var published = PublishedDocumentPath();
+        var published = PublishedDocumentPath(document);
 
         if (Environment.GetEnvironmentVariable("PIBBO_UPDATE_OPENAPI") == "1")
         {
@@ -47,6 +49,17 @@ public sealed class PublishedContractTests : IDisposable
             operations.Select(operation => operation.Operation.GetProperty("operationId").GetString()!).Order());
     }
 
-    private static string PublishedDocumentPath([CallerFilePath] string here = "") =>
-        Path.GetFullPath(Path.Combine(Path.GetDirectoryName(here)!, "..", "..", "openapi", "v1.json"));
+    [Fact]
+    public async Task Given_the_admin_OpenAPI_document_When_read_Then_every_operation_needs_a_bearer_token()
+    {
+        var document = JsonDocument.Parse(await _factory.CreateHttpsClient().GetStringAsync("/openapi/admin.json")).RootElement;
+
+        var paths = document.GetProperty("paths").EnumerateObject().Select(path => path.Name).ToArray();
+        Assert.Equal(new[] { "/api/v1/admin/assets/{folder}/{path}", "/api/v1/admin/content/versions" }, paths.Order());
+        Assert.Equal("bearer", document.GetProperty("components").GetProperty("securitySchemes").GetProperty("Bearer").GetProperty("scheme").GetString());
+        Assert.True(document.GetProperty("security")[0].TryGetProperty("Bearer", out _));
+    }
+
+    private static string PublishedDocumentPath(string document, [CallerFilePath] string here = "") =>
+        Path.GetFullPath(Path.Combine(Path.GetDirectoryName(here)!, "..", "..", "openapi", $"{document}.json"));
 }

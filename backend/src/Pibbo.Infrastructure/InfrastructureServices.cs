@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Pibbo.Application.Assets;
 using Pibbo.Application.Content;
+using Pibbo.Infrastructure.Assets;
 using Pibbo.Infrastructure.Content;
 using Pibbo.Infrastructure.Persistence;
 
@@ -19,6 +21,8 @@ public static class InfrastructureServices
         services.AddSingleton<ContentPublisher>();
         services.AddScoped<EfContentStore>();
         services.AddScoped<IContentStore>(provider => provider.GetRequiredService<EfContentStore>());
+        services.AddScoped<IContentVersions, ContentVersionWriter>();
+        services.AddSingleton<IAssetStore, FileAssetStore>();
         return services;
     }
 }

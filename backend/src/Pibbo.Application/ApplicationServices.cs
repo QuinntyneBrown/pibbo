@@ -11,6 +11,7 @@ public static class ApplicationServices
     {
         var assembly = typeof(ApplicationServices).Assembly;
         services.AddValidatorsFromAssembly(assembly);
+        services.AddScoped<Content.Validation.ContentSetValidator>();
         services.AddMediatR(mediatr =>
         {
             mediatr.RegisterServicesFromAssembly(assembly);

@@ -1,4 +1,5 @@
 using System.Data.Common;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pibbo.Application.Content;
@@ -11,13 +12,15 @@ namespace Pibbo.Infrastructure.Content;
 public sealed partial class EfContentStore(
     ContentDbContext database,
     ContentPublisher publisher,
+    IValidator<ContentSet> validator,
+    IContentVersions versions,
     ILogger<EfContentStore> log) : IContentStore
 {
     public async Task<PublishedVersion?> CurrentVersionAsync(CancellationToken cancellationToken)
     {
         try
         {
-            await publisher.SyncAsync(database, cancellationToken);
+            await publisher.SyncAsync(database, validator, versions, cancellationToken);
             return await database.Versions.AsNoTracking()
                 .OrderByDescending(version => version.Id)
                 .Select(version => new PublishedVersion(version.Version, version.ETag))
