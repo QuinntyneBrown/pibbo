@@ -12,21 +12,32 @@ skinparam class {
 title Class structure — Read longer words by syllable
 
 interface AudioPlayer <<token AUDIO_PLAYER>> {
-  +play(recordingId: string): Promise<PlayOutcome>
+  +play(recording: string): Promise<PlayOutcome>
   +stop(): void
 }
-interface RandomSource <<token RANDOM_SOURCE>> {
-  +next(): number
-}
-interface RoundFeedback <<token ROUND_FEEDBACK>> {
-  +praise(): void
-  +hint(h: Hint): void
-}
 
-class SyllableRound {
-  +word: Word
-  +chunks: Word[]
-  +readChunks: ReadonlySet<number>
+class Sound {
+  +letters: string
+  +shown: string
+  +recording: string
 }
-SyllableRound "1" *-- "2" Word
+class Syllable {
+  +sounds: Sound[]
+}
+class Word {
+  +word: string
+  +sounds: Sound[]
+  +syllables?: Syllable[]
+  +picture: string
+  +recording: string
+}
+class SoundOutRound {
+  +phase: SoundOutPhase
+  +word: Word
+  +heard: boolean[]
+}
+Sound <|-- Syllable
+Syllable *-- "1..*" Sound
+Word *-- "0..4" Syllable
+SoundOutRound --> Word
 @enduml

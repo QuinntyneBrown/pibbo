@@ -1,4 +1,4 @@
-<div [class]="'shell shell--' + group()">
+<div [class]="'shell shell--' + group()" [class.shell--fit]="fit()">
   <header class="shell__top">
     <button
       type="button"
@@ -53,5 +53,7 @@
     <h1 class="visually-hidden">{{ title() }}</h1>
     <ng-content />
   </main>
-  <ng-content select="[answer]" />
+  <div class="shell__answer">
+    <ng-content select="[answer]" />
+  </div>
 </div>

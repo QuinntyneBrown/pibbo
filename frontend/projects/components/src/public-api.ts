@@ -25,3 +25,4 @@ export * from './lib/dance/dance';
 export * from './lib/pairs/pairs';
 export * from './lib/spell-boxes/spell-boxes';
 export * from './lib/silent-e/silent-e';
+export * from './lib/rule/rule';

@@ -5,7 +5,7 @@ import { SoundItOutPage } from '../pages/sound-it-out.page';
 const sound = (s: string) => `/recordings/sounds/${s}.wav`;
 
 /** A seed whose first round is "stop" (the cast of the mock, not a rule). */
-const STOP = 20;
+const STOP = 2;
 
 test.describe('Sound it out: adjacent consonants are each their own sound', () => {
   test.use({ seed: STOP });

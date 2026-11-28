@@ -84,9 +84,38 @@ export interface SoundOutRound {
   readonly eAdded: boolean | null;
 }
 
-/** The sounds a round shows: the word without its e until the e is added (L2-016). */
+/** A word's tiles in order: a longer word's syllables (L2-017), otherwise its sounds. */
+export function wordTiles(word: Word): readonly Sound[] {
+  return word.syllables ?? word.sounds;
+}
+
+/** The tiles a round shows: the word without its e until the e is added (L2-016). */
 export function shownSounds(round: SoundOutRound): readonly Sound[] {
-  return round.eAdded === false ? round.word.withoutE!.sounds : round.word.sounds;
+  return round.eAdded === false ? round.word.withoutE!.sounds : wordTiles(round.word);
+}
+
+/** An instruction of several recordings: its text as shown, and what to play in order. */
+export interface SpokenInstruction {
+  readonly text: string;
+  readonly recordings: readonly string[];
+}
+
+/**
+ * What a longer word asks while it is read (L2-017 #1): "Tap", the next syllable and "and
+ * clap it", as text and as recordings; null for any other word or once every syllable is read.
+ */
+export function syllableAsk(
+  round: SoundOutRound,
+  before: { readonly text: string; readonly recording: string },
+  after: { readonly text: string; readonly recording: string },
+): SpokenInstruction | null {
+  const next = nextLetter(round);
+  const syllable = next === null ? undefined : round.word.syllables?.[next];
+  if (round.phase !== 'sounding' || !syllable) return null;
+  return {
+    text: `${before.text} “${syllable.letters}” ${after.text}`,
+    recordings: [before.recording, syllable.recording, after.recording],
+  };
 }
 
 function shuffled<T>(random: RandomSource, items: readonly T[]): T[] {
@@ -118,11 +147,12 @@ export function startSoundOutRound(
   // A silent-e word offers the picture of the word without its e among its pictures (#3).
   const offered = word.withoutE ? [word.withoutE, others[0]!] : others;
   const pictures = shuffled(random, [word, ...offered]);
-  const pair = adjacentConsonants(word);
+  // A longer word is read by syllable, so it asks no first-two-sounds question.
+  const pair = word.syllables ? null : adjacentConsonants(word);
   return {
     phase: word.withoutE ? 'magic-e' : 'sounding',
     word,
-    heard: word.sounds.map(() => false),
+    heard: wordTiles(word).map(() => false),
     pictures,
     chosen: null,
     wrong: 0,
@@ -160,7 +190,19 @@ export function touchLetter(round: SoundOutRound, index: number): LetterResult {
   if (round.phase !== 'sounding' || index !== nextLetter(round)) return { round, spoken: null };
   const heard = round.heard.map((h, i) => h || i === index);
   const phase = heard.every(Boolean) ? 'ready' : 'sounding';
-  return { round: { ...round, heard, phase }, spoken: round.word.sounds[index]!.recording };
+  return { round: { ...round, heard, phase }, spoken: wordTiles(round.word)[index]!.recording };
+}
+
+/**
+ * What a touch on a tile plays, the tile lit throughout: its one recording, or for a longer
+ * word's syllable (L2-017 #1) each of its sounds and then the syllable, sounded out and blended.
+ */
+export function soundingPlan(word: Word, index: number): PlaybackStep[] {
+  const syllable = word.syllables?.[index];
+  const recordings = syllable
+    ? [...syllable.sounds.map((s) => s.recording), syllable.recording]
+    : [wordTiles(word)[index]!.recording];
+  return recordings.map((recording) => ({ recording, letter: index }));
 }
 
 /**
@@ -180,10 +222,13 @@ export function toggleSilentE(round: SoundOutRound): LetterResult {
   };
 }
 
-/** Blending (L2-012 #2): each sound again, back to back, each letter lit, then the word. */
+/**
+ * Blending (L2-012 #2): each tile's recording again, back to back, each tile lit, then the
+ * word. A longer word blends its syllables, not its single sounds (L2-017 #2).
+ */
 export function blendPlan(word: Word): PlaybackStep[] {
   return [
-    ...word.sounds.map((s, letter) => ({ recording: s.recording, letter })),
+    ...wordTiles(word).map((s, letter) => ({ recording: s.recording, letter })),
     { recording: word.recording, letter: null },
   ];
 }
@@ -263,6 +308,7 @@ export function roundAssets(round: SoundOutRound): string[] {
     ...new Set([
       ...round.pictures.map((w) => w.picture),
       ...round.word.sounds.map((s) => s.recording),
+      ...(round.word.syllables ?? []).map((s) => s.recording),
       round.word.recording,
       ...(round.word.withoutE ? [round.word.withoutE.recording] : []),
     ]),

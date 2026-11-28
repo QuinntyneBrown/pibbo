@@ -1,0 +1,146 @@
+// Traces to: L2-017
+import { test, expect } from '../fixtures/test';
+import { SoundItOutPage } from '../pages/sound-it-out.page';
+
+const word = (w: string) => `/recordings/words/${w}.wav`;
+const sound = (s: string) => `/recordings/sounds/${s}.wav`;
+const read_ = (line: string) => `/recordings/read/${line}.wav`;
+const SET = '/recordings/syllables/set.wav';
+
+/** "Tap", the syllable, "and clap it". */
+const ask = (syllable: string) => [read_('tap'), syllable, read_('and-clap-it')];
+
+/** A seed whose first round is "sunset" (the cast of the mock, not a rule). */
+const SUNSET = 4;
+
+test.describe('Sound it out: a longer word read by syllable', () => {
+  test.use({ seed: SUNSET });
+
+  test('Given a longer-word round, when it is shown, then "sunset" appears as [sun][set] under its rule, and "Tap “sun” and clap it." is spoken and shown', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+
+    await expect.poll(() => read.tileLetters()).toEqual(['sun', 'set']);
+    await expect(read.rule).toHaveText('sun · set Read one beat at a time');
+    await expect(read.instruction).toHaveText('Tap “sun” and clap it.');
+    await expect(read.instructionPicture).toBeVisible();
+    await expect(read.letter(0)).toHaveClass(/tile--next/);
+    await expect(read.letter(1)).toBeDisabled();
+    await expect(read.shownSounds).toHaveCount(0);
+    await expect(read.blend).toBeDisabled();
+    await expect.poll(async () => (await spoken.recordings()).slice(-3)).toEqual(ask(word('sun')));
+    expect(await read.scrolls()).toBe(false);
+    const asked = (await spoken.recordings()).length;
+
+    await read.touch(read.replay);
+
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(asked))
+      .toEqual(ask(word('sun')));
+  });
+
+  test('Given "sunset" shown as [sun][set], when the child touches [sun], then "sun" is sounded out and blended; then [set] likewise @critical', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    await expect.poll(async () => (await spoken.recordings()).slice(-3)).toEqual(ask(word('sun')));
+    let before = (await spoken.recordings()).length;
+
+    await read.touch(read.letter(0));
+
+    await expect(read.letter(0)).toHaveClass(/tile--heard/);
+    await expect(read.letter(0)).toHaveAttribute('aria-label', 'sun, says clap 1');
+    await expect(read.shownSounds).toHaveText(['clap 1']);
+    await expect(read.letter(1)).toHaveClass(/tile--next/);
+    await expect(read.instruction).toHaveText('Tap “set” and clap it.');
+    await expect(read.blendFill).toHaveClass(/blend__fill--50/);
+    await expect(read.blend).toBeDisabled();
+    // Its sounds, then the syllable; only then is the next one asked for.
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(before))
+      .toEqual([sound('s'), sound('u'), sound('n'), word('sun'), ...ask(SET)]);
+    before = (await spoken.recordings()).length;
+
+    await read.touch(read.letter(1));
+
+    await expect(read.letter(1)).toHaveAttribute('aria-label', 'set, says clap 2');
+    await expect(read.shownSounds).toHaveText(['clap 1', 'clap 2']);
+    await expect(read.blendFill).toHaveClass(/blend__fill--100/);
+    await expect(read.blend).toBeEnabled();
+    await expect(read.instruction).toHaveText('Now say the sounds fast to read the word.');
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(before))
+      .toEqual([sound('s'), sound('e'), sound('t'), SET, read_('say-them-fast')]);
+  });
+
+  test('Given both syllables read, when the child touches blend, then "sunset" is spoken and its picture is highlighted', async ({
+    page,
+    spoken,
+  }) => {
+    const read = new SoundItOutPage(page);
+    await read.openFromHome();
+    await read.soundAll();
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(read_('say-them-fast'));
+    const blended = (await spoken.recordings()).length;
+
+    await read.touch(read.blend);
+
+    await expect(read.instruction).toHaveText('Which picture is “sunset”?');
+    await expect(read.pictures).toHaveCount(3);
+    // The syllables, then the word, then the question.
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(blended))
+      .toEqual([word('sun'), SET, word('sunset'), read_('which-picture'), word('sunset')]);
+    await expect(read.rule).toHaveText('sun · set Read one beat at a time');
+    await expect(read.shownSounds).toHaveText(['clap 1', 'clap 2']);
+
+    await read.answer('sunset');
+
+    await expect(read.rightPicture).toHaveCount(1);
+    await expect(read.picture('sunset')).toHaveClass(/pick__option--right/);
+    await expect(read.message).toHaveText('You read “sunset”!');
+    await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(word('sunset'));
+  });
+});
+
+for (const viewport of [
+  { width: 320, height: 640 },
+  { width: 360, height: 640 },
+  { width: 640, height: 360 },
+]) {
+  test.describe(`Sound it out: a two-syllable word fits at ${viewport.width} x ${viewport.height}`, () => {
+    test.use({ seed: SUNSET, viewport });
+
+    test('Given a two-syllable word, when shown, then both syllables fit on one line without scrolling or truncation', async ({
+      page,
+    }) => {
+      const read = new SoundItOutPage(page);
+      await read.openFromHome();
+      await expect.poll(() => read.tileLetters()).toEqual(['sun', 'set']);
+
+      const fits = async () => {
+        const boxes = await read.tileBoxes();
+        expect(new Set(boxes.map((b) => Math.round(b.y))).size).toBe(1);
+        for (const b of boxes) {
+          expect(b.width).toBeGreaterThanOrEqual(60);
+          expect(b.height).toBeGreaterThanOrEqual(60);
+          expect(b.x).toBeGreaterThanOrEqual(0);
+          expect(b.x + b.width).toBeLessThanOrEqual(viewport.width);
+        }
+        expect(await read.truncatedTiles()).toBe(0);
+        expect(await read.scrolls()).toBe(false);
+        expect(await read.hiddenUnderAnswerBar()).toEqual([]);
+      };
+      await fits();
+
+      // And with the pictures offered.
+      await read.soundAndBlend();
+      await fits();
+    });
+  });
+}

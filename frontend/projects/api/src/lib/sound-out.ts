@@ -10,6 +10,15 @@ export interface Sound {
   readonly recording: string;
 }
 
+/**
+ * One syllable of a longer word (L2-017): a tile like a sound's, whose `letters` are the
+ * syllable ("sun"), whose `shown` is its caption ("clap 1") and whose recording says it, with
+ * the sounds that spell it.
+ */
+export interface Syllable extends Sound {
+  readonly sounds: readonly Sound[];
+}
+
 /** A word Sound Out teaches: its sounds in order, its picture and its recording. */
 export interface Word {
   readonly word: string;
@@ -21,6 +30,8 @@ export interface Word {
    * word's own sounds are what it says with the e added, the e making no sound of its own.
    */
   readonly withoutE?: Word;
+  /** A longer word (L2-017): its syllables in order, one tile each. `sounds` is all of theirs. */
+  readonly syllables?: readonly Syllable[];
 }
 
 /** One step of a plan of recordings: what to play, and which letter to light while it plays. */

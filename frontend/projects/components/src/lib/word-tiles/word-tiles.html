@@ -1,5 +1,6 @@
 <div
   class="tiles"
+  [class.tiles--beats]="beats()"
   [class.tiles--long]="sounds().length + (quietE() === null ? 0 : 1) > 3"
   role="group"
   aria-label="The sounds in the word"

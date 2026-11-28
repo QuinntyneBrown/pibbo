@@ -26,6 +26,12 @@ export class RoundShell {
   /** Rounds finished so far, out of `rounds`. */
   readonly done = input(0);
   readonly rounds = input(5);
+  /**
+   * Whether the shell gives up room on a short screen, as the mocks draw it (`shell--fit`): a
+   * smaller prompt on a short upright phone, and on a phone on its side the prompt beside the
+   * way out and the progress bar.
+   */
+  readonly fit = input(false);
 
   readonly leave = output<void>();
   readonly replay = output<void>();

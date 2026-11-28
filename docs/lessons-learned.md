@@ -624,6 +624,43 @@ One entry per journey, newest last. Before a journey, read these and apply the o
   responsive mocks and journey 26.
 - Tag the critical path in the same change (J11 #4): adding the e is `@critical`.
 
+## Journey 17: Read longer words by syllable
+
+**What slowed it**
+
+- The checkout had no `node_modules`; `npm run build` failed until `npm ci`.
+- A ninth word and the new sound e moved the seeds again: the ship, stop and cape specs took
+  new ones, found offline.
+- The prompt's slices left out the narrow-width criterion (`L2-017` #3). Its spec passed the
+  tiles on one line and nothing scrolling, yet Read it fast was under the answer bar: only the
+  check against the answer bar's box found it. It appears only once the longer "Now say the
+  sounds fast" prompt wraps, so a check of the opening state alone would have missed it.
+- The fix needed the mocks' compact shell, which the app had never built. The same overlap
+  is there for ordinary words ("boat" at 320 x 640 and 640 x 360) and is left unfixed.
+- `round-shell.scss` is now 3.94 kB, 60 bytes under its 4 kB error budget.
+- A stray `rm` of a temp path in a long shell command was blocked by the safety check, so
+  none of the command ran.
+
+**New lessons**
+
+1. Check a layout in every phase of a round: a longer instruction moves the whole game down.
+2. Keep the layout helper (`hiddenUnderAnswerBar`) in the page object and assert it wherever
+   a spec asserts that nothing scrolls.
+3. Split `round-shell.scss` before the next rule is added to it.
+4. Keep a shell command to one job; one refused part stops the rest.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1, J7 to J16): its script settled that blending goes on to the pictures,
+  which the requirement did not say.
+- A last control against the answer bar, not only scrolling (J10 #2): it found the overlap.
+- Recompute seeds offline (J14 #2): one command gave all of them.
+- Whatever is shown beside a question must not be its answer (J16 #3): the picking state shows
+  only the syllables and the rule.
+- Read the acceptance criteria, not only the slices (J15 #1): criterion 3 was found there.
+- Build before proving a failure (J8 #1): each slice's spec failed for the expected reason.
+- Tag the critical path in the same change (J11 #4): reading the two syllables is `@critical`.
+
 ## Fix: the e2e network guard reported requests as unanswered now and then
 
 **What slowed it**
