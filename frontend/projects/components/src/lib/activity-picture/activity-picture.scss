@@ -48,12 +48,12 @@
 
 .game-card--read .game-card__glyph {
   background: var(--color-read-soft);
-  color: var(--color-read-strong);
+  color: var(--color-read-fg);
 }
 
 .game-card--count .game-card__glyph {
   background: var(--color-count-soft);
-  color: var(--color-count-strong);
+  color: var(--color-count-fg);
 }
 
 .game-card__body {

@@ -3,40 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pibbo foundations</title>
-<link rel="stylesheet" href="../../mocks/assets/tokens.css">
-<style>
-  body { margin: 0; padding: var(--space-6) var(--layout-margin); background: var(--color-bg); color: var(--color-fg); font-family: var(--font-display); }
-  h1 { margin: 0 0 var(--space-6); } h2 { margin: var(--space-8) 0 var(--space-4); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: var(--space-3); }
-  .swatch { border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface); font-size: var(--font-size-sm); }
-  .swatch__chip { height: 4rem; }
-  .swatch__name { padding: var(--space-2); font-family: ui-monospace, monospace; }
-  .row { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-2); font-family: ui-monospace, monospace; font-size: var(--font-size-sm); }
-  .bar { height: 1rem; background: var(--color-count); border-radius: var(--radius-sm); }
-</style>
+<title>Foundations — Pibbo design system</title>
+<meta name="description" content="The twelve foundation pages.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<link rel="stylesheet" href="../assets/ds-pibbo.css">
 </head>
-<body>
-<h1>Pibbo foundations</h1>
-<p>Every value below is read live from <code>docs/mocks/assets/tokens.css</code>, the source of truth. Add <code>?theme=dark</code> to see the dark theme.</p>
-<h2>Colour roles</h2><div class="grid" id="color"></div>
-<h2>Type</h2><div id="type"></div>
-<h2>Space</h2><div id="space"></div>
-<h2>Radius</h2><div class="grid" id="radius"></div>
-<h2>Motion</h2><div id="motion"></div>
-<script>
-  if (new URLSearchParams(location.search).get('theme') === 'dark') document.documentElement.dataset.theme = 'dark';
-  const names = [...document.styleSheets].flatMap((s) => { try { return [...s.cssRules]; } catch { return []; } })
-    .filter((r) => r.selectorText === ':root').flatMap((r) => [...r.style]).filter((n) => n.startsWith('--'));
-  const val = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-  const add = (id, html) => document.getElementById(id).insertAdjacentHTML('beforeend', html);
-  for (const n of names) {
-    if (n.startsWith('--color-')) add('color', `<div class="swatch"><div class="swatch__chip" style="background:var(${n})"></div><div class="swatch__name">${n}<br>${val(n)}</div></div>`);
-    else if (n.startsWith('--font-size-')) add('type', `<div class="row"><span style="font-size:var(${n})">Aa</span>${n} ${val(n)}</div>`);
-    else if (n.startsWith('--space-')) add('space', `<div class="row"><span class="bar" style="width:var(${n})"></span>${n} ${val(n)}</div>`);
-    else if (n.startsWith('--radius-')) add('radius', `<div class="swatch"><div class="swatch__chip" style="background:var(--color-count-soft);border-radius:var(${n})"></div><div class="swatch__name">${n} ${val(n)}</div></div>`);
-    else if (n.startsWith('--duration-') || n.startsWith('--ease-')) add('motion', `<div class="row">${n} ${val(n)}</div>`);
-  }
-</script>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Pibbo DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul><li><a href="../foundations/color.html">Color</a></li><li><a href="../foundations/typography.html">Typography</a></li><li><a href="../foundations/spacing.html">Spacing</a></li><li><a href="../foundations/layout.html">Layout</a></li><li><a href="../foundations/elevation.html">Elevation</a></li><li><a href="../foundations/shape.html">Shape</a></li><li><a href="../foundations/motion.html">Motion</a></li><li><a href="../foundations/iconography.html">Iconography</a></li><li><a href="../foundations/theming.html">Theming</a></li><li><a href="../foundations/responsive.html">Responsive</a></li><li><a href="../foundations/accessibility.html">Accessibility</a></li><li><a href="../foundations/content.html">Content</a></li></ul></details>
+    <details open><summary>Components</summary><ul><li><a href="../components/button.html">Button (Chunky)</a></li><li><a href="../components/hear-button.html">Hear button</a></li><li><a href="../components/group-switch.html">Group switch</a></li><li><a href="../components/numeral.html">Numeral</a></li><li><a href="../components/tile.html">Tile</a></li><li><a href="../components/count-set.html">Count set</a></li><li><a href="../components/tally.html">Tally</a></li><li><a href="../components/activity-card.html">Activity card</a></li><li><a href="../components/lesson-card.html">Lesson card</a></li><li><a href="../components/speech-bubble.html">Speech bubble</a></li><li><a href="../components/answer-bar.html">Answer bar</a></li><li><a href="../components/progress-bar.html">Progress bar</a></li><li><a href="../components/star-rating.html">Star rating</a></li><li><a href="../components/pill.html">Pill</a></li><li><a href="../components/lesson-path.html">Lesson path</a></li><li><a href="../components/activity-shell.html">Activity shell</a></li><li><a href="../components/skip-link.html">Skip link</a></li><li><a href="../components/mascot.html">Mascot (Pibbo)</a></li><li><a href="../components/wordmark.html">Wordmark</a></li><li><a href="../components/picture.html">Picture</a></li></ul></details>
+    <details open><summary>Patterns</summary><ul><li><a href="../patterns/activity-round.html">Activity round</a></li><li><a href="../patterns/choosing-an-answer.html">Choosing an answer</a></li><li><a href="../patterns/feedback.html">Feedback and loading</a></li><li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li><li><a href="../patterns/navigation.html">Navigation and page structure</a></li><li><a href="../patterns/overlays.html">Dialogs and overlays</a></li><li><a href="../patterns/activity-grids.html">Lists and grids</a></li><li><a href="../patterns/spoken-and-shown.html">Notifications: spoken and shown</a></li><li><a href="../patterns/content-and-tone.html">Content and tone</a></li></ul></details>
+  </nav>
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Foundations</p>
+      <h1>Foundations</h1>
+      <p class="ds-lead">The twelve foundation pages.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Light and dark</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li></ul>
+    </header>
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<div class="ds-cards"><a class="ds-card" href="color.html"><b>Color</b><span>Ramps, roles, both themes, contrast</span></a><a class="ds-card" href="typography.html"><b>Typography</b><span>Fredoka for Pibbo's voice, Andika for reading</span></a><a class="ds-card" href="spacing.html"><b>Spacing</b><span>The 4px scale and the size scale</span></a><a class="ds-card" href="layout.html"><b>Layout</b><span>Breakpoints, columns, margins, the activity frame</span></a><a class="ds-card" href="elevation.html"><b>Elevation</b><span>The press edge, shadows, z-order</span></a><a class="ds-card" href="shape.html"><b>Shape</b><span>Radii and borders</span></a><a class="ds-card" href="motion.html"><b>Motion</b><span>Durations, easing, reduced motion</span></a><a class="ds-card" href="iconography.html"><b>Iconography</b><span>The stroke icon set</span></a><a class="ds-card" href="theming.html"><b>Theming</b><span>Light, dark and how themes work</span></a><a class="ds-card" href="responsive.html"><b>Responsive</b><span>Phone, tablet and desktop rules</span></a><a class="ds-card" href="accessibility.html"><b>Accessibility</b><span>WCAG 2.2 AA and the child-first rules</span></a><a class="ds-card" href="content.html"><b>Content</b><span>What Pibbo says and shows</span></a></div>
+    </section>
+
+    <footer class="ds-footer"><span>Pibbo design system · extracted from <a href="../../mocks/index.html">docs/mocks</a> on 2026-11-27</span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
 </body>
 </html>

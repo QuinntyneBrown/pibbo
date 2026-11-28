@@ -1,105 +1,153 @@
-/* Pibbo design tokens. Transcribed from docs/mocks/assets/tokens.css, which is the source of
-   truth; docs/design-system/tokens.json carries the same values. Components read roles,
+/* Pibbo design tokens. Transcribed from docs/design-system/tokens/tokens.css, which the mocks
+   render through; docs/design-system/tokens/tokens.json carries the same values. Components read roles,
    never primitives or hex. */
 
 :root {
-  /* ---------- Primitives (prototype) ---------- */
-  --palette-paper: #fff7e8;
-  --palette-paper-deep: #f8ead0;
+  /* ---------- Primitives: colour (docs/design-system/palette-source.md) ---------- */
   --palette-white: #ffffff;
-  --palette-line: #ecdcc0;
-  --palette-ink: #2a2140;
-  --palette-ink-soft: #645b78;
-  --palette-ink-depth: #120c20;
+  --palette-black: #000000;
+  --palette-neutral-50: #f6f5f2;
+  --palette-neutral-100: #ece9e1;
+  --palette-neutral-200: #e1dbd2;
+  --palette-neutral-500: #807b74;
+  --palette-neutral-700: #56534e;
+  --palette-neutral-900: #2a2923;
+  --palette-purple-50: #f1e5ff;
+  --palette-purple-200: #dcb7ff;
+  --palette-purple-500: #7e2ee9;
+  --palette-purple-600: #5d1ebc;
+  --palette-purple-800: #3c0f7d;
+  --palette-purple-950: #210846;
+  --palette-blue-50: #dbf2ff;
+  --palette-blue-200: #a4dfff;
+  --palette-blue-400: #57beff;
+  --palette-blue-500: #2e8cff;
+  --palette-blue-600: #0057ff;
+  --palette-blue-900: #002b80;
+  --palette-green-50: #e3ffab;
+  --palette-green-200: #9eff86;
+  --palette-green-400: #54fa77;
+  --palette-green-500: #1eb83f;
+  --palette-green-700: #106d24;
+  --palette-green-950: #053812;
+  --palette-pink-50: #ffd1f0;
+  --palette-pink-200: #ff9fe5;
+  --palette-pink-400: #ff5dd8;
+  --palette-pink-600: #b627c6;
+  --palette-pink-800: #6b1575;
+  --palette-pink-900: #4d0e52;
+  --palette-red-300: #ea7b7b;
+  --palette-red-600: #e30450;
+  --palette-navy-900: #06065d;
 
-  --palette-sun: #ffc23d;
-  --palette-sun-deep: #d98f00;
-  --palette-sun-soft: #fff0c4;
-  --palette-sun-wing: #f0a516;
-  --palette-sun-belly: #ffe39b;
-  --palette-foot: #f28b3c;
-
-  --palette-berry: #ef4e5a;
-  --palette-berry-deep: #c22f3d;
-  --palette-berry-depth: #8f1f2b;
-  --palette-berry-soft: #ffe3e2;
-
-  --palette-sky: #2e8fe8;
-  --palette-sky-deep: #1a6cc0;
-  --palette-sky-depth: #11508f;
-  --palette-sky-soft: #dcedff;
-  --palette-sky-trace: #9cc8f2;
-
-  --palette-leaf: #2fb26a;
-  --palette-leaf-deep: #1b8549;
-  --palette-leaf-depth: #126236;
-  --palette-leaf-soft: #dcf5e6;
-
-  --palette-lilac-soft: #efe6ff;
-
-  /* ---------- Semantic colour ---------- */
-  --color-bg: var(--palette-paper);
-  --color-bg-sunken: var(--palette-paper-deep);
-  --color-surface: var(--palette-white);
-  --color-border: var(--palette-line);
-  --color-depth: var(--palette-line); /* the pressed-in edge under a white button */
-  --color-fg: var(--palette-ink);
-  --color-fg-muted: var(--palette-ink-soft);
+  /* ---------- Semantic colour (light) ---------- */
+  --color-bg-canvas: var(--palette-neutral-50);
+  --color-bg-surface: var(--palette-white);
+  --color-bg-surface-raised: var(--palette-white);
+  --color-bg-surface-sunken: var(--palette-neutral-100);
+  --color-bg-subtle: var(--palette-neutral-100);
+  --color-bg-subtle-hover: var(--palette-neutral-200);
+  --color-bg-inverse: var(--palette-neutral-900);
+  --color-bg-backdrop: rgb(42 41 35 / 0.55);
+  --color-fg-default: var(--palette-neutral-900);
+  --color-fg-muted: var(--palette-neutral-700);
+  --color-fg-subtle: var(--palette-neutral-700);
+  --color-fg-disabled: var(--palette-neutral-500);
+  --color-fg-inverse: var(--palette-neutral-50);
+  --color-fg-link: var(--palette-purple-500);
+  --color-fg-link-hover: var(--palette-purple-600);
+  --color-fg-accent: var(--palette-purple-500);
+  --color-fg-on-accent: var(--palette-white);
+  --color-border-default: var(--palette-neutral-200);
+  --color-border-strong: var(--palette-neutral-500);
+  --color-border-inverse: var(--palette-neutral-700);
+  --color-accent: var(--palette-purple-500);
+  --color-accent-hover: var(--palette-purple-600);
+  --color-accent-active: var(--palette-purple-800);
+  --color-accent-subtle: var(--palette-purple-50);
+  --color-accent-subtle-hover: var(--palette-purple-200);
+  --color-focus-ring: var(--palette-purple-500);
+  --color-info-bg: var(--palette-blue-50);
+  --color-info-fg: var(--palette-blue-900);
+  --color-info-border: var(--palette-blue-200);
+  --color-info-icon: var(--palette-blue-600);
+  --color-info-solid: var(--palette-blue-600);
+  --color-success-bg: var(--palette-green-50);
+  --color-success-fg: var(--palette-green-700);
+  --color-success-border: var(--palette-green-400);
+  --color-success-icon: var(--palette-green-700);
+  --color-success-solid: var(--palette-green-700);
+  --color-warning-bg: var(--palette-purple-50);
+  --color-warning-fg: var(--palette-neutral-900);
+  --color-warning-border: var(--palette-purple-200);
+  --color-warning-icon: var(--palette-purple-600);
+  --color-warning-solid: var(--palette-purple-600);
+  --color-danger-bg: var(--palette-pink-50);
+  --color-danger-fg: var(--palette-pink-800);
+  --color-danger-border: var(--palette-red-300);
+  --color-danger-icon: var(--palette-red-600);
+  --color-danger-solid: var(--palette-red-600);
+  --color-danger-solid-hover: var(--palette-pink-800);
+  --color-fg-on-danger: var(--palette-white);
+  --color-depth: var(--palette-neutral-200);
   --color-fg-on-strong: var(--palette-white);
-  --color-bg-inverse: var(--palette-ink);
-  --color-fg-inverse: var(--palette-paper);
-  --color-focus: var(--palette-sky-deep);
-
-  /* subject colours: Reading = berry, Counting = sky */
-  --color-read: var(--palette-berry);
-  --color-read-strong: var(--palette-berry-deep);
-  --color-read-depth: var(--palette-berry-depth);
-  --color-read-soft: var(--palette-berry-soft);
-  --color-count: var(--palette-sky);
-  --color-count-strong: var(--palette-sky-deep);
-  --color-count-depth: var(--palette-sky-depth);
-  --color-count-soft: var(--palette-sky-soft);
-  --color-count-trace: var(--palette-sky-trace);
-
-  /* feedback */
-  --color-success: var(--palette-leaf);
-  --color-success-strong: var(--palette-leaf-deep);
-  --color-success-depth: var(--palette-leaf-depth);
-  --color-success-soft: var(--palette-leaf-soft);
-  --color-reward: var(--palette-sun);
-  --color-reward-strong: var(--palette-sun-deep);
-  --color-reward-soft: var(--palette-sun-soft);
-  --color-on-reward: var(--palette-ink);
-  --color-ink-button: var(--palette-ink);
-  --color-ink-button-depth: var(--palette-ink-depth);
-
-  /* pairs found in a matching game, in order */
-  --color-pair-1: var(--palette-sun-soft);
-  --color-pair-2: var(--palette-sky-soft);
-  --color-pair-3: var(--palette-leaf-soft);
-  --color-pair-4: var(--palette-berry-soft);
-  --color-pair-5: var(--palette-lilac-soft);
-  --color-pair-depth: rgb(42 33 64 / 0.12);
-
-  /* the plate behind a sticker picture */
-  --picture-blend: multiply;
+  --color-read: var(--palette-pink-400);
+  --color-read-strong: var(--palette-pink-600);
+  --color-read-depth: var(--palette-pink-800);
+  --color-read-soft: var(--palette-pink-50);
+  --color-read-fg: var(--palette-pink-800);
+  --color-count: var(--palette-blue-500);
+  --color-count-strong: var(--palette-blue-600);
+  --color-count-depth: var(--palette-blue-900);
+  --color-count-soft: var(--palette-blue-50);
+  --color-count-trace: var(--palette-blue-200);
+  --color-count-fg: var(--palette-blue-600);
+  --color-success: var(--palette-green-500);
+  --color-success-strong: var(--palette-green-700);
+  --color-success-depth: var(--palette-green-950);
+  --color-success-soft: var(--palette-green-50);
+  --color-reward: var(--palette-purple-200);
+  --color-reward-strong: var(--palette-purple-500);
+  --color-reward-soft: var(--palette-purple-50);
+  --color-on-reward: var(--palette-neutral-900);
+  --color-reward-depth: var(--palette-purple-500);
+  --color-ink-button: var(--palette-neutral-900);
+  --color-ink-button-depth: var(--palette-black);
+  --color-pair-1: var(--palette-purple-50);
+  --color-pair-2: var(--palette-blue-50);
+  --color-pair-3: var(--palette-green-50);
+  --color-pair-4: var(--palette-pink-50);
+  --color-pair-5: var(--palette-neutral-100);
+  --color-pair-depth: rgb(42 41 35 / 0.12);
   --color-picture-plate: transparent;
-
-  /* brand marks (wordmark seed and leaf) */
-  --color-brand-seed: var(--palette-sun);
-  --color-brand-leaf: var(--palette-leaf);
-  /* Pibbo the mascot, read by role (docs/mocks/assets/ui.css .pibbo__*) */
-  --color-pibbo-body: var(--palette-sun);
-  --color-pibbo-belly: var(--palette-sun-belly);
-  --color-pibbo-wing: var(--palette-sun-wing);
-  --color-pibbo-foot: var(--palette-foot);
-  --color-pibbo-leaf: var(--palette-leaf);
-  --color-pibbo-stem: var(--palette-leaf-deep);
+  --color-on-strong-dim: rgb(255 255 255 / 0.35);
+  --color-on-strong-line: rgb(255 255 255 / 0.7);
+  --color-brand-seed: var(--palette-purple-500);
+  --color-brand-leaf: var(--palette-green-500);
+  --color-pibbo-body: var(--palette-green-200);
+  --color-pibbo-belly: var(--palette-green-50);
+  --color-pibbo-wing: var(--palette-green-400);
+  --color-pibbo-foot: var(--palette-pink-400);
+  --color-pibbo-leaf: var(--palette-green-500);
+  --color-pibbo-stem: var(--palette-green-700);
   --color-pibbo-eye: var(--palette-white);
-  --color-pibbo-ink: var(--palette-ink);
-  --color-pibbo-cheek: var(--palette-berry);
-  --color-pibbo-beak: var(--palette-berry);
-  --color-pibbo-beak-deep: var(--palette-berry-deep);
+  --color-pibbo-ink: var(--palette-neutral-900);
+  --color-pibbo-cheek: var(--palette-pink-400);
+  --color-pibbo-beak: var(--palette-pink-600);
+  --color-pibbo-beak-deep: var(--palette-pink-800);
+  --color-art-light: var(--palette-white);
+  --color-art-ink: var(--palette-neutral-900);
+  --color-art-flame: var(--palette-pink-400);
+  --color-art-fin: var(--palette-purple-500);
+  --color-art-window: var(--palette-blue-400);
+  --color-bg: var(--color-bg-canvas);
+  --color-bg-sunken: var(--color-bg-surface-sunken);
+  --color-surface: var(--color-bg-surface);
+  --color-border: var(--color-border-default);
+  --color-fg: var(--color-fg-default);
+  --color-focus: var(--color-focus-ring);
+  --color-focus-ring-offset: var(--color-bg-surface);
+  --picture-blend: multiply;
 
   /* ---------- Type ---------- */
   --font-display: 'Fredoka', ui-rounded, system-ui, sans-serif; /* Pibbo's voice, buttons, titles */
@@ -184,10 +232,10 @@
   --press-depth: 5px;
   --press-depth-down: 1px;
   --press-travel: 4px;
-  --shadow-1: 0 2px 0 var(--color-border);
-  --shadow-2: 0 4px 12px rgb(42 33 64 / 0.12);
-  --shadow-3: 0 8px 24px rgb(42 33 64 / 0.18);
-  --shadow-4: 0 16px 40px rgb(42 33 64 / 0.24);
+  --shadow-1: 0 2px 0 var(--color-depth);
+  --shadow-2: 0 4px 12px rgb(42 41 35 / 0.12);
+  --shadow-3: 0 8px 24px rgb(42 41 35 / 0.18);
+  --shadow-4: 0 16px 40px rgb(42 41 35 / 0.24);
 
   /* ---------- Motion ---------- */
   --duration-instant: 120ms;
@@ -219,37 +267,79 @@
 
 /* ---------- Dark ---------- */
 @mixin dark {
-  --color-bg: #1c1730;
-  --color-bg-sunken: #151124;
-  --color-surface: #2a2343;
-  --color-border: #3d3460;
-  --color-depth: #120e20;
-  --color-fg: #fff7e8;
-  --color-fg-muted: #c9c0dd;
-  --color-bg-inverse: #fff7e8;
-  --color-fg-inverse: #2a2140;
-  --color-focus: #8cc4ff;
-
-  --color-read-soft: #4a2230;
-  --color-count-soft: #1d3554;
-  --color-count-trace: #4b7fb4;
-  --color-success-soft: #193d2a;
-  --color-reward-soft: #4a3a14;
-  --color-reward-strong: #ffc23d;
-
-  --color-pair-1: #4a3a14;
-  --color-pair-2: #1d3554;
-  --color-pair-3: #193d2a;
-  --color-pair-4: #4a2230;
-  --color-pair-5: #352a55;
+  --color-bg-canvas: var(--palette-purple-950);
+  --color-bg-surface: var(--palette-neutral-900);
+  --color-bg-surface-raised: var(--palette-neutral-900);
+  --color-bg-surface-sunken: var(--palette-black);
+  --color-bg-subtle: var(--palette-neutral-900);
+  --color-bg-subtle-hover: var(--palette-neutral-700);
+  --color-bg-inverse: var(--palette-neutral-50);
+  --color-bg-backdrop: rgb(0 0 0 / 0.65);
+  --color-fg-default: var(--palette-neutral-50);
+  --color-fg-muted: var(--palette-neutral-200);
+  --color-fg-subtle: var(--palette-neutral-200);
+  --color-fg-inverse: var(--palette-neutral-900);
+  --color-fg-link: var(--palette-purple-200);
+  --color-fg-link-hover: var(--palette-purple-50);
+  --color-fg-accent: var(--palette-purple-200);
+  --color-fg-on-accent: var(--palette-purple-950);
+  --color-border-default: var(--palette-neutral-700);
+  --color-border-strong: var(--palette-neutral-200);
+  --color-border-inverse: var(--palette-neutral-200);
+  --color-accent: var(--palette-purple-200);
+  --color-accent-hover: var(--palette-purple-50);
+  --color-accent-active: var(--palette-white);
+  --color-accent-subtle: var(--palette-purple-800);
+  --color-accent-subtle-hover: var(--palette-purple-800);
+  --color-focus-ring: var(--palette-purple-200);
+  --color-info-bg: var(--palette-blue-900);
+  --color-info-fg: var(--palette-blue-50);
+  --color-info-border: var(--palette-blue-500);
+  --color-info-icon: var(--palette-blue-400);
+  --color-info-solid: var(--palette-blue-400);
+  --color-success-bg: var(--palette-green-950);
+  --color-success-fg: var(--palette-green-200);
+  --color-success-border: var(--palette-green-700);
+  --color-success-icon: var(--palette-green-400);
+  --color-success-solid: var(--palette-green-400);
+  --color-warning-bg: var(--palette-purple-950);
+  --color-warning-fg: var(--palette-neutral-50);
+  --color-warning-border: var(--palette-purple-600);
+  --color-warning-icon: var(--palette-purple-200);
+  --color-warning-solid: var(--palette-purple-200);
+  --color-danger-bg: var(--palette-pink-900);
+  --color-danger-fg: var(--palette-pink-50);
+  --color-danger-icon: var(--palette-red-300);
+  --color-danger-solid: var(--palette-red-300);
+  --color-danger-solid-hover: var(--palette-pink-200);
+  --color-fg-on-danger: var(--palette-neutral-900);
+  --color-depth: var(--palette-black);
+  --color-read-depth: var(--palette-pink-900);
+  --color-read-soft: var(--palette-pink-900);
+  --color-read-fg: var(--palette-pink-200);
+  --color-count-depth: var(--palette-navy-900);
+  --color-count-soft: var(--palette-blue-900);
+  --color-count-trace: var(--palette-blue-500);
+  --color-count-fg: var(--palette-blue-200);
+  --color-success: var(--palette-green-400);
+  --color-success-soft: var(--palette-green-950);
+  --color-reward-strong: var(--palette-purple-200);
+  --color-reward-soft: var(--palette-purple-950);
+  --color-reward-depth: var(--palette-purple-600);
+  --color-pair-1: var(--palette-purple-950);
+  --color-pair-2: var(--palette-blue-900);
+  --color-pair-3: var(--palette-green-950);
+  --color-pair-4: var(--palette-pink-900);
+  --color-pair-5: var(--palette-navy-900);
   --color-pair-depth: rgb(0 0 0 / 0.35);
-
+  --color-picture-plate: var(--palette-white);
+  --color-on-strong-line: rgb(255 255 255 / 0.2);
+  --color-brand-seed: var(--palette-purple-200);
+  --color-brand-leaf: var(--palette-green-400);
   --picture-blend: normal;
-  --color-picture-plate: #fffdf8;
-
-  --shadow-1: 0 2px 0 var(--color-depth);
   --shadow-2: 0 4px 12px rgb(0 0 0 / 0.4);
   --shadow-3: 0 8px 24px rgb(0 0 0 / 0.5);
+  --shadow-4: 0 16px 40px rgb(0 0 0 / 0.6);
   color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
