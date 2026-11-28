@@ -26,7 +26,7 @@ highlighted. The mock's cast is 7 and 4 on one ten-frame each, while `L2-005` co
    empty frame. The bounds are content (`WHICH_IS_BIGGER.smallest`/`largest`), not rules.
 4. **The round is a pure state machine in `@pibbo/domain/counting`** (`CompareRound`:
    `choosing`, `retry`, `right`) with `startCompareRound`, `chooseCard`, `checkChoice`,
-   `tryAgain` and `extraDots`. There is no modelled answer after three wrong choices
+   `chooseAgain` and `extraDots`. There is no modelled answer after three wrong choices
    (`L2-026` #2): with two cards, Try again always leaves only the right one, and every wrong
    choice already shows the answer by the extra dots.
 5. **Names.** The page is `WhichIsBigger` (`pb-which-is-bigger`, route `/count/compare`) and
@@ -35,7 +35,8 @@ highlighted. The mock's cast is 7 and 4 on one ten-frame each, while `L2-005` co
 6. **Recordings are placeholders**, short silences as in ADR 0007: "Which number is bigger?",
    "is bigger than", "Look at the dots. Which has more?" and the activity's name on Home. The
    comparison is spoken as three recordings: the bigger number, "is bigger than", the smaller.
-   Five rounds make one play.
+   Five rounds make one play. The speech bubble carries the question picture, as on the other
+   Count screens.
 
 ## Consequences
 

@@ -17,6 +17,11 @@ export const routes: Routes = [
       import('./pages/count-and-write/count-and-write').then((m) => m.CountAndWrite),
   },
   {
+    path: 'count/compare',
+    loadComponent: () =>
+      import('./pages/which-is-bigger/which-is-bigger').then((m) => m.WhichIsBigger),
+  },
+  {
     path: 'read/sound-out',
     loadComponent: () => import('./pages/sound-it-out/sound-it-out').then((m) => m.SoundItOut),
   },

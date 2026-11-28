@@ -27,6 +27,14 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       path: '/count/write',
     },
     {
+      id: 'which-is-bigger',
+      group: 'count',
+      name: 'Which is bigger?',
+      glyph: '7 4',
+      recording: '/recordings/home/which-is-bigger.wav',
+      path: '/count/compare',
+    },
+    {
       id: 'sound-it-out',
       group: 'read',
       name: 'Sound it out',

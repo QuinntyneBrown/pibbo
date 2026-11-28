@@ -1,0 +1,23 @@
+<pb-round-shell
+  title="Which is bigger?"
+  [instruction]="content.ask"
+  [mood]="mood()"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-compare
+    [numbers]="round().numbers"
+    [chosen]="round().chosen"
+    [locked]="round().phase !== 'choosing'"
+    (chose)="choose($event)"
+  />
+  <pb-answer-bar
+    answer
+    [kind]="bar().kind"
+    [message]="bar().message"
+    [ready]="bar().ready"
+    (action)="action()"
+  />
+</pb-round-shell>

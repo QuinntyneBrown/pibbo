@@ -1,0 +1,25 @@
+<div class="compare">
+  @for (card of cards(); track $index; let i = $index) {
+    <button
+      type="button"
+      class="compare__card"
+      [attr.aria-pressed]="chosen() === i"
+      [attr.aria-label]="card.number + ', ' + card.number + (card.number === 1 ? ' dot' : ' dots')"
+      [disabled]="locked()"
+      (pbTap)="chose.emit(i)"
+    >
+      <span class="compare__number" aria-hidden="true">{{ card.number }}</span>
+      @for (frame of card.frames; track $index) {
+        <span class="ten-frame" aria-hidden="true">
+          @for (cell of frame; track cell.index) {
+            <span class="ten-frame__cell">
+              @if (cell.dot) {
+                <span class="ten-frame__dot"></span>
+              }
+            </span>
+          }
+        </span>
+      }
+    </button>
+  }
+</div>
