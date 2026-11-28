@@ -2,7 +2,7 @@
 
 These are the user journeys to implement, in the order to build them. Each one is a thin vertical slice with its own implementation prompt in [`docs/prompts/`](prompts/). Each prompt is run as one session and ends with a PR.
 
-**% complete:** 26% (7 of 27 journeys done)
+**% complete:** 30% (8 of 27 journeys done)
 
 ## Order
 
@@ -27,7 +27,7 @@ The order follows what makes sense to build first:
 | 5 | Count and write to twenty | `L2-003`, `L2-004` | [count/count-to-twenty](detailed-designs/count/count-to-twenty/README.md) | It extends Count a set to larger sets and adds forming the numeral. | [prompt](prompts/05-count-to-twenty.md) | Done |
 | 6 | Compare two numbers | `L2-005` | [count/compare-two-numbers](detailed-designs/count/compare-two-numbers/README.md) | It reuses the counting rules with one new decision. | [prompt](prompts/06-compare-two-numbers.md) | Done |
 | 7 | Count backward | `L2-006` | [count/count-backward](detailed-designs/count/count-backward/README.md) | It reuses counting with a reversed order. | [prompt](prompts/07-count-backward.md) | Done |
-| 8 | Skip-count by twos, fives and tens | `L2-007` | [count/skip-count](detailed-designs/count/skip-count/README.md) | It builds on counting forward. | [prompt](prompts/08-skip-count.md) | Not started |
+| 8 | Skip-count by twos, fives and tens | `L2-007` | [count/skip-count](detailed-designs/count/skip-count/README.md) | It builds on counting forward. | [prompt](prompts/08-skip-count.md) | Done |
 | 9 | Add two numbers together (pass and play) | `L2-008` | [count/add-two-numbers](detailed-designs/count/add-two-numbers/README.md) | It combines two counted sets and adds turn-taking on one device. | [prompt](prompts/09-add-two-numbers.md) | Not started |
 | 10 | Count to music | `L2-009` | [count/count-to-music](detailed-designs/count/count-to-music/README.md) | It needs a timed audio track, so it comes after the plain counting activities. | [prompt](prompts/10-count-to-music.md) | Not started |
 | 11 | Match letters to sounds | `L2-010` | [sound-out/match-letters-to-sounds](detailed-designs/sound-out/match-letters-to-sounds/README.md) | It is the simplest reading round and reuses the sound data from journey 4. | [prompt](prompts/11-match-letters-to-sounds.md) | Not started |

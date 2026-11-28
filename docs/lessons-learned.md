@@ -260,3 +260,41 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - End a spec on what was last spoken (J5 #4): each spec polls for the last recording.
 - Grep the flat domain API before naming (J6 #2): `countAgain`, not `tryAgain`.
 
+
+## Journey 8: Skip-count by twos, fives and tens
+
+**What slowed it**
+
+- The first agent on this journey hung for about 40 minutes and was stopped. It had aligned the
+  requirement, design and mocks (ADR 0012) and written most of the code, but nothing past that
+  first commit, plus two throwaway layout specs. A second agent reviewed the uncommitted work,
+  kept it, deleted the throwaway specs and finished. Playwright ran with `--reporter=line` and
+  every long command had a timeout.
+- The acceptance spec passed with the Home entry and the route stashed. The specs run against
+  `dist/pibbo/browser`, which still held the first agent's build. After a rebuild the spec
+  failed for the expected reason: no Skip-count card on Home.
+- The domain rules and the whole feature landed as two commits, not one per slice, because the
+  code already existed when the second agent started.
+- Two rows of targets (the step switch and the choices) overflowed a phone on its side. The mock
+  gained a `max-height: 30rem` rule first, and `round-shell` followed it.
+
+**New lessons**
+
+1. The e2e server serves the last production build. Run `npm run build` before a spec meant to
+   prove a failure, or it may pass against stale code.
+2. When an agent is stopped partway through, commit what is green before going on, so the next
+   agent starts from reviewed commits rather than a pile of uncommitted files.
+3. Run Playwright with `--reporter=line` and give long commands a timeout. The HTML reporter
+   starts a server and waits.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1, J7): ADR 0012 aligned the requirement and design before any code.
+- A round as a pure state machine (J3 #1): `SkipRound` with `counting`, `retry` and `done`.
+- Sequence speech by awaiting `PlayOutcome` (J3 #2): "Count on 5 more from 10." is four
+  recordings in turn.
+- `CLOCK.after` for praise (J3 #3): reused unchanged.
+- The `seed` fixture option (J5 #1, J6 #3): seed 1 counts by 5 and seed 7 counts by 2.
+- End a spec on what was last spoken (J5 #4): every spec polls for the last recordings.
+- Edit regexes with the Edit tool (J7 #1): the choice locator's `\s` survived.
+- `AnswerBar` kind `none` (J7 #4): nothing jumps when Try again appears.
