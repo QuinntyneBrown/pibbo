@@ -803,3 +803,43 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Build before proving a failure (J8 #1): each slice's spec failed for the expected reason.
 - Tag the critical path in the same change (J11 #4): praise and Next is `@critical`.
 - Grep the flat domain API before naming (J6 #2): the names are rhyme-specific; no clash.
+
+## Journey 23: Play the check game
+
+**What slowed it**
+
+- `AGENTS.md` listed remembering practice and a grown-up screen as undecided, and the journey
+  needed both. The owner was asked before any work and decided both (ADR 0026); the list in
+  `AGENTS.md` now points to it. Journey 22 (lessons) was not built, so only the lessons' data
+  came with this journey.
+- The progress-check mock was the prototype's: a wrong answer moved on, results named the child
+  and scored every game in stars. It was redrawn to `L2-023` and `L2-026` first, with
+  `modelled` and `results-empty` added (ADR 0027).
+- The check card under the group pictures pushed Home past a Pixel 7's 839 px; beside them, as
+  tall as they are (101 px, a 2.5 rem Pibbo), Home grew no taller.
+- Twenty-one progress widths in the shell's stylesheet went over its 5 kB budget; the bar became
+  its own block, `pb-progress`, which also fits any number of rounds.
+- `answer()` in the page object read the next question before Angular re-rendered it; `goOn()`
+  now waits for the progress bar to move.
+- Running a downloaded PlantUML jar was refused in this environment, so the check game's
+  `.puml` sources changed and their PNGs were not re-rendered.
+- Journey 21 merged while this branch was open and took ADR 0025, and Rhyme time joined the
+  first lesson; the ADRs became 0026 to 0028 before the rebase, and the expectations followed.
+
+**New lessons**
+
+1. Ask about anything `AGENTS.md` says is undecided before planning slices, not mid-journey.
+2. Renumber ADRs in their own commit before a rebase: every later conflict is then a plain
+   union of two lists.
+3. When a page object reads the screen right after a touch, wait for something the touch
+   changes (the progress bar) before reading.
+4. A rule written in `domain` ahead of its slice still needs its spec to fail once: break the
+   rule after committing (J3 #5, J19 #4), as done for the hint, the earned skills and the
+   practice note.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1): the redraw, the Home card and `L2-023` went in the first commit.
+- Measure before redesigning (J18 #1, J19 #3): a throwaway spec found the Home overflow.
+- Commit before a break-the-rule check (J19 #4): each restore was a plain checkout.
+- Number ADRs at rebase time (J18 #4): done, in its own commit.

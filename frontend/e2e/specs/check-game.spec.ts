@@ -28,7 +28,7 @@ test.describe('What do I know?: opening it from Home', () => {
     const check = new CheckGamePage(page);
     await check.openFromHome();
 
-    // The first lesson is Letter sounds and Sound it out: reading, so a word question.
+    // The first lesson is Letter sounds, Sound it out and Rhyme time: reading, so a word question.
     await expect(check.instruction).toHaveText('Which word goes with the picture?');
     await expect(check.shown).toHaveAttribute('role', 'img');
     await expect(check.choices).toHaveCount(3);
@@ -188,7 +188,7 @@ test.describe('What do I know?: what the child can do', () => {
   }) => {
     const check = new CheckGamePage(page);
     await check.openFromHome();
-    // The first lesson's two skills alternate, so one is answered right and the other never.
+    // The first lesson's skills take turns; only the first is answered right, once.
     await check.answerRightAndGoOn();
     for (let i = 1; i < 5; i++) await check.answerWrongUntilModelledAndGoOn();
 
@@ -212,7 +212,7 @@ test.describe('What do I know?: what the child can do', () => {
     const home = new HomePage(page);
     await check.openFromHome();
     for (let i = 0; i < 5; i++) await check.answerRightAndGoOn();
-    await expect(check.earnedTitles).toHaveText(['Sound it out', 'Letter sounds']);
+    await expect(check.earnedTitles).toHaveText(['Sound it out', 'Letter sounds', 'Rhyme time']);
 
     await check.touch(check.earned.filter({ hasText: 'Letter sounds' }));
 

@@ -12,7 +12,7 @@ export interface Lesson {
 /**
  * The lessons: data, not rules. The two are the cast of the guided-lesson mock ("Sounds that
  * team up", "Numbers up and down"); which lessons Pibbo offers, and in what order, is not
- * decided (ADR 0026). "letter-groups", "rhyme-time" and "build-a-sentence" do not exist yet.
+ * decided (ADR 0026). "letter-groups" and "build-a-sentence" do not exist yet.
  */
 export const LESSONS: readonly Lesson[] = [
   {

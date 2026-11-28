@@ -32,6 +32,7 @@ describe('firstLessonSkills', () => {
     expect(firstLessonSkills(LESSONS, ACTIVITY_CATALOGUE)).toEqual([
       'letter-sounds',
       'sound-it-out',
+      'rhyme-time',
     ]);
   });
 
@@ -44,7 +45,7 @@ describe('checkSkills', () => {
   it('with no history takes the first lesson’s activities, at least 5 rounds, taken in turn', () => {
     const skills = checkSkills(null, ACTIVITY_CATALOGUE, LESSONS, fixed, CHECK);
     expect(skills).toHaveLength(5);
-    expect(new Set(skills)).toEqual(new Set(['letter-sounds', 'sound-it-out']));
+    expect(new Set(skills)).toEqual(new Set(['letter-sounds', 'sound-it-out', 'rhyme-time']));
     for (let i = 1; i < skills.length; i++) expect(skills[i]).not.toBe(skills[i - 1]);
   });
 
