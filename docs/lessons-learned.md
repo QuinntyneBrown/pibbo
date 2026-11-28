@@ -769,3 +769,37 @@ One entry per journey, newest last. Before a journey, read these and apply the o
   reused rather than redefined.
 - Build before proving a failure (J8 #1) and tag the critical path (J11 #4): both slices failed
   first for the expected reason; the praise-and-Next path is `@critical`.
+
+## Journey 21: Hear rhymes
+
+**What slowed it**
+
+- `L2-021` described three choices and one touch; the mock chooses every rhyme and has Check.
+  The mock won, and a `model` state was drawn for the third miss (ADR 0025).
+- `main` moved twice during the journey (journeys 18 and 19 merged). The ADR number was taken,
+  so it became 0025, and the generated mock files conflicted.
+- The rebase merged the new Home entry above the two newly merged activities, with no conflict.
+  The new specs passed without touching More, which showed it. Moved to the end, Read has seven
+  activities, so Spot the word moved to Home's second screen and its page object touches More.
+- On an upright phone the feedback bar was 169 px tall and covered a card. The mock draws a
+  compact bar that the app had never built; `pb-answer-bar` gained `fit`, as the shell has.
+- Box checks passed while an underline spilled out of the target on a phone on its side and the
+  chosen cards showed white squares. Only screenshots showed both.
+- Bash heredocs with quotes failed to parse again; the scripts went through the Write tool.
+
+**New lessons**
+
+1. After a rebase, read every list that merged cleanly (catalogue, routes): a clean merge can
+   still put an entry in the wrong place.
+2. A group passing 6 activities moves the sixth to the second screen (`L2-024` #7): update that
+   activity's page object in the same change.
+3. After the layout specs pass, look at a screenshot of each shape before committing.
+4. Fetch `main` before taking an ADR number, and check open pull requests.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1 and on): requirement, ADR, design and design system went in before code.
+- Check a layout in every phase (J17 #1): it found the covered card in `retry`.
+- Build before proving a failure (J8 #1): each slice's spec failed for the expected reason.
+- Tag the critical path in the same change (J11 #4): praise and Next is `@critical`.
+- Grep the flat domain API before naming (J6 #2): the names are rhyme-specific; no clash.

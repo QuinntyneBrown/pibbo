@@ -1,0 +1,50 @@
+{
+  "roundsPerPlay": 5,
+  "ask": {
+    "before": {
+      "text": "Which words rhyme with",
+      "recording": "/recordings/read/which-words-rhyme-with.wav"
+    },
+    "after": { "text": "Find them all.", "recording": "/recordings/read/find-them-all.wav" }
+  },
+  "listen": { "text": "Listen:", "recording": "/recordings/read/listen.wav" },
+  "words": {
+    "cat": { "picture": "/pictures/words/cat.jpg", "recording": "/recordings/words/cat.wav" },
+    "hat": { "picture": "/pictures/words/hat.jpg", "recording": "/recordings/words/hat.wav" },
+    "bat": { "picture": "/pictures/words/bat.jpg", "recording": "/recordings/words/bat.wav" },
+    "map": { "picture": "/pictures/words/map.jpg", "recording": "/recordings/words/map.wav" },
+    "cap": { "picture": "/pictures/words/cap.jpg", "recording": "/recordings/words/cap.wav" },
+    "sun": { "picture": "/pictures/words/sun.jpg", "recording": "/recordings/words/sun.wav" },
+    "boat": { "picture": "/pictures/words/boat.jpg", "recording": "/recordings/words/boat.wav" }
+  },
+  "sets": [
+    {
+      "target": "cat",
+      "end": "at",
+      "rhymes": ["hat", "bat"],
+      "others": ["sun", "map"],
+      "hint": {
+        "text": "Listen to the ends of the words: c-at…",
+        "recording": "/recordings/rhymes/listen-to-the-ends-c-at.wav"
+      },
+      "allEnd": {
+        "text": "they all end in “at”",
+        "recording": "/recordings/rhymes/all-end-in-at.wav"
+      }
+    },
+    {
+      "target": "map",
+      "end": "ap",
+      "rhymes": ["cap"],
+      "others": ["hat", "sun", "boat"],
+      "hint": {
+        "text": "Listen to the ends of the words: m-ap…",
+        "recording": "/recordings/rhymes/listen-to-the-ends-m-ap.wav"
+      },
+      "allEnd": {
+        "text": "they all end in “ap”",
+        "recording": "/recordings/rhymes/all-end-in-ap.wav"
+      }
+    }
+  ]
+}

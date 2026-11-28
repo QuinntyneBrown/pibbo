@@ -1,0 +1,28 @@
+<div class="stage">
+  <div class="rhyme-target">
+    <div class="rhyme-target__picture">
+      <img class="picture" [src]="target().picture" [alt]="target().word" draggable="false" />
+    </div>
+    <p class="rhyme-target__word">
+      {{ target().word.slice(0, -end().length) }}<span class="rhyme-target__end">{{ end() }}</span>
+    </p>
+  </div>
+  <div class="word-cards" role="group" aria-labelledby="prompt">
+    @for (card of cards(); track card.word; let i = $index) {
+      <button
+        type="button"
+        class="word-card"
+        [class.word-card--good]="right() && chosen().includes(i)"
+        [disabled]="!open()"
+        [attr.aria-pressed]="chosen().includes(i)"
+        (pbTap)="touched.emit(i)"
+      >
+        <span class="word-card__tick" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg>
+        </span>
+        <img class="picture" [src]="card.picture" alt="" draggable="false" />
+        <span class="word-card__word">{{ card.word }}</span>
+      </button>
+    }
+  </div>
+</div>

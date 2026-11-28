@@ -26,5 +26,6 @@ export * from './lib/pairs/pairs';
 export * from './lib/spell-boxes/spell-boxes';
 export * from './lib/silent-e/silent-e';
 export * from './lib/rule/rule';
+export * from './lib/rhyme-cards/rhyme-cards';
 export * from './lib/word-pictures/word-pictures';
 export * from './lib/spot/spot';

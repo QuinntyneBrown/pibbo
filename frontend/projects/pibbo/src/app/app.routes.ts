@@ -69,5 +69,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/spot-the-word/spot-the-word').then((m) => m.SpotTheWordPage),
   },
+  {
+    path: 'read/rhymes',
+    loadComponent: () => import('./pages/rhyme-time/rhyme-time').then((m) => m.RhymeTime),
+  },
   { path: '**', redirectTo: '' },
 ];

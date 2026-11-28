@@ -26,3 +26,4 @@
 | [0022](0022-syllables-in-sound-it-out.md) | Longer words by syllable in Sound it out | Accepted |
 | [0023](0023-words-and-pictures-round.md) | Words and pictures: a pair match of words and their pictures | Accepted |
 | [0024](0024-spot-the-word-round.md) | Spot the word: every common word in a short story, and misses that come back | Accepted |
+| [0025](0025-rhyme-time-round.md) | Rhyme time: choose every rhyme, then Check | Accepted |

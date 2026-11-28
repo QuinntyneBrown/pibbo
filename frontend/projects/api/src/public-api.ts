@@ -9,3 +9,4 @@ export * from './lib/activity';
 export * from './lib/round';
 export * from './lib/count';
 export * from './lib/sound-out';
+export * from './lib/rhymes';
