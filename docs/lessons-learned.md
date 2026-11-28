@@ -340,3 +340,50 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Build before proving a failure (J8 #1): the first run failed for the expected reason, no
   Add together on Home.
 - `--reporter=line` and timeouts (J8 #3): no hang.
+
+## Journey 10: Count to music
+
+**What slowed it**
+
+- Home's Count group already had six activities, the most `L2-024` allows on one screen, so
+  Counting dance had nowhere to go. Home gained a second screen (five activities and a More
+  picture) as its own slice, mock and `L2-024` first (ADR 0014), and Add together's page object
+  now touches More.
+- The prototype's speed switch was 44 px, 4 px apart, colour only; it became `.switch--speed`,
+  the same as `.switch--step` (ADR 0014).
+- The mock's layout (a 150 px Pibbo, a 144 px numeral, the row of ten and the controls) did
+  not fit a 360 × 640 phone, and on a 640 × 360 one Start the music sat under the answer bar,
+  where it could not be touched. A throwaway spec that logged the bubble, stage, controls and
+  answer bar boxes found both; the mock gained phone and short-screen rules first.
+- Pause and the hidden tab came with the beat scheduler in slice 2, so slice 3's specs passed
+  on their first run. Breaking each rule once (no pause on hidden; sway under reduced motion)
+  made them fail, so they bite.
+
+**New lessons**
+
+1. When a journey adds an activity, count the group's activities against `L2-024`'s 6 a
+   screen before planning the slices.
+2. "Nothing scrolls" is not enough for a layout check: a shell that clips its game area does
+   not scroll even when a control is hidden under the answer bar. Compare the boxes of the
+   last control and the answer bar.
+3. A timed activity is easiest to drive one beat at a time: each beat schedules the next with
+   `CLOCK.after`, and pause, a hidden tab and leaving cancel just that one timer. A component
+   unit test with a hand-advanced fake clock then proves "nothing is due" after a pause.
+4. One recording a beat (the number said over the rhythm) keeps one sound at a time with no
+   mixing and nothing to pile up.
+
+**Earlier lessons applied**
+
+- The mock first (J2 #1, J7, J8, J9): the speed switch, Home's second screen and the phone
+  layouts went into the mocks before the components.
+- Measure the largest case on 360 × 640 and 640 × 360 (J9 #1, J6 #1): it found both
+  overflows, after the component was written but before the commit.
+- A round as a pure state machine (J3 #1): `DanceRound` with `ready`, `playing`, `paused`,
+  `done`.
+- `CLOCK.after` for timing (J3 #3): the beat and praise; `page.clock.runFor` drives the beat.
+- `sound: 'off'` (J3 #4) and a spec that passes before its slice is a regression guard (J3
+  #5): said so, and proved by breaking the rule.
+- Grep the flat domain API before naming (J6 #2): done first; no clash.
+- Build before proving a failure (J8 #1): the first runs failed for the expected reasons (six
+  activities and no More; no route).
+- `--reporter=line` and timeouts (J8 #3): no hang.
