@@ -1,4 +1,5 @@
 # Feature: Compare two numbers
+n**Status:** Complete (PR #6)
 
 Journey 6 of 27 in `docs/journeys.md`. Requirements: L2-005.
 
