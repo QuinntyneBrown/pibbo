@@ -70,10 +70,16 @@ export class SoundItOutPage {
     return (await this.letters.allTextContents()).map((t) => t.trim()).join('');
   }
 
-  /** Touches every letter in order. */
+  /** The letters on each tile, in order: a letter group is one tile ("sh"). */
+  async tileLetters(): Promise<string[]> {
+    return (await this.letters.allTextContents()).map((t) => t.trim());
+  }
+
+  /** Touches every tile in order. */
   async soundAll(): Promise<string> {
     const word = await this.word();
-    for (let i = 0; i < word.length; i++) await this.touch(this.letter(i));
+    const tiles = await this.letters.count();
+    for (let i = 0; i < tiles; i++) await this.touch(this.letter(i));
     return word;
   }
 
