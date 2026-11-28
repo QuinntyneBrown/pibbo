@@ -16,6 +16,11 @@ export interface Word {
   readonly sounds: readonly Sound[];
   readonly picture: string;
   readonly recording: string;
+  /**
+   * A silent-e word (L2-016): the word it is without its quiet e ("cap" for "cape"). The
+   * word's own sounds are what it says with the e added, the e making no sound of its own.
+   */
+  readonly withoutE?: Word;
 }
 
 /** One step of a plan of recordings: what to play, and which letter to light while it plays. */

@@ -73,7 +73,12 @@
   if (blend) {
     const stage = blend.closest('.stage');
     stage.classList.add('stage--initial-sounds');
-    const tiles = Array.from(document.querySelectorAll('.tile'));
+    // The quiet e makes no sound of its own: touching it adds it or takes it away (L2-016).
+    const tiles = Array.from(document.querySelectorAll('.tile:not(.tile--silent)'));
+    const quietE = document.querySelector('.tile--silent[aria-pressed]');
+    if (quietE) quietE.addEventListener('click', () => {
+      location.href = quietE.getAttribute('aria-pressed') === 'true' ? 'magic-e.html' : 'magic-e-on.html';
+    });
     const fill = blend.querySelector('.blend__fill');
     const control = blend.querySelector('button') || buttonFrom(blend.querySelector('a'));
     if (route.get('begin') === '1' && location.pathname.endsWith('/default.html')) {

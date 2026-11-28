@@ -1,4 +1,4 @@
-// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -45,9 +45,44 @@ for (const word of content.words ?? []) {
   const spelled = (word.sounds ?? [])
     .map((s) => content.sounds?.[s]?.letters ?? "")
     .join("");
-  if (spelled !== name)
-    problems.push(`word "${name}": its sounds spell "${spelled}"`);
+  // A silent-e word (L2-016, ADR 0021): its sounds spell it but for its quiet e, and the word
+  // without the e has its own picture, recording and recorded sounds.
+  const without = word.withoutE;
+  const quiet = without ? "e" : "";
+  if (spelled + quiet !== name)
+    problems.push(`word "${name}": its sounds spell "${spelled}${quiet}"`);
+  if (without) {
+    if (without.word + "e" !== name)
+      problems.push(
+        `word "${name}": without its e it is not "${without.word}"`,
+      );
+    fileExists(without.picture, `word "${without.word}" picture`);
+    fileExists(without.recording, `word "${without.word}" recording`);
+    if ((without.sounds ?? []).length !== (word.sounds ?? []).length)
+      problems.push(`word "${name}": not as many sounds as "${without.word}"`);
+    const spelledWithout = (without.sounds ?? [])
+      .map((s) => content.sounds?.[s]?.letters ?? "")
+      .join("");
+    if (spelledWithout !== without.word)
+      problems.push(
+        `word "${without.word}": its sounds spell "${spelledWithout}"`,
+      );
+    for (const sound of without.sounds ?? []) {
+      const entry = content.sounds?.[sound];
+      if (!entry)
+        problems.push(
+          `word "${without.word}": sound "${sound}" is not in the sounds`,
+        );
+      else fileExists(entry.recording, `sound "${sound}" recording`);
+    }
+  }
 }
+// The silent-e lines (L2-016, ADR 0021).
+if (content.words?.some((w) => w.withoutE))
+  fileExists(
+    content.silentE?.instruction?.recording,
+    "silent e instruction recording",
+  );
 for (const [key, line] of Object.entries(content.instructions ?? {}))
   fileExists(line.recording, `instruction "${key}" recording`);
 for (const key of ["praise", "hint", "model"])

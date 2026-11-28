@@ -22,20 +22,24 @@ import {
   AnswerBar,
   PicturePick,
   RoundShell,
+  SilentE,
   WordTiles,
   type AnswerBarKind,
 } from '@pibbo/components';
 import {
   blendDone,
   blendPlan,
+  changedLetter,
   checkPicture,
   chooseFirstTwo,
   choosePicture,
   nextLetter,
   roundAssets,
+  shownSounds,
   SOUND_OUT,
   startBlend,
   startSoundOutRound,
+  toggleSilentE,
   touchLetter,
   tryAgain,
   type SoundOutRound,
@@ -51,7 +55,7 @@ const PRAISE_MS = 1500;
  */
 @Component({
   selector: 'pb-sound-it-out',
-  imports: [RoundShell, WordTiles, PicturePick, AnswerBar],
+  imports: [RoundShell, SilentE, WordTiles, PicturePick, AnswerBar],
   templateUrl: './sound-it-out.html',
   styleUrl: './sound-it-out.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -82,6 +86,8 @@ export class SoundItOut {
   protected readonly instruction = computed<Instruction>(() => {
     const round = this.round();
     switch (round.phase) {
+      case 'magic-e':
+        return SOUND_OUT.silentE.instruction;
       case 'sounding':
         return SOUND_OUT.instructions.sounding;
       case 'ready':
@@ -134,8 +140,32 @@ export class SoundItOut {
   protected readonly picking = computed(() => {
     const phase = this.round().phase;
     return (
-      phase !== 'sounding' && phase !== 'ready' && phase !== 'blending' && phase !== 'first-two'
+      phase !== 'magic-e' &&
+      phase !== 'sounding' &&
+      phase !== 'ready' &&
+      phase !== 'blending' &&
+      phase !== 'first-two'
     );
+  });
+  /** The sounds shown: a silent-e word's without its e until the e is added (L2-016). */
+  protected readonly sounds = computed(() => shownSounds(this.round()));
+  /**
+   * The rule and the word shown beside it, for a silent-e word. While the child picks the
+   * picture the rule stays and the word's own picture is not shown: it would be the answer.
+   */
+  protected readonly silentE = computed(() => {
+    const round = this.round();
+    const without = round.word.withoutE;
+    if (!without) return null;
+    const changed = changedLetter(round.word);
+    const shown = round.eAdded ? round.word : without;
+    return {
+      vowel: changed === null ? '' : without.sounds[changed]!.letters,
+      changed,
+      word: shown.word,
+      picture: this.picking() ? null : shown.picture,
+      note: round.eAdded ? SOUND_OUT.silentE.added : SOUND_OUT.silentE.waiting,
+    };
   });
   /** The first two sounds to choose from, while they are asked (L2-015 #2). */
   protected readonly choices = computed(() => {
@@ -172,6 +202,15 @@ export class SoundItOut {
     if (round.phase === 'ready' && outcome !== 'stopped' && this.round() === round) {
       void this.audio.play(SOUND_OUT.instructions.ready.recording);
     }
+  }
+
+  /** The quiet e (L2-016): adding or taking it away speaks the word it makes. */
+  protected toggleE(): void {
+    const { round, spoken } = toggleSilentE(this.round());
+    if (spoken === null) return;
+    this.round.set(round);
+    this.sounding.set(null);
+    void this.audio.play(spoken);
   }
 
   protected blend(): void {

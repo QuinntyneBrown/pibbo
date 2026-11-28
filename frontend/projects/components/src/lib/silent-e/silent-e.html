@@ -1,0 +1,14 @@
+<p class="rule">
+  <span class="rule__glyph">{{ vowel() }}_e</span> {{ ruleBefore() }} {{ vowel() }}
+  {{ ruleAfter() }}
+</p>
+@if (picture(); as src) {
+  <div class="before">
+    <img class="picture" [src]="src" [alt]="word()" draggable="false" />
+    <span class="before__word">{{ word() }}</span>
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+    <span class="before__note">{{ note() }}</span>
+  </div>
+}

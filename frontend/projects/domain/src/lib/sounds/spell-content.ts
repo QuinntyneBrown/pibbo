@@ -52,8 +52,10 @@ export function spellContent(
   return {
     ...raw,
     // Spell by sound spells one letter per box (ADR 0019) into three boxes (ADR 0020): a word
-    // with a letter group, or of more than three sounds, waits.
-    words: words.filter((w) => !w.sounds.some(isLetterGroup) && w.sounds.length <= SPELL_BOXES),
+    // with a letter group, of more than three sounds, or with a quiet e (ADR 0021), waits.
+    words: words.filter(
+      (w) => !w.sounds.some(isLetterGroup) && w.sounds.length <= SPELL_BOXES && !w.withoutE,
+    ),
     letters: Object.values(sounds).filter((s) => !isLetterGroup(s)),
   };
 }
