@@ -1,5 +1,6 @@
 # Feature: Count to music
-n**Status:** Complete (PR #10)
+
+**Status:** Complete (PR #10)
 
 Journey 10 of 27 in `docs/journeys.md`. Requirements: L2-009.
 
