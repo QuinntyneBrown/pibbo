@@ -32,3 +32,4 @@
 | [0028](0028-practice-kept-on-the-device-and-a-grown-up-area.md) | Practice is kept on the device, and a grown-up has an area | Accepted |
 | [0029](0029-grown-up-gate-and-area.md) | The grown-up gate and area: a corner padlock, three numbers in words, and Clear progress | Accepted |
 | [0030](0030-performance-accessibility-and-privacy-checks.md) | Performance, accessibility and privacy: behaviour specs over every activity, and sweeps on request | Accepted |
+| [0031](0031-explainer-films-from-the-running-app.md) | Explainer films: one a journey, pictured from the running app | Accepted |
