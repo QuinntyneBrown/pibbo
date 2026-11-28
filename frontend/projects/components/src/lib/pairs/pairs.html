@@ -1,49 +1,59 @@
+@if (kind() === 'forms') {
+  <div class="pairs__heads stage__label" aria-hidden="true">
+    <p>Big</p>
+    <p>Small</p>
+  </div>
+}
 <div class="pairs">
-  <div class="pairs__column" role="group" aria-label="Letters">
+  <div
+    class="pairs__column"
+    role="group"
+    [attr.aria-label]="kind() === 'forms' ? 'Big' : 'Letters'"
+  >
     @for (pair of letters(); track pair.sound.letters; let i = $index) {
       <button
         type="button"
         [class]="pairClass(letterColours()[i] ?? 0)"
-        [attr.aria-label]="
-          'Letter ' + pair.sound.letters + ((letterColours()[i] ?? 0) > 0 ? ', matched' : '')
-        "
+        [attr.aria-label]="letterLabel(pair, (letterColours()[i] ?? 0) > 0)"
         [attr.aria-pressed]="held() === i"
         [disabled]="(letterColours()[i] ?? 0) > 0"
         (pbTap)="letter.emit(i)"
       >
-        <span class="pair__letter" aria-hidden="true">{{ pair.sound.letters }}</span>
+        <span class="pair__letter" aria-hidden="true">{{ shownLetter(pair) }}</span>
       </button>
     }
   </div>
-  <div class="pairs__column" role="group" aria-label="Sounds">
+  <div
+    class="pairs__column"
+    role="group"
+    [attr.aria-label]="kind() === 'forms' ? 'Small' : 'Sounds'"
+  >
     @for (pair of sounds(); track pair.sound.letters; let i = $index) {
       <button
         type="button"
         [class]="pairClass(soundColours()[i] ?? 0, missed() === i)"
-        [attr.aria-label]="
-          'The sound ' +
-          pair.sound.shown +
-          ', as in ' +
-          pair.asIn +
-          ((soundColours()[i] ?? 0) > 0 ? ', matched' : '')
-        "
+        [attr.aria-label]="soundLabel(pair, (soundColours()[i] ?? 0) > 0)"
         [disabled]="(soundColours()[i] ?? 0) > 0"
         (pbTap)="sound.emit(i)"
       >
-        <span class="pair__sound" aria-hidden="true">
-          <span class="pair__sound-left">
-            <span class="speaker">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"
-                />
-                <path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8" />
-              </svg>
+        @if (kind() === 'forms') {
+          <span class="pair__letter" aria-hidden="true">{{ pair.sound.letters }}</span>
+        } @else {
+          <span class="pair__sound" aria-hidden="true">
+            <span class="pair__sound-left">
+              <span class="speaker">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"
+                  />
+                  <path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8" />
+                </svg>
+              </span>
+              {{ pair.sound.shown }}
             </span>
-            {{ pair.sound.shown }}
+            <img class="picture" [src]="picture(pair)" alt="" draggable="false" />
           </span>
-          <img class="picture" [src]="pair.picture" alt="" draggable="false" />
-        </span>
+        }
       </button>
     }
   </div>

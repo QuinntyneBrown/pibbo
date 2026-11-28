@@ -82,5 +82,13 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       recording: '/recordings/home/letter-sounds.wav',
       path: '/read/letter-sounds',
     },
+    {
+      id: 'big-and-small-letters',
+      group: 'read',
+      name: 'Big and small letters',
+      glyph: 'B b',
+      recording: '/recordings/home/big-and-small-letters.wav',
+      path: '/read/letter-forms',
+    },
   ],
 };

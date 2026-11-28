@@ -449,6 +449,9 @@ img { display: block; max-width: 100%; }
   .pair .speaker { display: none; }
   .pair .picture { width: var(--size-7); height: var(--size-7); }
 }
+/* Journey 12 (ADR 0017): on a phone the Big and Small heads no longer sit over their columns,
+   and the room is the targets'; the bubble already says which is which. */
+@media (max-width: 30rem), (max-height: 30rem) { .pairs__heads { display: none; } }
 @media (max-height: 30rem) {
   .pairs { grid-template-columns: 1fr 1fr; column-gap: var(--space-6); }
   .pair, .pair:has(.pair__sound) { height: var(--target-child); padding-block: 0; }

@@ -1,31 +1,34 @@
-import type { LetterPair, RandomSource } from '@pibbo/api';
+import type { FormPair, LetterPair, MatchPair, RandomSource } from '@pibbo/api';
 
 /** Where a round is: the child matches pairs (`matching`) until every pair is found (`right`). */
 export type LetterSoundsPhase = 'matching' | 'right';
 
-/** One Letter sounds round. Immutable: every rule returns a new value. */
-export interface LetterSoundsRound {
+/**
+ * One pair-match round: Letter sounds (a letter and its sound) and Big and small letters (a big
+ * letter and its small letter, ADR 0017). Immutable: every rule returns a new value.
+ */
+export interface LetterSoundsRound<P extends MatchPair = LetterPair> {
   readonly phase: LetterSoundsPhase;
   /** The letters, in the order shown. */
-  readonly letters: readonly LetterPair[];
+  readonly letters: readonly P[];
   /** The same pairs' sounds, in the order shown. */
-  readonly sounds: readonly LetterPair[];
+  readonly sounds: readonly P[];
   /** The index of the held letter, waiting for its sound. */
   readonly held: number | null;
   /** The letters matched so far, in the order they were matched. */
   readonly found: readonly string[];
 }
 
-const letterOf = (pair: LetterPair): string => pair.sound.letters;
+const letterOf = (pair: MatchPair): string => pair.sound.letters;
 
 /**
  * A new round: the letters in the content's order, their sounds in an order the random source
  * chooses, never the letters' own order when there is more than one pair.
  */
-export function startLetterSoundsRound(
+export function startLetterSoundsRound<P extends MatchPair = LetterPair>(
   random: RandomSource,
-  pairs: readonly LetterPair[],
-): LetterSoundsRound {
+  pairs: readonly P[],
+): LetterSoundsRound<P> {
   if (pairs.length === 0) throw new RangeError('a round needs a pair');
   const sounds = [...pairs];
   for (let i = sounds.length - 1; i > 0; i--) {
@@ -38,13 +41,13 @@ export function startLetterSoundsRound(
 }
 
 /** Whether the letter at `index` is matched. */
-export function letterFound(round: LetterSoundsRound, index: number): boolean {
+export function letterFound(round: LetterSoundsRound<MatchPair>, index: number): boolean {
   const pair = round.letters[index];
   return pair !== undefined && round.found.includes(letterOf(pair));
 }
 
 /** Whether the sound at `index` is matched. */
-export function soundFound(round: LetterSoundsRound, index: number): boolean {
+export function soundFound(round: LetterSoundsRound<MatchPair>, index: number): boolean {
   const pair = round.sounds[index];
   return pair !== undefined && round.found.includes(letterOf(pair));
 }
@@ -53,7 +56,7 @@ export function soundFound(round: LetterSoundsRound, index: number): boolean {
  * Which colour a matched pair takes: 1 for the first pair found, 2 for the second, and so on;
  * 0 while the letter is not matched.
  */
-export function pairColour(round: LetterSoundsRound, letter: string): number {
+export function pairColour(round: LetterSoundsRound<MatchPair>, letter: string): number {
   return round.found.indexOf(letter) + 1;
 }
 
@@ -66,10 +69,10 @@ export function letterSoundsAssets(round: LetterSoundsRound): string[] {
  * A letter is touched: it is held, and its sound is spoken, never its name (`L2-010` #2). A
  * matched letter takes no touch (`spoken` is null).
  */
-export function holdLetter(
-  round: LetterSoundsRound,
+export function holdLetter<P extends MatchPair>(
+  round: LetterSoundsRound<P>,
   index: number,
-): { round: LetterSoundsRound; spoken: string | null } {
+): { round: LetterSoundsRound<P>; spoken: string | null } {
   const pair = round.letters[index];
   if (!pair || round.phase !== 'matching' || letterFound(round, index))
     return { round, spoken: null };
@@ -86,10 +89,10 @@ export type SoundTouch = 'heard' | 'matched' | 'miss';
  * A sound is touched: its recording is spoken (`L2-010` #2). With a letter held, the right sound
  * joins them (#1) and the last pair ends the round `right`; a wrong one is a miss (#3).
  */
-export function matchSound(
-  round: LetterSoundsRound,
+export function matchSound<P extends MatchPair>(
+  round: LetterSoundsRound<P>,
   index: number,
-): { round: LetterSoundsRound; spoken: string | null; touch: SoundTouch | null } {
+): { round: LetterSoundsRound<P>; spoken: string | null; touch: SoundTouch | null } {
   const pair = round.sounds[index];
   if (!pair || round.phase !== 'matching' || soundFound(round, index))
     return { round, spoken: null, touch: null };
@@ -108,4 +111,18 @@ export function matchSound(
     spoken,
     touch: 'matched',
   };
+}
+
+/** A Big and small letters round (ADR 0017): the big letters in the content's order, the small
+ * letters in an order the random source chooses. */
+export function startLetterFormsRound(
+  random: RandomSource,
+  pairs: readonly FormPair[],
+): LetterSoundsRound<FormPair> {
+  return startLetterSoundsRound(random, pairs);
+}
+
+/** Every recording a Big and small letters round uses, to fetch before it is shown. */
+export function letterFormsAssets(round: LetterSoundsRound<FormPair>): string[] {
+  return [...new Set(round.letters.map((p) => p.sound.recording))];
 }

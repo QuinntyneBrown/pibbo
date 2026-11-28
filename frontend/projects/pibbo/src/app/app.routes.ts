@@ -47,5 +47,12 @@ export const routes: Routes = [
     path: 'read/letter-sounds',
     loadComponent: () => import('./pages/letter-sounds/letter-sounds').then((m) => m.LetterSounds),
   },
+  {
+    path: 'read/letter-forms',
+    loadComponent: () =>
+      import('./pages/big-and-small-letters/big-and-small-letters').then(
+        (m) => m.BigAndSmallLetters,
+      ),
+  },
   { path: '**', redirectTo: '' },
 ];

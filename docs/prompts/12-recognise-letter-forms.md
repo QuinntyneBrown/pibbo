@@ -1,5 +1,7 @@
 # Feature: Recognise uppercase and lowercase
 
+**Status:** Complete (PR #12)
+
 Journey 12 of 27 in `docs/journeys.md`. Requirements: L2-011.
 
 ## Goal

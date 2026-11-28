@@ -1,0 +1,29 @@
+<pb-round-shell
+  title="Big and small letters"
+  group="read"
+  [instruction]="content.instruction"
+  [mood]="mood()"
+  [done]="done()"
+  [rounds]="content.roundsPerPlay"
+  (replay)="replay()"
+  (leave)="leave()"
+>
+  <pb-pairs
+    kind="forms"
+    [letters]="round().letters"
+    [sounds]="round().sounds"
+    [letterColours]="letterColours()"
+    [soundColours]="soundColours()"
+    [held]="round().held"
+    [missed]="missed()"
+    (letter)="touchLetter($event)"
+    (sound)="touchSound($event)"
+  />
+  <pb-answer-bar
+    answer
+    group="read"
+    [kind]="right() ? 'right' : 'none'"
+    [message]="right() ? content.praise.text : ''"
+    (action)="next()"
+  />
+</pb-round-shell>

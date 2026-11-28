@@ -36,10 +36,22 @@ export interface AssetPreloader {
 
 export const ASSET_PRELOADER = new InjectionToken<AssetPreloader>('ASSET_PRELOADER');
 
-/** A letter and its sound in Letter sounds, with a picture of a word the sound begins. */
-export interface LetterPair {
+/** Two things a child joins in a pair match, keyed by the sound they share. */
+export interface MatchPair {
   readonly sound: Sound;
+}
+
+/** A letter and its sound in Letter sounds, with a picture of a word the sound begins. */
+export interface LetterPair extends MatchPair {
   /** The word the sound is "as in" ("map"), whose picture is shown with the sound. */
   readonly asIn: string;
   readonly picture: string;
+}
+
+/**
+ * A big letter and its small letter in Big and small letters. The small letter is the sound's
+ * letters ("b"); the big letter is data ("B"), never upper-cased by the app (ADR 0017).
+ */
+export interface FormPair extends MatchPair {
+  readonly big: string;
 }
