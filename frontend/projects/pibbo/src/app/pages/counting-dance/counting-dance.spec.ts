@@ -1,7 +1,14 @@
 import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { AUDIO_PLAYER, CLOCK, type AudioPlayer, type Clock, type PlayOutcome } from '@pibbo/api';
+import {
+  AUDIO_PLAYER,
+  CLOCK,
+  type AudioPlayer,
+  type Clock,
+  type PlayOutcome,
+  ACTIVITY_EXIT,
+} from '@pibbo/api';
 import { CountingDance } from './counting-dance';
 
 /** A clock the test advances by hand. */
@@ -58,6 +65,7 @@ describe('CountingDance', () => {
       providers: [
         provideRouter([]),
         { provide: CLOCK, useValue: clock },
+        { provide: ACTIVITY_EXIT, useValue: { leave: () => undefined, finish: () => undefined } },
         { provide: AUDIO_PLAYER, useValue: audio },
       ],
     });

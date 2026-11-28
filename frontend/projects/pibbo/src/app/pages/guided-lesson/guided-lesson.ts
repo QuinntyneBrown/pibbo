@@ -1,0 +1,125 @@
+import { DOCUMENT } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  input,
+  linkedSignal,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { AUDIO_PLAYER, CLIENT_LOG, PROGRESS_STORE, type LessonStep } from '@pibbo/api';
+import { LessonPath, Pibbo, Tap } from '@pibbo/components';
+import {
+  ACTIVITY_CATALOGUE,
+  LESSON_LINES,
+  LESSONS,
+  finishStep,
+  lessonById,
+  lessonKey,
+  lessonPlace,
+  lessonSteps,
+  readLessonPlace,
+} from '@pibbo/domain';
+
+/**
+ * A guided lesson (docs/mocks/pages/guided-lesson, ADR 0026): the path of its activities, the
+ * current one spoken and shown as "Up next", and one touch to play it. Every rule is in
+ * `@pibbo/domain`; this page reads and keeps the lesson's place and plays recordings.
+ */
+@Component({
+  selector: 'pb-guided-lesson',
+  imports: [LessonPath, Pibbo, Tap],
+  templateUrl: './guided-lesson.html',
+  styleUrl: './guided-lesson.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class GuidedLesson {
+  private readonly audio = inject(AUDIO_PLAYER);
+  private readonly router = inject(Router);
+  private readonly store = inject(PROGRESS_STORE);
+  private readonly log = inject(CLIENT_LOG);
+
+  /** The `:subject` route parameter. */
+  readonly subject = input<unknown>();
+  /** `?finished=<n>`: the activity at step n has just ended its last round. */
+  readonly finished = input<unknown>();
+
+  protected readonly lines = LESSON_LINES;
+  protected readonly lesson = computed(() => lessonById(LESSONS, this.subject()));
+  private readonly path = computed(() => {
+    const lesson = this.lesson();
+    return lesson ? lessonSteps(lesson, ACTIVITY_CATALOGUE) : { steps: [], unknown: [] };
+  });
+  protected readonly steps = computed(() => this.path().steps);
+  /** The current step, 1-based; one past the last once the lesson is done. */
+  protected readonly current = linkedSignal(() => {
+    const lesson = this.lesson();
+    const steps = this.steps();
+    if (!lesson) return 1;
+    // Where the child left off on this device, checked; anything else starts at step 1.
+    const kept = readLessonPlace(this.store.read(lessonKey(lesson)), steps) ?? 1;
+    return finishStep(kept, this.finished(), steps);
+  });
+  protected readonly next = computed<LessonStep | null>(
+    () => this.steps()[this.current() - 1] ?? null,
+  );
+
+  /** Once an activity is opening, every further touch is ignored. */
+  private opening = false;
+
+  constructor() {
+    const document = inject(DOCUMENT);
+    const rest = () => {
+      if (document.visibilityState === 'hidden') this.audio.stop();
+    };
+    document.addEventListener('visibilitychange', rest);
+    inject(DestroyRef).onDestroy(() => {
+      document.removeEventListener('visibilitychange', rest);
+      this.audio.stop();
+    });
+    queueMicrotask(() => void this.arrive());
+  }
+
+  /** The title on opening, then "Up next" and the activity's name; a newer sound cuts the rest. */
+  private async arrive(): Promise<void> {
+    const lesson = this.lesson();
+    if (!lesson) {
+      void this.router.navigate(['/'], { replaceUrl: true });
+      return;
+    }
+    // A step naming an activity that does not exist is left off the path (L2-022 #4).
+    for (const id of this.path().unknown) {
+      this.log.warn(`Lesson "${lesson.id}" names an unknown activity "${id}"; it is skipped.`);
+    }
+    this.store.write(lessonKey(lesson), lessonPlace(this.current(), this.steps()));
+    const next = this.next();
+    // The title when the lesson opens; back from an activity, only what comes next.
+    const lines = this.finished() === undefined ? [lesson.recording] : [];
+    if (next) lines.push(LESSON_LINES.upNext.recording, next.activity.recording);
+    else lines.push(LESSON_LINES.done.recording);
+    for (const line of lines) {
+      if ((await this.audio.play(line)) === 'stopped') return;
+    }
+  }
+
+  /** Play: the current step, or a done one again. */
+  protected play(step: LessonStep | null): void {
+    const lesson = this.lesson();
+    if (!lesson || !step || this.opening) return;
+    this.opening = true;
+    this.audio.stop();
+    void this.router
+      .navigate([step.activity.path], { queryParams: { lesson: lesson.id, step: step.number } })
+      .then(
+        (opened) => (this.opening = opened),
+        () => (this.opening = false),
+      );
+  }
+
+  protected home(): void {
+    this.audio.stop();
+    void this.router.navigate(['/'], { queryParams: { group: this.lesson()?.id } });
+  }
+}

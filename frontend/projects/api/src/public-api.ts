@@ -10,3 +10,5 @@ export * from './lib/round';
 export * from './lib/count';
 export * from './lib/sound-out';
 export * from './lib/rhymes';
+export * from './lib/lesson';
+export * from './lib/progress-store';

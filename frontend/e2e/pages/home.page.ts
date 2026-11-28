@@ -19,6 +19,8 @@ export class HomePage {
   readonly activityGroupTitle: Locator;
   /** More: the next screen of a group with more than 6 activities. */
   readonly more: Locator;
+  /** The chosen group's guided lesson (L2-024 #4). */
+  readonly lesson: Locator;
 
   constructor(private readonly page: Page) {
     this.root = page.locator('.home');
@@ -28,6 +30,7 @@ export class HomePage {
     this.activities = page.locator('.home__games .game-card:not(.game-card--more)');
     this.activityGroupTitle = page.locator('.home__games .game-group__title');
     this.more = page.locator('.home__games .game-card--more');
+    this.lesson = page.locator('.home__lesson');
   }
 
   group(name: GroupName): Locator {
@@ -123,7 +126,7 @@ export class HomePage {
   /** The bounding boxes of every target on screen. */
   async targetBoxes(): Promise<Box[]> {
     const boxes: Box[] = [];
-    for (const t of await this.page.locator('.switch__option, .game-card').all()) {
+    for (const t of await this.page.locator('.switch__option, .game-card, .home__lesson').all()) {
       const b = await t.boundingBox();
       if (b) boxes.push(b);
     }

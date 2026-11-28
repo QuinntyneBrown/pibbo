@@ -61,7 +61,9 @@
       "kind": "page",
       "title": "Guided lesson",
       "route": "/lesson/:subject",
-      "requirements": [],
+      "requirements": [
+        "L2-022"
+      ],
       "states": [
         "default",
         "start",

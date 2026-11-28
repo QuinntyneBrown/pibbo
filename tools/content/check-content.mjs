@@ -1,4 +1,4 @@
-// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024): every word has a picture and a
+// Checks the Sound Out content before every build (ADR 0008, 0015, 0017, 0019, 0020, 0021, 0022, 0023, 0024, 0025, 0026): every word has a picture and a
 // recording, every sound it uses has a recording, and every file named exists in public/.
 // Run from anywhere: node tools/content/check-content.mjs
 import { existsSync, readFileSync } from "node:fs";
@@ -283,6 +283,26 @@ for (const set of rhymes.sets ?? []) {
 }
 if ((content.words ?? []).length < 3)
   problems.push("fewer than 3 words: a round offers 3 pictures");
+
+// Guided lessons (L2-022, ADR 0026): 3 to 6 activities each, every line recorded. An activity
+// a lesson names that does not exist yet is allowed: the lesson leaves it off its path.
+const lessonPath = `${frontend}projects/domain/src/lib/lessons/lesson-content.json`;
+const lessonContent = JSON.parse(readFileSync(lessonPath, "utf8"));
+for (const lesson of lessonContent.lessons ?? []) {
+  const n = lesson.activities?.length ?? 0;
+  if (n < 3 || n > 6)
+    problems.push(`lesson "${lesson.id}": ${n} activities, not 3 to 6`);
+  if (!lesson.title) problems.push(`lesson "${lesson.id}": no title`);
+  fileExists(lesson.recording, `lesson "${lesson.id}" recording`);
+}
+for (const line of ["upNext", "done", "picture"]) {
+  if (!lessonContent.lines?.[line]?.text)
+    problems.push(`lesson ${line}: no text`);
+  fileExists(
+    lessonContent.lines?.[line]?.recording,
+    `lesson ${line} recording`,
+  );
+}
 
 if (problems.length) {
   console.error(
