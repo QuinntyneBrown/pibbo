@@ -16,6 +16,7 @@ export class SoundItOutPage {
   readonly shownSounds: Locator;
   readonly silentE: Locator;
   readonly changed: Locator;
+  readonly changeMark: Locator;
   readonly beforePicture: Locator;
   readonly beforeWord: Locator;
   readonly rule: Locator;
@@ -38,6 +39,7 @@ export class SoundItOutPage {
     this.letters = page.locator('.tiles .tile:not(.tile--silent)');
     this.silentE = page.locator('.tile--silent');
     this.changed = page.locator('.tile--changed');
+    this.changeMark = page.locator('.tile--changed .tile__mark');
     this.beforePicture = page.locator('.before .picture');
     this.beforeWord = page.locator('.before__word');
     this.rule = page.locator('.rule');

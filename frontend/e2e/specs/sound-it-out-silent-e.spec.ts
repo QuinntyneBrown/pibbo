@@ -33,6 +33,3 @@ test.describe('Sound it out: a silent-e word', () => {
     expect(await read.scrolls()).toBe(false);
   });
 });
-
-void sound;
-void word;
