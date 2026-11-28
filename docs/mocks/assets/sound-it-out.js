@@ -3,6 +3,7 @@
   const samples = {
     map: ['sun', 'map', 'cat'],
     ship: ['boat', 'sun', 'ship'],
+    boat: ['ship', 'boat', 'bat'],
     cape: ['cap', 'hat', 'cape'],
     sunset: ['sunset', 'night', 'sun']
   };
@@ -13,8 +14,14 @@
   const lessonWord = route.get('lesson') === 'read' && ['2', '3'].includes(route.get('game'))
     ? (route.get('game') === '3' ? 'ship' : 'map') : null;
   const illustrated = Array.from(document.querySelectorAll('.tile'), tile => tile.textContent).join('');
-  const word = blend ? (illustrated === 'map' ? lessonWord || 'map' : illustrated)
-    : Object.hasOwn(samples, params.get('word')) ? params.get('word') : lessonWord || 'map';
+  const teams = {
+    ship: { glyph: 'sh', rule: 'Two letters, one sound', units: ['sh', 'i', 'p'], sounds: ['/sh/', '/i/', '/p/'] },
+    boat: { glyph: 'oa', rule: 'Two vowels team up to say /ō/', units: ['b', 'oa', 't'], sounds: ['/b/', '/ō/', '/t/'] }
+  };
+  const requested = params.get('word') || route.get('word');
+  const word = blend
+    ? (illustrated === 'map' ? (Object.hasOwn(teams, requested) ? requested : lessonWord || 'map') : illustrated)
+    : Object.hasOwn(samples, requested) ? requested : lessonWord || 'map';
   const attempts = Number(params.get('misses'));
   const misses = [1, 2].includes(attempts) ? attempts : 0;
 
@@ -27,20 +34,27 @@
     return button;
   }
 
-  if (word === 'ship') {
+  const team = teams[word];
+  if (team) {
     const rule = document.createElement('p');
     rule.className = 'rule';
     const glyph = document.createElement('span');
     glyph.className = 'rule__glyph';
-    glyph.textContent = 'sh';
-    rule.append(glyph, ' Two letters, one sound');
+    glyph.textContent = team.glyph;
+    rule.append(glyph, ' ' + team.rule);
     document.querySelector('.tiles').before(rule);
-    const letters = ['sh', 'i', 'p'];
     document.querySelectorAll('.tile').forEach((tile, i) => {
-      tile.textContent = letters[i];
-      tile.classList.toggle('tile--wide', i === 0);
-      tile.nextElementSibling.textContent = '/' + letters[i] + '/';
-      tile.setAttribute('aria-label', letters[i] + ', says /' + letters[i] + '/');
+      tile.textContent = team.units[i];
+      tile.classList.toggle('tile--wide', team.units[i].length > 1);
+      tile.nextElementSibling.textContent = team.sounds[i];
+      tile.setAttribute('aria-label', team.units[i] + ', says ' + team.sounds[i]);
+    });
+    document.querySelectorAll('.mock-bar a[href]').forEach(link => {
+      const url = new URL(link.href);
+      if (new URL('.', url).href === new URL('.', location.href).href &&
+          !/(magic-e|syllables)\.html$/.test(url.pathname)) {
+        link.addEventListener('click', () => { link.hash = new URLSearchParams({ word }).toString(); });
+      }
     });
   }
   if (blend) {
