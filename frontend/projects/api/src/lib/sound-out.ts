@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import type { Instruction } from './round';
 
 /** One sound of a word: the letter or letters that make it, as shown and as recorded. */
 export interface Sound {
@@ -70,4 +71,17 @@ export interface LetterPair extends MatchPair {
  */
 export interface FormPair extends MatchPair {
   readonly big: string;
+}
+
+/**
+ * A theme of Words and pictures (L2-018, ADR 0022): related words and what is shown and spoken
+ * around them, both naming the theme ("By the sea! …", "You read all the by the sea words!").
+ */
+export interface WordTheme {
+  /** The theme as spoken and shown ("by the sea"). */
+  readonly name: string;
+  /** Two to four words, each with its picture, recording and sounds. */
+  readonly words: readonly Word[];
+  readonly instruction: Instruction;
+  readonly praise: { readonly text: string; readonly recording: string };
 }

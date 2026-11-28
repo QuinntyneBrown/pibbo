@@ -1,0 +1,207 @@
+// The mock's `.pairs--pictures` (ADR 0022): the board fills the game area, which is its size
+// container, so up to four rows of words and pictures fit with no scrolling.
+:host {
+  --pair-gap: var(--space-3);
+
+  display: flex;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  container-type: size;
+
+  // A short screen: four rows of 60 px targets still fit.
+  @media (max-height: 45rem) {
+    --pair-gap: var(--space-2);
+  }
+}
+
+.pairs {
+  display: grid;
+  width: 100%;
+  max-width: var(--content-narrow);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--pair-gap) var(--space-10);
+
+  @media (min-width: 40rem) {
+    column-gap: var(--space-24);
+  }
+}
+
+.pairs__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pair-gap);
+}
+
+.pair {
+  --depth: var(--color-depth);
+
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex: none;
+  height: clamp(var(--target-child), calc((100cqh - 3 * var(--pair-gap)) / 4), var(--size-15));
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  box-shadow: 0 var(--press-depth) 0 var(--depth);
+  container-type: size;
+  touch-action: manipulation;
+  transition:
+    transform var(--duration-instant) var(--ease-out-quint),
+    box-shadow var(--duration-instant) var(--ease-out-quint),
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+
+  &:active:not(:disabled) {
+    transform: translateY(var(--press-travel));
+    box-shadow: 0 var(--press-depth-down) 0 var(--depth);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &[aria-pressed='true'] {
+    --depth: var(--color-read-depth);
+
+    background: var(--color-read-strong);
+    color: var(--color-fg-on-strong);
+  }
+
+  // The held word and a missed picture are ringed, so colour is not the only sign.
+  &[aria-pressed='true']::before,
+  &.pair--miss::before {
+    position: absolute;
+    border: 3px solid currentColor;
+    border-radius: inherit;
+    content: '';
+    inset: var(--space-1);
+    pointer-events: none;
+  }
+
+  // Partners share a corner shape as well as a colour.
+  &:disabled::after {
+    position: absolute;
+    width: var(--space-3);
+    height: var(--space-3);
+    background: currentColor;
+    content: '';
+    inset: var(--space-2) var(--space-2) auto auto;
+  }
+}
+
+.pair--found-1 {
+  --depth: var(--color-pair-depth);
+
+  background: var(--color-pair-1);
+
+  &::after {
+    border-radius: 50%;
+  }
+}
+
+.pair--found-2 {
+  --depth: var(--color-pair-depth);
+
+  background: var(--color-pair-2);
+}
+
+.pair--found-3 {
+  --depth: var(--color-pair-depth);
+
+  background: var(--color-pair-3);
+
+  &::after {
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+}
+
+.pair--found-4 {
+  --depth: var(--color-pair-depth);
+
+  background: var(--color-pair-4);
+
+  &::after {
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  }
+}
+
+.pair--miss {
+  animation: pair-miss var(--duration-slow) var(--ease-standard) 1;
+
+  &::before {
+    border-style: dashed;
+    border-color: var(--color-read-strong);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes pair-miss {
+  0%,
+  100% {
+    translate: 0;
+  }
+
+  25% {
+    translate: calc(-1 * var(--space-2));
+  }
+
+  75% {
+    translate: var(--space-2);
+  }
+}
+
+.pair__word {
+  font-family: var(--font-read);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+
+  @media (min-width: 40rem) {
+    font-size: var(--font-size-5xl);
+  }
+}
+
+.picture {
+  width: calc(min(100cqi, 100cqb) - 2 * var(--space-2));
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  background: var(--color-picture-plate);
+  mix-blend-mode: var(--picture-blend);
+  object-fit: contain;
+  user-select: none;
+}
+
+// A phone on its side: the app's shell keeps the ask above the game, which leaves room for one
+// row of 60 px targets only, so the words take the left half of the row and their pictures the
+// right (ADR 0022), as Letter sounds does (ADR 0015). A word shrinks with its target.
+@media (max-height: 30rem) {
+  .pairs {
+    column-gap: var(--space-6);
+  }
+
+  .pairs__column {
+    flex-direction: row;
+    gap: var(--space-2);
+  }
+
+  .pair {
+    min-width: 0;
+    flex: 1;
+    height: var(--target-child);
+  }
+
+  .pair__word {
+    font-size: min(var(--font-size-3xl), 26cqi);
+  }
+}

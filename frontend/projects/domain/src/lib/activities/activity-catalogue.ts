@@ -98,5 +98,13 @@ export const ACTIVITY_CATALOGUE: ActivityCatalogue = {
       recording: '/recordings/home/spell-by-sound.wav',
       path: '/read/spell',
     },
+    {
+      id: 'words-and-pictures',
+      group: 'read',
+      name: 'Words and pictures',
+      glyph: 'boat',
+      recording: '/recordings/home/words-and-pictures.wav',
+      path: '/read/word-pictures',
+    },
   ],
 };
