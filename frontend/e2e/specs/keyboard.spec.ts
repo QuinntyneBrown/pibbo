@@ -32,7 +32,7 @@ async function focused(page: Page): Promise<Focused | null> {
     return {
       part: parts.findIndex((p) => el.closest(p)),
       name: name.trim(),
-      visible: outline || style.boxShadow.includes('rgb'),
+      visible: outline,
       tag: el.tagName.toLowerCase(),
     };
   }, PARTS);
