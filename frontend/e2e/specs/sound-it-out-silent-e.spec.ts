@@ -2,7 +2,6 @@
 import { test, expect } from '../fixtures/test';
 import { SoundItOutPage } from '../pages/sound-it-out.page';
 
-const sound = (s: string) => `/recordings/sounds/${s}.wav`;
 const word = (w: string) => `/recordings/words/${w}.wav`;
 const ADD_E = '/recordings/read/add-a-quiet-e.wav';
 
