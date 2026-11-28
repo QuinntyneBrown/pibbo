@@ -38,3 +38,4 @@ export * from './lib/rounds/check-game-content';
 export * from './lib/rounds/check-plan';
 export * from './lib/rounds/check-questions';
 export * from './lib/storage/activity-progress';
+export * from './lib/rounds/check-round';

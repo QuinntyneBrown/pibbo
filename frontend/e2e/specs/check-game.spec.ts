@@ -181,3 +181,203 @@ for (const size of [
     });
   });
 }
+
+const YES = '/recordings/count/yes.wav';
+const ANSWER_IS = '/recordings/check/here-is-the-answer.wav';
+
+test.describe('Check game: answering', () => {
+  test('@critical Given Home, when the child answers all five questions of the first lesson, then each right answer is shown and spoken as praise and Next asks the next', async ({
+    page,
+    spoken,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openFromHome();
+
+    for (let round = 0; round < 5; round++) {
+      await expect(check.progress).toHaveAttribute('aria-valuenow', String(round));
+      await expect(check.instruction).toHaveText(FIRST_LESSON);
+      await expect(check.action).toBeDisabled();
+      const { right } = await check.solve();
+
+      await check.touch(check.choice(right));
+      await expect(check.choice(right)).toHaveAttribute('aria-pressed', 'true');
+      await check.touch(check.action);
+
+      await expect(check.message).toHaveText('Yes!');
+      await expect(check.action).toHaveText('Next');
+      // As the mock draws it, the choice stays pressed; the tick is for the answer Pibbo shows.
+      await expect(check.choice(right)).toHaveAttribute('aria-pressed', 'true');
+      await expect(check.rightChoice).toHaveCount(0);
+      for (const choice of await check.choices.all()) await expect(choice).toBeDisabled();
+      await expect.poll(async () => (await spoken.recordings()).at(-1)).toBe(YES);
+      expect(await check.scrolls()).toBe(false);
+      await check.touch(check.action);
+    }
+  });
+
+  test('Given a wrong answer, when it is checked, then a hint is spoken and shown, and Try again asks the same question with nothing chosen', async ({
+    page,
+    spoken,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openPractised(['which-is-bigger']);
+    const { wrong } = await check.solve();
+    const choices = await check.choiceNames();
+
+    await check.answer(wrong);
+
+    const hint = await check.message.textContent();
+    expect(hint!.trim().length).toBeGreaterThan(0);
+    await expect(check.action).toHaveText('Try again');
+    await expect(check.rightChoice).toHaveCount(0);
+    for (const choice of await check.choices.all()) await expect(choice).toBeDisabled();
+    await expect
+      .poll(async () => (await spoken.recordings()).at(-1))
+      .toBe('/recordings/count/which-has-more.wav');
+
+    await check.touch(check.action);
+
+    await expect(check.message).toHaveCount(0);
+    expect(await check.choiceNames()).toEqual(choices);
+    for (const choice of await check.choices.all()) {
+      await expect(choice).toBeEnabled();
+      await expect(choice).toHaveAttribute('aria-pressed', 'false');
+    }
+    await expect(check.action).toBeDisabled();
+    await expect(check.progress).toHaveAttribute('aria-valuenow', '0');
+  });
+
+  test('Given two wrong answers, when a third is checked, then the right choice is ticked and said, and Next asks the next question', async ({
+    page,
+    spoken,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openPractised(['which-is-bigger']);
+    const { right, wrong } = await check.solve();
+
+    for (let miss = 0; miss < 2; miss++) {
+      await check.answer(wrong);
+      await check.touch(check.action);
+    }
+    await check.answer(wrong);
+
+    await expect(check.message).toHaveText('Here is the answer.');
+    await expect(check.rightChoice).toHaveAttribute('aria-label', right);
+    await expect(check.rightChoice).toHaveAttribute('aria-pressed', 'true');
+    await expect(check.choice(wrong)).toHaveAttribute('aria-pressed', 'false');
+    await expect(check.action).toHaveText('Next');
+    await expect
+      .poll(async () => (await spoken.recordings()).slice(-2))
+      .toEqual([ANSWER_IS, `/recordings/numbers/${right}.wav`]);
+
+    await check.touch(check.action);
+    await expect(check.progress).toHaveAttribute('aria-valuenow', '1');
+    await expect(check.message).toHaveCount(0);
+    await expect(check.rightChoice).toHaveCount(0);
+  });
+
+  test('Given a number or a picture, when it is chosen, then it is said; a word to read is chosen in silence', async ({
+    page,
+    spoken,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openPractised(['which-is-bigger']);
+    const number = (await check.choiceNames())[0]!;
+    await check.touch(check.choice(number));
+    await expect
+      .poll(async () => (await spoken.recordings()).at(-1))
+      .toBe(`/recordings/numbers/${number}.wav`);
+
+    await check.openPractised(['rhyme-time']);
+    const picture = (await check.choiceNames())[0]!;
+    await check.touch(check.choice(picture));
+    await expect
+      .poll(async () => (await spoken.recordings()).at(-1))
+      .toBe(`/recordings/words/${picture}.wav`);
+
+    await check.openPractised(['words-and-pictures']);
+    await expect
+      .poll(async () => (await spoken.recordings()).at(-1))
+      .toBe('/recordings/check/which-word-goes-with-the-picture.wav');
+    const asked = (await spoken.recordings()).length;
+    const word = (await check.choiceNames())[0]!;
+    await check.touch(check.choice(word));
+    await expect(check.choice(word)).toHaveAttribute('aria-pressed', 'true');
+    await expect(check.action).toBeEnabled();
+    expect((await spoken.recordings()).length).toBe(asked);
+  });
+
+  test('Given praise, when a second and a half pass, then Pibbo rests; Next never waited for it', async ({
+    page,
+  }) => {
+    const check = new CheckGamePage(page);
+    await check.openPractised(['which-is-bigger']);
+    await check.answer((await check.solve()).right);
+
+    await expect(check.mascot).toHaveClass(/pibbo--cheer/);
+    await expect(check.action).toBeEnabled();
+    await page.clock.runFor(1500);
+
+    await expect(check.mascot).not.toHaveClass(/pibbo--cheer/);
+  });
+
+  test.describe('muted', () => {
+    test.use({ sound: 'off' });
+
+    test('Given a muted device, when the child answers, then the question, the hint and the praise are shown and the game goes on', async ({
+      page,
+    }) => {
+      const check = new CheckGamePage(page);
+      await check.openPractised(['which-is-bigger']);
+      const { right, wrong } = await check.solve();
+
+      await check.answer(wrong);
+      await expect(check.message).not.toBeEmpty();
+      await check.touch(check.action);
+      await check.answer(right);
+
+      await expect(check.message).toHaveText('Yes!');
+      await check.touch(check.action);
+      await expect(check.progress).toHaveAttribute('aria-valuenow', '1');
+    });
+  });
+});
+
+for (const size of [
+  { width: 320, height: 568 },
+  { width: 360, height: 640 },
+  { width: 640, height: 360 },
+]) {
+  test.describe(`Check game: after Check at ${size.width} x ${size.height}`, () => {
+    test.use({ viewport: size });
+
+    for (const activity of ['count-and-write', 'add-together', 'sound-it-out']) {
+      test(`Given ${activity}, when a hint, then the answer, then praise are shown, then nothing is under the answer bar and nothing scrolls`, async ({
+        page,
+      }) => {
+        const check = new CheckGamePage(page);
+        await check.openPractised([activity]);
+        const fits = async (state: string) => {
+          await expect(check.action, state).toBeVisible();
+          expect(await check.shownFits(), state).toBe(true);
+          expect(await check.scrolls(), state).toBe(false);
+          expect(await check.hiddenUnderAnswerBar(), state).toBe(false);
+        };
+
+        // Each choice in turn until three are wrong: the fourth state is the answer shown.
+        let misses = 0;
+        for (const name of await check.choiceNames()) {
+          if (misses === 3) break;
+          await check.answer(name);
+          // The result is shown before it is read.
+          await expect(check.action).not.toHaveText('Check');
+          if ((await check.action.textContent())!.includes('Next')) break;
+          await fits('hint');
+          await check.touch(check.action);
+          misses++;
+        }
+        await fits('over');
+      });
+    }
+  });
+}

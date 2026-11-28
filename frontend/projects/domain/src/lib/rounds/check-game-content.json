@@ -58,6 +58,7 @@
       "recording": "/recordings/check/say-each-word-slowly.wav"
     }
   },
+  "praise": { "text": "Yes!", "recording": "/recordings/count/yes.wav" },
   "answerIs": {
     "text": "Here is the answer.",
     "recording": "/recordings/check/here-is-the-answer.wav"

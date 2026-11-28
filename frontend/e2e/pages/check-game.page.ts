@@ -14,6 +14,7 @@ export class CheckGamePage {
   readonly rightChoice: Locator;
   readonly message: Locator;
   readonly action: Locator;
+  readonly mascot: Locator;
 
   constructor(private readonly page: Page) {
     this.root = page.locator('.shell');
@@ -27,6 +28,7 @@ export class CheckGamePage {
     this.rightChoice = page.locator('.pick__option--right');
     this.message = page.locator('.answer-bar__message');
     this.action = page.locator('.answer-bar .chunky');
+    this.mascot = page.locator('.shell__ask .pibbo');
   }
 
   /** The check game's picture on Home. */
@@ -91,6 +93,34 @@ export class CheckGamePage {
       names.push((await c.getAttribute('aria-label')) ?? '');
     }
     return names;
+  }
+
+  /**
+   * The names of the right choice and of a wrong one, worked out from what is shown, as a
+   * child would. It knows the first lesson's four questions only.
+   */
+  async solve(): Promise<{ right: string; wrong: string }> {
+    await expect(this.choices).toHaveCount(3);
+    const asked = (await this.instruction.textContent())!.trim();
+    const names = await this.choiceNames();
+    let right: string;
+    if (asked.startsWith('How many')) right = String(await this.shownPictures.count());
+    else if (asked.startsWith('Which number is bigger'))
+      right = String(Math.max(...names.map(Number)));
+    else if (asked.startsWith('Which word goes with the picture'))
+      right = (await this.show.getAttribute('aria-label'))!;
+    else {
+      const target = /“(\w+)”/.exec(asked)![1]!;
+      right = names.find((name) => name.endsWith(target.slice(-2)))!;
+    }
+    expect(names, asked).toContain(right);
+    return { right, wrong: names.find((name) => name !== right)! };
+  }
+
+  /** Chooses the choice with this name and touches Check. */
+  async answer(name: string): Promise<void> {
+    await this.touch(this.choice(name));
+    await this.touch(this.action);
   }
 
   async scrolls(): Promise<boolean> {
