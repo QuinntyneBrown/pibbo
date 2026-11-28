@@ -139,3 +139,46 @@ One entry per journey, newest last. Before a journey, read these and apply the o
 - Sequence speech by awaiting `PlayOutcome` (J3 #2): worked for blending and Try again.
 - `CLOCK.after` and `sound: 'off'` (J3 #3, #4): reused unchanged for praise and the muted spec.
 - Write tool over heredocs (J2): followed for long TypeScript; short heredocs were fine.
+
+## Journey 5: Count and write to twenty
+
+**What slowed it**
+
+- The prototype's Count and write had no things to count (a number track) and a tracing pad,
+  a precise drag that `AGENTS.md` forbids, and `L2-004` accepted the digits without the mock's
+  Check. All six states were redrawn with ten-frames and a digit pad, and `L2-004` was brought
+  in line (ADR 0009) before any code.
+- A phone 360 px wide cannot fit five 60 px targets 16 px apart; the ten-frames and the digit
+  pad use 6 px, recorded in ADR 0009.
+- The hint lit each digit tile inside one task, because the stand-in audio player ends a
+  recording on a microtask: the spec never saw a lit tile. Each lit tile now stays lit for at
+  least 700 ms through `CLOCK.after`, which a muted child also needs.
+- A spec that ended as praise was requested left `yes.wav` unanswered for the network guard;
+  it now waits for the last recording it expects.
+- Bash `node -e` with an apostrophe in the text failed to parse; the Write tool was used.
+
+**New lessons**
+
+1. A `seed` fixture option picks the round a spec needs (14 or 7) with no hook in the bundle;
+   the first `Math.random` call of the mulberry32 stream decides it.
+2. Something shown only while a recording plays needs a minimum time on the injected clock,
+   or it is invisible when the sound is off or a recording is short.
+3. To prove a fleeting state was shown, note it with a `MutationObserver` from the page object
+   rather than racing it with a locator.
+4. End a spec on what was last spoken (`expect.poll` on the recordings), so no media fetch is
+   still pending when the guard checks the network.
+
+**Earlier lessons applied**
+
+- Read the mock against `AGENTS.md` and the requirement first (J2 #1): worked; it caught the
+  drag and the missing things before any code.
+- A round as a pure state machine (J3 #1): worked; `CountAndWriteRound` holds every rule and
+  the page only plays recordings and sets timers.
+- Sequence speech by awaiting `PlayOutcome` (J3 #2): reused for the count, the hint and the
+  modelled answer.
+- `CLOCK.after` and `sound: 'off'` (J3 #3, #4): reused for praise, the hint and the muted spec.
+- A spec that passes before its slice is a regression guard (J3 #5): the muted spec passed
+  before slice 3; it guards the round with the sound off.
+- Wait for something the new round shows before reading the page (J4 #4): the Next spec
+  waits for the progress bar.
+- Write tool over heredocs (J2): followed for TypeScript; short heredocs were fine.
