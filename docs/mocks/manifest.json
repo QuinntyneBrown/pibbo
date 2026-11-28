@@ -93,6 +93,7 @@
       "states": [
         "start",
         "default",
+        "counted",
         "choose",
         "correct",
         "retry",
@@ -118,6 +119,7 @@
         "L2-026"
       ],
       "states": [
+        "start",
         "counting",
         "default",
         "written",
@@ -192,6 +194,7 @@
         "start",
         "default",
         "by-twos",
+        "by-tens",
         "retry",
         "correct"
       ],
@@ -287,6 +290,7 @@
         "L2-026"
       ],
       "states": [
+        "start",
         "default",
         "held",
         "miss",
@@ -307,7 +311,10 @@
       "route": "/read/word-pictures",
       "requirements": [],
       "states": [
+        "start",
         "default",
+        "held",
+        "miss",
         "correct"
       ],
       "prototype_frame": "i8mQ2u4bAv95bb92nf7tc5",
@@ -443,6 +450,8 @@
         "correct",
         "retry",
         "counting-question",
+        "rhyme-question",
+        "number-question",
         "results"
       ],
       "prototype_frame": "uqsXti2BwppQA9k9zEtnFN",
@@ -456,7 +465,8 @@
         "default": "read",
         "answered": "read",
         "correct": "read",
-        "retry": "read"
+        "retry": "read",
+        "rhyme-question": "read"
       }
     },
     {

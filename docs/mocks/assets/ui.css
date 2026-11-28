@@ -143,6 +143,10 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
 @keyframes check-enter { from { opacity: 0; } }
 .answer-bar__message { line-height: 2rem; display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); }
 .answer-bar--correct .answer-bar__message { color: var(--color-success-strong); }
+/* Count and write names its feedback bars as the design system does: --right is the correct bar, --hint and --model the retry bar. */
+.answer-bar--right { background: var(--color-success-soft); }
+.answer-bar--right .answer-bar__message { color: var(--color-success-strong); }
+.answer-bar--hint, .answer-bar--model { background: var(--color-reward-soft); }
 
 .answer-bar__spacer { height: var(--control-height); }
 
@@ -1311,7 +1315,7 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
   color: var(--color-count-fg);
 }
 [data-theme="dark"] :is(.speaker, .hear--read) { color: var(--color-read-fg); }
-[data-theme="dark"] :is(.compare__card--won .compare__number, .answer-bar--correct .answer-bar__message,
+[data-theme="dark"] :is(.compare__card--won .compare__number, .answer-bar--correct .answer-bar__message, .answer-bar--right .answer-bar__message,
   .box--right, .sum__answer--right, .digit-pad__slot--answer) { color: var(--color-success-fg); }
 [data-theme="dark"] .digit-pad__slot--filled:not(.digit-pad__slot--answer) { box-shadow: inset 0 0 0 3px currentColor; }
 [data-theme="dark"] .track-row__cell:not(.track-row__cell--now, .track-row__cell--said) { color: var(--color-fg-muted); }
@@ -1509,7 +1513,7 @@ main[tabindex="-1"]:focus-visible { outline-offset: calc(-1 * var(--stroke-focus
   .numeral.numeral--answer { border: 4px double Highlight; }
   .bubble { outline: 1px solid CanvasText; outline-offset: -1px; }
   .hear { border: 2px solid ButtonText; }
-  .answer-bar--correct, .answer-bar--retry { border-block-start: 2px solid CanvasText; }
+  .answer-bar--correct, .answer-bar--retry, .answer-bar--right, .answer-bar--hint, .answer-bar--model { border-block-start: 2px solid CanvasText; }
 
   .press { border: 2px solid ButtonText; }
   .press[aria-pressed="true"] { border: 4px double Highlight; }

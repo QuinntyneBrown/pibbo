@@ -35,14 +35,29 @@
     img.draggable = false;
     return img;
   }
-  const show = document.querySelector('.show');
+  let show = document.querySelector('.show');
+  if (question.picture && !show) {
+    show = document.createElement('div');
+    show.className = 'show';
+    document.querySelector('.pick').before(show);
+  }
   if (question.picture) {
     if (question.count !== show.children.length || !show.firstElementChild.src.endsWith('/' + question.picture + '.jpg')) {
       show.replaceChildren(...Array.from({ length: question.count }, () => picture(question.picture)));
     }
     show.classList.toggle('show--one', question.count === 1);
-    show.setAttribute('aria-label', question.count + ' ' + question.picture + (question.count === 1 ? '' : 's'));
-  } else show.remove();
+    // One picture is named as a whole. Things to count are named one by one, so the name never
+    // says the answer and a screen reader user counts them too.
+    if (question.count === 1) {
+      show.setAttribute('role', 'img');
+      show.setAttribute('aria-label', 'a ' + question.picture);
+      show.querySelectorAll('img').forEach(img => { img.alt = ''; });
+    } else {
+      show.setAttribute('role', 'group');
+      show.setAttribute('aria-label', question.picture[0].toUpperCase() + question.picture.slice(1) + 's to count');
+      show.querySelectorAll('img').forEach(img => { img.alt = question.picture; });
+    }
+  } else show?.remove();
 
   const check = document.querySelector('.answer-bar--check .chunky');
   if (check) {
@@ -105,7 +120,7 @@
   if (!check) {
     const next = document.querySelector('.answer-bar a');
     const finished = number === questions.length;
-    next.href = finished ? 'results.html' : 'counting-question.html#question=' + (number + 1);
+    next.href = finished ? 'results.html' : ['counting-question', 'rhyme-question', 'number-question'][number - 1] + '.html';
     next.addEventListener('click', event => {
       const url = new URL(next.href);
       if (event.detail === 0) url.searchParams.set('focus', finished ? 'results' : 'answers');

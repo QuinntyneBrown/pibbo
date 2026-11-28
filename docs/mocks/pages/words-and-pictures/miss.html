@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Words and pictures · miss — Pibbo mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="words-and-pictures">
+<meta name="mock:state" content="miss">
+<meta name="description" content="ship was held and the child touched the picture of a sunset: a small shake, and ship is let go.">
+<script src="../../assets/appearance.js"></script>
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the game</a>
+<div class="shell shell--read">
+  <header class="shell__top">
+    <a class="chunky chunky--white chunky--icon press" href="../home/default.html" aria-label="Leave game"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
+    <div class="progress" role="progressbar" aria-label="Step 3 of 5" aria-valuemin="0" aria-valuemax="5" aria-valuenow="3"><div class="progress__fill progress__fill--3"></div></div>
+  </header>
+  <div class="shell__ask">
+    <svg class="pibbo pibbo--md " viewBox="0 0 120 120" role="img" aria-label="Pibbo"><path class="pibbo__stem" d="M60 30 C60 22 60 18 61 13"/><path class="pibbo__leaf" d="M60 18 C52 18 44 13 43 5 C51 4 59 9 60 18 Z"/><path class="pibbo__leaf" d="M61 15 C66 8 75 5 82 8 C79 16 70 19 61 15 Z"/><ellipse class="pibbo__wing" cx="19" cy="74" rx="9" ry="15" transform="rotate(18 19 74)"/><ellipse class="pibbo__wing" cx="101" cy="74" rx="9" ry="15" transform="rotate(-18 101 74)"/><ellipse class="pibbo__foot" cx="49" cy="108" rx="8" ry="5"/><ellipse class="pibbo__foot" cx="71" cy="108" rx="8" ry="5"/><ellipse class="pibbo__body" cx="60" cy="67" rx="43" ry="41"/><ellipse class="pibbo__belly" cx="60" cy="84" rx="25" ry="18"/><ellipse class="pibbo__white" cx="45" cy="57" rx="11" ry="12.5"/><ellipse class="pibbo__white" cx="75" cy="57" rx="11" ry="12.5"/><circle class="pibbo__ink" cx="46" cy="58.5" r="6.5"/><circle class="pibbo__ink" cx="76" cy="58.5" r="6.5"/><circle class="pibbo__white" cx="48" cy="56.0" r="2.2"/><circle class="pibbo__white" cx="78" cy="56.0" r="2.2"/><circle class="pibbo__cheek" cx="30" cy="73" r="6"/><circle class="pibbo__cheek" cx="90" cy="73" r="6"/><path class="pibbo__beak" d="M53 69 Q60 65.5 67 69 Q60 79 53 69 Z"/></svg>
+    <div class="bubble">
+      <p class="bubble__text" id="prompt">By the sea! Read a word, then tap its picture.</p>
+      <button class="hear hear--read" type="button" aria-label="Hear it again" aria-describedby="prompt"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6M19.4 18.4a9 9 0 0 0 0-12.8"/></svg></button>
+    </div>
+  </div>
+  <main class="shell__game" id="main" tabindex="-1" aria-labelledby="prompt">
+    <h1 class="visually-hidden">Words and pictures</h1>
+    <div class="pairs pairs--pictures" data-release-on-miss><div class="pairs__column" role="group" aria-label="Words"><button class="pair press pair--tall pair--found-1" data-partner="boat" type="button" aria-label="boat, matched" aria-pressed="false" disabled><span class="pair__word" aria-hidden="true">boat</span></button><button class="pair press pair--tall" data-partner="ship" type="button" aria-label="ship" aria-pressed="false"><span class="pair__word" aria-hidden="true">ship</span></button><button class="pair press pair--tall" data-partner="sun" type="button" aria-label="sun" aria-pressed="false"><span class="pair__word" aria-hidden="true">sun</span></button><button class="pair press pair--tall" data-partner="sunset" type="button" aria-label="sunset" aria-pressed="false"><span class="pair__word" aria-hidden="true">sunset</span></button></div><div class="pairs__column" role="group" aria-label="Pictures"><button class="pair press pair--tall" data-partner="ship" type="button" aria-label="Picture of a ship"><img class="picture " src="../../assets/pictures/ship.jpg" alt="" draggable="false"></button><button class="pair press pair--tall pair--miss" data-partner="sunset" type="button" aria-label="Picture of a sunset"><img class="picture " src="../../assets/pictures/sunset.jpg" alt="" draggable="false"></button><button class="pair press pair--tall pair--found-1" data-partner="boat" type="button" aria-label="Picture of a boat, matched" disabled><img class="picture " src="../../assets/pictures/boat.jpg" alt="" draggable="false"></button><button class="pair press pair--tall" data-partner="sun" type="button" aria-label="Picture of a sun"><img class="picture " src="../../assets/pictures/sun.jpg" alt="" draggable="false"></button></div></div>
+    <p class="visually-hidden" data-pair-feedback role="status"></p>
+  </main>
+  <footer class="answer-bar answer-bar--check"><span class="answer-bar__spacer" aria-hidden="true"></span></footer>
+</div>
+<p class="mock-note">The child held ship and touched the picture of a sunset: it gives a small shake and a dashed ring, and ship is let go so any word can be touched next. Nothing else changes; boat stays matched. With reduced motion there is no shake.</p>
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html#state-words-and-pictures-miss" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Words and pictures</span>
+  <ul class="mock-bar__states"><li><a href="start.html">start</a></li><li><a href="default.html">default</a></li><li><a href="held.html">held</a></li><li><a href="miss.html" aria-current="page">miss</a></li><li><a href="correct.html">correct</a></li></ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+<script src="../../assets/pairs.js"></script>
+</body>
+</html>
